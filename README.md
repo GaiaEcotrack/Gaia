@@ -1,0 +1,1 @@
+# Fungible Token Tutorial For VARA Network
