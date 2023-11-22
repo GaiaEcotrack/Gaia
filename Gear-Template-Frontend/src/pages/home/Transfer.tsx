@@ -24,8 +24,8 @@ function Transfer() {
     destination: programIDFT, // programId
     payload: {
       transfer: [
-        decodeAddress("5DJ5qVeyhicpVceyJfJZtzCWZpBV3pjAos9kZzMtyuYM3Aj1"),
-        decodeAddress("5HB7N9FqBFbrJKguyx3D8L61auaLLDrARiKaJuUryrPg2NvG"),
+        decodeAddress("From:"),
+        decodeAddress("to:"),
         150,
       ],
     },
