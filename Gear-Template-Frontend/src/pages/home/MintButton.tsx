@@ -11,7 +11,7 @@ function Mint() {
 
    // Add your programID
    const programIDFT =
-   "0xe5fd61567629a183c9caf022c3bed995a732814313785a1210c2ddbbf051a005";
+   "0xd46f5f0fba63bff9a43f6d4cca46d09ef0955b024e1bb70851dad96391c69986";
 
   // Add your metadata.txt
  const meta =

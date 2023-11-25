@@ -201,10 +201,10 @@ const GraficoEnergia = () => {
         </div> 
      
         <div className='justify-center h-96 mb-24'> 
-        {/* <Pie className='w-[400px] h-[400px] justify-center'
+         <Pie className='w-[400px] h-[400px] justify-center'
           data = {dataPie}
           options = {optionsPie}
-          ></Pie> */}
+          ></Pie>
         </div>
         <div className="mt-12 flex justify-center mb-8">
             <button className="w-[151px] h-[47px]  bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
@@ -230,10 +230,10 @@ const GraficoEnergia = () => {
             </div>
           </div>
           <div className='flex mx-auto max-w-screen-md h-[200px]'>
-            {/* <Bar
+             <Bar
             data={barData}
             options={optionsBar}
-            /> */}
+            /> 
             <div className=" border-4 m-auto ml-32 bg-gray-100 h-32 rounded-full flex items-center justify-center border-gray-300">
             <p className='text-gray-400 text-xl m-2 text-center'>{showDate}</p> 
 </div>

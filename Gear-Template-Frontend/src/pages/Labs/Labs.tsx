@@ -1,6 +1,7 @@
 import { Burn } from 'pages/home/Burn';
 import { Mint } from 'pages/home/MintButton';
 import { LocalBalanceToken } from 'pages/home/MyBalanceToken';
+import { Transfer } from 'pages/home/Transfer';
 import React from 'react';
 
 function Labs (){

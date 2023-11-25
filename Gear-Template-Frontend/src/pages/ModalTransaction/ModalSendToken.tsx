@@ -1,4 +1,5 @@
 import { ConvertButton } from "pages/home/ConvertButton";
+import { Transfer } from "pages/home/Transfer";
 import { sendTokensFromGaia } from "pages/home/sendTokenFromGaia";
 import { useState } from "react";
 
@@ -24,7 +25,10 @@ function ModalSendToken ({onClose}:ModalProps) {
     // Aquí puedes manejar la lógica de envío de datos si es necesario
     console.log("Datos enviados:", userData);
   };
-
+const quantity = userData.cantidad
+const quantityToNumber = parseInt(quantity,10)
+  console.log(quantityToNumber);
+  
 
   return (
     <div className="fixed bg-black/60 top-0 left-0 w-full h-full flex items-center justify-center">
@@ -109,8 +113,8 @@ function ModalSendToken ({onClose}:ModalProps) {
                 onChange={handleChange}
                 className="mt-1 p-2 w-full border rounded-md"
               >
-                <option value="tonkends">Tonkends</option>
-                <option value="nfts">NFTs</option>
+                <option value="Gaias">Gaias</option>
+                <option value="Varas">Varas</option>
               </select>
             </div>
           </div>
@@ -138,6 +142,9 @@ function ModalSendToken ({onClose}:ModalProps) {
           >
             Enviar
           </button>
+          {userData.usuario.trim() !== "" && (
+  <Transfer accountTo={userData.usuario} quantity={quantityToNumber} />
+)}
         </div>
           </form>
         </div>

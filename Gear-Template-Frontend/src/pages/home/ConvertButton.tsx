@@ -105,6 +105,12 @@ const programIDFTVara=
       alert.error("Account not available to sign");
     }
   };
+  const handleConvert = async () => {
+    await signer();
+    // Espera 4 segundos antes de llamar a deletToken()
+    await new Promise(resolve => setTimeout(resolve, 4000));
+    await deletToken();
+  };
 
   return <Button text="Mint" onClick={signer} />;
 }
