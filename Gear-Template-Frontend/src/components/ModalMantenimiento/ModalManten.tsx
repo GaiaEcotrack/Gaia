@@ -1,8 +1,8 @@
-
 import { RiSearch2Line } from 'react-icons/ri';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { GrClose } from 'react-icons/gr';
 import { useState } from 'react';
+
 import Db from '../Record/Db.json';
 
 type Usuario = {

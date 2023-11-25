@@ -10,7 +10,7 @@ import {
 import { Pie, Bar } from 'react-chartjs-2'
 import Eclipse from '../../assets/Eclipse.svg'
 import { useState, useEffect } from 'react';
-import  PopUpAlert  from '../../components/PopUpALert/PopUpAlert'
+import  {PopUpALert}  from '../../components/PopUpALert/PopUpAlert'
 import json from './data.json'
 import { Link, NavLink } from 'react-router-dom';
 import PanelUsuarioFinal from '../panelUsuarioFinal/PanelUsuarioFinal';
@@ -196,7 +196,7 @@ const GraficoEnergia = () => {
          >Crear Alertas
           
           </button>
-          {popupOpen && <PopUpAlert onClose={closePopup} />}
+          {popupOpen && <PopUpALert onClose={closePopup} />}
         </div>
         </div> 
      

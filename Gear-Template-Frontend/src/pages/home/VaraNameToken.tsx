@@ -3,7 +3,7 @@ import { ProgramMetadata } from "@gear-js/api";
 import { useEffect, useState } from "react";
 import { useApi, useAlert, useAccount } from "@gear-js/react-hooks";
 
-function NameFungibleToken() {
+function VaraTokenName() {
   const { api } = useApi();
   const { account } = useAccount();
 
@@ -18,7 +18,7 @@ function NameFungibleToken() {
 
   // Add your programID
   const programIDFT =
-  "0xd46f5f0fba63bff9a43f6d4cca46d09ef0955b024e1bb70851dad96391c69986";
+  "0xe5fd61567629a183c9caf022c3bed995a732814313785a1210c2ddbbf051a005";
 
  // Add your metadata.txt
 const meta =
@@ -53,6 +53,6 @@ const meta =
   );
 }
 
-export { NameFungibleToken };
+export { VaraTokenName };
 
     

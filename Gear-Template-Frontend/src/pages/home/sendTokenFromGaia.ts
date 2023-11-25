@@ -1,9 +1,8 @@
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
 import { ProgramMetadata } from "@gear-js/api";
-import { Button } from "@chakra-ui/react";
 
-function Burn() {
+function sendTokensFromGaia() {
   const alert = useAlert();
   const { accounts, account } = useAccount();
   const { api } = useApi();
@@ -58,17 +57,9 @@ function Burn() {
     } else {
       alert.error("Account not available to sign");
     }
-  };
+}
+signer()
 
-  return (
-    <button
-    onClick={signer}
-      type="submit"
-      className="bg-secondary text-white px-4 py-2 rounded-md mb-5"
-    >
-      Enviar
-    </button>
-  );
 }
 
-export { Burn };
+export {sendTokensFromGaia}

@@ -1,3 +1,5 @@
+import { ConvertButton } from "pages/home/ConvertButton";
+import { sendTokensFromGaia } from "pages/home/sendTokenFromGaia";
 import { useState } from "react";
 
 interface ModalProps {
@@ -22,6 +24,7 @@ function ModalSendToken ({onClose}:ModalProps) {
     // Aquí puedes manejar la lógica de envío de datos si es necesario
     console.log("Datos enviados:", userData);
   };
+
 
   return (
     <div className="fixed bg-black/60 top-0 left-0 w-full h-full flex items-center justify-center">

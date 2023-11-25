@@ -4,14 +4,16 @@ import { web3FromSource } from "@polkadot/extension-dapp";
 import { ProgramMetadata } from "@gear-js/api";
 import { Button } from "@gear-js/ui";
 
-function Mint() {
+function ConvertButton() {
   const alert = useAlert();
   const { accounts, account } = useAccount();
   const { api } = useApi();
 
    // Add your programID
-   const programIDFT =
-   "0xe5fd61567629a183c9caf022c3bed995a732814313785a1210c2ddbbf051a005";
+const programIDFT =
+   "0xd46f5f0fba63bff9a43f6d4cca46d09ef0955b024e1bb70851dad96391c69986";
+const programIDFTVara=
+"0xe5fd61567629a183c9caf022c3bed995a732814313785a1210c2ddbbf051a005"
 
   // Add your metadata.txt
  const meta =
@@ -19,14 +21,57 @@ function Mint() {
 
   const metadata = ProgramMetadata.from(meta);
 
-  const message: any = {
+  const messageTwo: any = {
     destination: programIDFT, // programId
-    payload: { mint: 500 },
+    payload: { burn: 100 },
     gasLimit: 899819245,
     value: 0,
   };
 
- async function signer(){
+  const deletToken = async () => {
+    const localaccount = account?.address;
+    const isVisibleAccount = accounts.some(
+      (visibleAccount) => visibleAccount.address === localaccount
+    );
+
+    if (isVisibleAccount) {
+      // Create a message extrinsic
+      const transferExtrinsic = await api.message.send(messageTwo, metadata);
+
+      const injector = await web3FromSource(accounts[0].meta.source);
+
+      transferExtrinsic
+        .signAndSend(
+          account?.address ?? alert.error("No account"),
+          { signer: injector.signer },
+          ({ status }) => {
+            if (status.isInBlock) {
+              alert.success(status.asInBlock.toString());
+            } else {
+              console.log("In process");
+              if (status.type === "Finalized") {
+                alert.success(status.type);
+              }
+            }
+          }
+        )
+        .catch((error: any) => {
+          console.log(":( transaction failed", error);
+        });
+    } else {
+      alert.error("Account not available to sign");
+    }
+  };
+
+
+  const message: any = {
+    destination: programIDFTVara, // programId
+    payload: { mint: 100 },
+    gasLimit: 899819245,
+    value: 0,
+  };
+
+  const signer = async () => {
     const localaccount = account?.address;
     const isVisibleAccount = accounts.some(
       (visibleAccount) => visibleAccount.address === localaccount
@@ -35,7 +80,7 @@ function Mint() {
     if (isVisibleAccount) {
       // Create a message extrinsic
       const transferExtrinsic = await api.message.send(message, metadata);
-
+      await deletToken()
       const injector = await web3FromSource(accounts[0].meta.source);
 
       transferExtrinsic
@@ -64,7 +109,7 @@ function Mint() {
   return <Button text="Mint" onClick={signer} />;
 }
 
-export { Mint};
+export { ConvertButton };
 
  
     

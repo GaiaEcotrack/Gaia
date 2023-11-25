@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { GrClose } from "react-icons/gr";
+
 import {ModalConfig} from "../ModalConfig/ModalConfig";
 import {ModalManten} from "../ModalMantenimiento/ModalManten";
 import {ModalGenerad} from "../ModalGeneradores/ModalGenerad";

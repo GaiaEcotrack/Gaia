@@ -1,8 +1,13 @@
-import { MdOutlineTrendingUp,MdOutlineTrendingDown } from "react-icons/md";
+import { NameFungibleToken } from "pages/home/NameToken";
+import { MdOutlineTrendingUp, MdOutlineTrendingDown } from "react-icons/md";
 import { useState, useEffect } from "react";
-import {ModalSendToken} from "../ModalTransaction/ModalSendToken";
-import {ModalConvertTokens} from "../ModalTransaction/ModalConvertTokens";
-import {ModalFunds} from "../ModalTransaction/ModalFunds";
+import { ModalSendToken } from "../ModalTransaction/ModalSendToken";
+import { ModalConvertTokens } from "../ModalTransaction/ModalConvertTokens";
+import { ModalFunds } from "../ModalTransaction/ModalFunds";
+import { LocalBalanceToken } from "pages/home/MyBalanceToken";
+import { VaraTokenName } from "pages/home/VaraNameToken";
+import { VarasBalance } from "pages/home/VarasBalance";
+
 
 interface CryptoValues {
   gaia: number;
@@ -115,8 +120,8 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
             </div>
           </div>
           <div className="flex items-center justify-between p-2.5">
-            <h2 className="text-3xl">Gaias</h2>
-            <h2 className="text-3xl"> 10</h2>
+            <div className="text-3xl"><NameFungibleToken/></div>
+            <div><LocalBalanceToken/></div>
           </div>
           <div className="flex items-center gap-10">
             <h2 className="p-2.5 text-2xl ">
@@ -166,8 +171,8 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
             </div>
           </div>
           <div className="flex items-center justify-between p-2.5">
-            <h2 className="text-3xl">Varas</h2>
-            <h2 className="text-3xl"> 7</h2>
+            <div className="text-3xl"><VaraTokenName/></div>
+            <h2 className="text-3xl"><VarasBalance/></h2>
           </div>
           <div className="flex items-center gap-10">
             <h2 className="p-2.5 text-2xl ">

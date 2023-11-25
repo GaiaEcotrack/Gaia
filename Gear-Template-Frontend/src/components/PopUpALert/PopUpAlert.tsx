@@ -5,7 +5,7 @@ interface PopupProps {
   onClose: () => void;
 }
 
-const PopUpALert: React.FC<PopupProps> = ({ onClose }) => {
+const PopUpALert: React.FC<PopupProps> = function ({ onClose })  {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
       <div className="bg-white p-8 max-w-md w-[447px] h-[542px] rounded-[20px]">
@@ -37,6 +37,7 @@ const PopUpALert: React.FC<PopupProps> = ({ onClose }) => {
         </div>
         <div className="flex flex-col items-center mt-16">
           <button
+          type="button"
             className="bg-[#74C7ED] text-white py-2 px-4 rounded w-1/2 mx-"
             onClick={onClose}
           >
@@ -48,4 +49,4 @@ const PopUpALert: React.FC<PopupProps> = ({ onClose }) => {
   );
 };
 
-export default PopUpALert;
+export  {PopUpALert};

@@ -2,6 +2,7 @@ import { CiFilter } from "react-icons/ci";
 import { GrClose } from "react-icons/gr";
 import { RiSearch2Line } from "react-icons/ri";
 import { useState } from "react";
+
 import Db from '../Record/Db.json';
 
 type Transaccion = {

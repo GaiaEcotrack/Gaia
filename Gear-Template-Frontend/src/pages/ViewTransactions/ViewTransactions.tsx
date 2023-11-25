@@ -1,6 +1,6 @@
-import Record from "../Record/Record"
-import Search from "../Search/Search"
-import {Transaction} from "../Transaction/Transaction"
+import {Record} from "./Record"
+import {Search} from "./Search"
+import {Transaction} from "./Transaction"
 
 
 function ViewTransactions  () {

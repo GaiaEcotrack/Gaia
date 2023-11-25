@@ -1,16 +1,15 @@
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
 import { ProgramMetadata } from "@gear-js/api";
-import { Button } from "@chakra-ui/react";
 
-function Burn() {
+function sendTokenToVara() {
   const alert = useAlert();
   const { accounts, account } = useAccount();
   const { api } = useApi();
 
   // Add your programID
   const programIDFT =
-    "0xd46f5f0fba63bff9a43f6d4cca46d09ef0955b024e1bb70851dad96391c69986";
+    "0xe5fd61567629a183c9caf022c3bed995a732814313785a1210c2ddbbf051a005";
 
   // Add your metadata.txt
   const meta =
@@ -20,7 +19,7 @@ function Burn() {
 
   const message: any = {
     destination: programIDFT, // programId
-    payload: { burn: 100 },
+    payload: { mint: 500 },
     gasLimit: 899819245,
     value: 0,
   };
@@ -60,15 +59,7 @@ function Burn() {
     }
   };
 
-  return (
-    <button
-    onClick={signer}
-      type="submit"
-      className="bg-secondary text-white px-4 py-2 rounded-md mb-5"
-    >
-      Enviar
-    </button>
-  );
+  signer(); // Llama a la función signer para que se ejecute inmediatamente al cargar el componente
 }
 
-export { Burn };
+export { sendTokenToVara };

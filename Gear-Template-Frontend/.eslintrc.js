@@ -26,6 +26,7 @@ module.exports = {
 
     'import/prefer-default-export': 'off', // force named exports
     'import/no-default-export': 'error',
+    'import/order': ['error', { 'newlines-between': 'always' }],
 
     '@typescript-eslint/no-unused-vars': 'warn', // 'error' is not convinient in development
 

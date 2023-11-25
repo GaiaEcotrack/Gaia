@@ -1,7 +1,7 @@
 
-import Db from './Db.json'
+import Db from '../../components/Record/Db.json'
 
-const Record = () => {
+function Record  () {
 const data = Db
 
 const getTextColor = (estadoPago: string) => {
@@ -20,9 +20,9 @@ const getTextColor = (estadoPago: string) => {
   return (
     <div className="flex items-center justify-center">
     <div className="bg-white w-4/5 h-full rounded-md mt-5 flex flex-col items-center gap-5 p-2.5">
-      {data.registros.map((e, index) => (
+      {data.registros.map((e) => (
         <div
-          key={index}
+          key={e.id}
           className="bg-secondary rounded-md text-white flex items-center justify-around w-full h-16 p-2.5"
         >
           <h1>{e.nombre}</h1>
@@ -43,4 +43,4 @@ const getTextColor = (estadoPago: string) => {
   );
 };
 
-export default Record;
+export {Record};

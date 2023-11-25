@@ -4,7 +4,10 @@ import { NameFungibleToken } from "./NameToken";
 
 function Home() {
   return (
+    <div>
+    <NameFungibleToken/>
     <LocalBalanceToken/>
+    </div>
   );
 }
 
