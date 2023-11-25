@@ -1,13 +1,18 @@
+import { useState, useEffect } from "react";
+import { ProgramMetadata, encodeAddress } from "@gear-js/api";
+import { useApi, useAlert, useAccount } from "@gear-js/react-hooks";
 
-import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
-import { web3FromSource } from "@polkadot/extension-dapp";
-import { ProgramMetadata } from "@gear-js/api";
-import { Button } from "@gear-js/ui";
-
-function Mint() {
-  const alert = useAlert();
-  const { accounts, account } = useAccount();
+function LocalBalanceToken() {
   const { api } = useApi();
+  const { account } = useAccount();
+
+  const alert = useAlert();
+
+  const [balance, setBalance] = useState<any | undefined>(0);
+
+  const [fullState, setFullState] = useState<any | undefined>({});
+
+  const Localbalances = fullState.balances || [];
 
    // Add your programID
    const programIDFT =
@@ -19,53 +24,40 @@ function Mint() {
 
   const metadata = ProgramMetadata.from(meta);
 
-  const message: any = {
-    destination: programIDFT, // programId
-    payload: { mint: 500 },
-    gasLimit: 899819245,
-    value: 0,
+  console.log(account);
+  
+
+  const getBalance = () => {
+    api.programState
+      .read({ programId: programIDFT, payload: "" }, metadata)
+      .then((result) => {
+        setFullState(result.toJSON());
+      })
+      .catch(({ message }: Error) => alert.error(message));
+
+    Localbalances.some(([address, balances]: any) => {
+      if (encodeAddress(address) === account?.address) {
+        setBalance(balances);
+
+        return true;
+      }
+      return false;
+    });
   };
 
-  const signer = async () => {
-    const localaccount = account?.address;
-    const isVisibleAccount = accounts.some(
-      (visibleAccount) => visibleAccount.address === localaccount
-    );
 
-    if (isVisibleAccount) {
-      // Create a message extrinsic
-      const transferExtrinsic = await api.message.send(message, metadata);
+  useEffect(() => {
+    getBalance();
+  });
 
-      const injector = await web3FromSource(accounts[0].meta.source);
-
-      transferExtrinsic
-        .signAndSend(
-          account?.address ?? alert.error("No account"),
-          { signer: injector.signer },
-          ({ status }) => {
-            if (status.isInBlock) {
-              alert.success(status.asInBlock.toString());
-            } else {
-                console.log("In process")
-              if (status.type === "Finalized") {
-                alert.success(status.type);
-              }
-            }
-          }
-        )
-        .catch((error: any) => {
-          console.log(":( transaction failed", error);
-        });
-    } else {
-      alert.error("Account not available to sign");
-    }
-  };
-
-  return <Button text="Mint" onClick={signer} />;
+  return (
+    <div>
+      <div>
+        <p>Balance Token</p>
+        <p>{balance}</p>
+      </div>
+    </div>
+  );
 }
 
-export { Mint };
-
- 
-    
-    
+export { LocalBalanceToken };
