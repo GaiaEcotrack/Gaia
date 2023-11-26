@@ -1,15 +1,22 @@
-import { BsCheck2Circle } from "react-icons/bs"; 
-import { HiOutlineBell } from "react-icons/hi"; 
-import { FiAlertCircle } from "react-icons/fi"; 
+// Importaciones de React
+import { useState } from "react";
+// Importaciones de react-icons
+import { BsCheck2Circle } from "react-icons/bs";
+import { HiOutlineBell } from "react-icons/hi";
+import { FiAlertCircle } from "react-icons/fi";
+// Importaciones de chart.js
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+// Importaciones de react-chartjs-2
 import { Doughnut } from "react-chartjs-2";
-import { useState } from "react"
+
+// Importaciones de estilos
 import '../../App.css';
-import {ModalAdministrar} from "../../components/ModalAdministrar/ModalAdministrar";
-import {ModalConfig} from "../../components/ModalConfig/ModalConfig";
-import {ModalManten} from "../../components/ModalMantenimiento/ModalManten";
-import {ModalGenerad} from "../../components/ModalGeneradores/ModalGenerad";
-import {ModalTransac} from "../../components/ModalTransacciones/ModalTransac";
+// Importaciones de componentes propios
+import { ModalAdministrar } from "../../components/ModalAdministrar/ModalAdministrar";
+import { ModalConfig } from "../../components/ModalConfig/ModalConfig";
+import { ModalManten } from "../../components/ModalMantenimiento/ModalManten";
+import { ModalGenerad } from "../../components/ModalGeneradores/ModalGenerad";
+import { ModalTransac } from "../../components/ModalTransacciones/ModalTransac";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -30,7 +37,7 @@ const options = {
   // ... otras opciones
 };
 
-const SuperUser = () => {
+export function SuperUser () {
 
   const [showAdmin, setShowAdmin] = useState(false)
   const [showConfig, setShowConfig] = useState(false)
@@ -135,15 +142,15 @@ const SuperUser = () => {
                 className="h-[300px] 2xl:h-[400px] justify-center mt-4 md:mt-0"
                 data={data}
                 options={options}
-                ></Doughnut>
+                />
             </div>
 
             <div className="mt-6 flex justify-center laptop">            
-              <button className="w-[113px] 2xl:w-[151px] h-[35px] 2xl:h-[47px]  bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
+              <button type="button" className="w-[113px] 2xl:w-[151px] h-[35px] 2xl:h-[47px]  bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
                 Energia Solar
               </button>
 
-              <button className="w-[113px] 2xl:w-[151px] h-[35px] 2xl:h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1 ml-8">
+              <button type="button" className="w-[113px] 2xl:w-[151px] h-[35px] 2xl:h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1 ml-8">
                 Tiempo real 
               </button>
 
@@ -181,38 +188,38 @@ const SuperUser = () => {
         
             <div className="w-[300px] h-full 2xl:h-[450px] rounded flex flex-col m-4 2xl:mt-0">
               <div className="flex flex-col items-end mt-10">           
-                <button onClick={() => {setShowConfig(true)}} className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff]" >
+                <button type="button" onClick={() => {setShowConfig(true)}} className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff]" >
                   Configuracion del sistema
                 </button>
                 
-                <button onClick={() => {setShowManten(true)}} className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff] mt-4" >
+                <button type="button" onClick={() => {setShowManten(true)}} className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff] mt-4" >
                   Mantenimiento del sistema
                 </button>
 
-                <button onClick={() => {setShowGenerad(true)}} className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff] mt-4" >
+                <button type="button" onClick={() => {setShowGenerad(true)}} className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff] mt-4" >
                   Administrar generadores
                 </button>
 
-                <button onClick={() => {setShowTransac(true)}} className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff] mt-4" >
+                <button type="button" onClick={() => {setShowTransac(true)}} className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff] mt-4" >
                   Administrar transacciones
                 </button>
 
-                <button className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff] mt-4" >
+                <button type="button" className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff] mt-4" >
                   Configuracion de las tarifas
                 </button>
 
-                <button className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff] mt-4" >
+                <button type="button" className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff] mt-4" >
                   Control de la red
                 </button>
 
-                <button className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff] mt-4" >
+                <button type="button" className="w-[250px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff] mt-4" >
                   Informes y Analisis
                 </button>           
               </div>
             </div>
           </div>
           
-          <button onClick={() => {setShowAdmin(true)}} className="md:hidden w-[150px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff]" >
+          <button type="button" onClick={() => {setShowAdmin(true)}} className="md:hidden w-[150px] h-[40px] bg-[#74C7ED] rounded-[5px] text-lg text-[#ffffff]" >
             Administrar
           </button>
         </section>
@@ -227,5 +234,3 @@ const SuperUser = () => {
     </>
   );
 };
-
-export default SuperUser;

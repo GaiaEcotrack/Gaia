@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@media (max-width: 1400px) {
+  .laptop {
+    transform: scale(0.70);
+  }
+}

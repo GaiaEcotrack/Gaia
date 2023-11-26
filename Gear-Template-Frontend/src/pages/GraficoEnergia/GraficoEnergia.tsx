@@ -10,9 +10,10 @@ import {
 } from "chart.js";
 import { Pie, Bar } from "react-chartjs-2";
 import { useState, useEffect } from "react";
-import { format } from "date-fns";
-import { PopUpALert } from "../../components/PopUpALert/PopUpAlert";
 import { NavLink } from "react-router-dom";
+import { format } from "date-fns";
+
+import { PopUpALert } from "../../components/PopUpALert/PopUpAlert";
 import PolygonDown from '../../assets/PolygonDown.svg'
 
 ChartJS.register(
@@ -76,7 +77,8 @@ const optionsBar = {
   },
 };
 
-const GraficoEnergia = () => {
+export function GraficoEnergia () {
+  
   const [totalGenerado, setTotalGenerado] = useState<number>(0);
   const [totalConsumido, setTotalConsumido] = useState<number>(0);
   const [totalExcedente, setTotalExcedente] = useState<number>(0);
@@ -102,16 +104,16 @@ const GraficoEnergia = () => {
     setPopupOpen(false);
   };
 
-  const fetchData = async () => {
-    try {
-      const response = await fetch("src/pages/GraficoEnergia/data.json");
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return null;
-    }
-  };
+  // const fetchData = async () => {
+  //   try {
+  //     const response = await fetch("src/pages/GraficoEnergia/data.json");
+  //     const data = await response.json();
+  //     return data;
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //     return null;
+  //   }
+  // };
 
   const updateBarChart = () => {
     const newData = Array.from({ length: 12 }, () =>
@@ -145,13 +147,9 @@ const GraficoEnergia = () => {
 
   // contador de total generado de Kw
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setTotalGenerado((prevTotalGenerado) => {
-        return prevTotalGenerado + 0.01;
-      });
-    }, 1000);
-
-    return () => clearInterval(intervalId);
+    const intervalId = setInterval(() => setTotalGenerado(prevTotalGenerado => prevTotalGenerado + 0.01), 1000);  
+  
+  return () => clearInterval(intervalId);
   }, []);
   // contador de total consumido de Kw
   useEffect(() => {
@@ -163,17 +161,17 @@ const GraficoEnergia = () => {
   }, []);
 
    // calcula excdente energia Kw
-  const calcularExcedente = (totalGenerado: number, totalConsumido: number): number => {
-    return Math.max(totalGenerado - totalConsumido, 0);
-  };
-  useEffect(() => {
-    // Calcula el excedente solo si totalConsumido es menor que totalGenerado
-    if (totalConsumido < totalGenerado) {
-      setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
-    } else {
-      setTotalExcedente(0);
-    }
-  }, [totalGenerado, totalConsumido]);
+   const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
+   Math.max(totalGenerado - totalConsumido, 0);
+ 
+ useEffect(() => {
+   // Calcula el excedente solo si totalConsumido es menor que totalGenerado
+   if (totalConsumido < totalGenerado) {
+     setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
+   } else {
+     setTotalExcedente(0);
+   }
+ }, [totalGenerado, totalConsumido]);
 
   return (
     <div className="w-full ">
@@ -238,7 +236,7 @@ const GraficoEnergia = () => {
             className="w-[400px] h-[400px] justify-center"
             data={dataPie}
             options={optionsPie}
-          ></Pie>
+          />
         </div>
 
         <div className="mt-12 flex flex-col items-center sm:flex-row sm:justify-center">
@@ -283,5 +281,3 @@ const GraficoEnergia = () => {
     </div>
   );
 };
-
-export default GraficoEnergia;

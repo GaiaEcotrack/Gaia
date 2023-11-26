@@ -5,10 +5,10 @@ import { withProviders } from 'hocs';
 import { Routes, Route } from "react-router-dom";
 
 import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
-import GraficoEnergia from './pages/GraficoEnergia/GraficoEnergia';
+import {GraficoEnergia} from './pages/GraficoEnergia/GraficoEnergia';
 import { ViewTransactions } from './pages/ViewTransactions/ViewTransactions';
-import Login from './pages/Login/Login';
-import SuperUser from './pages/superUser/SuperUser';
+import { Welcome } from './pages/Login/Login';
+import {SuperUser} from './pages/superUser/SuperUser';
 import { Labs } from './pages/Labs/Labs';
 import 'App.css';
 
@@ -29,7 +29,7 @@ function Component() {
       <Route path="/graficoEnergia" element={<GraficoEnergia/>} />
       <Route path="/superUser" element={<SuperUser/>} />
       <Route path="/" element={<ViewTransactions/>} />
-      <Route path="/login" element={<Login/>} />
+      <Route path="/login" element={<Welcome/>} />
       <Route path='/lab' element={<Labs/>}/>
      </Routes>
      </div>
