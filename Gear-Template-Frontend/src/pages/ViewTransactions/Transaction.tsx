@@ -1,13 +1,14 @@
-import { NameFungibleToken } from "pages/home/NameToken";
-import { MdOutlineTrendingUp, MdOutlineTrendingDown } from "react-icons/md";
 import { useState, useEffect } from "react";
+import { MdOutlineTrendingUp, MdOutlineTrendingDown } from "react-icons/md";
+
+// Importaciones locales
+import { NameFungibleToken } from "pages/home/NameToken";
 import { ModalSendToken } from "../ModalTransaction/ModalSendToken";
 import { ModalConvertTokens } from "../ModalTransaction/ModalConvertTokens";
 import { ModalFunds } from "../ModalTransaction/ModalFunds";
 import { LocalBalanceToken } from "pages/home/MyBalanceToken";
 import { VaraTokenName } from "pages/home/VaraNameToken";
 import { VarasBalance } from "pages/home/VarasBalance";
-
 
 interface CryptoValues {
   gaia: number;

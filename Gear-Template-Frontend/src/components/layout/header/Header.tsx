@@ -8,8 +8,7 @@ type Props = {
 
 function Header({ isAccountVisible }: Props) {
   return (
-    <header className={styles.header}>
-      <h1>Logo</h1>
+    <header className="text-black flex justify-end items-center bg-white">
       {isAccountVisible && <Account />}
     </header>
   );
