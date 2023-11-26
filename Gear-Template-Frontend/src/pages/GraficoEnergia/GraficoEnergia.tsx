@@ -14,6 +14,7 @@ import { NavLink } from "react-router-dom";
 import { format } from "date-fns";
 
 import { PopUpALert } from "../../components/PopUpALert/PopUpAlert";
+import PolygonDown from '../../assets/PolygonDown.svg'
 
 ChartJS.register(
   ArcElement,
@@ -90,7 +91,7 @@ export function GraficoEnergia () {
         label: "Valores de energía",
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         backgroundColor: ["#74C7ED", "#F37B7B", "#699CD0"],
-        barThickness: 40,
+        barThickness: 25,
       },
     ],
   });
@@ -174,11 +175,11 @@ export function GraficoEnergia () {
 
   return (
     <div className="w-full ">
-      <section className="">
-        <div className="flex ml-[20rem] p-2 justify-center">
-          <div className="w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
-            <div className="flex justify-center items-center h-full">
-              <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
+      <section className="bg-white md:p-8">
+        <div className="flex flex-col md:flex-row  p-2 justify-center">
+          <div className=" ms:w-228 ] md:w-[349px] h-[203px]  rounded overflow-hidden shadow-lg flex flex-col m-4">
+          <div className="flex justify-center items-center h-full">
+      <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
                 {totalGenerado.toFixed(3)} Kw
               </span>
             </div>
@@ -186,9 +187,9 @@ export function GraficoEnergia () {
               <span className="text-[#A7A4B2E0] mb-4 mr-4">Total Generado</span>
             </div>
           </div>
-          <div className="w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
-            <div className="flex justify-center items-center h-full">
-              <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
+          <div className="ms:w-228 md:w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
+    <div className="flex justify-center items-center h-full">
+      <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
                 {totalConsumido.toFixed(3)} Kw
               </span>
             </div>
@@ -198,9 +199,9 @@ export function GraficoEnergia () {
               </span>
             </div>
           </div>
-          <div className="w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
-            <div className="flex justify-center items-center h-full">
-              <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
+          <div className="ms:w-228 md:w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
+    <div className="flex justify-center items-center h-full">
+      <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
                 {totalExcedente.toFixed(3)} Kw
               </span>
             </div>
@@ -211,31 +212,24 @@ export function GraficoEnergia () {
             </div>
           </div>
 
-          <div className=" flex flex-col p-2 mb-24 ml-10">
-            <button
-              type="button"
-              className="text-[#699CD0] text-[18px] underline mt-4 text-left"
-            >
-              Panel de generación y consumo
-            </button>
-            <NavLink to="/panelUsuarioFinal">
-              <button
-                type="button"
-                className="text-[#699CD0] text-[18px] underline mt-4 text-left"
-              >
-                Administrar Dispositivos.
-              </button>
-            </NavLink>
-            <button
-              type="button"
-              className="text-[#699CD0] text-[18px] underline mt-4 text-left"
-              onClick={openPopup}
-            >
-              Crear Alertas
-            </button>
-            {popupOpen && <PopUpALert onClose={closePopup} />}
-          </div>
-        </div>
+          <div className="flex flex-col p-2 mb-24 md:ml-10 items-center md:items-start">
+  <button className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
+    Panel de generación y consumo
+  </button>
+  <NavLink to="/panelUsuarioFinal">
+    <button className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
+      Administrar Dispositivos.
+    </button>
+  </NavLink>
+  <button
+    className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left"
+    onClick={openPopup}
+  >
+    Crear Alertas
+  </button>
+  {popupOpen && <PopUpALert onClose={closePopup} />}
+</div>
+</div>
 
         <div className="justify-center h-96 mb-24">
           <Pie
@@ -244,43 +238,44 @@ export function GraficoEnergia () {
             options={optionsPie}
           />
         </div>
-        <div className="mt-12 flex justify-center mb-8">
-          <button
-            type="button"
-            className="w-[151px] h-[47px]  bg-neutral-100 rounded-[15px] text-[#857D7D] m-1"
-          >
-            Energia Solar
-          </button>
-          <button
-            type="button"
-            className="w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1"
-          >
-            Generado
-          </button>
-          <button
-            type="button"
-            className="w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1"
-          >
-            Tiempo real
-          </button>
-          <div className="ml-20">
-            <span className="text-[#857D7D] text-[16px] font-[700]">0 Kws</span>
-            <p className="text-[#857D7D]">Actual</p>
-          </div>
-          <div className="ml-20">
-            <span className="text-[#857D7D] text-[16px] font-[700]">0 Kws</span>
-            <p className="text-[#857D7D]">Basico</p>
-          </div>
-          <div className="ml-20">
-            <span className="text-[#857D7D] text-[16px] font-[700]">0 Kws</span>
-            <p className="text-[#857D7D]">Total</p>
-          </div>
-        </div>
-        <div className="flex mx-auto max-w-screen-md h-[200px]">
+
+        <div className="mt-12 flex flex-col items-center sm:flex-row sm:justify-center">
+  <button className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
+    Energia Solar
+    <img src={PolygonDown} alt="" className="ml-2" />
+  </button>
+  <button className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
+    Generado
+    <img src={PolygonDown} alt="" className="ml-2" />
+  </button>
+  <button className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
+    Tiempo real
+    <img src={PolygonDown} alt="" className="ml-2" />
+  </button>
+
+  <div className="mt-4 sm:mt-0 sm:ml-4 flex flex-col items-center sm:flex-row">
+    <div className="flex items-center mb-2 sm:mb-0">
+      <span className="text-[#857D7D] text-[16px] font-[700]">0 Kws</span>
+      <p className="text-[#857D7D] ml-2">Actual</p>
+    </div>
+    <div className="flex items-center mb-2 sm:mb-0 sm:ml-4">
+      <span className="text-[#857D7D] text-[16px] font-[700]">0 Kws</span>
+      <p className="text-[#857D7D] ml-2">Basico</p>
+    </div>
+    <div className="flex items-center">
+      <span className="text-[#857D7D] text-[16px] font-[700]">0 Kws</span>
+      <p className="text-[#857D7D] ml-2">Total</p>
+    </div>
+    <br />
+  </div>
+</div>
+
+<div className="flex mx-auto max-w-screen-md h-[200px]">
           <Bar data={barData} options={optionsBar} />
-          <div className=" border-4 m-auto ml-32 bg-gray-100 h-32 rounded-full flex items-center justify-center border-gray-300">
-            <p className="text-gray-400 text-xl m-2 text-center">{showDate}</p>
-          </div>
+          <div className="border-4 m-auto ml-32 bg-gray-100 h-32 rounded-full hidden lg:flex items-center justify-center border-gray-300">
+  <p className="text-gray-400 text-xl m-2 text-center">{showDate}</p>
+</div>
+
         </div>
       </section>
     </div>
