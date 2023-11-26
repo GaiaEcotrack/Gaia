@@ -1,3 +1,4 @@
+// Librerías de gráficos
 import {
   Chart as ChartJS,
   ChartData,
@@ -8,12 +9,19 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
+// Gráficos de React
 import { Pie, Bar } from "react-chartjs-2";
+// React Hooks
 import { useState, useEffect } from "react";
+// React Router
 import { NavLink } from "react-router-dom";
+// Funciones de formato de fecha
 import { format } from "date-fns";
+// Componentes personalizados
+import { ModalMintGaia } from "components/ModalMintGaia/ModalMintGaia";
 
 import { PopUpALert } from "../../components/PopUpALert/PopUpAlert";
+// Imágenes
 import PolygonDown from "../../assets/PolygonDown.svg";
 
 ChartJS.register(
@@ -78,6 +86,10 @@ const optionsBar = {
 };
 
 export function GraficoEnergia() {
+  const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
+    null
+  );
+  const [modalMint, setModalMint] = useState<boolean>(false)
   const [totalGenerado, setTotalGenerado] = useState<number>(0);
   const [totalConsumido, setTotalConsumido] = useState<number>(0);
   const [totalExcedente, setTotalExcedente] = useState<number>(0);
@@ -150,9 +162,9 @@ export function GraficoEnergia() {
       () => setTotalGenerado((prevTotalGenerado) => prevTotalGenerado + 0.01),
       1000
     );
-    return () => clearInterval(intervalId);
-  }, [setTotalGenerado]); // Agrega setTotalGenerado a las dependencias
 
+    return () => clearInterval(intervalId);
+  }, []);
   // contador de total consumido de Kw
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -166,6 +178,8 @@ export function GraficoEnergia() {
   const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
     Math.max(totalGenerado - totalConsumido, 0);
 
+  //  console.log(calcularExcedente(totalGenerado, totalConsumido));
+
   useEffect(() => {
     // Calcula el excedente solo si totalConsumido es menor que totalGenerado
     if (totalConsumido < totalGenerado) {
@@ -174,6 +188,13 @@ export function GraficoEnergia() {
       setTotalExcedente(0);
     }
   }, [totalGenerado, totalConsumido]);
+
+  const handleCaptureExcedente = () => {
+    const excedente = Math.floor(
+      calcularExcedente(totalGenerado, totalConsumido) * 10
+    );
+    setExcedenteCapturado(excedente);
+  };
 
   return (
     <div className="w-full ">
@@ -202,12 +223,19 @@ export function GraficoEnergia() {
             </div>
           </div>
           <div className="ms:w-228 md:w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
-            <div className="flex justify-center items-center h-full">
+            <div className="flex flex-col justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
                 {totalExcedente.toFixed(3)} Kw
               </span>
+              <button
+                type="button"
+                className="text-[#699CD0] text-[18px] underline mt-4 text-left"
+                onClick={() => {setModalMint(true); handleCaptureExcedente()}}
+              >
+                Convertir a Token
+              </button>
             </div>
-            <div className="flex justify-end items-end h-full">
+            <div className="flex justify-end items-end h-24">
               <span className="text-[#A7A4B2E0] mb-4 mr-4">
                 Total Excedente
               </span>
@@ -215,17 +243,11 @@ export function GraficoEnergia() {
           </div>
 
           <div className="flex flex-col p-2 mb-24 md:ml-10 items-center md:items-start">
-            <button
-              type="button"
-              className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left"
-            >
+            <button type="button" className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
               Panel de generación y consumo
             </button>
             <NavLink to="/panelUsuarioFinal">
-              <button
-                type="button"
-                className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left"
-              >
+              <button type="button" className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
                 Administrar Dispositivos.
               </button>
             </NavLink>
@@ -249,24 +271,15 @@ export function GraficoEnergia() {
         </div>
 
         <div className="mt-12 flex flex-col items-center sm:flex-row sm:justify-center">
-          <button
-            type="button"
-            className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1"
-          >
+          <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
             Energia Solar
             <img src={PolygonDown} alt="" className="ml-2" />
           </button>
-          <button
-            type="button"
-            className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1"
-          >
+          <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
             Generado
             <img src={PolygonDown} alt="" className="ml-2" />
           </button>
-          <button
-            type="button"
-            className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1"
-          >
+          <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
             Tiempo real
             <img src={PolygonDown} alt="" className="ml-2" />
           </button>
@@ -301,6 +314,13 @@ export function GraficoEnergia() {
           </div>
         </div>
       </section>
+  
+      <ModalMintGaia 
+      modalMint={modalMint} 
+      setModalMint={setModalMint}
+      excedenteCapturado={excedenteCapturado}
+      setTotalGenerado={setTotalGenerado}
+      setTotalConsumido={setTotalConsumido}/>
     </div>
   );
 }

@@ -4,10 +4,22 @@ import { web3FromSource } from "@polkadot/extension-dapp";
 import { ProgramMetadata } from "@gear-js/api";
 import { Button } from "@gear-js/ui";
 
-function Mint() {
+interface MintGaiaProps {
+  excedenteCapturado: number | null;
+  setTotalGenerado: React.Dispatch<React.SetStateAction<number>>;
+  setTotalConsumido: React.Dispatch<React.SetStateAction<number>>;
+}
+
+function MintGaia({ excedenteCapturado, setTotalGenerado, setTotalConsumido }: MintGaiaProps) {
   const alert = useAlert();
   const { accounts, account } = useAccount();
   const { api } = useApi();
+
+  const handleClick = () => {
+    // Aquí puedes realizar otras acciones si es necesario antes de reiniciar los estados
+    setTotalGenerado(0);
+    setTotalConsumido(0);
+  };
 
    // Add your programID
    const programIDFT =
@@ -21,7 +33,7 @@ function Mint() {
 
   const message: any = {
     destination: programIDFT, // programId
-    payload: { mint: 500 },
+    payload: { mint: excedenteCapturado  },
     gasLimit: 899819245,
     value: 0,
   };
@@ -61,10 +73,10 @@ function Mint() {
     }
   };
 
-  return <Button text="Mint" onClick={()=>{signer()}} />;
+  return <Button text="Convertir" className="bg-green-600" onClick={()=>{signer(); handleClick()}} />;
 }
 
-export { Mint};
+export { MintGaia };
 
  
     
