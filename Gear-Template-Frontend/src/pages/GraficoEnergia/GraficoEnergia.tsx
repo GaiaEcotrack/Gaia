@@ -14,6 +14,7 @@ import { NavLink } from "react-router-dom";
 import { format } from "date-fns";
 
 import { PopUpALert } from "../../components/PopUpALert/PopUpAlert";
+import { MintGaia } from "pages/home/MintGaia";
 
 ChartJS.register(
   ArcElement,
@@ -78,6 +79,7 @@ const optionsBar = {
 
 export function GraficoEnergia () {
   
+  const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(null);
   const [totalGenerado, setTotalGenerado] = useState<number>(0);
   const [totalConsumido, setTotalConsumido] = useState<number>(0);
   const [totalExcedente, setTotalExcedente] = useState<number>(0);
@@ -161,8 +163,10 @@ export function GraficoEnergia () {
 
    // calcula excdente energia Kw
    const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
-   Math.max(totalGenerado - totalConsumido, 0);
- 
+   Math.max(totalGenerado - totalConsumido, 0);   
+
+  //  console.log(calcularExcedente(totalGenerado, totalConsumido));
+
  useEffect(() => {
    // Calcula el excedente solo si totalConsumido es menor que totalGenerado
    if (totalConsumido < totalGenerado) {
@@ -171,6 +175,12 @@ export function GraficoEnergia () {
      setTotalExcedente(0);
    }
  }, [totalGenerado, totalConsumido]);
+
+ const handleCaptureExcedente = () => {
+  const excedente = Math.floor(calcularExcedente(totalGenerado, totalConsumido) * 10);
+  console.log(`Valor actual de excedente: ${excedente}`);
+  setExcedenteCapturado(excedente);
+};
 
   return (
     <div className="w-full ">
@@ -237,6 +247,19 @@ export function GraficoEnergia () {
           </div>
         </div>
 
+
+
+        <button
+          type="button"
+          className="text-[#699CD0] text-[18px] underline mt-4 text-left"
+          onClick={handleCaptureExcedente}
+        >
+          Convertir a TOKENS
+        </button>
+
+
+
+
         <div className="justify-center h-96 mb-24">
           <Pie
             className="w-[400px] h-[400px] justify-center"
@@ -283,6 +306,9 @@ export function GraficoEnergia () {
           </div>
         </div>
       </section>
+        <MintGaia excedenteCapturado={excedenteCapturado}
+        setTotalGenerado={setTotalGenerado}
+        setTotalConsumido={setTotalConsumido} />
     </div>
   );
 };
