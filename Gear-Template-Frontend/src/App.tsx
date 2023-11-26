@@ -8,7 +8,7 @@ import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
 import GraficoEnergia from './pages/GraficoEnergia/GraficoEnergia';
 import { ViewTransactions } from './pages/ViewTransactions/ViewTransactions';
 import Login from './pages/Login/Login';
-import SuperUser from './pages/superUser/SuperUser';
+import {SuperUser} from './pages/superUser/SuperUser';
 import { Labs } from './pages/Labs/Labs';
 import 'App.css';
 
