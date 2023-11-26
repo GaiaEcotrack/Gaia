@@ -1,13 +1,13 @@
 import FacebookIcon from "../../assets/FacebookIcon.svg";
 import LogoGaia from "../../assets/LogoGaia.svg";
 import GoogleIcon from "../../assets/GoogleIcon.svg";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const Welcome = () => {
   const isDesktop = window.innerWidth >= 1024;
 
   return (
-    <>
+    <div className="bg-white">
       <Link to="/w">
         <button className="text-white hover:text-gray-300">
           Dispositivos encontrados
@@ -53,7 +53,6 @@ const Welcome = () => {
                 Continuar con Google
               </p>
             </button>
-
             <button
               className={`w-full ${
                 isDesktop ? "h-16" : "h-12"
@@ -74,10 +73,15 @@ const Welcome = () => {
                 Continuar con Facebook
               </p>
             </button>
+            <NavLink to='/'>
+            <button className="w-1/3 bg-blue-500 rounded-full mt-8">
+              Ingresar
+              </button>
+              </NavLink>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
