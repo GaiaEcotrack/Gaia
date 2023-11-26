@@ -61,7 +61,7 @@ function Mint() {
     }
   };
 
-  return <Button text="Mint" onClick={signer} />;
+  return <Button text="Mint" onClick={()=>{signer()}} />;
 }
 
 export { Mint};

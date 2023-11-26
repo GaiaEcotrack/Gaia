@@ -4,7 +4,7 @@ import PolygonUp from "../../assets/PolygonUp.svg";
 // import Refresh from "../../assets/Refresh.svg";
 import back from "../../assets/back.svg";
 import { useState, useEffect } from "react";
-import data from '../../pages/panelUsuarioFinal/data-dispositivos-encontrados.json'
+// import data from '../../pages/panelUsuarioFinal/data-dispositivos-encontrados.json'
 
 interface Dispositivo {
   Nombre: string;

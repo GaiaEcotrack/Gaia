@@ -1,3 +1,4 @@
+// Librerías de gráficos
 import {
   Chart as ChartJS,
   ChartData,
@@ -8,14 +9,20 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
+// Gráficos de React
 import { Pie, Bar } from "react-chartjs-2";
+// React Hooks
 import { useState, useEffect } from "react";
+// React Router
 import { NavLink } from "react-router-dom";
+// Funciones de formato de fecha
 import { format } from "date-fns";
+// Componentes personalizados
+import { ModalMintGaia } from "components/ModalMintGaia/ModalMintGaia";
 
 import { PopUpALert } from "../../components/PopUpALert/PopUpAlert";
-import PolygonDown from '../../assets/PolygonDown.svg'
-import { MintGaia } from "pages/home/MintGaia";
+// Imágenes
+import PolygonDown from "../../assets/PolygonDown.svg";
 
 ChartJS.register(
   ArcElement,
@@ -78,9 +85,11 @@ const optionsBar = {
   },
 };
 
-export function GraficoEnergia () {
-  
-  const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(null);
+export function GraficoEnergia() {
+  const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
+    null
+  );
+  const [modalMint, setModalMint] = useState<boolean>(false)
   const [totalGenerado, setTotalGenerado] = useState<number>(0);
   const [totalConsumido, setTotalConsumido] = useState<number>(0);
   const [totalExcedente, setTotalExcedente] = useState<number>(0);
@@ -149,9 +158,12 @@ export function GraficoEnergia () {
 
   // contador de total generado de Kw
   useEffect(() => {
-    const intervalId = setInterval(() => setTotalGenerado(prevTotalGenerado => prevTotalGenerado + 0.01), 1000);  
-  
-  return () => clearInterval(intervalId);
+    const intervalId = setInterval(
+      () => setTotalGenerado((prevTotalGenerado) => prevTotalGenerado + 0.01),
+      1000
+    );
+
+    return () => clearInterval(intervalId);
   }, []);
   // contador de total consumido de Kw
   useEffect(() => {
@@ -162,34 +174,35 @@ export function GraficoEnergia () {
     return () => clearInterval(intervalId);
   }, []);
 
-   // calcula excdente energia Kw
-   const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
-   Math.max(totalGenerado - totalConsumido, 0);   
+  // calcula excdente energia Kw
+  const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
+    Math.max(totalGenerado - totalConsumido, 0);
 
   //  console.log(calcularExcedente(totalGenerado, totalConsumido));
 
- useEffect(() => {
-   // Calcula el excedente solo si totalConsumido es menor que totalGenerado
-   if (totalConsumido < totalGenerado) {
-     setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
-   } else {
-     setTotalExcedente(0);
-   }
- }, [totalGenerado, totalConsumido]);
+  useEffect(() => {
+    // Calcula el excedente solo si totalConsumido es menor que totalGenerado
+    if (totalConsumido < totalGenerado) {
+      setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
+    } else {
+      setTotalExcedente(0);
+    }
+  }, [totalGenerado, totalConsumido]);
 
- const handleCaptureExcedente = () => {
-  const excedente = Math.floor(calcularExcedente(totalGenerado, totalConsumido) * 10);
-  console.log(`Valor actual de excedente: ${excedente}`);
-  setExcedenteCapturado(excedente);
-};
+  const handleCaptureExcedente = () => {
+    const excedente = Math.floor(
+      calcularExcedente(totalGenerado, totalConsumido) * 10
+    );
+    setExcedenteCapturado(excedente);
+  };
 
   return (
     <div className="w-full ">
       <section className="bg-white md:p-8">
         <div className="flex flex-col md:flex-row  p-2 justify-center">
           <div className=" ms:w-228 ] md:w-[349px] h-[203px]  rounded overflow-hidden shadow-lg flex flex-col m-4">
-          <div className="flex justify-center items-center h-full">
-      <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
+            <div className="flex justify-center items-center h-full">
+              <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
                 {totalGenerado.toFixed(3)} Kw
               </span>
             </div>
@@ -198,8 +211,8 @@ export function GraficoEnergia () {
             </div>
           </div>
           <div className="ms:w-228 md:w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
-    <div className="flex justify-center items-center h-full">
-      <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
+            <div className="flex justify-center items-center h-full">
+              <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
                 {totalConsumido.toFixed(3)} Kw
               </span>
             </div>
@@ -210,12 +223,19 @@ export function GraficoEnergia () {
             </div>
           </div>
           <div className="ms:w-228 md:w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
-    <div className="flex justify-center items-center h-full">
-      <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
+            <div className="flex flex-col justify-center items-center h-full">
+              <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
                 {totalExcedente.toFixed(3)} Kw
               </span>
+              <button
+                type="button"
+                className="text-[#699CD0] text-[18px] underline mt-4 text-left"
+                onClick={() => {setModalMint(true); handleCaptureExcedente()}}
+              >
+                Convertir a Token
+              </button>
             </div>
-            <div className="flex justify-end items-end h-full">
+            <div className="flex justify-end items-end h-24">
               <span className="text-[#A7A4B2E0] mb-4 mr-4">
                 Total Excedente
               </span>
@@ -223,36 +243,24 @@ export function GraficoEnergia () {
           </div>
 
           <div className="flex flex-col p-2 mb-24 md:ml-10 items-center md:items-start">
-  <button className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
-    Panel de generación y consumo
-  </button>
-  <NavLink to="/panelUsuarioFinal">
-    <button className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
-      Administrar Dispositivos.
-    </button>
-  </NavLink>
-  <button
-    className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left"
-    onClick={openPopup}
-  >
-    Crear Alertas
-  </button>
-  {popupOpen && <PopUpALert onClose={closePopup} />}
-</div>
-</div>
-
-
-
-        <button
-          type="button"
-          className="text-[#699CD0] text-[18px] underline mt-4 text-left"
-          onClick={handleCaptureExcedente}
-        >
-          Convertir a TOKENS
-        </button>
-
-
-
+            <button type="button" className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
+              Panel de generación y consumo
+            </button>
+            <NavLink to="/panelUsuarioFinal">
+              <button type="button" className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
+                Administrar Dispositivos.
+              </button>
+            </NavLink>
+            <button
+              type="button"
+              className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left"
+              onClick={openPopup}
+            >
+              Crear Alertas
+            </button>
+            {popupOpen && <PopUpALert onClose={closePopup} />}
+          </div>
+        </div>
 
         <div className="justify-center h-96 mb-24">
           <Pie
@@ -263,47 +271,56 @@ export function GraficoEnergia () {
         </div>
 
         <div className="mt-12 flex flex-col items-center sm:flex-row sm:justify-center">
-  <button className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
-    Energia Solar
-    <img src={PolygonDown} alt="" className="ml-2" />
-  </button>
-  <button className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
-    Generado
-    <img src={PolygonDown} alt="" className="ml-2" />
-  </button>
-  <button className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
-    Tiempo real
-    <img src={PolygonDown} alt="" className="ml-2" />
-  </button>
+          <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
+            Energia Solar
+            <img src={PolygonDown} alt="" className="ml-2" />
+          </button>
+          <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
+            Generado
+            <img src={PolygonDown} alt="" className="ml-2" />
+          </button>
+          <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
+            Tiempo real
+            <img src={PolygonDown} alt="" className="ml-2" />
+          </button>
 
-  <div className="mt-4 sm:mt-0 sm:ml-4 flex flex-col items-center sm:flex-row">
-    <div className="flex items-center mb-2 sm:mb-0">
-      <span className="text-[#857D7D] text-[16px] font-[700]">0 Kws</span>
-      <p className="text-[#857D7D] ml-2">Actual</p>
-    </div>
-    <div className="flex items-center mb-2 sm:mb-0 sm:ml-4">
-      <span className="text-[#857D7D] text-[16px] font-[700]">0 Kws</span>
-      <p className="text-[#857D7D] ml-2">Basico</p>
-    </div>
-    <div className="flex items-center">
-      <span className="text-[#857D7D] text-[16px] font-[700]">0 Kws</span>
-      <p className="text-[#857D7D] ml-2">Total</p>
-    </div>
-    <br />
-  </div>
-</div>
+          <div className="mt-4 sm:mt-0 sm:ml-4 flex flex-col items-center sm:flex-row">
+            <div className="flex items-center mb-2 sm:mb-0">
+              <span className="text-[#857D7D] text-[16px] font-[700]">
+                0 Kws
+              </span>
+              <p className="text-[#857D7D] ml-2">Actual</p>
+            </div>
+            <div className="flex items-center mb-2 sm:mb-0 sm:ml-4">
+              <span className="text-[#857D7D] text-[16px] font-[700]">
+                0 Kws
+              </span>
+              <p className="text-[#857D7D] ml-2">Basico</p>
+            </div>
+            <div className="flex items-center">
+              <span className="text-[#857D7D] text-[16px] font-[700]">
+                0 Kws
+              </span>
+              <p className="text-[#857D7D] ml-2">Total</p>
+            </div>
+            <br />
+          </div>
+        </div>
 
-<div className="flex mx-auto max-w-screen-md h-[200px]">
+        <div className="flex mx-auto max-w-screen-md h-[200px]">
           <Bar data={barData} options={optionsBar} />
           <div className="border-4 m-auto ml-32 bg-gray-100 h-32 rounded-full hidden lg:flex items-center justify-center border-gray-300">
-  <p className="text-gray-400 text-xl m-2 text-center">{showDate}</p>
-</div>
-
+            <p className="text-gray-400 text-xl m-2 text-center">{showDate}</p>
+          </div>
         </div>
       </section>
-        <MintGaia excedenteCapturado={excedenteCapturado}
-        setTotalGenerado={setTotalGenerado}
-        setTotalConsumido={setTotalConsumido} />
+  
+      <ModalMintGaia 
+      modalMint={modalMint} 
+      setModalMint={setModalMint}
+      excedenteCapturado={excedenteCapturado}
+      setTotalGenerado={setTotalGenerado}
+      setTotalConsumido={setTotalConsumido}/>
     </div>
   );
-};
+}

@@ -73,7 +73,7 @@ function MintGaia({ excedenteCapturado, setTotalGenerado, setTotalConsumido }: M
     }
   };
 
-  return <Button text="Mint" onClick={()=>{signer(), handleClick()}} />;
+  return <Button text="Convertir" className="bg-green-600" onClick={()=>{signer(); handleClick()}} />;
 }
 
 export { MintGaia };
