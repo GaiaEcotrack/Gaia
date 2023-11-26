@@ -146,7 +146,7 @@ const GraficoEnergia = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setTotalGenerado((prevTotalGenerado) => {
-        return prevTotalGenerado + 1;
+        return prevTotalGenerado + 0.01;
       });
     }, 1000);
 
@@ -155,7 +155,7 @@ const GraficoEnergia = () => {
   // contador de total consumido de Kw
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setTotalConsumido((prevTotalConsumido) => prevTotalConsumido + 1);
+      setTotalConsumido((prevTotalConsumido) => prevTotalConsumido + 0.005);
     }, 7000);
 
     return () => clearInterval(intervalId);
@@ -181,7 +181,7 @@ const GraficoEnergia = () => {
           <div className="w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
             <div className="flex justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
-                {totalGenerado} Kw
+                {totalGenerado.toFixed(3)} Kw
               </span>
             </div>
             <div className="flex justify-end items-end h-full">
@@ -191,7 +191,7 @@ const GraficoEnergia = () => {
           <div className="w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
             <div className="flex justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
-                {totalConsumido} Kw
+                {totalConsumido.toFixed(3)} Kw
               </span>
             </div>
             <div className="flex justify-end items-end h-full">
@@ -203,7 +203,7 @@ const GraficoEnergia = () => {
           <div className="w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
             <div className="flex justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
-                {totalExcedente} Kw
+                {totalExcedente.toFixed(3)} Kw
               </span>
             </div>
             <div className="flex justify-end items-end h-full">
