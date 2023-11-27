@@ -125,76 +125,89 @@ export function GraficoEnergia() {
   //     return null;
   //   }
   // };
+  useEffect(() => {
+    // Recuperar valores desde localStorage
+    const storedTotalGenerado = JSON.parse(localStorage.getItem("totalGenerado") || "0");
+    const storedTotalConsumido = JSON.parse(localStorage.getItem("totalConsumido") || "0");
+    const storedTotalExcedente = JSON.parse(localStorage.getItem("totalExcedente") || "0");
 
-  const updateBarChart = () => {
-    const newData = Array.from({ length: 12 }, () =>
-      Math.floor(Math.random() * 15001)
-    );
-
-    const newBarData = {
-      ...barData,
-      datasets: [
-        {
-          ...barData.datasets[0],
-          data: newData,
-        },
-      ],
-    };
-
-    setBarData(newBarData);
-  };
+    // Eestados con los valores recuperados
+    setTotalGenerado(storedTotalGenerado);
+    setTotalConsumido(storedTotalConsumido);
+    setTotalExcedente(storedTotalExcedente);
+  }, []); // Se ejecuta solo al montar el componente
+ 
 
   useEffect(() => {
+    const updateBarChart = () => {
+      const newData = Array.from({ length: 12 }, () =>
+        Math.floor(Math.random() * 15001)
+      );
+  
+      const newBarData = {
+        ...barData,
+        datasets: [
+          {
+            ...barData.datasets[0],
+            data: newData,
+          },
+        ],
+      };
+  
+      setBarData(newBarData);
+      //obtengo los valores guardados
+      localStorage.setItem("totalGenerado", JSON.stringify(totalGenerado));
+      localStorage.setItem("totalConsumido", JSON.stringify(totalConsumido));
+      localStorage.setItem("totalExcedente", JSON.stringify(totalExcedente));
+    };
+    
     const intervalId = setInterval(updateBarChart, 1500);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  }, [barData]);
 
   const currentDate = new Date();
 
   const showDate = format(currentDate, "dd/MM/yyyy HH:mm");
 
-  // contador de total generado de Kw
-  useEffect(() => {
-    const intervalId = setInterval(
-      () => setTotalGenerado((prevTotalGenerado) => prevTotalGenerado + 0.01),
-      1000
-    );
 
-    return () => clearInterval(intervalId);
-  }, []);
-  // contador de total consumido de Kw
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setTotalConsumido((prevTotalConsumido) => prevTotalConsumido + 0.005);
-    }, 7000);
 
-    return () => clearInterval(intervalId);
-  }, []);
+useEffect(() => {
+  const intervalId = setInterval(
+    () => setTotalGenerado((prevTotalGenerado) => prevTotalGenerado + 0.01),
+    1000
+  );
 
-  // calcula excdente energia Kw
-  const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
-    Math.max(totalGenerado - totalConsumido, 0);
+  return () => clearInterval(intervalId);
+}, []);
 
-  //  console.log(calcularExcedente(totalGenerado, totalConsumido));
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    setTotalConsumido((prevTotalConsumido) => prevTotalConsumido + 0.005);
+  }, 7000);
 
-  useEffect(() => {
-    // Calcula el excedente solo si totalConsumido es menor que totalGenerado
-    if (totalConsumido < totalGenerado) {
-      setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
-    } else {
-      setTotalExcedente(0);
-    }
-  }, [totalGenerado, totalConsumido]);
+  return () => clearInterval(intervalId);
+}, []);
 
-  const handleCaptureExcedente = () => {
-    const excedente = Math.floor(
-      calcularExcedente(totalGenerado, totalConsumido) * 10
-    );
-    setExcedenteCapturado(excedente);
-  };
+const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
+  Math.max(totalGenerado - totalConsumido, 0);
+
+useEffect(() => {
+  if (totalConsumido < totalGenerado) {
+    setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
+  } else {
+    setTotalExcedente(0);
+  }
+}, [totalGenerado, totalConsumido]);
+
+const handleCaptureExcedente = () => {
+  const excedente = Math.floor(
+    calcularExcedente(totalGenerado, totalConsumido) * 10
+  );
+  setExcedenteCapturado(excedente);
+};
 
   return (
     <div className="w-full ">
