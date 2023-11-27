@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useAccount } from '@gear-js/react-hooks';
+
 import { AccountsModal } from './accounts-modal';
+// import
 import { Wallet } from './wallet';
 
 function Account() {

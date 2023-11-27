@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import FacebookIcon from "../../assets/FacebookIcon.svg";
 import LogoGaia from "../../assets/LogoGaia.svg";
@@ -8,12 +8,7 @@ export function Welcome () {
   const isDesktop = window.innerWidth >= 1024;
 
   return (
-    <div className="bg-white">
-      <Link to="/w">
-        <button type="button" className="text-white hover:text-gray-300">
-          Dispositivos encontrados
-        </button >
-      </Link>
+    <div className="bg-white">      
       <div className="h-screen flex justify-center items-center">
         <div
           className={`text-center ${
@@ -74,11 +69,11 @@ export function Welcome () {
                 Continuar con Facebook
               </p>
             </button >
-            <NavLink to='/'>
+            <Link to='/graficoEnergia'>
             <button type="button" className="w-1/3 bg-blue-500 rounded-full mt-8">
               Ingresar
               </button >
-              </NavLink>
+              </Link>
           </div>
         </div>
       </div>

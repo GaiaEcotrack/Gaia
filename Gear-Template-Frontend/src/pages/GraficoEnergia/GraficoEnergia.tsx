@@ -84,7 +84,7 @@ const optionsBar = {
     },
   },
 };
-
+/* eslint-disable */
 export function GraficoEnergia() {
   const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
     null
@@ -155,7 +155,7 @@ export function GraficoEnergia() {
       };
   
       setBarData(newBarData);
-      //obtengo los valores guardados
+
       localStorage.setItem("totalGenerado", JSON.stringify(totalGenerado));
       localStorage.setItem("totalConsumido", JSON.stringify(totalConsumido));
       localStorage.setItem("totalExcedente", JSON.stringify(totalExcedente));

@@ -44,7 +44,7 @@ function ModalMintGaia(props: ModalMintGaiaProps) {
 
         <div className="text-[#000000] text-xl flex justify-center items-center h-[50%] w-[100%] md:text-2xl">
           <h1 className="flex justify-center items-center">
-            {exdenteKWh} kWh exedentes equivalen a {excedenteCapturado} Token
+            {exdenteKWh} kWh excedentes equivalen a {excedenteCapturado} Token
           </h1>
         </div>
 

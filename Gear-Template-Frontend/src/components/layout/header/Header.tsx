@@ -1,6 +1,6 @@
 
 import { Account } from './account';
-import styles from './Header.module.scss';
+// import styles from './Header.module.scss';
 
 type Props = {
   isAccountVisible: boolean;
