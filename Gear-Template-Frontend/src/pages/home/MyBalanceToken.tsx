@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
 import { ProgramMetadata, encodeAddress } from "@gear-js/api";
 import { useApi, useAlert, useAccount } from "@gear-js/react-hooks";
-import { Center, Heading, VStack } from "@chakra-ui/react";
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../store'; 
 
 function LocalBalanceToken() {
   const { api } = useApi();
   const { account } = useAccount();
 
   const alert = useAlert();
+  const dispatch = useDispatch();
+
+  const valueGaia = useSelector((state: RootState) => state.app.valueGaia);
+
 
   const [balance, setBalance] = useState<any | undefined>(0);
 
@@ -46,6 +51,7 @@ function LocalBalanceToken() {
 
   useEffect(() => {
     getBalance();
+    dispatch({ type: 'SET_VALUE_GAIA', payload: balance });
   });
 
   return (

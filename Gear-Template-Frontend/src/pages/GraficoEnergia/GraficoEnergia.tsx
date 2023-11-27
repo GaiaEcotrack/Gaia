@@ -211,7 +211,7 @@ const handleCaptureExcedente = () => {
 
   return (
     <div className="w-full ">
-      <section className="bg-white md:p-8">
+      <section className="bg-white md:p-40 2xl:p-40">
         <div className="flex flex-col md:flex-row  p-2 justify-center">
           <div className=" ms:w-228 ] md:w-[349px] h-[203px]  rounded overflow-hidden shadow-lg flex flex-col m-4">
             <div className="flex justify-center items-center h-full">
@@ -223,7 +223,7 @@ const handleCaptureExcedente = () => {
               <span className="text-[#A7A4B2E0] mb-4 mr-4">Total Generado</span>
             </div>
           </div>
-          <div className="ms:w-228 md:w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
+          <div className=" ms:w-228 md:w-[349px] h-[203px] rounded overflow-hidden shadow-lg flex flex-col m-4">
             <div className="flex justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-auto">
                 {totalConsumido.toFixed(3)} Kw

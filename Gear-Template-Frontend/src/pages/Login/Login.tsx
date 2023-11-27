@@ -69,7 +69,7 @@ export function Welcome () {
                 Continuar con Facebook
               </p>
             </button >
-            <Link to='/graficoEnergia'>
+            <Link to='/home'>
             <button type="button" className="w-1/3 bg-blue-500 rounded-full mt-8">
               Ingresar
               </button >

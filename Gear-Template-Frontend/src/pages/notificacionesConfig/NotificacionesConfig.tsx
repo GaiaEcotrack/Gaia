@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import SideBar from '../home/SideBar'
 
 const NotificacionesConfig: React.FC = () => {
   const [buttonStates, setButtonStates] = useState([true, true, true, true]);
@@ -11,7 +10,6 @@ const NotificacionesConfig: React.FC = () => {
   };
   return (
     <div>
-      <SideBar />
       <div className='flex items-center justify-center h-screen '>
        <div  className='bg-gray-300 w-96 h-96 flex items-center justify-center rounded-lg ' >
         <div className='w-48 bg-white text-gray-600 h-32 mt-[-33vh] ml-[-10vh] rounded-md flex'>

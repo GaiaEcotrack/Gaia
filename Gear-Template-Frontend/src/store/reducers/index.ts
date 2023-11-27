@@ -1,12 +1,12 @@
 // // src/store/reducers/index.ts
-// import { combineReducers } from 'redux';
-// // Importa tus reductores aquí
+ import { combineReducers } from 'redux';
+// / Importa tus reductores aquí
 
-// const rootReducer = combineReducers({
-//   // Agrega tus reductores aquí
-// });
+ const rootReducer = combineReducers({
+   // Agrega tus reductores aquí
+ });
 
-// export type RootState = ReturnType<typeof rootReducer>;
+ export type RootState = ReturnType<typeof rootReducer>;
 
-// export default rootReducer;
+ export default rootReducer;
 export {};

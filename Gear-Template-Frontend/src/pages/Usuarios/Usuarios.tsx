@@ -1,4 +1,3 @@
-import SideBar from "../home/SideBar";
 
 function Usuarios() {
   const users = [

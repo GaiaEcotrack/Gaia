@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { MdOutlineTrendingUp, MdOutlineTrendingDown } from "react-icons/md";
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../store/index';
 
 // Importaciones locales
 import { NameFungibleToken } from "pages/home/NameToken";
@@ -11,8 +13,8 @@ import { VaraTokenName } from "pages/home/VaraNameToken";
 import { VarasBalance } from "pages/home/VarasBalance";
 
 interface CryptoValues {
-  gaia: number;
-  vara: number;
+  gaia: any;
+  vara: any;
 }
 
 interface PercentageChanges {
@@ -23,10 +25,39 @@ interface PercentageChanges {
 function Transaction () {
 
 
+  const gaia = useSelector((state: RootState)=> state.app.valueGaia)
 
+  // Función para calcular el valor total
+  
+
+  const [cantidad, setCantidad] = useState({
+    gaia,
+    vara:1000,
+  })
+
+  useEffect(() => {
+    setCantidad((prevValores) => ({
+      ...prevValores,
+      gaia: gaia,
+    }));
+  }, [gaia]);
+
+  const calcularValorTotal = (cantidad: number, valorCrypto: number): number => {
+    return cantidad * valorCrypto;
+  };
+
+  const [valoresCrypto, setValoresCrypto] = useState<CryptoValues>({
+    gaia: 5.05,
+    vara: 50.50,
+  });
+  
+  const totalGaia = calcularValorTotal(cantidad.gaia, valoresCrypto.gaia);
+  const totalVara = calcularValorTotal(cantidad.vara, valoresCrypto.vara);
+  
   const [sendTokenState, setSendTokenState] = useState(false);
   const [convertTokenState, setConvertTokenState] = useState(false);
   const [fundsState, setFundsState] = useState(false)
+
 
   const onClose = () => {
     setSendTokenState(false);
@@ -43,12 +74,6 @@ function Transaction () {
     setFundsState(true);
   };
 
-  
-  const [valoresCrypto, setValoresCrypto] = useState<CryptoValues>({
-    gaia: 1256,
-    vara: 2300,
-  });
-
   const [porcentajesCambio, setPorcentajesCambio] = useState<PercentageChanges>(
     {
       gaia: 0,
@@ -57,7 +82,7 @@ function Transaction () {
   );
 
   const [total, setTotal] = useState<number>(
-    valoresCrypto.gaia + valoresCrypto.vara
+    totalGaia + totalVara
   );
 
   useEffect(() => {
@@ -90,7 +115,7 @@ function Transaction () {
 
   const porcentajeGaiaColor = porcentajesCambio.gaia > 0 ? "#00ffc3" : "red";
   const porcentajeVaraColor = porcentajesCambio.vara > 0 ? "#00ffc3" : "red";
-
+  
   return (
     <div className="flex flex-col items-center">
       <div className="bg-white w-4/5 h-56 rounded-md mt-10 flex items-center gap-10 justify-around p-2.5">
@@ -122,11 +147,11 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
           </div>
           <div className="flex items-center justify-between p-2.5">
             <div className="text-3xl"><NameFungibleToken/></div>
-            <div><LocalBalanceToken/></div>
+            <div className="text-3xl"><LocalBalanceToken/></div>
           </div>
           <div className="flex items-center gap-10">
             <h2 className="p-2.5 text-2xl ">
-              ${valoresCrypto.gaia.toFixed(2)}
+              ${totalGaia.toFixed(2)}
             </h2>
             <div className="flex items-center gap-1">
               <h3 style={{ color: porcentajeGaiaColor }}>
@@ -177,7 +202,7 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
           </div>
           <div className="flex items-center gap-10">
             <h2 className="p-2.5 text-2xl ">
-              ${valoresCrypto.vara.toFixed(2)}
+              ${totalVara.toFixed(2)}
             </h2>
             <div className="flex items-center gap-1">
               <h3 style={{ color: porcentajeVaraColor }}>

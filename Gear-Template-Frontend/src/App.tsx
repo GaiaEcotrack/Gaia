@@ -3,7 +3,7 @@ import { Routing } from 'pages';
 import { Header, ApiLoader } from 'components';
 import { withProviders } from 'hocs';
 import { Routes, Route } from "react-router-dom";
-import SideBar from 'pages/home/SideBar';
+import {SideBar} from 'pages/home/SideBar';
 
 import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
 import {GraficoEnergia} from './pages/GraficoEnergia/GraficoEnergia';
@@ -27,7 +27,7 @@ function Component() {
       <main>{isAppReady ? <Routing /> : <ApiLoader />}</main>
      <Routes>
       <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal/>} />
-      <Route path="/graficoEnergia" element={<GraficoEnergia/>} />
+      <Route path="/home" element={<GraficoEnergia/>} />
       <Route path="/superUser" element={<SuperUser/>} />
       <Route path="/" element={<Welcome/>} />
       <Route path='/lab' element={<Labs/>}/>

@@ -1,8 +1,7 @@
 import React from "react";
-import SideBar from "../home/SideBar";
 import { Link } from "react-router-dom";
 
-const Notificaciones = () => {
+function Notificaciones (){
   const iconoStyle: React.CSSProperties = {
     margin: "auto",
     width: "30px",
@@ -13,8 +12,7 @@ const Notificaciones = () => {
 
   return (
     <div className="bg-slate-200 h-full">
-      <SideBar />
-      <Link to={"/notificacionesConfig"}>
+      <Link to="/notificacionesConfig">
         {/* <PiNutBold style={iconoStyle}/> */}
       </Link>
       <div className="flex items-center justify-center">
