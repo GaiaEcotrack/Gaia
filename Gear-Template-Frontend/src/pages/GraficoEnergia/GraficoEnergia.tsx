@@ -256,7 +256,7 @@ const handleCaptureExcedente = () => {
           </div>
 
           <div className="flex flex-col p-2 mb-24 md:ml-10 items-center md:items-start">
-            <button type="button" className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
+            <button type="button" className="cursor-not-allowed pointer-events-none text-[#699CD0] text-[18px] mt-4 md:mt-0 text-center md:text-left">
               Panel de generación y consumo
             </button>
             <NavLink to="/panelUsuarioFinal">
@@ -284,10 +284,18 @@ const handleCaptureExcedente = () => {
         </div>
 
         <div className="mt-12 flex flex-col items-center sm:flex-row sm:justify-center">
-          <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
-            Energia Solar
-            <img src={PolygonDown} alt="" className="ml-2" />
-          </button>
+        <div className="relative inline-block">
+        <select
+          className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1"
+          defaultValue="Energia Solar"
+          onChange={(e) => console.log(e.target.value)} // Puedes manejar la selección aquí
+        >
+          <option value="Energia Solar">Energia Solar</option>
+          <option value="Energia Termica">Energia Termica</option>
+          <option value="Energia Eolica">Energia Eolica</option>
+        </select>
+        {/* <img src={PolygonDown} alt="" className="ml-2" /> */}
+      </div>
           <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-100 rounded-[15px] text-[#857D7D] m-1">
             Generado
             <img src={PolygonDown} alt="" className="ml-2" />
@@ -320,7 +328,7 @@ const handleCaptureExcedente = () => {
           </div>
         </div>
 
-        <div className="flex mx-auto max-w-screen-md h-[200px]">
+        <div className="flex mx-auto max-w-screen-md h-[200px] mt-8">
           <Bar data={barData} options={optionsBar} />
           <div className="border-4 m-auto ml-32 bg-gray-100 h-32 rounded-full hidden lg:flex items-center justify-center border-gray-300">
             <p className="text-gray-400 text-xl m-2 text-center">{showDate}</p>
