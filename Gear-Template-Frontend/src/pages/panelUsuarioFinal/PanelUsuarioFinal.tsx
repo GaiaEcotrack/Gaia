@@ -58,7 +58,7 @@ const PanelUsuarioFinal = () => {
         <button className="w-28 h-10 bg-neutral-100 rounded-[5px] text-[#857D7D] hidden md:inline">
           Actualizar
         </button>
-        <NavLink to="/graficoEnergia">
+        <NavLink to="/home">
           <button>
             <img className="w-10 h-10 hidden md:inline" src={back} alt="" />
           </button>
