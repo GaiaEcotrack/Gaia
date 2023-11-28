@@ -22,7 +22,7 @@ function ModalConvertTokens({ onClose }: ModalProps) {
 
   return (
     <div className="fixed bg-black/60 top-0 left-0 w-full h-full flex items-center justify-center">
-      <div className="bg-secondary gap-5 rounded-3xl relative w-2/6 h-1/2 flex flex-col items-center justify-between">
+      <div className="bg-secondary gap-5 rounded-3xl relative w-4/5 sm:w-2/6 h-1/2 flex flex-col items-center justify-between">
         <div className="flex justify-end w-full">
           <button
             type="button"

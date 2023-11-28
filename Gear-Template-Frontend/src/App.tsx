@@ -5,6 +5,7 @@ import { Header, ApiLoader } from 'components';
 import { withProviders } from 'hocs';
 import { Routing } from 'pages';
 import { SideBar } from 'pages/home/SideBar';
+
 import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
 import { GraficoEnergia } from './pages/GraficoEnergia/GraficoEnergia';
 import { Welcome } from './pages/Login/Login';

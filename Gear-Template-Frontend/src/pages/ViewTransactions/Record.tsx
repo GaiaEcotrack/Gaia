@@ -19,7 +19,7 @@ const getTextColor = (estadoPago: string) => {
 
   return (
     <div className="flex items-center justify-center">
-    <div className="bg-white w-4/5 h-full rounded-md mt-5 flex flex-col items-center gap-5 p-2.5">
+    <div className="bg-white w-[90%] sm:w-4/5 h-full rounded-md mt-5 flex flex-col items-center gap-5 p-2.5">
       {data.registros.map((e) => (
         <div
           key={e.id}
@@ -28,10 +28,10 @@ const getTextColor = (estadoPago: string) => {
           <h1>{e.nombre}</h1>
           <h1 className={getTextColor(e.estado_pago)}>{e.estado_pago}</h1>
           <h1>{e.tipo_transaccion}</h1>
-          <h1>{e.cantidad_kw}Kw</h1>
+          <h1 className='hidden sm:absolute'>{e.cantidad_kw}Kw</h1>
           <div className='flex items-center flex-col'>
           <h1>${e.total}</h1>
-          <div className='flex gap-5'>
+          <div className='flex hidden sm:absolute gap-5'>
             <h2>26 de noviembre</h2>
             <h2>13:52 pm</h2>
           </div>

@@ -19,7 +19,7 @@ function Search() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="bg-white w-4/5 h-20 rounded-md mt-5 flex items-center gap-5 p-2.5">
+      <div className="bg-white w-[90%] sm:w-4/5 justify-around h-20 rounded-md mt-5 flex items-center gap-5 p-2.5">
         <div className="flex items-center justify-center p-5">
           <div className="rounded-lg p-5">
             <div className="flex ">
@@ -48,7 +48,9 @@ function Search() {
           </div>
         </div>
 
-        <div className="p-4 max-w-md mx-auto">
+        <div className="sm:flex hidden gap-10">
+          
+        <div className="p-4  max-w-md mx-auto">
           <label
             htmlFor="opcionesCompra"
             className="block text-sm font-medium text-gray-700"
@@ -68,7 +70,7 @@ function Search() {
           </select>
         </div>
 
-        <div className="p-4 max-w-md mx-auto">
+        <div className="p-4  max-w-md mx-auto">
           <label
             htmlFor="opcionesEstado"
             className="block text-sm font-medium text-gray-700"
@@ -88,7 +90,7 @@ function Search() {
           </select>
         </div>
 
-        <div className="p-4 max-w-md mx-auto">
+        <div className="p-4  max-w-md mx-auto">
           <label
             htmlFor="opcionesFecha"
             className="block text-sm font-medium text-gray-700"
@@ -106,6 +108,7 @@ function Search() {
             <option value="opcion2">Opción 2</option>
             <option value="opcion3">Opción 3</option>
           </select>
+        </div>
         </div>
 
       </div>

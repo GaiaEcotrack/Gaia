@@ -23,13 +23,13 @@ const meta =
 
    const metadata = ProgramMetadata.from(meta);
 
-console.log(quantity);
+   const addresLocal = account!.address
 
   const message: any = {
     destination: programIDFT, // programId
     payload: {
       transfer: [
-        decodeAddress("5HjNGPcdpphBeLq6ffechssztTar6e2xXuavMAdeo3JHGcdR"),
+        decodeAddress(addresLocal),
         decodeAddress(accountTo),
         quantity,
       ],
@@ -37,6 +37,8 @@ console.log(quantity);
     gasLimit: 899819245,
     value: 0,
   };
+
+
 
   const signer = async () => {
     const localaccount = account?.address;

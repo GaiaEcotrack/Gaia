@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
   function SideBar (){    
     return (
       <div>
-      <div className="bg-white w-[10vh] h-full flex-col flex items-center justify-center fixed flex-wrap border border-dark">
+      <div className="bg-white hidden 2xl:absolute sm:w-[10vh] sm:h-full sm:flex-col sm:flex sm:items-center sm:justify-center sm:fixed sm:flex-wrap sm:border sm:border-dark">
       <div className="mt-48">
         <img className="rounded-full w-[45px] mt-[-40vh]" src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" />
   <Link to="/home">

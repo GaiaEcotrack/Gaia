@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
 import { MdOutlineTrendingUp, MdOutlineTrendingDown } from "react-icons/md";
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../store/index';
-
 // Importaciones locales
 import { NameFungibleToken } from "pages/home/NameToken";
+import { VaraTokenName } from "pages/home/VaraNameToken";
+import { VarasBalance } from "pages/home/VarasBalance";
+import { LocalBalanceToken } from "pages/home/MyBalanceToken";
+
 import { ModalSendToken } from "../ModalTransaction/ModalSendToken";
 import { ModalConvertTokens } from "../ModalTransaction/ModalConvertTokens";
 import { ModalFunds } from "../ModalTransaction/ModalFunds";
-import { LocalBalanceToken } from "pages/home/MyBalanceToken";
-import { VaraTokenName } from "pages/home/VaraNameToken";
-import { VarasBalance } from "pages/home/VarasBalance";
+import { RootState } from '../../store/index';
 
 interface CryptoValues {
   gaia: any;
@@ -32,19 +32,18 @@ function Transaction () {
 
   const [cantidad, setCantidad] = useState({
     gaia,
-    vara:1000,
-  })
+    vara: 1000,
+  });
 
   useEffect(() => {
     setCantidad((prevValores) => ({
       ...prevValores,
-      gaia: gaia,
+     gaia,
     }));
   }, [gaia]);
 
-  const calcularValorTotal = (cantidad: number, valorCrypto: number): number => {
-    return cantidad * valorCrypto;
-  };
+  const calcularValorTotal = (quantity: number, valorCrypto: number): number =>
+  quantity * valorCrypto;
 
   const [valoresCrypto, setValoresCrypto] = useState<CryptoValues>({
     gaia: 5.05,
@@ -118,8 +117,8 @@ function Transaction () {
   
   return (
     <div className="flex flex-col items-center">
-      <div className="bg-white w-4/5 h-56 rounded-md mt-10 flex items-center gap-10 justify-around p-2.5">
-        <div className="w-80 h-48 flex flex-col bg-gradient-to-r from-secondary to-primary rounded-md">
+      <div className="bg-white w-[90%] sm:w-4/5 h-[37rem] gap-5 sm:h-56 rounded-md mt-10 flex sm:flex-row items-center flex-col sm:gap-10 sm:justify-around p-2.5">
+        <div className="w-80 h-44 sm:w-80 sm:h-48 flex flex-col  bg-gradient-to-r from-secondary to-primary rounded-md">
           <div className="flex gap-10 p-2.5 items-center justify-between">
             <img className="w-14 h-14" src="/LOGOGAIASOLO.png" alt="" />
             <div className="flex gap-1">
@@ -146,11 +145,11 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
             </div>
           </div>
           <div className="flex items-center justify-between p-2.5">
-            <div className="text-3xl"><NameFungibleToken/></div>
-            <div className="text-3xl"><LocalBalanceToken/></div>
+            <div className="sm:text-3xl">Gaia</div>
+            <div className="sm:text-3xl"><LocalBalanceToken/></div>
           </div>
           <div className="flex items-center gap-10">
-            <h2 className="p-2.5 text-2xl ">
+            <h2 className="p-2.5 sm:text-2xl ">
               ${totalGaia.toFixed(2)}
             </h2>
             <div className="flex items-center gap-1">
@@ -170,7 +169,7 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
           </div>
         </div>
 
-        <div className="w-80 h-48 flex flex-col bg-gradient-to-r from-vara to-black rounded-md">
+        <div className="w-80 h-44 sm:w-80 sm:h-48 flex flex-col bg-gradient-to-r from-vara to-black rounded-md">
           <div className="flex gap-10 p-2.5 items-center justify-between">
             <img className="w-14 h-14" src="/VaraCrypto.png" alt="" />
             <div className="flex gap-1">
@@ -197,11 +196,11 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
             </div>
           </div>
           <div className="flex items-center justify-between p-2.5">
-            <div className="text-3xl"><VaraTokenName/></div>
-            <h2 className="text-3xl"><VarasBalance/></h2>
+            <div className="sm:text-3xl"><VaraTokenName/></div>
+            <h2 className="sm:text-3xl"><VarasBalance/></h2>
           </div>
           <div className="flex items-center gap-10">
-            <h2 className="p-2.5 text-2xl ">
+            <h2 className="p-2.5 sm:text-2xl ">
               ${totalVara.toFixed(2)}
             </h2>
             <div className="flex items-center gap-1">
@@ -221,9 +220,9 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
           </div>
         </div>
 
-        <div className="w-80 h-48 bg-gradient-to-r from-black to-secundary flex flex-col items-center justify-around gap-5 bg-secondary rounded-md">
+        <div className="w-80 h-44 sm:w-80 sm:h-48 flex flex-col bg-gradient-to-r from-black to-secundary flex flex-col items-center justify-around gap-5 bg-secondary rounded-md">
           <div className="flex items-center justify-center p-2.5">
-            <h2 className="text-3xl">Saldo Total</h2>
+            <h2 className="sm:text-3xl">Saldo Total</h2>
           </div>
           <div className="flex items-center gap-5">
             <button
@@ -246,7 +245,7 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
               Depositar Fondos
             </button>
           </div>
-          <h2 className="p-2.5 text-3xl ">${total.toFixed(2)} USD</h2>
+          <h2 className="p-2.5 sm:text-3xl ">${total.toFixed(2)} USD</h2>
         </div>
       </div>
       {sendTokenState && (
