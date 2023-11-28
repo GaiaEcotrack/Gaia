@@ -49,19 +49,6 @@ const optionsPie = {
   maintainAspectRatio: false,
 };
 
-// const dataBar = {
-//   labels: ['', '', '', '', '', '', '', '', '', '', ''], // esta data vendria de Vara network
-//   datasets: [
-//     {
-//       type: 'bar',
-//       label: 'Valores de energía',
-//       data: [7000, 5000, 2000, 500, 9000, 1000, 4000, 9000, 3500, 2000, 5000, 700],
-//       backgroundColor: ['#74C7ED', '#F37B7B', '#699CD0'],
-//       barThickness: 50,
-//       // maxBarThickness: 50,
-//     },
-//   ],
-// };
 
 const optionsBar = {
   responsive: true,
@@ -115,16 +102,7 @@ export function GraficoEnergia() {
     setPopupOpen(false);
   };
 
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await fetch("src/pages/GraficoEnergia/data.json");
-  //     const data = await response.json();
-  //     return data;
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     return null;
-  //   }
-  // };
+
   useEffect(() => {
     // Recuperar valores desde localStorage
     const storedTotalGenerado = JSON.parse(localStorage.getItem("totalGenerado") || "0");
@@ -306,23 +284,23 @@ const handleCaptureExcedente = () => {
           </button>
 
           <div className="mt-4 sm:mt-0 sm:ml-4 flex flex-col items-center sm:flex-row">
-            <div className="flex items-center mb-2 sm:mb-0">
+            <div className="flex flex-col items-center mb-2 sm:mb-0">
               <span className="text-[#857D7D] text-[16px] font-[700]">
                 0 Kws
               </span>
-              <p className="text-[#857D7D] ml-2">Actual</p>
+              <h3 className="text-[#857D7D] ml-2 p-2">Actual</h3>
             </div>
-            <div className="flex items-center mb-2 sm:mb-0 sm:ml-4">
+            <div className="flex flex-col items-center mb-2 sm:mb-0 sm:ml-4">
               <span className="text-[#857D7D] text-[16px] font-[700]">
                 0 Kws
               </span>
-              <p className="text-[#857D7D] ml-2">Basico</p>
+              <h3 className="text-[#857D7D] ml-2 p-2">Basico</h3>
             </div>
-            <div className="flex items-center">
+            <div className="flex flex-col items-center mb-2 sm:mb-0">
               <span className="text-[#857D7D] text-[16px] font-[700]">
                 0 Kws
               </span>
-              <p className="text-[#857D7D] ml-2">Total</p>
+              <h3 className="text-[#857D7D] ml-2 p-2">Total</h3>
             </div>
             <br />
           </div>
