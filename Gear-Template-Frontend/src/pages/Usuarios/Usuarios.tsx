@@ -79,7 +79,7 @@ function Usuarios() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center justify-center gap-10 h-96">
+      <div className="flex items-center justify-center gap-10 h-80">
         <div className="flex mt-16 text-white ml-39">
           <div className="w-80 h-48 bg-[#74C7ED] rounded-2xl flex flex-col items-center justify-center flex-wrap">
             <div className="w-56 flex items-center justify-center ">

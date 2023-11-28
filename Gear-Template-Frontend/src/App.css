@@ -4,6 +4,12 @@
 
 @media (max-width: 1400px) {
   .laptop {
-    transform: scale(0.70);
+    transform: scale(0.80);
+  }
+}
+
+@media (max-width: 1400px) {
+  .graficos {
+    transform: scale(0.90);
   }
 }

@@ -47,9 +47,9 @@ export function SuperUser () {
 
   return (
     <>
-      <div className="flex flex-row flex-wrap justify-center">      
+      <div className="flex flex-row flex-wrap justify-center pl-20">      
 
-        <div className="md:hidden w-[245px] h-[120px] 2xl:h-[300px] rounded overflow-hidden shadow-md flex flex-col justify-center mt-5 mb-2">
+        <div className="bg-white md:hidden w-[245px] h-[120px] 2xl:h-[300px] rounded overflow-hidden shadow-md flex flex-col justify-center mt-5 mb-2">
           <div className="flex justify-center items-center h-20">
             <span className="text-center text-7xl  text-[#4bc844]">
               <BsCheck2Circle />
@@ -164,7 +164,7 @@ export function SuperUser () {
           </section>
         </div>
 
-        <section className="md:w-[30%] flex justify-center items-center md:h-[78vh] 2xl:h-[650px] mt-4 md:mt-10">
+        <section className="md:w-[30%] flex justify-center items-center md:h-[86vh] 2xl:h-[650px] mt-8 md:mt-10">
           <div className="hidden md:flex flex-col h-[115vh] 2xl:h-[700px] laptop">
             <div className="bg-white w-[300px] h-[600px] 2xl:h-[300px] rounded overflow-hidden shadow-lg md:flex flex-col justify-center m-4">
               <div className="flex justify-center items-center h-32">
