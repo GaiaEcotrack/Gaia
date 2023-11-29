@@ -5,12 +5,13 @@ import { Header, ApiLoader } from 'components';
 import { withProviders } from 'hocs';
 import { Routing } from 'pages';
 import { SideBar } from 'pages/home/SideBar';
-
-import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
+/* eslint-disable */
+import { NotificacionesConfig } from 'pages/notificacionesConfig/NotificacionesConfig';
 import { GraficoEnergia } from './pages/GraficoEnergia/GraficoEnergia';
 import { Welcome } from './pages/Login/Login';
 import { SuperUser } from './pages/superUser/SuperUser';
 import { Labs } from './pages/Labs/Labs';
+import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
 import 'App.css';
 
 function Component() {
@@ -38,6 +39,7 @@ function Component() {
         <Route path="/superUser" element={<SuperUser />} />
         <Route path="/" element={<Welcome />} />
         <Route path='/lab' element={<Labs />} />
+        <Route path='/notificacionesConfig' element={<NotificacionesConfig />} />
       </Routes>
     </div>
   );

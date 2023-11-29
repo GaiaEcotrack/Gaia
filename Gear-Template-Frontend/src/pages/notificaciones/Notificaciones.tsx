@@ -1,20 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom";
 
-function Notificaciones (){
-  const iconoStyle: React.CSSProperties = {
-    margin: "auto",
-    width: "30px",
-    height: "30px",
-    marginLeft: "200px",
-    color: "black",
-  };
+function Notificaciones (){ 
 
   return (
     <div className="bg-slate-200 h-full">
-      <Link to="/notificacionesConfig">
-        {/* <PiNutBold style={iconoStyle}/> */}
-      </Link>
+      
       <div className="flex items-center justify-center">
         <div className="flex text-[#696771] bg-[#DDDDDD] w-[800px] h-20 border border-solid border-[#000 ] items-center justify-center mt-40">
           <h1 className="m-5">El Precio de la Token Gaia Subió un 20%</h1>
