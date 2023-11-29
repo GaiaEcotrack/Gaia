@@ -2,7 +2,6 @@
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
 import { decodeAddress, ProgramMetadata } from "@gear-js/api";
-import { Button } from "@gear-js/ui";
 
 interface ModalTypes {
   accountTo: string,
@@ -17,10 +16,6 @@ interface Transaccion {
   total: any;
 }
 
-interface TransferProps {
-  datos: Transaccion;
-  guardarDatosLocalmente: (datos: Transaccion) => void;
-}
 
 function Transfer({accountTo, quantity,state}:ModalTypes) {
 
@@ -32,12 +27,10 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
       const nuevosDatos: Transaccion[] = [...datosActuales, state as Transaccion];
 
       localStorage.setItem('transacciones', JSON.stringify(nuevosDatos));
-      console.log('Datos guardados localmente.');
-    } catch (error) {
-      console.error('Error al guardar datos localmente:', error);
+    } catch (error:any) {
+      return error
     }
   };
-
   const alert = useAlert();
   const { accounts, account } = useAccount();
   const { api } = useApi();
@@ -90,7 +83,8 @@ const meta =
               
               alert.success(status.asInBlock.toString());
             } else {
-                console.log("In process");
+              alert.info("in procces")
+              
               if (status.type === "Finalized") {
                 alert.success(status.type);
               }
@@ -98,7 +92,7 @@ const meta =
           }
         )
         .catch((error: any) => {
-          console.log(":( transaction failed", error);
+          alert.error(error)
         });
     } else {
       alert.error("Account not available to sign");

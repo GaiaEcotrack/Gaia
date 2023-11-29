@@ -7,11 +7,9 @@ type Props = {
   address: string;
   name: string | undefined;
   onClick: () => void;
-  isActive?: boolean;
-  block?: boolean;
 };
 
-function AccountButton({ address, name, onClick, isActive, block }: Props) {
+function AccountButton({ address, name, onClick }: Props) {
   
 
   return (

@@ -19,7 +19,6 @@ function ModalFunds  ({onClose}:ModalFundsProps){
       const handleSubmit = (e: { preventDefault: () => void }) => {
         e.preventDefault();
         // Aquí puedes manejar la lógica de envío de datos si es necesario
-        console.log("Datos enviados:", userData);
       };
 
 

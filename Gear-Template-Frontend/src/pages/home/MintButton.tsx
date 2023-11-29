@@ -46,7 +46,7 @@ function Mint() {
             if (status.isInBlock) {
               alert.success(status.asInBlock.toString());
             } else {
-                console.log("In process")
+                alert.loading("In process")
               if (status.type === "Finalized") {
                 alert.success(status.type);
               }
@@ -54,7 +54,7 @@ function Mint() {
           }
         )
         .catch((error: any) => {
-          console.log(":( transaction failed", error);
+          alert.error(":( transaction failed", error);
         });
     } else {
       alert.error("Account not available to sign");

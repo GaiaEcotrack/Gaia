@@ -45,12 +45,12 @@ function TotalSupply() {
           { signer: injector.signer },
           ({ status }) => {
             if (status.isInBlock) {
-              console.log(
+              alert.info(
                 `Completed at block hash #${status.asInBlock.toString()}`
               );
               alert.success(`Block hash #${status.asInBlock.toString()}`);
             } else {
-              console.log(`Current status: ${status.type}`);
+              alert.info(`Current status: ${status.type}`);
               if (status.type === "Finalized") {
                 alert.success(status.type);
               }
@@ -58,7 +58,7 @@ function TotalSupply() {
           }
         )
         .catch((error: any) => {
-          console.log(":( transaction failed", error);
+          alert.error(":( transaction failed", error);
         });
     } else {
       alert.error("Account not available to sign");

@@ -1,12 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
-import { Home } from './home';
+
 import { Main } from './main';
 import {Labs} from './Labs/Labs'
 import { ViewTransactions } from './ViewTransactions/ViewTransactions';
 import { Notificaciones } from './notificaciones/Notificaciones';
 import { RedUser } from './red/Red';
 import { Usuarios } from './Usuarios/Usuarios';
-import { GraficoEnergia } from './GraficoEnergia/GraficoEnergia';
 
 const routes = [{ path: '/main', Page: Main },
 { path: '/labs', Page: Labs },

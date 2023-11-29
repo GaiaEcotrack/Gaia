@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { MdOutlineTrendingUp, MdOutlineTrendingDown } from "react-icons/md";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 // Importaciones locales
-import { NameFungibleToken } from "pages/home/NameToken";
 import { VaraTokenName } from "pages/home/VaraNameToken";
 import { VarasBalance } from "pages/home/VarasBalance";
 import { LocalBalanceToken } from "pages/home/MyBalanceToken";

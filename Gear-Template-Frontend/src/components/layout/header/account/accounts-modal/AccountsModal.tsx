@@ -1,5 +1,6 @@
 import type { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { Modal } from '@gear-js/ui';
+
 import { Accounts } from '../accounts';
 
 

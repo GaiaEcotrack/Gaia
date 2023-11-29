@@ -1,7 +1,5 @@
-import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
-import { ConvertButton } from "pages/home/ConvertButton";
+import { useAccount} from "@gear-js/react-hooks";
 import { Transfer } from "pages/home/Transfer";
-import { sendTokensFromGaia } from "pages/home/sendTokenFromGaia";
 import { useState } from "react";
 
 interface ModalProps {
@@ -31,11 +29,9 @@ function ModalSendToken ({onClose}:ModalProps) {
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     // Aquí puedes manejar la lógica de envío de datos si es necesario
-    console.log("Datos enviados:", userData);
   };
 const quantity = userData.cantidad
 const quantityToNumber = parseInt(quantity,10)
-  console.log(userData);
   
 
   return (

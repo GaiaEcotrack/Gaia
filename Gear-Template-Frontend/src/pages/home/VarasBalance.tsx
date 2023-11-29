@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { ProgramMetadata, encodeAddress } from "@gear-js/api";
 import { useApi, useAlert, useAccount } from "@gear-js/react-hooks";
-import { Center, Heading, VStack } from "@chakra-ui/react";
 
 function VarasBalance() {
   const { api } = useApi();

@@ -1,5 +1,3 @@
-import React from 'react'
-
     function RedUser () {
     return (
     <div className='text-[#696771]'>
