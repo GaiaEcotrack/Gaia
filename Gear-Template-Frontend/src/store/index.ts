@@ -1,4 +1,3 @@
-
 import { createStore, combineReducers } from 'redux';
 
 // Define tu estado inicial y los reducers
@@ -12,16 +11,15 @@ const initialState: AppState = {
   // ... otras propiedades iniciales aquí
 };
 
-const rootReducer = (state: AppState = initialState, action: any) => {
-    switch (action.type) {
-      case 'SET_VALUE_GAIA':
-        return { ...state, valueGaia: action.payload };
-      // ... otros casos y lógicas de reducer
-      default:
-        return state;
-    }
-  };
-  
+const rootReducer = (state: AppState = initialState, action: any,) => {
+  switch (action.type) {
+    case 'SET_VALUE_GAIA':
+      return { ...state, valueGaia: action.payload };
+    // ... otros casos y lógicas de reducer
+    default:
+      return state;
+  }
+};
 // Combina los reducers si tienes más de uno
 const combinedReducers = combineReducers({
   app: rootReducer,
@@ -33,4 +31,4 @@ const store = createStore(combinedReducers);
 
 export type RootState = ReturnType<typeof combinedReducers>;
 
-export default store;
+export  {store};

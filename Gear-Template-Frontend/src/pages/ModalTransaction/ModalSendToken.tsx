@@ -1,3 +1,4 @@
+import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { ConvertButton } from "pages/home/ConvertButton";
 import { Transfer } from "pages/home/Transfer";
 import { sendTokensFromGaia } from "pages/home/sendTokenFromGaia";
@@ -8,10 +9,15 @@ interface ModalProps {
 }
 
 function ModalSendToken ({onClose}:ModalProps) {
+
+  const {account}=useAccount()
+  const localAdress = account!.address 
+
   const [userData, setUserData] = useState({
+    From:localAdress,
     usuario: "",
     cantidad: "",
-    tipo: "tonkends",
+    tipo: "",
     total: "",
   });
   
@@ -20,6 +26,8 @@ function ModalSendToken ({onClose}:ModalProps) {
     const { name, value } = e.target;
     setUserData((prevData) => ({ ...prevData, [name]: value }));
   };
+
+
   const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     // Aquí puedes manejar la lógica de envío de datos si es necesario
@@ -27,7 +35,7 @@ function ModalSendToken ({onClose}:ModalProps) {
   };
 const quantity = userData.cantidad
 const quantityToNumber = parseInt(quantity,10)
-  console.log(quantityToNumber);
+  console.log(userData);
   
 
   return (
@@ -113,6 +121,7 @@ const quantityToNumber = parseInt(quantity,10)
                 onChange={handleChange}
                 className="mt-1 p-2 w-full border rounded-md"
               >
+                <option value="none"> </option>
                 <option value="Gaias">Gaias</option>
                 <option value="Varas">Varas</option>
               </select>
@@ -136,14 +145,8 @@ const quantityToNumber = parseInt(quantity,10)
             />
           </div>
           <div className="flex justify-center">
-          <button
-            type="submit"
-            className="bg-secondary text-white px-4 py-2 rounded-md mb-5"
-          >
-            Enviar
-          </button>
           {userData.usuario.trim() !== "" && (
-  <Transfer accountTo={userData.usuario} quantity={quantityToNumber} />
+  <Transfer accountTo={userData.usuario} quantity={quantityToNumber} state={userData} />
 )}
         </div>
           </form>

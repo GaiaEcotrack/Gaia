@@ -6,10 +6,38 @@ import { Button } from "@gear-js/ui";
 
 interface ModalTypes {
   accountTo: string,
-  quantity:number
+  quantity:number,
+  state:object
+}
+interface Transaccion {
+  From: string;
+  usuario: string;
+  cantidad: any;
+  tipo: string;
+  total: any;
 }
 
-function Transfer({accountTo, quantity}:ModalTypes) {
+interface TransferProps {
+  datos: Transaccion;
+  guardarDatosLocalmente: (datos: Transaccion) => void;
+}
+
+function Transfer({accountTo, quantity,state}:ModalTypes) {
+
+  const pushData = () => {
+    // No cambies esta lógica, ya que se está utilizando localStorage directamente
+    try {
+      const datosActuales: Transaccion[] = JSON.parse(localStorage.getItem('transacciones') || '[]');
+
+      const nuevosDatos: Transaccion[] = [...datosActuales, state as Transaccion];
+
+      localStorage.setItem('transacciones', JSON.stringify(nuevosDatos));
+      console.log('Datos guardados localmente.');
+    } catch (error) {
+      console.error('Error al guardar datos localmente:', error);
+    }
+  };
+
   const alert = useAlert();
   const { accounts, account } = useAccount();
   const { api } = useApi();
@@ -41,6 +69,7 @@ const meta =
 
 
   const signer = async () => {
+    pushData()
     const localaccount = account?.address;
     const isVisibleAccount = accounts.some(
       (visibleAccount) => visibleAccount.address === localaccount
@@ -76,7 +105,15 @@ const meta =
     }
   };
 
-  return <Button text="Tranfer" onClick={signer} />;
+  return (
+    <button
+    onClick={signer}
+    type="submit"
+    className="bg-secondary text-white px-4 py-2 rounded-md mb-5"
+  >
+    Enviar
+  </button>
+  )
 }
 
 export { Transfer };
