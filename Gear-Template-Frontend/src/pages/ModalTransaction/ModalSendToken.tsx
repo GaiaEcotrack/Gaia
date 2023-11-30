@@ -1,5 +1,6 @@
 import { useAccount} from "@gear-js/react-hooks";
 import { Transfer } from "pages/home/Transfer";
+import { VaraTransfer } from "pages/home/VaraTransfer";
 import { useState } from "react";
 
 interface ModalProps {
@@ -142,7 +143,15 @@ const quantityToNumber = parseInt(quantity,10)
           </div>
           <div className="flex justify-center">
           {userData.usuario.trim() !== "" && (
-  <Transfer accountTo={userData.usuario} quantity={quantityToNumber} state={userData} />
+  <>
+    {userData.tipo === 'Gaias' && (
+      <Transfer accountTo={userData.usuario} quantity={quantityToNumber} state={userData} />
+    )}
+
+    {userData.tipo === 'Varas' && (
+      <VaraTransfer accountTo={userData.usuario} quantity={quantityToNumber} state={userData}/>
+    )}
+  </>
 )}
         </div>
           </form>

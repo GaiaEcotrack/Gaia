@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { ProgramMetadata, encodeAddress } from "@gear-js/api";
 import { useApi, useAlert, useAccount } from "@gear-js/react-hooks";
+import { useDispatch } from "react-redux";
 
 function VarasBalance() {
   const { api } = useApi();
   const { account } = useAccount();
+
+  const dispatch = useDispatch();
 
   const alert = useAlert();
 
@@ -45,6 +48,7 @@ function VarasBalance() {
 
   useEffect(() => {
     getBalance();
+    dispatch({ type: 'SET_VALUE_VARA', payload: balance });
   });
 
   return (

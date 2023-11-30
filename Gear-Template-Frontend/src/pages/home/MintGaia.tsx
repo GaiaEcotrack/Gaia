@@ -58,7 +58,7 @@ function MintGaia({ excedenteCapturado, setTotalGenerado, setTotalConsumido }: M
             if (status.isInBlock) {
               alert.success(status.asInBlock.toString());
             } else {
-                alert.loading("In process")
+                alert.info("In process")
               if (status.type === "Finalized") {
                 alert.success(status.type);
               }
