@@ -1,3 +1,4 @@
+
 /* eslint-disable */
 import { BsFillGearFill } from "react-icons/bs";
 import { useState } from "react";
@@ -15,11 +16,11 @@ function SideBar() {
 
   
   return (
-    <div className="border-2 w-1/6  bg-white flex">
+    <div className=" w-16 ">
       {isOpen ?  (
         <IoMdClose
           size={32}
-          className="cursor-pointer text-gray-800 sm:hidden flex"
+          className="cursor-pointer text-gray-800 sm:hidden flex mx-2 mt-2"
           onClick={handleToggle}
         />
       ) : (
@@ -31,19 +32,21 @@ function SideBar() {
       )}
 
       <div
-        className={`bg-white  sm:w-[10vh] sm:h-full sm:flex-col sm:flex sm:items-center sm:justify-center sm:fixed sm:flex-wrap sm:border sm:border-dark ${
-          isOpen ? "block"  : "hidden"
+        className={`bg-white border-2  border-teal-100  min-h-25 fixed  sm:w-[10vh] sm:h-full sm:flex-col sm:flex sm:items-center sm:justify-center sm:fixed sm:flex-wrap sm:border sm:border-dark justify-center flex flex-col items-center  ${
+          isOpen ? "block "  : "hidden"
         } `}
       >
         
+        <Link to='/notificacionesConfig' className="sm:flex sm:justify-center">
           <img
-            className="rounded-full w-[45px] mt-[-40vh]"
+            className="rounded-full w-[45px] mt-2 "
             src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt=""
           />
+          </Link>
           <Link to="/home">
             <svg
-              className="ml-2 mt-10 w-6"
+              className="  mt-10 w-6 "
               xmlns="http://www.w3.org/2000/svg"
               width="36"
               height="36"
@@ -69,7 +72,7 @@ function SideBar() {
 
           <Link to="/transactions">
             <svg
-              className="ml-2 mt-10 w-6 h-6"
+              className=" mt-10  w-6 h-6"
               xmlns="http://www.w3.org/2000/svg"
               width="36"
               height="41"
@@ -87,7 +90,7 @@ function SideBar() {
           </Link>
           <Link to="/usuarios">
             <svg
-              className="ml-2 mt-10 w-6"
+              className=" mt-10  w-6"
               xmlns="http://www.w3.org/2000/svg"
               width="30"
               height="30"
@@ -110,7 +113,7 @@ function SideBar() {
           </Link>
           <Link to="/red">
             <svg
-              className="ml-2 mt-10 w-6"
+              className=" mt-10  w-6"
               xmlns="http://www.w3.org/2000/svg"
               width="30"
               height="30"
@@ -141,7 +144,7 @@ function SideBar() {
           </Link>
           <Link to="/notificaciones">
             <svg
-              className="ml-2 mt-10 w-6"
+              className=" mt-10  w-6"
               xmlns="http://www.w3.org/2000/svg"
               width="36"
               height="40"
@@ -172,7 +175,7 @@ function SideBar() {
           </Link>
           <Link to="/superUser">
             <svg
-              className="mt-10 ml-2 w-6"
+              className="mt-10   w-6"
               xmlns="http://www.w3.org/2000/svg"
               width="30"
               height="30"
@@ -190,7 +193,7 @@ function SideBar() {
             </svg>
           </Link>
           <Link to="/notificacionesConfig">
-            <BsFillGearFill className="text-[#8a879a] text-[50px] h-8 mt-10 ml-2 w-6" />
+            <BsFillGearFill className="text-[#8a879a] text-[50px]  h-8 mt-10 w-6" />
           </Link>
         </div>
       </div>
@@ -199,3 +202,9 @@ function SideBar() {
 }
 
 export { SideBar };
+
+
+
+
+
+
