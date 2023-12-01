@@ -8,11 +8,11 @@ import { SideBar } from 'pages/home/SideBar';
 /* eslint-disable */
 import { NotificacionesConfig } from 'pages/notificacionesConfig/NotificacionesConfig';
 import { GraficoEnergia } from './pages/GraficoEnergia/GraficoEnergia';
-import { Welcome } from './pages/Login/Login';
 import { SuperUser } from './pages/superUser/SuperUser';
 import { Labs } from './pages/Labs/Labs';
 import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
 import 'App.css';
+import { AuthForm } from 'components/LoginAct/LoginAct';
 
 function Component() {
   const { isApiReady } = useApi();
@@ -37,9 +37,10 @@ function Component() {
         <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
         <Route path="/home" element={<GraficoEnergia />} />
         <Route path="/superUser" element={<SuperUser />} />
-        <Route path="/" element={<Welcome />} />
+        <Route path="/" element={<AuthForm />} />
         <Route path='/lab' element={<Labs />} />
         <Route path='/notificacionesConfig' element={<NotificacionesConfig />} />
+        <Route path='/loginPrueba' element={<AuthForm/>}/>
       </Routes>
     </div>
   );
