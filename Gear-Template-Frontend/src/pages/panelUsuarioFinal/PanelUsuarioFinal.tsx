@@ -49,7 +49,7 @@ const PanelUsuarioFinal = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100 m-4">
+    <div className="bg-gray-100 m-16 sm:m-4 ">
       <div className="text-end">
         <p className="text-[#699CD0] text-[20px] sm:text-[14px]  md:text-[28px] lg:text-[24px] xl:text-[24px] mr-8 mt-8 hidden md:block ">
           Panel de usuario final
@@ -84,7 +84,7 @@ const PanelUsuarioFinal = () => {
             Fabricante: {dispositivo.Fabricante}
           </p>
           <div className="">
-            <p className="text-end text-[#5A5A5A] font-light">
+            <p className="text-end text-[#5A5A5A] text-[12px] sm:text-[16px] font-light">
               {dispositivo.conectado ? "Conectado" : "Desconectado"}
             </p>
             <br />
@@ -94,7 +94,7 @@ const PanelUsuarioFinal = () => {
               className="flex items-center text-[#5A5A5A] text-[16px] text-base font-semibold"
               onClick={() => toggleMenu(index === menuAbierto ? null : index)}
             >
-              Ver mas
+              <p className="text-[12px] sm:text-[16px]">Ver mas</p>
               <img className="cursor-pointer ml-1" src={Polygon} alt="" />
             </button>
           </div>
@@ -129,13 +129,13 @@ const PanelUsuarioFinal = () => {
           </p>
 
           <div className="mt-4 sm:mt-12">
-            <button className="w-[99px] h-[40px] bg-neutral-200 rounded-[5px] text-[#857D7D] m-1">
+            <button className="sm:w-[99px] w-[80px] h-[40px] bg-neutral-200 rounded-[5px] text-[#857D7D] text-[12px] sm:text-[16px] m-1">
               Reiniciar
             </button>
-            <button className="w-[99px] h-[40px] bg-neutral-200 rounded-[5px] text-[#857D7D] m-1">
+            <button className="sm:w-[99px] w-[80px] h-[40px] bg-neutral-200 rounded-[5px] text-[#857D7D] text-[12px] sm:text-[16px] m-1">
               Actualizar
             </button>
-            <button className="w-[99px] h-[40px] bg-neutral-200 rounded-[5px] text-[#857D7D] m-1">
+            <button className="sm:w-[99px] w-[80px] h-[40px] bg-neutral-200 rounded-[5px] text-[#857D7D] text-[12px] sm:text-[16px] m-1">
               Diagnosticar
             </button>
           </div>
@@ -150,14 +150,14 @@ const PanelUsuarioFinal = () => {
               className="flex ml-auto items-center text-[#5A5A5A] text-[16px] text-base font-semibold"
               onClick={() => toggleMenu(null)}
             >
-              Ver menos
+              <p className="text-[12px] sm:text-[16px]">Ver menos</p>
               <img
                 className="cursor-pointer ml-1 mt-2.5"
                 src={PolygonUp}
                 alt=""
               />
             </button>
-            <span className="text-[#5A5A5A] font-light ml-auto">
+            <span className="text-[#5A5A5A] text-[12px] sm:text-[16px] font-light ml-auto">
               Desconectado
             </span>
             <br />

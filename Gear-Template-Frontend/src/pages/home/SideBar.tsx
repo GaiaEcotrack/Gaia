@@ -32,7 +32,7 @@ function SideBar() {
       )}
 
       <div
-        className={`bg-white border-2  border-teal-100  min-h-25 fixed  sm:w-[10vh] sm:h-full sm:flex-col sm:flex sm:items-center sm:justify-center sm:fixed sm:flex-wrap sm:border sm:border-dark justify-center flex flex-col items-center  ${
+        className={`bg-white border-2 rounded-lg  min-h-25 fixed  sm:w-[10vh] sm:h-full sm:flex-col sm:flex sm:items-center sm:justify-center sm:fixed sm:flex-wrap sm:border sm:border-dark justify-center flex flex-col items-center  ${
           isOpen ? "block "  : "hidden"
         } `}
       >
