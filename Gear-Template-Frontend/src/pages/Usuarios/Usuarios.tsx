@@ -81,7 +81,7 @@ function Usuarios() {
     <div className="flex flex-col items-center">
       <div className="flex items-center justify-center gap-10 h-80">
         <div className="flex mt-16 text-white ml-39">
-          <div className="w-28 h-32 sm:w-80 sm:h-48 bg-[#74C7ED] rounded-2xl flex flex-col items-center justify-center sm:flex-wrap">
+          <div className="w-28 shadow-lg h-32 sm:w-80 sm:h-48 bg-[#74C7ED] rounded-2xl flex flex-col items-center justify-center sm:flex-wrap">
             <div className="w-20 sm:w-56 flex items-center justify-center ">
               <img
                 className="mt-4 w-24 h-24 object-cover rounded-full  "
@@ -92,7 +92,7 @@ function Usuarios() {
             <h1 className="sm:text-3xl">Steve Jackson</h1>
           </div>
 
-          <div className="w-28 h-32 sm:w-80 sm:h-48 bg-[#699CD0] rounded-2xl mt-[-40px] mx-1 flex flex-col items-center justify-center sm:flex-wrap">
+          <div className="w-28 shadow-lg h-32 sm:w-80 sm:h-48 bg-[#699CD0] rounded-2xl mt-[-40px] mx-1 flex flex-col items-center justify-center sm:flex-wrap">
             <div className="w-20 sm:w-58 flex items-center justify-center">
               <img
                 className="mt-4 w-24 h-24 object-cover rounded-full "
@@ -103,7 +103,7 @@ function Usuarios() {
             <h1 className="sm:text-3xl">Juan Eduardo</h1>
           </div>
 
-          <div className="w-28 h-32 sm:w-80 sm:h-48 bg-[#F0B778] rounded-2xl flex flex-col items-center justify-center sm:flex-wrap">
+          <div className="w-28 shadow-lg h-32 sm:w-80 sm:h-48 bg-[#F0B778] rounded-2xl flex flex-col items-center justify-center sm:flex-wrap">
             <div className="w-20 sm:w-56 flex items-center justify-center">
               <img
                 className="mt-4 w-24 h-24 object-cover rounded-full"
@@ -115,7 +115,7 @@ function Usuarios() {
           </div>
         </div>
       </div>
-      <div className="bg-white w-[96%] sm:w-4/6 p-2.5 rounded-md h-full flex items-center flex-col justify-center text-[#696771] ">
+      <div className="bg-white shadow-lg w-[96%] sm:w-4/6 p-2.5 rounded-md h-full flex items-center flex-col justify-center text-[#696771] ">
         <div className="hidden sm:flex gap-1 sm:gap-10">
         <p>Nombres </p>
         <p>Energia </p>

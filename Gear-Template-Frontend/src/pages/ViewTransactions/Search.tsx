@@ -19,7 +19,7 @@ function Search() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="bg-white w-[90%] sm:w-4/5 justify-around h-20 rounded-md mt-5 flex items-center gap-5 p-2.5">
+      <div className="bg-white shadow-lg w-[90%] sm:w-4/5 justify-around h-20 rounded-md mt-5 flex items-center gap-5 p-2.5">
         <div className="flex items-center justify-center p-5">
           <div className="rounded-lg p-5">
             <div className="flex ">
