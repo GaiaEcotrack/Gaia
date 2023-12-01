@@ -10,19 +10,19 @@ export function NotificacionesConfig() {
   };
   return (
     <div>
-      <div className="flex items-center justify-center h-screen ">
+      <div className="flex items-center justify-center h-screen mt-[-20vh]">
         <div className="bg-gray-300 w-96 h-96 flex items-center justify-center rounded-lg ">
-          <div className="w-48 bg-white text-gray-600 h-32 mt-[-33vh] ml-[-10vh] rounded-md flex">
+          <div className="w-48 bg-white text-gray-600 h-32 sm:mt-[-33vh] md:mt-[-33vh] lg:mt-[-33vh] mt-[-20vh] ml-[-10vh] rounded-md flex">
             <p className="ml-4 mt-2">nombre:</p>
             <p className="mt-3 ml-10 text-xs">mr Jackson</p>
-            <p className="mt-9 ml-[-26.5vh]">correo: </p>
+            <p className="mt-9 sm:ml-[-26.5vh] md:ml-[-26.5vh] lg:ml-[-26.5vh] ml-[-17.5vh]">correo: </p>
             <p style={{ fontSize: "11px" }} className="text-xs mt-10">
               mrJackson@gmail.com
             </p>
-            <p className="mt-16 ml-[-27vh]">Edad:</p>
+            <p className="mt-16 sm:ml-[-27vh] md:ml-[-27vh] lg:ml-[-27vh] ml-[-17vh]">Edad:</p>
             <p className="mt-16 ml-16">21 años</p>
-            <p className="mt-24 ml-[-26vh]">Telefono: </p>
-            <p style={{ fontSize: "11px" }} className="mt-[16.4vh] ml-10">
+            <p className="mt-24 sm:ml-[-26vh] md:ml-[-26vh] lg:ml-[-26vh] ml-[-18vh]">Telefono: </p>
+            <p style={{ fontSize: "11px" }} className="sm:mt-[16.4vh] md:mt-[16.4vh] lg:mt-[16.4vh] mt-[11vh] sm:ml-10 md:ml-10 lg:ml-10 ml-[5vh]">
               2975367833
             </p>
             <p
@@ -33,12 +33,12 @@ export function NotificacionesConfig() {
             </p>
           </div>
           <img
-            className="rounded-full h-28 mt-[-40vh] ml-[-55vh] "
+            className="rounded-full h-28 sm:mt-[-40vh] lg:mt-[-40vh] md:mt-[-40vh] mt-[-27vh] ml-[-37vh] sm:ml-[-55vh] md:ml-[-55vh] lg:ml-[-55vh]"
             src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxIPEhUPEhIQEA8QEBAQEBARDQ8REBAQFREWFhcSFRcYHSggGBolGxMVITEhJSkrLi4uFx8zODMsNyktLisBCgoKDg0OGxAQGy0lHyUrNy0vLi0tLS0tKzctLy0tLTctLS03LS0tLS0tLS0tLS0tLS0rLS0tLS0tLS0tLjgtL//AABEIANsA5gMBIgACEQEDEQH/xAAcAAEAAQUBAQAAAAAAAAAAAAAABAIDBQYHAQj/xABDEAACAQIDBAcDCQYEBwAAAAAAAQIDBBESEwUhMVEGByJBYXGBMlKRFCNCYnKCobHBM3OSwtHwQ2OisggVNFPS4eL/xAAaAQEAAwEBAQAAAAAAAAAAAAAAAgQFAwEG/8QAKhEBAAICAgEDAgUFAAAAAAAAAAECAxEEMSESQVEyYQUjcbHRExQiQqH/2gAMAwEAAhEDEQA/AO4gAAAAAAAAAAAa90s6TwsY5VhO4msYU3wivfn4eHf8WoZMlcdfVbpKtZtOoZXae06NrHUrTjTj3Y+1J8opb2/I0nanWK98bekkv+5W3t+UIvd8fQ0q/vqlxN1as3Ob733LklwS8ERzFzfiOS06p4j/AK0MfFrH1eWYu+lN5V9q4qRXKm1SS8OxgzG1bypP2qlSX2qk5fmyyCjbJe3czKxFax1D1SfN/Ek0NpV6fsVq0Ps1qi/JkUEYtMdPZiJbNs7pzd0t05Rrx5VIpSw8JRw/HE3fYPTG3u2oNujWe5U5tYSfKEuEvLc/A5EC3h52XHPmdx9/5cb8elvs7+DnPQ3pk4uNtcyxg8I060nvg+6M33x+t3d+7eujG5gz0zV9VWdkxzjnUgAOzmAAAAAAAAAAAAAAAAAAAAAIG3NpxtKE6896guzHHfOb3RivN/qzil7eTr1JVqjzVJvNJ/klySW5LkjbutHamerC1T7NKOpNc6kl2U/KP+80hMwvxDNN7+iOo/dpcbH6a+r3lWentGnKbUYpylJ4JJYts3XYfRmNPCpWSnU4qPGEP/J/h+ZQrSbdLO2t2Owq9aLnGGEUm05PLn8I8/Ph4mNaw3Pc1uafFM6yat0r2HmxuKa7S31YrvXvrx5/3j0ti1Hh5EtPABxSAAAOm9Xe33Wg7Wo8atGONOT4zpcMPOO5eTXicyJeyNoStq1OvHjTkm0vpQ4Sj6ptFji55w5In293LNj9ddO6AppVFJKUXjGSUotcGmsUyo+mZAAAAAAAAAAAAAAAAAAAABauqmSEp+7CUvgmwOG7fvNe5rVccc1aeV/UTyx/0pEOnFtpJYtvBJcW+RZhwNv6E7KzN3Elujupp8++R8vO7238tmPEaZno5sRW0c8knWkt79xe6jNgHaI14h4FcUUIuxJ1eS0vpH0YlFutQjmg98qa4xf1V3rw/taq1hue5nYoohbQ2HQuN84LN767MviuJC/G35q8jJrtyoG73PQSL/Z1mlynBS/FYFmj0FePbrdnvUYb36t7jj/b5PhP+pVpwOlXHRyg6Loxgk8OzPDt5ubfF+RzitScJOEt0otxa8UyOTHNO3tbRLrnQO71bKljvdPNSflB4RX8OU2A0rqsqfMVY8q+b+KnFfym6n0XFt6sNZ+zKzRrJMAALDkAAAAAAAAAAAAAAAAETa6+Yq/uav8AsZLKK1PNFxfCUXF+TWB5PmHsPnu2pucowXGTSXqdZ2fbKjTjTXCMUvN97Of9FbB/K1TmsJUXJTXKUXl/NHSZxweB87Sumvt4ACQ9iXYlqJegTqjZcii5FFES9FFmsOFpMCiSLuBRJE5hGJWZI5502stOtqJdmqsfvLc/0OiTMB0vs1VoN8HT7af5op567q7458vequPzNaXOrFfCCf6m8GtdX1k6VnFtYOtKVZ+UsFF+sYxfqbKa3ErNcNYn4UM87ySAAsOQAAAAAAAAAAAAAAAAAANVvtkQpXjuIbpVoLUj3Zk8My80lj4rHvJFdb/Qv7Wfz0f3f85armPniPXbXy0sU/41WQAVnZ7EvQLMS9AnRGy9EvRLMC7EtUV7LuBbkXMS3I62QhZkQr62VaKpS9mpKMZYccuO9fBE2Raj+0p/vEV5jdoiXaJ1G2chBRSikkkkkluSS4JFQBrs4AAAAAAAAAAAAAAAAAAAAAYPbH7aL/y/5iirwLu3lhOk+anH8MS3LevQyc8fmWhoYvoqjgAqLD2JdgWUXYk6o2X4l2LLMWXIss1lxtC7iUyZ5ieNk5lCIW5Fujvq014yfwRXIptN9eHhGb+KwOdfN4/VO30z+jOgA1meAAAAAAAAAAAAAAAAAAAAAMT0ij2IT92rHHyfEjRe4yO2qWehUXKOb+Hf+hibaeaKfNJ/FGZy41k38wvced0191LB7PieFKVoLkWWyqLEPJX4suJlmLK0zvWXKYXMTxs8xKWycyjokxstY139Wl+LkUSZe2EsZ1ZeMIr0W89wecsPMviksyADVUAAAAAAAAAAAAAAAAAAAAAB5OOKafBpp+RqlnLJjRlunBtYNYNrHc1zRthEv9nwrrCS3r2ZrdKPkytyME5IiY7h2w5YpPnqWIksS20UXUZ2rSq9qm3hGqufKS57i4pKSxTTT4NGVesxOp7aFZiY3Dw9R5gCCS4mVplqLK0zpEoTC5ieNlOJHurpQ3e1N+zBcX/REps80uV6ygsX6Lvb5IyewreUKeMlllOcptPiseH5ELo9bKovlE+1UzSio/Rp4PuXPxM8XuLh1+ZKryMn+kAALqqAAAAAAAAAAAAAAAAAAAAAAB5KSSxe5JYt8kBgOkc81WjS44Zqsl4cI/jiY6Vq4PNSeXnB+w/6F2FTVnOu/pvLBcqcdy+JeMPNf15Js1cVfTSIRqV6m8s1pz5S4PyfeSSirSjNYSSa8f73Eb5JKH7ObS92Xaj6cjkmmI9zYb3uXMhfP8PmV49sKyzb6knU8PZgvRDZpVO8c+zSWPOo/Zj5c2XLe3UN++U37Unxf9C7GKSwSSS4JLBHoEnozLB1qfu1VP0nH/5M6a5seWW5a7qlHH70Zf0xNjNjiW3ihnciNZJAAWXAAAAAAAAAAAAAAAYrpJ0ittm0XcXVRU6aeEVg3OpPuhCK3yf5cXgk2cq2j1uX1Zv5La29vSb7MrqU6lZx7pZINKL8Hj+oHaixd3lOjHPVqU6UFxlUqRhFesngfPN90m2pc4qrtGvGLfs20YW2HhmgszXmYaezqUpalTPWqPjOtVnUk/PFgd12n1obJt3ld3CrPujbwnXx+9BOPxZrl71yp/8AS7Puqu/DNcTp20fNe02vgc3pRjBYRjGK5Rior8CvUA2a96xtr1sVB2dnF+y6dKVerHzdR5X8DF2+1buVWNW5vbq5SfapOpp0HisMXSh2XxMbqDUPJjcal7E6nbtWz7mNWnGUcMMFw7txJOXdFekjtpZJvGk/9P8A6OmW1xGpFSg00zEzYZx21LTx5IvG4XQAcnQLtGjm8i0iS62VYInSI7lG0z7LVbjgWw2QNrbVp20HKckmluWJHufD3qGC6fXcoU0qVarQrYxy1KM3CpHtJ4Yruai013pmqWnTTbFD2b2ncR7oXNrD8Z08JMh7b2vK6qOb9nflXhzMfqGzxsc46antnZrxe24btZ9bl9DBV7ChW96dtdOnh4qFRNvyxM5Z9clg91ele2mHGVW2z0/R03Jv4HLdQah3cXdtmdPNmXOGlfWzcuEZ1VRm/DLUwePobDTmpLNFqSfBppp+p8w1ralP2qcJeLhFv4lq2slRblQqV7aT4yoXFWm/wYH1KD51sulm1bfDT2hUqRj9C5pU6+bwlNrP644nRegvWdC8qRs7yEbW9lupuMm7e5f+W3vjL6jb7t7bwA6KAAAAAEDb22KVjb1LuvLLSowcpcMW+CjHnJtpJc2iecM67ekDuLuGzYP5i0Ua9wk907ia+bg/sxeP33jwA1TbG2a2067vbndLerehi3C2pd0Vzk9zcu98uCtahE1BqAS9QahE1BqAS9QahE1BqAS9QahE1BqAS9QymxukVa0fYljD3G93pyMBqDUI2rFo1MPa2ms7h1jZnT6hUSVXGnLvb4GfobctprFVoeskjhGoFUKluDSep0s15Vo7h3x7UoL/ABaf8aIF50qtaXGrFvknjicTdZvvfxPM5GODHvL2eXPtDo+1esLHGNCD+1LcaZfbSqV5ZqknJ8u5eSMXqDULOPBTH1DhfLa/aXqHmoRdQah2c0rUGoRdQagErUGoRdQagErULV1SjUjlfPGMk8JRkuEovuZa1BqAdt6pOmcr+lK0uZJ31okpSx33FDco1/Pul44P6WC6CfK+ytsz2fc0b+ni5UJfOwT/AGtvLdUpv0bax4Pf3H1FZXUK9OFanJTp1YRqU5LhKEkmmvRoC8AAI2076FtRqXFR4U6NKdWb+rCLk/wR8nyvZ151Lmo8atzVnXnyxnJvBeCXBHdevXa2hsx0Ytqd5Wp26w4qGOeb8sIZX9o4ApgS9QahE1BqAS9QahE1BqAS9QahE1BqAS9QahE1BqAS9QahE1BqAS9QahE1BqAS9QahE1BqAS9QahE1BqAS9QahE1BqAS9QahE1BqAS9QahE1BqAS9QahE1BqASnPHd3HZ+oXbzq2tTZ83jOynjSx4u2qNyjx44SzrwTijh2obF1c7d+QbTt6zeFOs/klf93VaUW+SU1CT8IgfUIAA4F/xB7V1L23tU+zbUJVZb/wDErSwwa8I04v7xy/UMh032yr3aF1dJpxqV5Km130qaVOm/WMImE1AJeoNQiag1AJeoNQiag1AJeoNQiag1AJeoNQiag1AJeoNQiag1AJeoNQiag1AJeoNQiag1AJeoNQiag1AJeoNQiag1AJeoNQiag1AJeoNQiag1AJeoNQiag1AJeoUVXmTXP8yPqDUA+tOrrb3/ADHZ9vct41HT062PHWpvJNvli1m8pIHJeoPpZTtZXFnXqRp0ZpXVOUmlFVE405x85Jwf3GAMz1udVTruW0Nnw+feMrm1isNbnVpL3+9x+lxXa3S4JPGLcWmpJtNNYNNcU13M+4DlXXn0atHZ1L/Qpq7i4LWjmhKWLw7eVpTeCSxkm0B855hmKQBVmGYpAFWYZikAVZhmKQBVmGYpAFWYZikAVZhmKQBVmGYpAFWYZikAVZhmKQBVmGYpAFWYZikAVZidsXZVxe1Y29tSlWrT4QiuC75Sb3Riu9vBIt7HoxqV6UJLGE6kIyWLWKb3rFH130T6OWmz6MY2tCFFTjGU2s0pzbWPanJuUuLwTe7uA1XoH1S2ljSxu6dG9u6kVqOrTjUo0+/JSjNYfeaxfgngDowA/9k="
             alt=""
           />
           <svg
-            className="mt-[-25vh] ml-[-6vh] h-8"
+            className="sm:mt-[-25vh] lg:mt-[-25vh] md:mt-[-25vh] mt-[-16vh] ml-[-4vh] sm:ml-[-6vh] lg:ml-[-6vh] md:ml-[-6vh] h-8"
             xmlns="http://www.w3.org/2000/svg"
             width="40"
             height="41"
@@ -51,37 +51,39 @@ export function NotificacionesConfig() {
             />
           </svg>
         </div>
-        <div className="bg-white w-[57vh] ml-[-60vh] h-40 mt-36 rounded-lg flex items-center justify-center">
+
+        <div className="bg-white sm:w-[57vh] md:w-[57vh] lg:w-[57vh] w-[39vh] sm:ml-[-60vh] md:ml-[-60vh] lg:ml-[-60vh] ml-[-40vh] sm:h-40 md:h-40 lg:h-40 h-[22vh] sm:mt-36 md:mt-36 lg:mt-36 mt-40 rounded-lg flex items-center justify-center">
+          <p
+            style={{ fontSize: "9px" }}
+            className="sm:mt-[9vh] sm:w-0 md:w-0 lg:w-0 md:mt-[9vh] lg:mt-[9vh] mt-[1vh] sm:ml-[-35vh] md:ml-[-35vh] lg:ml-[-35vh] ml-[43vh] sm:m-20 md:m-20 lg:m-20  m-5 text-gray-600"
+          >
+            Recibir notificaciones sobre actualizaciones de la cuenta
+          </p>
           <p
             style={{
               fontSize: "9px",
               backgroundColor: "re",
               marginLeft: "10px",
             }}
-            className="mt-[-10px] ml-[1px] m-20 text-gray-600"
+            className="sm:mt-[-10px] md:mt-[-10px] lg:mt-[-10px] mt-[-12vh] sm:ml-[1px] md:ml-[1px] lg:ml-[1px] ml-[-25 vh] sm:m-20 md:m-20 lg:m-20 m-5 text-gray-600"
           >
             Recibir notificaciones por transaccion
           </p>
+   
           <p
             style={{ fontSize: "9px" }}
-            className="mt-[9vh] ml-[-35vh] m-20  text-gray-600"
-          >
-            Recibir notificaciones sobre actualizaciones de la cuenta
-          </p>
-          <p
-            style={{ fontSize: "9px" }}
-            className="mt-[20vh] ml-[-46vh] m-20 text-gray-600"
+            className="mt-[10vh]  sm:mt-[20vh] md:mt-[20vh] lg:mt-[20vh] sm:ml-[-46vh] md:ml-[-46vh] lg:ml-[-60vh] ml-[-18vh] sm:m-20 md:m-20 lg:m-20 m-5 text-gray-600"
           >
             Recibir notificaciones sobre noticias{" "}
           </p>
           <p
             style={{ fontSize: "9px" }}
-            className="mt-[30vh] ml-[-34vh] m-20 text-gray-600"
+            className="mt-[30vh] sm:ml-[-34vh] md:ml-[-34vh] lg:ml-[-34vh] ml-[5vh] sm:m-20 md:m-20 lg:m-20 m-5 text-gray-600"
           >
             Recibir alertas cuando lo producción de energia sea optima
           </p>
 
-          <div className="flex  h-[20vh] w-[8vh] items-center justify-center">
+          <div className="flex  h-[20vh] w-[8vh] items-center justify-center sm:mt-[0.1vh] md:mt-[0.1vh] lg:mt-[0.1vh] mt-[-1vh] sm:ml-[0.1vh] md:ml-[0.1vh] lg:ml-[0.1vh] ml-[50vh] ">
             <div className="ml-[-20px]">
               <div
                 style={{ marginLeft: "20px" }}
@@ -100,7 +102,7 @@ export function NotificacionesConfig() {
               </div>
             </div>
 
-            <div className="ml-[-10px]">
+            <div className="sm:ml-[-10px] md:ml-[-10px] lg:ml-[-10px] ml-[4px] sm:mt-0 md:mt-0 lg:mt-0 mt-[-2vh]">
               <div className="bg-blue-500 w-10 h-5 rounded-lg ml-[-5vh] mt-[6vh]">
                 <button
                   aria-label="x"
@@ -115,7 +117,7 @@ export function NotificacionesConfig() {
               </div>
             </div>
 
-            <div className="mt-[-16vh] ml-[10px]">
+            <div className="sm:mt-[-16vh] md:mt-[-16vh] lg:mt-[-16vh] mt-[-16vh] ml-[28px]">
               <div className="bg-blue-500 w-10 h-5 rounded-lg ml-[-8vh] ">
                 <button
                   aria-label="x"
@@ -130,7 +132,7 @@ export function NotificacionesConfig() {
               </div>
             </div>
 
-            <div className="mt-[2vh] ml-[-10px]">
+            <div className="sm:mt-[2vh] md:mt-[2vh] lg:mt-[2vh]  mt-[-2vh]  ml-[-10px]">
               <div className="bg-blue-500 w-10 h-5 rounded-lg ml-[-6.5vh] mt-[16vh]">
                 <button
                   aria-label="x"

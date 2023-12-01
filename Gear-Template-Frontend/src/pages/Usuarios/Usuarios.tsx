@@ -80,9 +80,9 @@ function Usuarios() {
   return (
     <div className="flex flex-col items-center">
       <div className="flex items-center justify-center gap-10 h-80">
-        <div className="flex mt-16 text-white ml-39">
-          <div className="w-80 h-48 bg-[#74C7ED] rounded-2xl flex flex-col items-center justify-center flex-wrap">
-            <div className="w-56 flex items-center justify-center ">
+        <div className="mt-16 text-white flex flex-col items-center justify-center ml-[-7vh]">
+          <div className="w-72 h-40  mt-[15vh] z-10 lg:mt-[5vh] md:ml-[0vh] md:mt-[30vh] lg:ml-[-85vh]  bg-[#74C7ED] rounded-2xl flex flex-col items-center justify-center flex-wrap">
+            <div className="w-56 flex items-center justify-center">
               <img
                 className="mt-4 w-24 h-24 object-cover rounded-full  "
                 src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -92,7 +92,7 @@ function Usuarios() {
             <h1 className="text-3xl">Steve Jackson</h1>
           </div>
 
-          <div className="w-80 h-48 bg-[#699CD0] rounded-2xl mt-[-40px] mx-1 flex flex-col items-center justify-center flex-wrap">
+          <div className="w-72 h-40  z-20 md:ml-[0.5vh] lg:mt-[-40vh] md:mt-[5vh] bg-[#699CD0] rounded-2xl mt-[1vh] mx-1 flex flex-col items-center justify-center flex-wrap">
             <div className="w-58 flex items-center justify-center">
               <img
                 className="mt-4 w-24 h-24 object-cover rounded-full "
@@ -103,7 +103,7 @@ function Usuarios() {
             <h1 className="text-3xl">Juan Eduardo</h1>
           </div>
 
-          <div className="w-80 h-48 bg-[#F0B778] rounded-2xl flex flex-col items-center justify-center flex-wrap">
+          <div className="w-72 h-40 z-0 bg-[#F0B778] md:ml-[0vh] lg:ml-[85vh] mt-[1vh] lg:mt-[-12vh] md:mt-[5vh]  rounded-2xl flex flex-col items-center justify-center flex-wrap">
             <div className="w-56 flex items-center justify-center">
               <img
                 className="mt-4 w-24 h-24 object-cover rounded-full"
@@ -115,41 +115,46 @@ function Usuarios() {
           </div>
         </div>
       </div>
-      <div className="bg-white w-4/6 p-2.5 rounded-md h-full flex items-center flex-col justify-center text-[#696771] ">
-        <div className="flex gap-10">
+    
+      <div className="bg-white w-[40vh]  sm:w-[70vh] ml-[-8vh] md:mt-[40vh] md:ml-[0.1vh] md:w-4/6 sm:mt-[30vh] p-2.5 rounded-md h-[70vh] md:h-full flex text-xs items-center flex-col justify-center text-[#696771] mt-[22vh] lg:mt-[1vh] ">
+       
+      <div className="mt-[-22vh] ml-[7vh] sm:mt-[1vh] md:mt-[1vh]">
+         
+         <div className="flex gap-5 md:gap-10 md:ml-[8vh] text-sm md:text-lg ml-[2vh]">
         <p>Nombres </p>
         <p>Energia </p>
         <p>Mensual </p>
         <p>Historico </p>
         <p>%Red </p>
         </div>
+
         {users.map((user) => (
-          <div
-            className="p-2.5 text-[#696771] flex m-5 items-center border-b border-[#696771]"
-            style={{ width: "590px" }}
-          >
-            <span className="mr-1">{(contador += 1)}°</span>
-            <img
-              className="w-8 h-8 object-cover rounded-full"
-              src={user.foto}
-              alt="User"
-            />
-            <h1 className="ml-2" style={{ minWidth: "200px" }}>
-              {user.nombre}
-            </h1>
-            <h1 className="ml-[-35px]" style={{ minWidth: "60px" }}>
-              {user.energia}
-            </h1>
-            <h1 className="ml-12" style={{ minWidth: "60px" }}>
-              {user.mesual}
-            </h1>
-            <h1 className="ml-16" style={{ minWidth: "200px" }}>
-              {user.historico}
-            </h1>
-            <h1 className="ml-[-100px]">{user.red}</h1>
-          </div>
+            <div
+              className="p-1 md:p-2.5 text-[#696771] flex md:m-5 items-center border-b text-xs md:text-lg  md:w-[590px] w-[45vh]"
+            >
+              <span className="mr-1 ml-[-2.5vh] md:ml-[-0.1vh]">{(contador += 1)}°</span>
+              <img
+                className="w-8 h-8 object-cover rounded-full"
+                src={user.foto} 
+                alt="User"
+              />
+              <h1 className="ml-[0.3vh] text-xs" style={{ minWidth: "150px" }}>
+                {user.nombre}
+              </h1>
+              <h1 className="ml-[-35px]" style={{ minWidth: "60px" }}>
+                {user.energia}
+              </h1>
+              <h1 className="ml-[4] md:ml-12" style={{ minWidth: "100px" }}>
+                {user.mesual}
+              </h1>
+              <h1 className="ml-[-4vh] md:ml-[2px]" style={{ minWidth: "100px" }}>
+                {user.historico}
+              </h1>
+              <h1 className="ml-[-40px] md:ml-[-10px]">{user.red}</h1>
+            </div>
         ))}
       </div>
+        </div>
     </div>
   );
 }
