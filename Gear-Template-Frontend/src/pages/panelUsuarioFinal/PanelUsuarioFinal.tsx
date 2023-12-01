@@ -6,6 +6,8 @@ import Polygon from "../../assets/Polygon.svg";
 
 import PolygonUp from "../../assets/PolygonUp.svg";
 
+import Update from "../../assets/Update.svg";
+
 import { NavLink } from "react-router-dom";
 
 import back from "../../assets/back.svg";
@@ -56,19 +58,23 @@ const PanelUsuarioFinal = () => {
         </p>
       </div>
       <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-12 sm:mt-8">
-  <h1 className="sm:text-4xl text-[#5A5A5A] my-4 sm:my-0">
-    Dispositivos Encontrados
-  </h1>
+        <h1 className="sm:text-4xl text-[#5A5A5A] my-4 sm:my-0">
+          Dispositivos Encontrados
+        </h1>
 
-  <button className="w-28 h-10 hidden border-2 bg-neutral-100 rounded-[5px] text-[#857D7D] mb-2 ml-8 mr-8 sm:inline">
-    Actualizar
-  </button>
-  <NavLink to="/home">
-    <button className="mb-2 sm:inline">
-      <img className="w-10 h-10" src={back} alt="" />
-    </button>
-  </NavLink>
-</div>
+        <button className="w-28 h-10 hidden border-2 bg-neutral-100 rounded-[5px] text-[#857D7D] mb-2 ml-8 mr-8 sm:inline">
+          Actualizar
+        </button>
+        <NavLink to="/home">
+          <button className="mb-2 sm:inline hidden">
+            <img className="w-10 h-10  " src={back} alt="" />
+          </button>
+          </NavLink>
+          <button>
+            <img className="w-10 h-10 sm:hidden" src={Update} alt="" />
+          </button>
+        
+      </div>
 
       {dispositivosEncontrados.map((dispositivo, index) => (
         <div
@@ -76,7 +82,9 @@ const PanelUsuarioFinal = () => {
           className={`border-2 p-4 w-full sm:w-[762px] mx-auto my-auto mb-4 sm:mb-8 
             ${index === menuAbierto ? "hidden" : ""}`}
         >
-          <h2 className="text-[#5A5A5A] sm:text-2xl mb-6  ">{dispositivo.Nombre}</h2>
+          <h2 className="text-[#5A5A5A] sm:text-2xl mb-6  ">
+            {dispositivo.Nombre}
+          </h2>
           <p className="text-[#5A5A5A] text-sm sm:text-lg">
             Tipo de Dispositivo: {dispositivo.Tipo_de_Dispositivo}
           </p>
@@ -129,13 +137,13 @@ const PanelUsuarioFinal = () => {
           </p>
 
           <div className="mt-4 sm:mt-12">
-            <button className="sm:w-[99px] w-[80px] h-[40px] bg-neutral-200 rounded-[5px] text-[#857D7D] text-[12px] sm:text-[16px] m-1">
+            <button className="sm:w-[99px] w-[75px] h-[40px] bg-neutral-200 rounded-[5px] text-[#857D7D] text-[12px] sm:text-[16px] m-1">
               Reiniciar
             </button>
-            <button className="sm:w-[99px] w-[80px] h-[40px] bg-neutral-200 rounded-[5px] text-[#857D7D] text-[12px] sm:text-[16px] m-1">
+            <button className="sm:w-[99px] w-[72px] h-[40px] bg-neutral-200 rounded-[5px] text-[#857D7D] text-[12px] sm:text-[16px] m-1">
               Actualizar
             </button>
-            <button className="sm:w-[99px] w-[80px] h-[40px] bg-neutral-200 rounded-[5px] text-[#857D7D] text-[12px] sm:text-[16px] m-1">
+            <button className="sm:w-[99px] w-[75px] h-[40px] bg-neutral-200 rounded-[5px] text-[#857D7D] text-[12px] sm:text-[16px] m-1">
               Diagnosticar
             </button>
           </div>
@@ -144,7 +152,7 @@ const PanelUsuarioFinal = () => {
               href="#"
               className="text-end text-[#5A5A5A] text-[15px] underline "
             >
-              Opciones Avanzadas
+              <p className="text-[10px] sm:text-[14px]">Opciones Avanzadas</p>
             </a>
             <button
               className="flex ml-auto items-center text-[#5A5A5A] text-[16px] text-base font-semibold"

@@ -8,24 +8,7 @@
         "Firmware_version": "Firmware v2.10",
         "Voltaje": "40w",
         "Temperatura": "10°C"
-      },
-      {
-        "Nombre": "Vertical Wind Turbine Generator, 3000W Win",
-        "Tipo_de_Dispositivo": "Generador Eolico",
-        "Fabricante": "Juancito Perez",
-        "Marca_Modelo": "Generator 8272",
-        "Firmware_version": "Firmware v6.10",
-        "Voltaje": "408w",
-        "Temperatura": "16°C"
-      },
-      {
-        "Nombre": "Dispositivo 3",
-        "Tipo_de_Dispositivo": "Generador 3",
-        "Fabricante": "Jnumero 3",
-        "Marca_Modelo": "Generator 3",
-        "Firmware_version": "Firmware v3",
-        "Voltaje": "408w",
-        "Temperatura": "36°C"
       }
+      
   ]
 
