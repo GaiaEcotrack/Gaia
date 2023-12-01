@@ -28,6 +28,7 @@ const PanelUsuarioFinal = () => {
   const [dispositivosEncontrados, setDispositivosEncontrados] = useState<
     Dispositivo[]
   >([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleMenu = (index: number | null) => {
     setMenuAbierto(index);
@@ -50,6 +51,31 @@ const PanelUsuarioFinal = () => {
     fetchData();
   }, []);
 
+  const handleUpdate = async () => {
+    try {
+      setIsLoading(true);
+
+     
+      setTimeout(async () => {
+        const response = await fetch("/data-dispositivos-encontrados.json");
+        const data = await response.json();
+
+        // Obtener un índice aleatorio
+        const randomIndex = Math.floor(Math.random() * data.length);
+
+       
+        const dispositivoAleatorio = data[randomIndex];
+
+        // Actualizar el estado scon un dispositivo aleatorio
+        setDispositivosEncontrados([dispositivoAleatorio]);
+        setIsLoading(false);
+        // alert('actualizado');
+      }, 2000); 
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setIsLoading(false);
+    }
+  };
   return (
     <div className="bg-gray-100 m-16 sm:m-4 ">
       <div className="text-end">
@@ -62,18 +88,32 @@ const PanelUsuarioFinal = () => {
           Dispositivos Encontrados
         </h1>
 
-        <button className="w-28 h-10 hidden border-2 bg-neutral-100 rounded-[5px] text-[#857D7D] mb-2 ml-8 mr-8 sm:inline">
+        <div>
+      {isLoading ? (
+        <p className="text-[#857D7D]">Cargando...</p>
+      ) : (
+        <button
+          onClick={handleUpdate}
+          disabled={isLoading}
+          className="w-28 h-10 hidden border-2 bg-neutral-100 rounded-[5px] text-[#857D7D] mb-2 ml-8 mr-8 sm:inline"
+        >
           Actualizar
         </button>
+      )}
+      </div>
         <NavLink to="/home">
           <button className="mb-2 sm:inline hidden">
             <img className="w-10 h-10  " src={back} alt="" />
           </button>
-          </NavLink>
-          <button>
-            <img className="w-10 h-10 sm:hidden" src={Update} alt="" />
-          </button>
-        
+        </NavLink>
+        <button
+        onClick={handleUpdate}
+        disabled={isLoading} 
+        >
+          {/* <p className="text-cyan-500 m-2">{isLoading ? "Cargando..." : ""}</p> */}
+          
+          <img className="w-10 h-10 sm:hidden" src={Update} alt="" />
+        </button>
       </div>
 
       {dispositivosEncontrados.map((dispositivo, index) => (
