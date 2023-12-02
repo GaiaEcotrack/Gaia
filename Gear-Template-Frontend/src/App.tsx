@@ -36,7 +36,7 @@ function Component() {
 
   return (
     <div className='font-sans bg-slate-200 text-white'>
-      <Header isAccountVisible={isAccountReady} />
+      {window.location.pathname !== '/' && <Header isAccountVisible={isAccountReady} />}
       {window.location.pathname !== '/' && <SideBar />}
       
       <main>{isAppReady ? <Routing /> : <ApiLoader />}</main>
