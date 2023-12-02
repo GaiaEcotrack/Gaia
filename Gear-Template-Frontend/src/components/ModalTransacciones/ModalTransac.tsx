@@ -137,7 +137,7 @@ function ModalTransac({ showTransac, setShowTransac }: Modaltransac) {
           <div className="flex flex-col w-full  h-auto py-4 mt-10 lg:mt-4 text-xs sm:text-[14px] max-h-[56vh] md:max-h-[66vh] overflow-y-auto">
             {foundUsers.map((usuario) => (
               <div key={usuario.id} className="flex flex-col text-black">
-                {usuario.transacciones && usuario.transacciones.map((transaccion, index) => (
+                {usuario.transacciones && usuario.transacciones.map((transaccion) => (
                   <div key={usuario.id} className="flex flex-row justify-center text-black border-2 h-20">
                     <div className="w-[28%] flex flex-col justify-center items-center">
                       <h1 className=""><strong>{usuario.nombre}</strong></h1>

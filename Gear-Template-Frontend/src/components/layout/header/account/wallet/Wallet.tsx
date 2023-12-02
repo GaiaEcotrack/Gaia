@@ -1,5 +1,7 @@
 import { Account } from '@gear-js/react-hooks';
+
 import { AccountButton } from '../account-button';
+
 import styles from './Wallet.module.scss';
 
 type Props = {

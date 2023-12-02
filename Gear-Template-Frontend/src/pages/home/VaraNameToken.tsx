@@ -1,11 +1,10 @@
 
 import { ProgramMetadata } from "@gear-js/api";
 import { useEffect, useState } from "react";
-import { useApi, useAlert, useAccount } from "@gear-js/react-hooks";
+import { useApi, useAlert} from "@gear-js/react-hooks";
 
 function VaraTokenName() {
   const { api } = useApi();
-  const { account } = useAccount();
 
   const alert = useAlert();
 

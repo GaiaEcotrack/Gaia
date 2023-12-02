@@ -1,7 +1,6 @@
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
 import { ProgramMetadata } from "@gear-js/api";
-import { Button } from "@chakra-ui/react";
 
 function Burn() {
   const alert = useAlert();
@@ -45,7 +44,7 @@ function Burn() {
             if (status.isInBlock) {
               alert.success(status.asInBlock.toString());
             } else {
-              console.log("In process");
+              alert.info("In process");
               if (status.type === "Finalized") {
                 alert.success(status.type);
               }
@@ -53,7 +52,7 @@ function Burn() {
           }
         )
         .catch((error: any) => {
-          console.log(":( transaction failed", error);
+          alert.error(":( transaction failed", error);
         });
     } else {
       alert.error("Account not available to sign");

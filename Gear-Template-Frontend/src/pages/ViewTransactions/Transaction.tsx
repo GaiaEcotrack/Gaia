@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { MdOutlineTrendingUp, MdOutlineTrendingDown } from "react-icons/md";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 // Importaciones locales
-import { NameFungibleToken } from "pages/home/NameToken";
 import { VaraTokenName } from "pages/home/VaraNameToken";
 import { VarasBalance } from "pages/home/VarasBalance";
 import { LocalBalanceToken } from "pages/home/MyBalanceToken";
@@ -26,21 +25,15 @@ function Transaction () {
 
 
   const gaia = useSelector((state: RootState)=> state.app.valueGaia)
+  const vara = useSelector((state: RootState)=> state.app.valueVara)
 
   // Función para calcular el valor total
   
 
   const [cantidad, setCantidad] = useState({
     gaia,
-    vara: 1000,
+    vara,
   });
-
-  useEffect(() => {
-    setCantidad((prevValores) => ({
-      ...prevValores,
-     gaia,
-    }));
-  }, [gaia]);
 
   const calcularValorTotal = (quantity: number, valorCrypto: number): number =>
   quantity * valorCrypto;
@@ -79,10 +72,7 @@ function Transaction () {
       vara: 0,
     }
   );
-
-  const [total, setTotal] = useState<number>(
-    totalGaia + totalVara
-  );
+  const totalTokens = totalGaia + totalVara
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -101,16 +91,20 @@ function Transaction () {
       }));
 
       // Calculamos el nuevo total
-      setTotal(
-        (prevTotal) =>
-          prevTotal +
-          valoresCrypto.gaia * (nuevosPorcentajes.gaia / 100) +
-          valoresCrypto.vara * (nuevosPorcentajes.vara / 100)
-      );
     }, 3000);
 
     return () => clearInterval(intervalId);
   }, [valoresCrypto.gaia, valoresCrypto.vara]);
+  useEffect(() => {
+    setCantidad((prevValores) => ({
+      ...prevValores,
+      gaia,
+      vara,
+    }));
+  }, [gaia, vara]);
+
+
+  
 
   const porcentajeGaiaColor = porcentajesCambio.gaia > 0 ? "#00ffc3" : "red";
   const porcentajeVaraColor = porcentajesCambio.vara > 0 ? "#00ffc3" : "red";
@@ -245,7 +239,7 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
               Depositar Fondos
             </button>
           </div>
-          <h2 className="p-2.5 sm:text-3xl ">${total.toFixed(2)} USD</h2>
+          <h2 className="p-2.5 sm:text-3xl ">${totalTokens.toFixed(2)} USD</h2>
         </div>
       </div>
       {sendTokenState && (

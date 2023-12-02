@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { ProgramMetadata, encodeAddress } from "@gear-js/api";
 import { useApi, useAlert, useAccount } from "@gear-js/react-hooks";
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store'; 
+import { useDispatch} from 'react-redux';
+
 
 function LocalBalanceToken() {
   const { api } = useApi();
@@ -11,7 +11,6 @@ function LocalBalanceToken() {
   const alert = useAlert();
   const dispatch = useDispatch();
 
-  const valueGaia = useSelector((state: RootState) => state.app.valueGaia);
 
 
   const [balance, setBalance] = useState<any | undefined>(0);

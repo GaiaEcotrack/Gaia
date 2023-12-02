@@ -79,9 +79,9 @@ function Usuarios() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex items-center justify-center gap-10 h-80">
+      <div className="flex items-center justify-center gap-10 h-80 ml-[4.5vh]">
         <div className="mt-16 text-white flex flex-col items-center justify-center ml-[-7vh]">
-          <div className="w-72 h-40  mt-[15vh] z-10 lg:mt-[5vh] md:ml-[0vh] md:mt-[30vh] lg:ml-[-85vh]  bg-[#74C7ED] rounded-2xl flex flex-col items-center justify-center flex-wrap">
+          <div className="w-72 h-40  mt-[15vh] z-10 lg:mt-[2vh] md:ml-[0vh] md:mt-[30vh] lg:ml-[-85vh]  bg-[#74C7ED] rounded-2xl flex flex-col items-center justify-center flex-wrap">
             <div className="w-56 flex items-center justify-center">
               <img
                 className="mt-4 w-24 h-24 object-cover rounded-full  "
@@ -89,10 +89,10 @@ function Usuarios() {
                 alt="User"
               />
             </div>
-            <h1 className="text-3xl">Steve Jackson</h1>
+            <h1 className="sm:text-3xl">Steve Jackson</h1>
           </div>
 
-          <div className="w-72 h-40  z-20 md:ml-[0.5vh] lg:mt-[-40vh] md:mt-[5vh] bg-[#699CD0] rounded-2xl mt-[1vh] mx-1 flex flex-col items-center justify-center flex-wrap">
+          <div className="w-72 h-40  z-20 md:ml-[0.5vh] lg:mt-[-31vh] md:mt-[5vh] bg-[#699CD0] rounded-2xl mt-[1vh] mx-1 flex flex-col items-center justify-center flex-wrap">
             <div className="w-58 flex items-center justify-center">
               <img
                 className="mt-4 w-24 h-24 object-cover rounded-full "
@@ -100,7 +100,7 @@ function Usuarios() {
                 alt=""
               />
             </div>
-            <h1 className="text-3xl">Juan Eduardo</h1>
+            <h1 className="sm:text-3xl">Juan Eduardo</h1>
           </div>
 
           <div className="w-72 h-40 z-0 bg-[#F0B778] md:ml-[0vh] lg:ml-[85vh] mt-[1vh] lg:mt-[-12vh] md:mt-[5vh]  rounded-2xl flex flex-col items-center justify-center flex-wrap">
@@ -111,14 +111,14 @@ function Usuarios() {
                 alt=""
               />
             </div>
-            <h1 className="text-3xl">Maria Gomez </h1>
+            <h1 className="sm:text-3xl">Maria Gomez </h1>
           </div>
         </div>
       </div>
     
-      <div className="bg-white w-[40vh]  sm:w-[70vh] ml-[-8vh] md:mt-[40vh] md:ml-[0.1vh] md:w-4/6 sm:mt-[30vh] p-2.5 rounded-md h-[70vh] md:h-full flex text-xs items-center flex-col justify-center text-[#696771] mt-[22vh] lg:mt-[1vh] ">
+      <div className="bg-white w-[43vh]  sm:w-[70vh] ml-[-1vh] md:mt-[40vh] md:ml-[0.1vh] md:w-4/6 sm:mt-[30vh] p-2.5 rounded-md h-[73.6vh] md:h-full flex text-xs items-center flex-col justify-center text-[#696771] mt-[22vh] lg:mt-[1vh] ">
        
-      <div className="mt-[-22vh] ml-[7vh] sm:mt-[1vh] md:mt-[1vh]">
+      <div className="mt-[-27vh] ml-[7vh] sm:mt-[1vh] md:mt-[1vh]">
          
          <div className="flex gap-5 md:gap-10 md:ml-[8vh] text-sm md:text-lg ml-[2vh]">
         <p>Nombres </p>
@@ -129,6 +129,7 @@ function Usuarios() {
         </div>
 
         {users.map((user) => (
+          
             <div
               className="p-1 md:p-2.5 text-[#696771] flex md:m-5 items-center border-b text-xs md:text-lg  md:w-[590px] w-[45vh]"
             >

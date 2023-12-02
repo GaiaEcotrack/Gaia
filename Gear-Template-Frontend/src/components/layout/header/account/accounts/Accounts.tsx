@@ -1,6 +1,5 @@
 import type { InjectedAccountWithMeta } from '@polkadot/extension-inject/types';
 import { useAccount } from '@gear-js/react-hooks';
-import { isLoggedIn } from 'utils';
 import { LOCAL_STORAGE } from 'consts';
 
 import { AccountButton } from '../account-button';
@@ -28,9 +27,7 @@ function Accounts({ list, onChange }: Props) {
         <AccountButton
           address={account.address}
           name={account.meta.name}
-          isActive={isLoggedIn(account)}
           onClick={() => handleAccountButtonClick(account)}
-          block
         />
       </li>
     ));

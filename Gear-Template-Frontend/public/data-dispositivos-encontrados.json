@@ -26,6 +26,15 @@
         "Firmware_version": "Firmware v3",
         "Voltaje": "408w",
         "Temperatura": "36°C"
+      },
+      {
+        "Nombre": "Thermal generator 2",
+        "Tipo_de_Dispositivo": "Generador Termico",
+        "Fabricante": "empresa x",
+        "Marca_Modelo": "Generator 33",
+        "Firmware_version": "Firmware v4.56",
+        "Voltaje": "45w",
+        "Temperatura": "21°C"
       }
   ]
 
