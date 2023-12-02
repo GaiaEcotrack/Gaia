@@ -23,6 +23,7 @@ import { ModalMintGaia } from "components/ModalMintGaia/ModalMintGaia";
 import { PopUpALert } from "../../components/PopUpALert/PopUpAlert";
 // Imágenes
 import PolygonDown from "../../assets/PolygonDown.svg";
+import { getAuth, signOut } from 'firebase/auth';
 
 ChartJS.register(
   ArcElement,
@@ -72,7 +73,13 @@ const optionsBar = {
   },
 };
 /* eslint-disable */
-export function GraficoEnergia() {
+
+export interface IHomePageProps {}
+
+const GraficoEnergia: React.FunctionComponent<IHomePageProps> = (props) => {
+
+  const auth = getAuth();
+  
   const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
     null
   );
@@ -313,6 +320,8 @@ const handleCaptureExcedente = () => {
           </div>
         </div>
       </div>
+
+      <button onClick={() => signOut(auth)}>Sign out of Firebase</button>
   
       <ModalMintGaia 
       modalMint={modalMint} 
@@ -323,3 +332,5 @@ const handleCaptureExcedente = () => {
     </div>
   );
 }
+
+export default GraficoEnergia;
