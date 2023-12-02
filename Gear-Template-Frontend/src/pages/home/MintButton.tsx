@@ -1,8 +1,9 @@
 
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
-import { ProgramMetadata } from "@gear-js/api";
+import { ProgramMetadata,  GearKeyring } from "@gear-js/api";
 import { Button } from "@gear-js/ui";
+
 
 function Mint() {
   const alert = useAlert();
@@ -21,10 +22,15 @@ function Mint() {
 
   const message: any = {
     destination: programIDFT, // programId
-    payload: { mint: 500 },
+    payload: { mint: 1000000 },
     gasLimit: 899819245,
     value: 0,
   };
+
+
+
+
+
 
  async function signer(){
     const localaccount = account?.address;
@@ -38,6 +44,7 @@ function Mint() {
 
       const injector = await web3FromSource(accounts[0].meta.source);
 
+
       transferExtrinsic
         .signAndSend(
           account?.address ?? alert.error("No account"),
@@ -46,7 +53,7 @@ function Mint() {
             if (status.isInBlock) {
               alert.success(status.asInBlock.toString());
             } else {
-                alert.loading("In process")
+                alert.info("In process")
               if (status.type === "Finalized") {
                 alert.success(status.type);
               }

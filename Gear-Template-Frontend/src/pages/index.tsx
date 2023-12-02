@@ -6,6 +6,7 @@ import { ViewTransactions } from './ViewTransactions/ViewTransactions';
 import { Notificaciones } from './notificaciones/Notificaciones';
 import { RedUser } from './red/Red';
 import { Usuarios } from './Usuarios/Usuarios';
+import { GraficoEnergia } from './GraficoEnergia/GraficoEnergia';
 
 const routes = [{ path: '/main', Page: Main },
 { path: '/labs', Page: Labs },
@@ -13,6 +14,7 @@ const routes = [{ path: '/main', Page: Main },
 { path: '/notificaciones', Page: Notificaciones },
 { path: '/red', Page: RedUser },
 { path: '/usuarios', Page: Usuarios },
+{ path: '/home', Page: GraficoEnergia },
 
 ];
 

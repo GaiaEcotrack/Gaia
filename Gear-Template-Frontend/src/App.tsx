@@ -7,7 +7,6 @@ import { Routing } from 'pages';
 import { SideBar } from 'pages/home/SideBar';
 
 /* eslint-disable */
-import { GraficoEnergia } from './pages/GraficoEnergia/GraficoEnergia';
 import { SuperUser } from './pages/superUser/SuperUser';
 import { Labs } from './pages/Labs/Labs';
 import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
@@ -31,12 +30,11 @@ function Component() {
 
   return (
     <div className='font-sans bg-slate-200 text-white'>
-      <Header isAccountVisible={isAccountReady} />
+      {window.location.pathname !== '/' && <Header isAccountVisible={isAccountReady} />}
       {window.location.pathname !== '/' && <SideBar />}
       <main>{isAppReady ? <Routing /> : <ApiLoader />}</main>
       <Routes>
         <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
-        <Route path="/home" element={<GraficoEnergia />} />
         <Route path="/superUser" element={<SuperUser />} />
         <Route path="/" element={<AuthForm />} />
         <Route path='/lab' element={<Labs />} />
