@@ -111,8 +111,8 @@ function Transaction () {
   
   return (
     <div className="flex flex-col items-center">
-      <div className="bg-white w-[90%] sm:w-4/5 h-[37rem] gap-5 sm:h-56 rounded-md mt-10 flex sm:flex-row items-center flex-col sm:gap-10 sm:justify-around p-2.5">
-        <div className="w-80 h-44 sm:w-80 sm:h-48 flex flex-col  bg-gradient-to-r from-secondary to-primary rounded-md">
+      <div className="bg-white shadow-lg w-[90%] sm:w-4/5 h-[37rem] gap-5 sm:h-56 rounded-md mt-10 flex sm:flex-row items-center flex-col sm:gap-10 sm:justify-around p-2.5">
+        <div className="w-80 h-44 shadow-lg sm:w-80 sm:h-48 flex flex-col  bg-gradient-to-r from-secondary to-primary rounded-md">
           <div className="flex gap-10 p-2.5 items-center justify-between">
             <img className="w-14 h-14" src="/LOGOGAIASOLO.png" alt="" />
             <div className="flex gap-1">
@@ -163,7 +163,7 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
           </div>
         </div>
 
-        <div className="w-80 h-44 sm:w-80 sm:h-48 flex flex-col bg-gradient-to-r from-vara to-black rounded-md">
+        <div className="w-80 shadow-lg h-44 sm:w-80 sm:h-48 flex flex-col bg-gradient-to-r from-vara to-black rounded-md">
           <div className="flex gap-10 p-2.5 items-center justify-between">
             <img className="w-14 h-14" src="/VaraCrypto.png" alt="" />
             <div className="flex gap-1">
@@ -214,7 +214,7 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
           </div>
         </div>
 
-        <div className="w-80 h-44 sm:w-80 sm:h-48 flex flex-col bg-gradient-to-r from-black to-secundary flex flex-col items-center justify-around gap-5 bg-secondary rounded-md">
+        <div className="w-80 shadow-lg h-44 sm:w-80 sm:h-48 flex flex-col bg-gradient-to-r from-black to-secundary flex flex-col items-center justify-around gap-5 bg-secondary rounded-md">
           <div className="flex items-center justify-center p-2.5">
             <h2 className="sm:text-3xl">Saldo Total</h2>
           </div>

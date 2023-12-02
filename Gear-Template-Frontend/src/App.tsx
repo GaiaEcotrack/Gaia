@@ -5,14 +5,15 @@ import { Header, ApiLoader } from 'components';
 import { withProviders } from 'hocs';
 import { Routing } from 'pages';
 import { SideBar } from 'pages/home/SideBar';
+
 /* eslint-disable */
-import { NotificacionesConfig } from 'pages/notificacionesConfig/NotificacionesConfig';
 import { GraficoEnergia } from './pages/GraficoEnergia/GraficoEnergia';
 import { SuperUser } from './pages/superUser/SuperUser';
 import { Labs } from './pages/Labs/Labs';
 import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
 import 'App.css';
 import { AuthForm } from 'components/LoginAct/LoginAct';
+import { PublicProfile } from 'components/UserNew/UserNew';
 
 function Component() {
   const { isApiReady } = useApi();
@@ -39,7 +40,7 @@ function Component() {
         <Route path="/superUser" element={<SuperUser />} />
         <Route path="/" element={<AuthForm />} />
         <Route path='/lab' element={<Labs />} />
-        <Route path='/notificacionesConfig' element={<NotificacionesConfig />} />
+        <Route path='/settings' element={<PublicProfile/>} />
         <Route path='/loginPrueba' element={<AuthForm/>}/>
       </Routes>
     </div>
