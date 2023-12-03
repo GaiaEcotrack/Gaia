@@ -42,11 +42,7 @@ function Component() {
       <main>{isAppReady ? <Routing /> : <ApiLoader />}</main>
       <Routes>
         <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
-        <Route path="/home" element={
-        <AuthRoute>
-          <GraficoEnergia />
-        </AuthRoute>
-        } />
+        <Route path="/home" element={<AuthRoute> <GraficoEnergia /> </AuthRoute>} />
         <Route path="/superUser" element={<SuperUser />} />
         <Route path="/" element={<AuthForm />} />
         <Route path='/lab' element={<Labs />} />

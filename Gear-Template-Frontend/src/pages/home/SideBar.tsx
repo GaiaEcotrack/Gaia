@@ -1,6 +1,6 @@
 
 /* eslint-disable */
-import { SideBarNew } from "components/SideBarNew/SideBarNew";
+import {SideBarNew} from "components/SideBarNew/SideBarNew";
 
 function SideBar() {
 

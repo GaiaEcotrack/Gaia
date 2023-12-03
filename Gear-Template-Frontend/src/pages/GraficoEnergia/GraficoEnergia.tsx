@@ -22,11 +22,14 @@ import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { decodeAddress, ProgramMetadata, GearKeyring } from "@gear-js/api";
 // Componentes personalizados
 import { ModalMintGaia } from "components/ModalMintGaia/ModalMintGaia";
+// Auth
+import { getAuth, signOut } from 'firebase/auth';
 
 import { PopUpALert } from "../../components/PopUpALert/PopUpAlert";
 // Imágenes
 import PolygonDown from "../../assets/PolygonDown.svg";
-import { getAuth, signOut } from 'firebase/auth';
+// import { SideBarNew } from "components/SideBarNew/SideBarNew";
+
 
 ChartJS.register(
   ArcElement,
@@ -82,6 +85,10 @@ export interface IHomePageProps {}
 const GraficoEnergia: React.FunctionComponent<IHomePageProps> = (props) => {
 
   const auth = getAuth();
+
+  const signOutWithoutAuth = async () => {
+    await signOut(auth);
+  };
   
   const [componenteMontado, setComponenteMontado] = useState(true);
   const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
@@ -322,6 +329,7 @@ useEffect(() => {
 
 console.log(excedenteCapturado);
 
+
 //------------------------------VARA INTEGRATION-----------------------------------------------------------------------
 
 
@@ -452,8 +460,8 @@ console.log(excedenteCapturado);
         </div>
       </div>
 
-      <button onClick={() => signOut(auth)}>Sign out of Firebase</button>
-  
+      <button onClick={signOutWithoutAuth}>Sign out of Firebase</button>
+
       <ModalMintGaia 
       modalMint={modalMint} 
       setModalMint={setModalMint}
