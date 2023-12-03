@@ -23,13 +23,11 @@ import { decodeAddress, ProgramMetadata, GearKeyring } from "@gear-js/api";
 // Componentes personalizados
 import { ModalMintGaia } from "components/ModalMintGaia/ModalMintGaia";
 // Auth
-import { getAuth, signOut } from 'firebase/auth';
 
 import { PopUpALert } from "../../components/PopUpALert/PopUpAlert";
 // Imágenes
 import PolygonDown from "../../assets/PolygonDown.svg";
 // import { SideBarNew } from "components/SideBarNew/SideBarNew";
-
 
 ChartJS.register(
   ArcElement,
@@ -80,15 +78,7 @@ const optionsBar = {
 };
 /* eslint-disable */
 
-export interface IHomePageProps {}
-
-const GraficoEnergia: React.FunctionComponent<IHomePageProps> = (props) => {
-
-  const auth = getAuth();
-
-  const signOutWithoutAuth = async () => {
-    await signOut(auth);
-  };
+const GraficoEnergia = () => {  
   
   const [componenteMontado, setComponenteMontado] = useState(true);
   const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
@@ -459,8 +449,6 @@ console.log(excedenteCapturado);
           </div>
         </div>
       </div>
-
-      <button onClick={signOutWithoutAuth}>Sign out of Firebase</button>
 
       <ModalMintGaia 
       modalMint={modalMint} 
