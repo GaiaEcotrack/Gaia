@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAccount } from '@gear-js/react-hooks';
+import { TbWalletOff } from "react-icons/tb";
 
 import { AccountsModal } from './accounts-modal';
 // import
@@ -22,7 +23,7 @@ function Account() {
       {account ? (
         <Wallet balance={account.balance} address={account.address} name={account.meta.name} onClick={openModal} />
       ) : (
-        <button type="button" onClick={openModal}> Connect Your Wallet</button>
+        <button type="button" onClick={openModal} aria-label="Abrir modal"><TbWalletOff className='w-8 h-8' /></button>
       )}
       {isModalOpen && <AccountsModal accounts={accounts} close={closeModal} />}
     </>

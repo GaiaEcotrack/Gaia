@@ -7,6 +7,7 @@ import { Notificaciones } from './notificaciones/Notificaciones';
 import { RedUser } from './red/Red';
 import { Usuarios } from './Usuarios/Usuarios';
 import GraficoEnergia from './GraficoEnergia/GraficoEnergia';
+import { AuthForm } from './LoginAct/LoginAct';
 
 const routes = [{ path: '/main', Page: Main },
 { path: '/labs', Page: Labs },
@@ -15,6 +16,7 @@ const routes = [{ path: '/main', Page: Main },
 { path: '/red', Page: RedUser },
 { path: '/usuarios', Page: Usuarios },
 { path: '/home', Page: GraficoEnergia },
+{ path: '/', Page: AuthForm },
 
 ];
 
