@@ -76,15 +76,17 @@ const PanelUsuarioFinal = () => {
       setIsLoading(false);
     }
   };
+  const imageUrl= 'https://services.meteored.com/img/article/energy-overhaul-scientists-predict-by-the-2040s-solar-energy-will-dominate-our-power-grids-1697660406587_1280.jpeg'
   return (
-    <div className="bg-gray-100 m-16 sm:m-4 ">
+    <section className="">
+    <div className="bg-gray-100 m-16 sm:m-4 " style={{ backgroundImage: `url(${imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat', opacity: ''  }}>
       <div className="text-end">
-        <p className="text-[#699CD0] text-[20px] sm:text-[14px]  md:text-[28px] lg:text-[24px] xl:text-[24px] mr-8 mt-8 hidden md:block ">
+        <p className="text-gray-100 text-[20px] sm:text-[14px]  md:text-[28px] lg:text-[24px] xl:text-[24px] mr-8 mt-8 hidden md:block ">
           Panel de usuario final
         </p>
       </div>
       <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-12 sm:mt-8">
-        <h1 className="sm:text-4xl text-[#5A5A5A] my-4 sm:my-0">
+        <h1 className="sm:text-4xl text-gray-800 my-4 sm:my-0">
           Dispositivos Encontrados
         </h1>
 
@@ -95,7 +97,7 @@ const PanelUsuarioFinal = () => {
         <button
           onClick={handleUpdate}
           disabled={isLoading}
-          className="w-28 h-10 hidden border-2 bg-neutral-100 rounded-[5px] text-[#857D7D] mb-2 ml-8 mr-8 sm:inline"
+          className="w-28 h-10 hidden border-2 bg-emerald-500 rounded-[5px] text-gray-900 mb-2 ml-8 mr-8 sm:inline"
         >
           Actualizar
         </button>
@@ -103,7 +105,7 @@ const PanelUsuarioFinal = () => {
       </div>
         <NavLink to="/home">
           <button className="mb-2 sm:inline hidden">
-            <img className="w-10 h-10  " src={back} alt="" />
+            <img className="w-10 h-10" src={back} alt="" />
           </button>
         </NavLink>
         <button
@@ -119,27 +121,27 @@ const PanelUsuarioFinal = () => {
       {dispositivosEncontrados.map((dispositivo, index) => (
         <div
           key={index}
-          className={`border-2 p-4 w-full sm:w-[762px] mx-auto my-auto mb-4 sm:mb-8 
+          className={`border rounded-lg shadow-2xl p-4 w-full sm:w-[762px] mx-auto my-auto mb-4 sm:mb-8 
             ${index === menuAbierto ? "hidden" : ""}`}
         >
-          <h2 className="text-[#5A5A5A] sm:text-2xl mb-6  ">
+          <h2 className="text-gray-50 sm:text-2xl mb-6  ">
             {dispositivo.Nombre}
           </h2>
-          <p className="text-[#5A5A5A] text-sm sm:text-lg">
+          <p className="text-gray-50 text-sm sm:text-lg">
             Tipo de Dispositivo: {dispositivo.Tipo_de_Dispositivo}
           </p>
-          <p className="text-[#5A5A5A] text-sm sm:text-lg ">
+          <p className="text-gray-50 text-sm sm:text-lg ">
             Fabricante: {dispositivo.Fabricante}
           </p>
           <div className="">
-            <p className="text-end text-[#5A5A5A] text-[12px] sm:text-[16px] font-light">
+            <p className="text-end text-gray-50 text-[12px] sm:text-[16px] font-light">
               {dispositivo.conectado ? "Conectado" : "Desconectado"}
             </p>
             <br />
           </div>
           <div className="flex justify-center mt-[-32px]">
             <button
-              className="flex items-center text-[#5A5A5A] text-[16px] text-base font-semibold"
+              className="flex items-center text-gray-50 text-[16px] text-base font-semibold"
               onClick={() => toggleMenu(index === menuAbierto ? null : index)}
             >
               <p className="text-[12px] sm:text-[16px]">Ver mas</p>
@@ -151,28 +153,28 @@ const PanelUsuarioFinal = () => {
 
       {menuAbierto !== null && (
         <div className="border-2 p-4 w-full sm:w-[762px] mx-auto my-auto mt-4 mb-8">
-          <h2 className="text-[#5A5A5A] sm:text-2xl mb-6 ">
+          <h2 className="text-gray-50 sm:text-2xl mb-6 ">
             {dispositivosEncontrados[menuAbierto].Nombre}
           </h2>
-          <p className="text-[#5A5A5A] text-sm sm:text-lg">
+          <p className="text-gray-50 text-sm sm:text-lg">
             Tipo de Dispositivo:{" "}
             {dispositivosEncontrados[menuAbierto].Tipo_de_Dispositivo}
           </p>
-          <p className="text-[#5A5A5A] text-sm sm:text-lg">
+          <p className="text-gray-50 text-sm sm:text-lg">
             Fabricante: {dispositivosEncontrados[menuAbierto].Fabricante}
           </p>
 
-          <p className="text-[#5A5A5A] text-sm sm:text-lg">
+          <p className="text-gray-50 text-sm sm:text-lg">
             Marca/Modelo: {dispositivosEncontrados[menuAbierto].Marca_Modelo}
           </p>
-          <p className="text-[#5A5A5A] text-sm sm:text-lg">
+          <p className="text-gray-50 text-sm sm:text-lg">
             Firmware Version:{" "}
             {dispositivosEncontrados[menuAbierto].Firmware_version}
           </p>
-          <p className="text-[#5A5A5A] text-sm sm:text-lg">
+          <p className="text-gray-50 text-sm sm:text-lg">
             Voltaje: {dispositivosEncontrados[menuAbierto].Voltaje}
           </p>
-          <p className="text-[#5A5A5A] text-sm sm:text-lg">
+          <p className="text-gray-50 text-sm sm:text-lg">
             Temperatura: {dispositivosEncontrados[menuAbierto].Temperatura}
           </p>
 
@@ -190,12 +192,12 @@ const PanelUsuarioFinal = () => {
           <div className="flex justify-between items-center mt-4 sm:mt-6">
             <a
               href="#"
-              className="text-end text-[#5A5A5A] text-[15px] underline "
+              className="text-end text-gray-50 text-[15px] underline "
             >
               <p className="text-[10px] sm:text-[14px]">Opciones Avanzadas</p>
             </a>
             <button
-              className="flex ml-auto items-center text-[#5A5A5A] text-[16px] text-base font-semibold"
+              className="flex ml-auto items-center text-gray-50 text-[16px] text-base font-semibold"
               onClick={() => toggleMenu(null)}
             >
               <p className="text-[12px] sm:text-[16px]">Ver menos</p>
@@ -205,7 +207,7 @@ const PanelUsuarioFinal = () => {
                 alt=""
               />
             </button>
-            <span className="text-[#5A5A5A] text-[12px] sm:text-[16px] font-light ml-auto">
+            <span className="text-gray-50 text-[12px] sm:text-[16px] font-light ml-auto">
               Desconectado
             </span>
             <br />
@@ -213,6 +215,7 @@ const PanelUsuarioFinal = () => {
         </div>
       )}
     </div>
+    </section>
   );
 };
 
