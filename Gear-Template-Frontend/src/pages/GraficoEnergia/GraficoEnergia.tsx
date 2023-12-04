@@ -313,8 +313,6 @@ useEffect(() => {
   };
 }, [componenteMontado]);
 
-console.log(excedenteCapturado);
-
 //------------------------------VARA INTEGRATION-----------------------------------------------------------------------
 
 
