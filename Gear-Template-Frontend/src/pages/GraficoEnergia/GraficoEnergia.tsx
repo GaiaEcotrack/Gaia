@@ -22,10 +22,12 @@ import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { decodeAddress, ProgramMetadata, GearKeyring } from "@gear-js/api";
 // Componentes personalizados
 import { ModalMintGaia } from "components/ModalMintGaia/ModalMintGaia";
+// Auth
 
 import { PopUpALert } from "../../components/PopUpALert/PopUpAlert";
 // Imágenes
 import PolygonDown from "../../assets/PolygonDown.svg";
+// import { SideBarNew } from "components/SideBarNew/SideBarNew";
 
 ChartJS.register(
   ArcElement,
@@ -75,7 +77,9 @@ const optionsBar = {
   },
 };
 /* eslint-disable */
-export function GraficoEnergia() {
+
+const GraficoEnergia = () => {  
+  
   const [componenteMontado, setComponenteMontado] = useState(true);
   const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
     null
@@ -313,6 +317,9 @@ useEffect(() => {
   };
 }, [componenteMontado]);
 
+console.log(excedenteCapturado);
+
+
 //------------------------------VARA INTEGRATION-----------------------------------------------------------------------
 
 
@@ -442,7 +449,7 @@ useEffect(() => {
           </div>
         </div>
       </div>
-  
+
       <ModalMintGaia 
       modalMint={modalMint} 
       setModalMint={setModalMint}
@@ -452,3 +459,5 @@ useEffect(() => {
     </div>
   );
 }
+
+export default GraficoEnergia;

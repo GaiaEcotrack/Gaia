@@ -6,7 +6,7 @@ import { ViewTransactions } from './ViewTransactions/ViewTransactions';
 import { Notificaciones } from './notificaciones/Notificaciones';
 import { RedUser } from './red/Red';
 import { Usuarios } from './Usuarios/Usuarios';
-import { GraficoEnergia } from './GraficoEnergia/GraficoEnergia';
+import GraficoEnergia from './GraficoEnergia/GraficoEnergia';
 
 const routes = [{ path: '/main', Page: Main },
 { path: '/labs', Page: Labs },

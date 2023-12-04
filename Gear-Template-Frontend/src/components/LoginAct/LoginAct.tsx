@@ -1,6 +1,31 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
-function AuthForm  () {
+/* eslint-disable */
+export interface ILoginPageProps {}
+  
+function AuthForm (props: ILoginPageProps): JSX.Element {
+
+  const auth = getAuth();
+  const navigate = useNavigate();
+  const [authing, setAuthing] = useState(false);
+  
+  const signInWithGoogle = async () => {
+    setAuthing(true);    
+
+    try {
+      const response = await signInWithPopup(auth, new GoogleAuthProvider());
+      
+      console.log(response.user.uid);
+      console.log(response.user.photoURL);    
+      
+      navigate('/home');
+    } catch (error) {
+      console.log(error);
+      setAuthing(false);
+    }
+  };
 
     const imageUrl = 'https://images.unsplash.com/photo-1467533003447-e295ff1b0435?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
@@ -10,7 +35,7 @@ function AuthForm  () {
         <h1 className="relative text-5xl">Blockchain Impulsa Tu Energía Verde</h1>
       </div>
 
-      <div className="bg-white/70 w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
+      <div className="bg-white/70 w-full md:max-w-md lg:max-w-full md:mx-auto md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
         <div className="w-full h-100">
             <div className="flex flex-col gap-2 ml-16 sm:ml-32 lg:ml-44 item-center justify-center">
                 <img className="w-32 h-32" src="/LOGOGAIASOLO.png" alt="" />
@@ -82,6 +107,7 @@ function AuthForm  () {
           </Link>
 
           <button
+            onClick={() => signInWithGoogle()} disabled={authing}
             type="button"
             className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300"
           >
@@ -138,4 +164,4 @@ function AuthForm  () {
   );
 };
 
-export {AuthForm};
+export { AuthForm };
