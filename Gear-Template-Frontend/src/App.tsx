@@ -38,7 +38,7 @@ function Component() {
   
 
   return (
-    <div className='font-sans bg-slate-200 text-white'>
+    <div className='font-sans bg-gradient-to-tr from-[#181745] from-10% via-[#181745] via-30% to-[#216e93] to-90% text-white'>
       {window.location.pathname !== '/' && <Header isAccountVisible={isAccountReady} />}
       {window.location.pathname !== '/' && <SideBar />}
       

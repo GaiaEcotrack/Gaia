@@ -5,7 +5,7 @@ import instagram from "../../assets/instagram.png";
 
 function Footer() {
   return (
-    <footer className="flex flex-col items-center text-center text-white bg-gray-200">
+    <footer className="flex flex-col items-center text-center text-white ">
       <div className="container pt-9">
         <div className="flex flex-col items-center justify-center sm:flex-row">
           <a

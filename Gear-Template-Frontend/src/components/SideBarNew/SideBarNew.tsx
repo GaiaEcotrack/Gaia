@@ -24,11 +24,11 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
   ];
 
   return (
-    <div className="bg-white text-black">
+    <div className="bg-white text-white">
       <div
         className={` ${
           open ? "w-72" : "w-20 "
-        } bg-white text-black h-screen p-5  pt-8 relative duration-300`}
+        } bg-[#181745] text-white h-screen p-5  pt-8 relative duration-300`}
       >
         <button
           type="button"
@@ -72,7 +72,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
             <Link to={Menu.to}>
               <li
                 key={Menu.id}
-                className={`flex  rounded-md p-2 cursor-pointer hover:bg-light-white text-black text-sm items-center gap-x-4 
+                className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-slate-400 hover:text-white text-sm items-center gap-x-4 
       ${Menu.gap ? "mt-9" : "mt-2"} ${Menu.id === 0 && "bg-light-white"} `}
               >
                 <img src={`/${Menu.src}.png`} alt="logotwo" />

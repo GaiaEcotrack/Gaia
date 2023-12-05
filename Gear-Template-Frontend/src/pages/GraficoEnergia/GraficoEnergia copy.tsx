@@ -52,13 +52,11 @@ const dataPie: ChartData<"pie", number[], string> = {
 const optionsPie = {
   responsive: true,
   maintainAspectRatio: false,
-  color: 'white',
 };
 
 
 const optionsBar = {
   responsive: true,
-  color: 'white',
   maintainAspectRatio: false,
   scales: {
     x: {
@@ -330,62 +328,62 @@ const meta = '00010001000000000001030000000107000000000000000108000000a90b340008
 
   return (
     <div className="w-full">
-      <div className="bg-gradient-to-tr from-[#181745] from-10% via-[#181745] via-30% to-[#216e93] to-90% text-white md:pl-24 2xl:pl-32 md:pr-10 md:pb-0 ">
+      <div className="bg-slate-200 md:pl-24 2xl:pl-32 md:pr-10 md:pb-0 ">
         <div className="flex flex-col md:flex-row  p-2 justify-center graficos">
-          <div className="bg-[#1d335b] ms:w-228 ] md:w-[349px] h-[170px]  rounded overflow-hidden shadow-lg flex flex-col m-4">
-            <div className=" flex justify-center items-center h-full">
-              <span className="font-[600] text-[40px] text-center mt-4">
+          <div className="bg-white ms:w-228 ] md:w-[349px] h-[170px]  rounded overflow-hidden shadow-lg flex flex-col m-4">
+            <div className="flex justify-center items-center h-full">
+              <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-4">
                 {totalGenerado.toFixed(3)} Kw
               </span>
             </div>
             <div className="flex justify-end items-end h-20">
-              <span className=" mb-4 mr-4">Total Generado</span>
+              <span className="text-[#A7A4B2E0] mb-4 mr-4">Total Generado</span>
             </div>
           </div>
-          <div className="bg-[#1d335b] ms:w-228 md:w-[349px] h-[170px] rounded overflow-hidden shadow-lg flex flex-col m-4">
+          <div className="bg-white ms:w-228 md:w-[349px] h-[170px] rounded overflow-hidden shadow-lg flex flex-col m-4">
             <div className="flex justify-center items-center h-full">
-              <span className="font-[600] text-[40px] text-center mt-4">
+              <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-4">
                 {totalConsumido.toFixed(3)} Kw
               </span>
             </div>
             <div className="flex justify-end items-end h-20">
-              <span className=" mb-4 mr-4">
+              <span className="text-[#A7A4B2E0] mb-4 mr-4">
                 Total Consumido
               </span>
             </div>
           </div>
-          <div className="bg-[#1d335b] ms:w-228 md:w-[349px] h-[170px] rounded overflow-hidden shadow-lg flex flex-col m-4">
+          <div className="bg-white ms:w-228 md:w-[349px] h-[170px] rounded overflow-hidden shadow-lg flex flex-col m-4">
             <div className="flex flex-col justify-center items-center h-full">
-              <span className="font-[600] text-[40px] text-center mt-8">
+              <span className="font-[600] text-[40px] text-center text-[#0487F2] mt-8">
                 {totalExcedente.toFixed(3)} Kw
               </span>
               <button
                 type="button"
-                className="text-[#338de7] text-[18px] underline text-left"
+                className="text-[#699CD0] text-[18px] underline text-left"
                 onClick={() => {setModalMint(true); handleCaptureExcedente()}}
               >
                 Convertir a Token
               </button>
             </div>
             <div className="flex justify-end items-end h-20">
-              <span className=" mb-4 mr-4">
+              <span className="text-[#A7A4B2E0] mb-4 mr-4">
                 Total Excedente
               </span>
             </div>
           </div>
 
           <div className="flex flex-col p-2 mb-6 md:ml-10 justify-center items-center md:items-start">
-            <button type="button" className="cursor-not-allowed pointer-events-none  text-[18px] mt-4 md:mt-0 text-center md:text-left">
+            <button type="button" className="cursor-not-allowed pointer-events-none text-[#699CD0] text-[18px] mt-4 md:mt-0 text-center md:text-left">
               Panel de generación y consumo
             </button>
             <NavLink to="/panelUsuarioFinal">
-              <button type="button" className=" text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
+              <button type="button" className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
                 Administrar Dispositivos.
               </button>
             </NavLink>
             <button
               type="button"
-              className=" text-[18px] underline mt-4 md:mt-0 text-center md:text-left"
+              className="text-[#699CD0] text-[18px] underline mt-4 md:mt-0 text-center md:text-left"
               onClick={openPopup}
             >
               Crear Alertas
@@ -396,7 +394,7 @@ const meta = '00010001000000000001030000000107000000000000000108000000a90b340008
 
         <div className="justify-center mb-10">
           <Pie
-            className="h-[300px] 2xl:h-[400px] justify-center "
+            className="h-[300px] 2xl:h-[400px] justify-center"
             data={dataPie}
             options={optionsPie}
           />
@@ -405,7 +403,7 @@ const meta = '00010001000000000001030000000107000000000000000108000000a90b340008
         <div className="flex flex-col items-center sm:flex-row sm:justify-center">
         <div className="relative inline-block">
         <select
-          className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] text-white m-1 pl-2"
+          className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-50 rounded-[15px] text-[#857D7D] m-1"
           defaultValue="Energia Solar"
           onChange={(e) => console.log(e.target.value)} // Puedes manejar la selección aquí
         >
@@ -415,33 +413,33 @@ const meta = '00010001000000000001030000000107000000000000000108000000a90b340008
         </select>
         {/* <img src={PolygonDown} alt="" className="ml-2" /> */}
       </div>
-          <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] m-1">
+          <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-50 rounded-[15px] text-[#857D7D] m-1">
             Generado
             <img src={PolygonDown} alt="" className="ml-2" />
           </button>
-          <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] m-1">
+          <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-neutral-50 rounded-[15px] text-[#857D7D] m-1">
             Tiempo real
             <img src={PolygonDown} alt="" className="ml-2" />
           </button>
 
           <div className="mt-4 sm:mt-0 sm:ml-4 flex flex-col items-center sm:flex-row">
             <div className="flex flex-col items-center mb-2 sm:mb-0">
-              <span className=" text-[16px] font-[700]">
+              <span className="text-[#857D7D] text-[16px] font-[700]">
                 0 Kws
               </span>
-              <h3 className=" ml-2 p-2">Actual</h3>
+              <h3 className="text-[#857D7D] ml-2 p-2">Actual</h3>
             </div>
             <div className="flex flex-col items-center mb-2 sm:mb-0 sm:ml-4">
-              <span className="t text-[16px] font-[700]">
+              <span className="text-[#857D7D] text-[16px] font-[700]">
                 0 Kws
               </span>
-              <h3 className="t ml-2 p-2">Basico</h3>
+              <h3 className="text-[#857D7D] ml-2 p-2">Basico</h3>
             </div>
             <div className="flex flex-col items-center mb-2 sm:mb-0">
-              <span className=" text-[16px] font-[700]">
+              <span className="text-[#857D7D] text-[16px] font-[700]">
                 0 Kws
               </span>
-              <h3 className=" ml-2 p-2">Total</h3>
+              <h3 className="text-[#857D7D] ml-2 p-2">Total</h3>
             </div>
             <br />
           </div>
@@ -449,8 +447,8 @@ const meta = '00010001000000000001030000000107000000000000000108000000a90b340008
 
         <div className="flex mx-auto max-w-screen-md h-[200px] mt-8">
           <Bar data={barData} options={optionsBar} />
-          <div className="border-4 m-auto ml-32 bg-gray-100 h-32 rounded-full hidden lg:flex items-center justify-center border-gray-400">
-            <p className="text-[#1d335b] text-xl m-2 text-center">{showDate}</p>
+          <div className="border-4 m-auto ml-32 bg-gray-100 h-32 rounded-full hidden lg:flex items-center justify-center border-gray-300">
+            <p className="text-gray-400 text-xl m-2 text-center">{showDate}</p>
           </div>
         </div>
       </div>
