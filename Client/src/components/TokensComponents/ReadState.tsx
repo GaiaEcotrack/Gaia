@@ -1,0 +1,50 @@
+import { ProgramMetadata } from "@gear-js/api";
+import { Button } from "@gear-js/ui";
+import { useState } from "react";
+import { useApi, useAlert } from "@gear-js/react-hooks";
+import { AnyJson } from "@polkadot/types/types";
+
+function ReadState() {
+  const { api } = useApi();
+
+  const alert = useAlert();
+
+  const [fullState, setFullState] = useState<AnyJson>();
+
+ // Add your programID
+ const programIDFT =
+ "0x5311f784eaecf5ac7f602577d49d7ef515809587f168534696d205df2448f194";
+
+// Add your metadata.txt
+const meta =
+ "00010001000000000001040000000106000000000000000107000000710724000808696f18496e69744654000004013466745f70726f6772616d5f696404011c4163746f72496400000410106773746418636f6d6d6f6e287072696d6974697665731c4163746f724964000004000801205b75383b2033325d000008000003200000000c000c0000050300100808696f18416374696f6e00012048465444656c617965644d65737361676530730400140110753132380000004c465444656c617965644d6573736167653130730400140110753132380001004c465444656c617965644d6573736167653230730400140110753132380002004c465444656c617965644d65737361676533307304001401107531323800030048465444656c617965644d657373616765316d04001401107531323800040048465444656c617965644d657373616765336d04001401107531323800050048465444656c617965644d657373616765356d040014011075313238000600504654416c6c44656c617965644d6573736167657304001401107531323800070000140000050700180808696f144576656e7400010c405375636365737366756c437265617465000000445375636365737366756c44657374726f79000100485375636365737366756c5472616e73666572000200001c00000220002000000408041400";
+
+  const metadata = ProgramMetadata.from(meta);
+
+  
+  const getState = () => {
+
+    api.programState
+      .read({ programId: programIDFT,payload:"" }, metadata)
+      .then((result) => {
+        setFullState(result.toJSON());
+        alert.success("Successful state");
+      })
+      .catch(({ message }: Error) => alert.error(message));
+  };
+
+  
+
+  return (
+    <div className="text-black">
+      <div>Full State</div>
+      <div className="state">
+        State
+        <p className="text"> {JSON.stringify(fullState)}</p>
+      </div>
+      <Button text="Get Full State" onClick={getState} />
+    </div>
+  );
+}
+
+export { ReadState };
