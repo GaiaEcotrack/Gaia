@@ -52,7 +52,7 @@ function VarasBalance() {
   });
 
   return (
-        <h2 className="text-3xl">{balance}</h2>
+        <h2 className="text-3xl text-gray-700">{balance}</h2>
   );
 }
 

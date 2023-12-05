@@ -8,7 +8,7 @@ type Props = {
 
 function Header({ isAccountVisible }: Props) {
   return (
-    <header className="text-white flex justify-end items-center bg-[#181745]">
+    <header className="text-white hidden flex justify-end items-center bg-[#181745]">
       {isAccountVisible && <Account />}
     </header>
   );

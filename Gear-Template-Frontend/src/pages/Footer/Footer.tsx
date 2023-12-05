@@ -1,3 +1,7 @@
+import { FaInstagram,FaTwitter,FaLinkedinIn } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
+
+
 import inImg from "../../assets/in.png";
 import email2 from "../../assets/email2.jpeg";
 import x from "../../assets/x.png";
@@ -7,7 +11,7 @@ function Footer() {
   return (
     <footer className="flex flex-col items-center text-center text-white ">
       <div className="container pt-9">
-        <div className="flex flex-col items-center justify-center sm:flex-row">
+        <div className="flex items-center justify-center sm:flex-row">
           <a
             href="https://gear-tech.io/es"
             target="_blank"
@@ -15,9 +19,9 @@ function Footer() {
             className="mb-4"
           >
             <img
-              src="/varaxgear.png"
+              src="/VaraWhite.png"
               alt="Descripción de la imagen 1"
-              className=""
+              className="w-16 h-12 sm:w-72 sm:h-48"
             />
           </a>
           <a
@@ -25,7 +29,7 @@ function Footer() {
             target="_blank"
             rel="noreferrer"
           >
-            <img src="/andromeda.png" alt="" className="w-72 h-48 mb-12" />
+            <img src="/andromeda.png" alt="" className="w-16 h-12 sm:w-72 sm:h-48 mb-12" />
           </a>
           <a
             href="https://www.andromedacomputer.net/dapps/gaia-ecotrack.html"
@@ -35,24 +39,20 @@ function Footer() {
             <img
               src="/LOGOGAIASOLO.PNG"
               alt=""
-              className="w-48 h-48 ml-16  mb-12"
+              className=" w-16 h-12 sm:w-48 sm:h-48 sm:ml-16  mb-12"
             />
           </a>
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row sm:gap-16">
+      <div className="flex z-10 sm:flex-row sm:gap-16">
         <a
           href="https://www.linkedin.com/company/andromeda-computer/mycompany/"
           className="mx-4 my-2 flex flex-col items-center"
           target="_blank"
           rel="noreferrer"
         >
-          <img
-            src={inImg}
-            className="w-16 h-16 brightness-110 mix-blend-multiply"
-            alt="LinkedIn"
-          />
-          <h2 className="mt-2 text-gray-900 ">LinkedIn</h2>
+<FaLinkedinIn color="white" className="text-3xl sm:text-7xl" />
+          <h2 className="mt-2 text-white ">LinkedIn</h2>
         </a>
         <a
           href="https://gmail.com/"
@@ -60,12 +60,8 @@ function Footer() {
           target="_blank "
           rel="noreferrer"
         >
-          <img
-            src={email2}
-            className="w-16 h-16 brightness-110 mix-blend-multiply"
-            alt="email"
-          />
-          <h2 className="mt-2 text-gray-900">Email</h2>
+<MdEmail color="white" className="text-3xl sm:text-7xl" />
+          <h2 className="mt-2 text-white">Email</h2>
         </a>
         <a
           href="https://twitter.com/"
@@ -73,12 +69,8 @@ function Footer() {
           target="_blank "
           rel="noreferrer"
         >
-          <img
-            src={x}
-            className="w-16 h-16 brightness-110 mix-blend-multiply"
-            alt="x"
-          />
-          <h2 className="mt-2 text-gray-900">X</h2>
+< FaTwitter color="white" className="text-3xl sm:text-7xl" />
+          <h2 className="mt-2 text-white">X</h2>
         </a>
         <a
           href="https://www.instagram.com/"
@@ -86,19 +78,15 @@ function Footer() {
           target="_blank "
           rel="noreferrer"
         >
-          <img
-            src={instagram}
-            className="w-16 h-16 brightness-110 mix-blend-multiply"
-            alt="instagram"
-          />
-          <h2 className="mt-2 text-gray-900">Instagram</h2>
+<FaInstagram color="white" className="text-3xl sm:text-7xl"/>
+          <h2 className="mt-2 text-white">Instagram</h2>
         </a>
       </div>
 
-      <div className="w-full bg-neutral-300 p-4 text-center text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200">
+      <div className="w-full gap-5 p-4 text-center text-white dark:bg-neutral-700 dark:text-neutral-200">
         © 2023 Copyright:
         <a
-          className="text-neutral-800 dark:text-neutral-400"
+          className="text-white dark:text-neutral-400"
           href="https://www.andromedacomputer.net/dapps/gaia-ecotrack.html" target="_blannk" rel="noreferrer"
         >
           Gaia Ecotrack

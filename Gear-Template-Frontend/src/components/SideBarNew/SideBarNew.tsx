@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
+import { Account } from "components/layout/header/account";
 
 /* eslint-disable */
 export interface IHomePageProps {}
 
 function SideBarNew(props: IHomePageProps): JSX.Element {
   const auth = getAuth();
-
   const signOutWithoutAuth = async () => {
     await signOut(auth);
   };
@@ -22,6 +22,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
     { id: 8, title: "Setting", src: "Setting", to: "/settings" },
     { title: "Notificaciones", src: "Chat", to: "/notificaciones" },
   ];
+
 
   return (
     <div className="bg-white text-white">
@@ -84,6 +85,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
               </li>
             </Link>
           ))}
+         <Account/>
         </ul>
       </div>
     </div>

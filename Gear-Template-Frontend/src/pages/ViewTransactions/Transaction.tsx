@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { MdOutlineTrendingUp, MdOutlineTrendingDown } from "react-icons/md";
 import { useSelector } from 'react-redux';
 // Importaciones locales
-import { VaraTokenName } from "pages/home/VaraNameToken";
-import { VarasBalance } from "pages/home/VarasBalance";
-import { LocalBalanceToken } from "pages/home/MyBalanceToken";
+import {CryptoCard} from "components/CryptoCard/CryptoCard";
+import { CryptoCardVara } from "components/CryptoCard/CryptoCardVara";
 
 import { ModalSendToken } from "../ModalTransaction/ModalSendToken";
 import { ModalConvertTokens } from "../ModalTransaction/ModalConvertTokens";
 import { ModalFunds } from "../ModalTransaction/ModalFunds";
 import { RootState } from '../../store/index';
+
 
 interface CryptoValues {
   gaia: any;
@@ -39,7 +39,7 @@ function Transaction () {
   quantity * valorCrypto;
 
   const [valoresCrypto, setValoresCrypto] = useState<CryptoValues>({
-    gaia: 5.05,
+    gaia: 0.126,
     vara: 50.50,
   });
   
@@ -112,8 +112,8 @@ function Transaction () {
   return (
     <div className="flex flex-col items-center">
       <div className="bg-white shadow-lg w-[90%] sm:w-4/5 h-[37rem] gap-5 sm:h-56 rounded-md mt-10 flex sm:flex-row items-center flex-col sm:gap-10 sm:justify-around p-2.5">
-        <div className="w-80 h-44 shadow-lg sm:w-80 sm:h-48 flex flex-col  bg-gradient-to-r from-secondary to-primary rounded-md">
-          <div className="flex gap-10 p-2.5 items-center justify-between">
+        {/* <div className="w-80 h-44 shadow-lg sm:w-80 sm:h-48 flex flex-col  bg-gradient-to-r from-secondary to-primary rounded-md"> */}
+          {/* <div className="flex gap-10 p-2.5 items-center justify-between">
             <img className="w-14 h-14" src="/LOGOGAIASOLO.png" alt="" />
             <div className="flex gap-1">
               <button
@@ -160,10 +160,11 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
                 />
               )}
             </div>
-          </div>
-        </div>
+          </div> */}
+          <CryptoCard image='/LOGOGAIASOLO.png' metric={porcentajesCambio.gaia.toFixed(2)}  quantity={totalGaia.toFixed(2)} name="Gaia" onClick={openCard} />
+        {/* </div> */}
 
-        <div className="w-80 shadow-lg h-44 sm:w-80 sm:h-48 flex flex-col bg-gradient-to-r from-vara to-black rounded-md">
+        {/* <div className="w-80 shadow-lg h-44 sm:w-80 sm:h-48 flex flex-col bg-gradient-to-r from-vara to-black rounded-md">
           <div className="flex gap-10 p-2.5 items-center justify-between">
             <img className="w-14 h-14" src="/VaraCrypto.png" alt="" />
             <div className="flex gap-1">
@@ -212,32 +213,16 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
               )}
             </div>
           </div>
-        </div>
+        </div> */}
+        <CryptoCardVara image="/VaraCrypto.png" quantity={totalVara.toFixed(2)} metric={porcentajesCambio.vara.toFixed(2)} name="Vara" onClick={openCard}/>
 
-        <div className="w-80 shadow-lg h-44 sm:w-80 sm:h-48 flex flex-col bg-gradient-to-r from-black to-secundary flex flex-col items-center justify-around gap-5 bg-secondary rounded-md">
+        <div className="bg-gradient-to-br from-secondary to-black  rounded-3xl border shadow-xl p-8 w-80 h-52">
           <div className="flex items-center justify-center p-2.5">
             <h2 className="sm:text-3xl">Saldo Total</h2>
           </div>
           <div className="flex items-center gap-5">
-            <button
-            type="button"
-            onClick={openCardFunds}
-              className="cursor-pointer transition-all bg-blue-500 text-white px-2 py-2 rounded-lg
-border-blue-600
-border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
-active:border-b-[2px] active:brightness-90 active:translate-y-[2px] "
-            >
-              Retirar Fondos
-            </button>
-            <button
-            type="button"
-              className="cursor-pointer transition-all bg-blue-500 text-white px-2 py-2 rounded-lg
-border-blue-600
-border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
-active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
-            >
-              Depositar Fondos
-            </button>
+          <button type="button" onClick={openCardFunds} className="hover:brightness-110 hover:animate-pulse font-bold py-3 px-6 rounded-full bg-gradient-to-r from-blue-500 to-pink-500 text-white">Retirar Fondos</button>
+          <button type="button" onClick={openCardFunds} className="hover:brightness-110 hover:animate-pulse font-bold py-3 px-6 rounded-full bg-gradient-to-r from-blue-500 to-pink-500 text-white">Depositar Fondos</button>
           </div>
           <h2 className="p-2.5 sm:text-3xl ">${totalTokens.toFixed(2)} USD</h2>
         </div>

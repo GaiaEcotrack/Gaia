@@ -50,7 +50,7 @@ function Component() {
         <Route path='/settings' element={<PublicProfile/>} />
         <Route path='/loginPrueba' element={<AuthForm/>}/>
       </Routes>
-      <Footer/>
+      {window.location.pathname !== '/' && <Footer/>}
     </div>
   );
 }
