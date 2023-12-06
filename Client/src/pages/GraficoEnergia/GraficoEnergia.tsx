@@ -90,6 +90,7 @@ const GraficoEnergia = () => {
   const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
     null
   );
+  const [convertirToken, setConvertirToken] = useState(0)
   const [modalMint, setModalMint] = useState<boolean>(false)
   const [totalGenerado, setTotalGenerado] = useState<number>(0);
   const [totalConsumido, setTotalConsumido] = useState<number>(0);
@@ -331,18 +332,22 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
               <span className="font-[600] text-[40px] text-center mt-8">
                 {totalExcedente.toFixed(3)} Kw
               </span>
-              <button
+             
+
+              {/* <button
                 type="button"
                 className="text-[#338de7] text-[18px] underline text-left"
                 onClick={() => {setModalMint(true); handleCaptureExcedente()}}
               >
                 Convertir a Token
-              </button>
+              </button> */}
             </div>
             <div className="flex justify-end items-end h-20">
-              <span className=" mb-4 mr-4">
-                Total Excedente
+            <img src="./LOGOGAIASOLO.PNG"  className="w-16 h-16 mr-8 mb-2"  alt="" />
+              <span className=" mb-4 mr-4 font-bold text-white">
+                Total Excedente en Tokens: 
               </span>
+              <h2 className="mb-4 mr-4 font-bold text-emerald-400">{excedenteCapturado}</h2>
             </div>
           </div>
         </div>
