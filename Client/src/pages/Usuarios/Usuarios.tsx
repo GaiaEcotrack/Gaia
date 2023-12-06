@@ -78,8 +78,8 @@ function Usuarios() {
   let contador = 0;
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="flex items-center justify-center gap-10 h-80 ml-[4.5vh]">
+    <div className="flex flex-col items-center ml-[-4vh]">
+      <div className="flex items-center justify-center gap-10 h-80 ml-[3vh] md:ml-[4.5vh]">
         <div className="mt-16 text-white flex flex-col items-center justify-center ml-[-7vh]">
           <div className="w-72 h-40  mt-[15vh] z-10 lg:mt-[2vh] md:ml-[0vh] md:mt-[30vh] lg:ml-[-85vh]  bg-[#74C7ED] rounded-2xl flex flex-col items-center justify-center flex-wrap">
             <div className="w-56 flex items-center justify-center">
@@ -116,9 +116,9 @@ function Usuarios() {
         </div>
       </div>
     
-      <div className="bg-white w-[43vh]  sm:w-[70vh] ml-[-1vh] md:mt-[40vh] md:ml-[0.1vh] md:w-4/6 sm:mt-[30vh] p-2.5 rounded-md h-[73.6vh] md:h-full flex text-xs items-center flex-col justify-center text-[#696771] mt-[22vh] lg:mt-[1vh] ">
+      <div className="bg-gradient-to-tr from-[#1e1d59] from-10%  via-[#121165] via-30% to-[#216e93] w-[43vh]  sm:w-[70vh] ml-[-5vh] md:mt-[40vh] md:ml-[0.1vh] md:w-4/6 sm:mt-[30vh] p-2.5 rounded-md h-[52vh] md:h-full flex text-xs items-center flex-col justify-center text-white mt-[22vh] lg:mt-[1vh] ">
        
-      <div className="mt-[-27vh] ml-[7vh] sm:mt-[1vh] md:mt-[1vh]">
+      <div className="mt-[-2vh] md:ml-[7vh] ml-[2vh] sm:mt-[1vh] md:mt-[1vh]">
          
          <div className="flex gap-5 md:gap-10 md:ml-[8vh] text-sm md:text-lg ml-[2vh]">
         <p>Nombres </p>
@@ -131,7 +131,7 @@ function Usuarios() {
         {users.map((user) => (
           
             <div
-              className="p-1 md:p-2.5 text-[#696771] flex md:m-5 items-center border-b text-xs md:text-lg  md:w-[590px] w-[45vh]"
+              className="p-1 md:p-2.5 text-white flex md:m-5 items-center border-b text-xs md:text-lg  md:w-[590px] w-[38vh]"
             >
               <span className="mr-1 ml-[-2.5vh] md:ml-[-0.1vh]">{(contador += 1)}°</span>
               <img

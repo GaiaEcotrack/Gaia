@@ -1,17 +1,17 @@
 export function NotificacionesConfig() {
   return (
     <div>
-      <div className="flex items-center justify-center h-screen ">
-        <div className="bg-gray-300 w-[95%] h-[70%] sm:w-2/5 sm:h-2/4 flex flex-col justify-around items-center rounded-lg ">
+      <div className="flex items-center justify-center md:h-screen h-full ">
+        <div className="bg-gradient-to-tr from-[#181745] from-10%  via-[#181745] via-30% to-[#216e93] to-90% text-whitew-[95%] h-[50vh] md:h-[70%] sm:w-2/5 sm:h-2/4 flex flex-col justify-around items-center rounded-lg ">
           <div className="flex items-center gap-2 sm:gap-10">
-            <div>
+            <div className="ml-4">
               <img
-                className="rounded-full h-28 "
+                className="rounded-full h-28 ml-[-0.5vh] md:ml-0"
                 src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 alt=""
               />
               <svg
-                className="h-8"
+                className="h-8 mt-[-4vh] ml-[-1vh] md:ml-0"
                 xmlns="http://www.w3.org/2000/svg"
                 width="40"
                 height="41"
@@ -24,54 +24,55 @@ export function NotificacionesConfig() {
                 />
               </svg>
             </div>
-            <div className="w-52 lg:w-96 bg-white text-gray-600 h-32  rounded-md flex flex-col justify-center items-center">
-              <p className="mb-2">Nombre: mr Jackson</p>
+            <div className="md:w-52 w-72 lg:w-96 bg-[#1d335b]  text-white h-34 md:h-40  ml-[1vh] md:ml-0  rounded-md flex flex-col justify-center items-center">
+              <p className=" ml-[-8vh] md:ml-[-9.7vh]">Nombre: mr Jackson</p>
               <p>Correo: mrJackson@gmail.com</p>
-              <p>Edad: 21 años</p>
-              <p>Telefono: 2975367833</p>
+              <p className="ml-[-12.5vh] md:ml-[-15.5vh]">Edad: 21 años</p>
+              <p className="ml-[-6.9vh] md:ml-[-8.5vh]">Telefono: 2975367833</p>
               <p>Cambiar contraseña</p>
             </div>
           </div>
-          <div className="bg-white w-[95%] h-4/6 xl:h-2/4 rounded-lg flex justify-center items-center">
-            <div className="flex flex-col p-2.5  items-center">
-              <div className="flex space-y-4 items-center text-black lg:gap-40 2xl:gap-60">
-                <p>Recibir notificaciones por transacciones</p>
+          <div className="bg-[#142545] text-xs md:text-base w-[95%] h-[30vh] md:h-4/6  xl:h-2/4 rounded-lg flex justify-center items-center">
+            <div className="flex flex-col p-2.5 items-center mt-[1vh] md:mt-0">
+              <div className="flex space-y-4 items-center text-white lg:gap-40 2xl:gap-60">
+                <p className="ml-[0.2vh] md:ml-0 mt-[-3vh] md:mt-0">Recibir notificaciones por transacciones</p>
                 <div>
-                  <label className="relative inline-flex items-center cursor-pointer">
+                  <label className="relative inline-flex  mt-[-2vh] items-center md:ml-0 ml-[27vh] cursor-pointer">
                     <input type="checkbox" value="" className="sr-only peer" />
-                    <div className="group peer ring-0 bg-rose-400  rounded-full outline-none duration-300 after:duration-300 w-24 h-12  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✖️']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-10 after:w-10 after:top-1 after:left-1 after:flex after:justify-center after:items-center peer-checked:after:translate-x-12 peer-checked:after:content-['✔️'] peer-hover:after:scale-95"> </div>
+                    <div className="group peer ring-0 bg-rose-400 mt-[0.5vh] rounded-full outline-none duration-300 after:duration-300 md:w-16 lg:w-16 h-10 w-14 shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✖️']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-10 ml:after:w-8 lg:after:w-8 after:top-1 after:left-[0.5vh] after:flex after:justify-center after:items-center peer-checked:after:translate-x-6 peer-checked:after:content-['✔️'] peer-hover:after:scale-95"> </div>
                   </label>
                 </div>
               </div>
-              <div className="flex space-y-4 items-center text-black lg:gap-40 2xl:gap-60">
-                <p>Recibir notificaciones 
+        
+              <div className="flex space-y-4 items-center text-white lg:gap-40 2xl:gap-60">
+                <p className="ml-[0.2vh] md:ml-0 w-42">Recibir notificaciones 
 sobre actualizaciones de la cuenta</p>
                 <div>
-                  <label className="relative inline-flex items-center cursor-pointer">
+                  <label className="relative inline-flex  mt-[-2vh] md:ml-0 ml-8 items-center cursor-pointer">
                     <input type="checkbox" value="" className="sr-only peer" />
-                    <div className="group peer ring-0 bg-rose-400  rounded-full outline-none duration-300 after:duration-300 w-24 h-12  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✖️']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-10 after:w-10 after:top-1 after:left-1 after:flex after:justify-center after:items-center peer-checked:after:translate-x-12 peer-checked:after:content-['✔️'] peer-hover:after:scale-95"> </div>
+                    <div className="group peer ring-0 bg-rose-400 mt-[0.5vh] rounded-full outline-none duration-300 after:duration-300 md:w-16 lg:w-16 h-10 w-14 shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✖️']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-10 ml:after:w-8 lg:after:w-8 after:top-1 after:left-[0.5vh] after:flex after:justify-center after:items-center peer-checked:after:translate-x-6 peer-checked:after:content-['✔️'] peer-hover:after:scale-95"> </div>
                   </label>
                 </div>
               </div>
-              <div className="flex space-y-4 items-center text-black lg:gap-40 2xl:gap-60">
-                <p>Recibir notificaciones
-sobre noticias </p>
+              <div className="flex space-y-4 items-center text-white lg:gap-40 2xl:gap-60">
+                <p className="ml-[0.3vh] md:ml-0">Recibir notificaciones
+                  sobre noticias </p>
                 <div>
-                  <label className="relative inline-flex items-center cursor-pointer">
+                  <label className="relative ml-[22vh]  inline-flex  mt-[-2vh] items-center md:ml-6 cursor-pointer">
                     <input type="checkbox" value="" className="sr-only peer" />
-                    <div className="group peer ring-0 bg-rose-400  rounded-full outline-none duration-300 after:duration-300 w-24 h-12  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✖️']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-10 after:w-10 after:top-1 after:left-1 after:flex after:justify-center after:items-center peer-checked:after:translate-x-12 peer-checked:after:content-['✔️'] peer-hover:after:scale-95"> </div>
+                    <div className="group peer ring-0 bg-rose-400 mt-[0.5vh] rounded-full outline-none duration-300  after:duration-300 md:w-16 lg:w-16 h-10 w-14 shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✖️']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-10 ml:after:w-8 lg:after:w-8 after:top-1 after:left-[0.5vh] after:flex after:justify-center after:items-center peer-checked:after:translate-x-6 peer-checked:after:content-['✔️'] peer-hover:after:scale-95"> </div>
                   </label>
                 </div>
               </div>
-              <div className="flex space-y-4 items-center text-black lg:gap-40 2xl:gap-60">
-                <div>
-                <p>Recibir alertas cuando lo 
-producción de energia sea optima</p>
+              <div className="flex space-y-4 items-center text-white lg:gap-40 2xl:gap-60">
+                <div className="ml-[0.4vh] md:ml-0 ">
+                  <p>Recibir alertas cuando lo
+                    producción de energia sea optima</p>
                 </div>
                 <div>
-                  <label className="relative inline-flex items-center cursor-pointer">
+                  <label className="relative ml-3 md:ml-0 inline-flex mt-[-2vh] items-center cursor-pointer">
                     <input type="checkbox" value="" className="sr-only peer" />
-                    <div className="group peer ring-0 bg-rose-400  rounded-full outline-none duration-300 after:duration-300 w-24 h-12  shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✖️']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-10 after:w-10 after:top-1 after:left-1 after:flex after:justify-center after:items-center peer-checked:after:translate-x-12 peer-checked:after:content-['✔️'] peer-hover:after:scale-95"> </div>
+                    <div className="group peer ring-0 bg-rose-400 mt-[0.5vh] rounded-full outline-none duration-300 after:duration-300 md:w-16 lg:w-16 w-14 h-10 shadow-md peer-checked:bg-emerald-500  peer-focus:outline-none  after:content-['✖️']  after:rounded-full after:absolute after:bg-gray-50 after:outline-none after:h-10 ml:after:w-8 lg:after:w-8 after:top-1 after:left-[0.5vh] after:flex after:justify-center after:items-center peer-checked:after:translate-x-6 peer-checked:after:content-['✔️'] peer-hover:after:scale-95"> </div>
                   </label>
                 </div>
               </div>
