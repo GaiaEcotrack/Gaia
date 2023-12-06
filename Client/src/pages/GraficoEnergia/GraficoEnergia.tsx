@@ -27,6 +27,8 @@ import { ModalMintGaia } from "components/ModalMintGaia/ModalMintGaia";
 import { PopUpALert } from "../../components/PopUpALert/PopUpAlert";
 // Imágenes
 import PolygonDown from "../../assets/PolygonDown.svg";
+import { WeatherNavbar } from "components/WeatherNavbar/WeatherNavbar";
+import { WeatherPanel } from "components/WeatherNavbar/WeatherPanel";
 // import { SideBarNew } from "components/SideBarNew/SideBarNew";
 
 ChartJS.register(
@@ -297,6 +299,8 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
   return (
     <div className="w-full">
       <div className=" text-white md:pl-24 2xl:pl-32 md:pr-10 md:pb-0 ">
+        <WeatherNavbar/>
+        <WeatherPanel/>
         <div className="flex flex-col md:flex-row  p-2 justify-center graficos">
           <div className="bg-[#1d335b] ms:w-228 ] md:w-[349px] h-[170px]  rounded overflow-hidden shadow-lg flex flex-col m-4">
             <div className=" flex justify-center items-center h-full">
