@@ -36,31 +36,31 @@ function ModalAdministrar({ showAdmin, setShowAdmin }: ModalAdministrarProps) {
           <div>
             <div className="w-[320px] h-full rounded flex flex-col">
               <div className="flex flex-col items-center">           
-                <button type="button" onClick={() => {setShowConfig(true)}} className="w-[250px] h-[30px] bg-[#74C7ED] rounded-[5px] text-md text-[#ffffff] mt-4" >
+                <button type="button" onClick={() => {setShowConfig(true)}} className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
                   Configuracion del sistema
                 </button>
                 
-                <button   type="button" onClick={() => {setShowManten(true)}} className="w-[250px] h-[30px] bg-[#74C7ED] rounded-[5px] text-md text-[#ffffff] mt-4" >
+                <button   type="button" onClick={() => {setShowManten(true)}} className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
                   Mantenimiento del sistema
                 </button>
 
-                <button  type="button" onClick={() => {setShowGenerad(true)}} className="w-[250px] h-[30px] bg-[#74C7ED] rounded-[5px] text-md text-[#ffffff] mt-4" >
+                <button  type="button" onClick={() => {setShowGenerad(true)}} className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
                   Administrar generadores
                 </button>
 
-                <button  type="button" onClick={() => {setShowTransac(true)}} className="w-[250px] h-[30px] bg-[#74C7ED] rounded-[5px] text-md text-[#ffffff] mt-4" >
+                <button  type="button" onClick={() => {setShowTransac(true)}} className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
                   Administrar transacciones
                 </button>
 
-                <button  type="button" className="w-[250px] h-[30px] bg-[#74C7ED] rounded-[5px] text-md text-[#ffffff] mt-4" >
+                <button  type="button" className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
                   Configuracion de las tarifas
                 </button>
 
-                <button type="button" className="w-[250px] h-[30px] bg-[#74C7ED] rounded-[5px] text-md text-[#ffffff] mt-4" >
+                <button type="button" className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
                   Control de la red
                 </button>
 
-                <button type="button" className="w-[250px] h-[30px] bg-[#74C7ED] rounded-[5px] text-md text-[#ffffff] mt-4" >
+                <button type="button" className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
                   Informes y Analisis
                 </button>           
               </div>

@@ -10,6 +10,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const auth = getAuth();
   const navigate = useNavigate();
   const [authing, setAuthing] = useState(false);
+  const [photoURL, setPhotoURL] = useState<string | null>(null);
   
   const signInWithGoogle = async () => {
     setAuthing(true);    
@@ -18,7 +19,10 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       const response = await signInWithPopup(auth, new GoogleAuthProvider());
       
       console.log(response.user.uid);
-      console.log(response.user.photoURL);    
+      console.log(response.user.photoURL);  
+      const profile = response.user.photoURL
+
+      setPhotoURL(profile);
       
       navigate('/home');
     } catch (error) {

@@ -62,7 +62,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
 
           {open && (
             <Link to="/">
-            <button type="button" onClick={signOutWithoutAuth}>
+            <button type="button" onClick={signOutWithoutAuth} className="text-slate-400 hover:text-white">
               Cerrar sesión
             </button>
             </Link>
