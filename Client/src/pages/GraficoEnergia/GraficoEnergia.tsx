@@ -299,12 +299,12 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
 
 
   return (
-    <div className="w-full">
-      <div className=" text-white md:pl-24 2xl:pl-32 md:pr-10 md:pb-0 ">
+    <div className="">
+      <div className=" text-white md:pl-24 2xl:pl-32 md:pr-10 md:pb-0">
         <WeatherNavbar/>
         <WeatherPanel/>
-        <div className="flex flex-col md:flex-row  p-2 justify-center graficos">
-          <div className="bg-[#1d335b] ms:w-228 ] md:w-[349px] h-[170px]  rounded overflow-hidden shadow-lg flex flex-col m-4">
+        <div className="flex flex-col lg:flex-row  p-2 justify-center graficos items-center">
+          <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px]   rounded overflow-hidden shadow-lg  m-4">
             <div className=" flex justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center mt-4">
                 {totalGenerado.toFixed(3)} Kw
@@ -314,7 +314,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
               <span className=" mb-4 mr-4">Total Generado</span>
             </div>
           </div>
-          <div className="bg-[#1d335b] ms:w-228 md:w-[349px] h-[170px] rounded overflow-hidden shadow-lg flex flex-col m-4">
+          <div className="flex flex-col bg-[#1d335b] md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg  m-4">
             <div className="flex justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center mt-4">
                 {totalConsumido.toFixed(3)} Kw
@@ -326,7 +326,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
               </span>
             </div>
           </div>
-          <div className="bg-[#1d335b] ms:w-228 md:w-[349px] h-[170px] rounded overflow-hidden shadow-lg flex flex-col m-4">
+          <div className="flex flex-col bg-[#1d335b] md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg  m-4">
             <div className="flex flex-col justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center mt-8">
                 {totalExcedente.toFixed(3)} Kw
@@ -345,8 +345,9 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
               </span>
             </div>
           </div>
+        </div>
 
-          <div className="flex flex-col p-2 mb-6 md:ml-10 justify-center items-center md:items-start">
+        <div className="flex flex-col p-2 mb-6 md:ml-10 justify-center items-center md:items-start">
             <button type="button" className="cursor-not-allowed pointer-events-none  text-[18px] mt-4 md:mt-0 text-center md:text-left">
               Panel de generación y consumo
             </button>
@@ -364,7 +365,6 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
             </button>
             {popupOpen && <PopUpALert onClose={closePopup} />}
           </div>
-        </div>
 
         <div className="justify-center mb-10">
           <Pie
