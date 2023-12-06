@@ -10,7 +10,7 @@ interface CardProps {
 function Card({ loadingData, showData, weather, forecast }: CardProps) {
   const today = new Date();
   const day = today.getDate();
-  const month = today.getMonth();
+  const month = today.getMonth() + 1;
   const year = today.getFullYear();
   const date = `${day}/${month}/${year}`;
   let url = "";

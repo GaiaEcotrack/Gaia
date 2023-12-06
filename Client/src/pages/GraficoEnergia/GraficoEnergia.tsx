@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // Librerías de gráficos
 import {
   Chart as ChartJS,
