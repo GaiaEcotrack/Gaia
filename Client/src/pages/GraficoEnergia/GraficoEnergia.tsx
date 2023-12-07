@@ -12,7 +12,7 @@ import {
   LinearScale,
 } from "chart.js";
 // Gráficos de React
-import { Pie, Bar } from "react-chartjs-2";
+import { Pie, Bar, Doughnut } from "react-chartjs-2";
 // React Hooks
 import { useState, useEffect } from "react";
 // React Router
@@ -42,11 +42,11 @@ ChartJS.register(
   LinearScale
 );
 
-const dataPie: ChartData<"pie", number[], string> = {
+const dataPie: ChartData<"doughnut", number[], string> = {
   labels: ["Energia Eólica", "Energia Térmica", "Energia Solar"],
   datasets: [
     {
-      type: "pie",
+      type: "doughnut",
       data: [10000, 7000, 3000],
       backgroundColor: ["#699CD0", "#74C7ED", "#F0B778"],
     },
@@ -372,7 +372,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
           </div>
 
         <div className="justify-center mb-10">
-          <Pie
+          <Doughnut
             className="h-[300px] 2xl:h-[400px] justify-center "
             data={dataPie}
             options={optionsPie}

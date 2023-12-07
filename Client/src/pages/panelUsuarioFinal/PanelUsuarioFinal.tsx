@@ -135,7 +135,7 @@ const PanelUsuarioFinal = () => {
             ${index === menuAbierto ? "hidden" : ""}`}
           >
             <h2 className="text-gray-900 font-bold sm:text-2xl mb-6  ">
-              {dispositivo.Nombre}
+              {dispositivo && dispositivo.Nombre}
             </h2>
             <p className="text-gray-900 font-bold text-sm sm:text-lg">
               Tipo de Dispositivo: {dispositivo.Tipo_de_Dispositivo}
