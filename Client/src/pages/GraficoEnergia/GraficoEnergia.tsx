@@ -300,7 +300,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
 
 
   return (
-    <div className="">
+    <div className="mb-12">
       <div className=" text-white md:pl-24 2xl:pl-32 md:pr-10 md:pb-0">
         <WeatherNavbar/>
         <WeatherPanel/>
