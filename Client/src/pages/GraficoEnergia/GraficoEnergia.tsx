@@ -202,12 +202,6 @@ useEffect(() => {
   handleCaptureExcedente()
 }, [totalGenerado, totalConsumido, excedenteCapturado]);
 
-const handleCaptureExcedente = () => {
-  const excedente = Math.floor(
-    calcularExcedente(totalGenerado, totalConsumido) * 10
-  );
-  setExcedenteCapturado(excedente);
-};
 
 
 
@@ -217,6 +211,7 @@ const { accounts, account } = useAccount();
 const { api } = useApi();
 // Add your programID
 const programIdKey = process.env.REACT_APP_PROGRAM_ID
+
 
 // Add your metadata.txt
  const meta = process.env.REACT_APP_META_DATA
@@ -242,7 +237,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
      transfer: [
        decodeAddress(MidWallet),
        decodeAddress(addresLocal),
-       5,
+       3,
      ],
    },
    gasLimit: gasUsage,

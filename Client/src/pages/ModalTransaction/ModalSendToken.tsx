@@ -17,7 +17,6 @@ function ModalSendToken ({onClose}:ModalProps) {
     usuario: "",
     cantidad: "",
     tipo: "",
-    total: "",
   });
   
 
@@ -123,23 +122,6 @@ const quantityToNumber = parseInt(quantity,10)
                 <option value="Varas">Varas</option>
               </select>
             </div>
-          </div>
-
-          <div className="mb-4 p-2.5">
-            <label
-              htmlFor="total"
-              className="block text-sm font-medium text-gray-600"
-            >
-              Total
-            </label>
-            <input
-              type="text"
-              id="total"
-              name="total"
-              value={userData.total}
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border rounded-md"
-            />
           </div>
           <div className="flex justify-center">
           {userData.usuario.trim() !== "" && (
