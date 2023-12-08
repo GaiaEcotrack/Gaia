@@ -9,7 +9,7 @@ import instagram from "../../assets/instagram.png";
 
 function Footer() {
   return (
-    <footer className="flex flex-col items-center text-center text-white ">
+    <footer className="flex flex-col items-center text-center text-white">
       <div className="container lg:pt-9">
         <div className="flex items-center justify-evenly sm:flex-row mb-8 lg:mb-14">
 
