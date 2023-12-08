@@ -19,7 +19,7 @@ function PublicProfile () {
             Account Settings
           </a>
           <a
-            href="/notification"
+            href="/NotificacionesConfig"
             className="flex items-center px-3 py-2.5 font-semibold hover:text-indigo-900 hover:border hover:rounded-full"
           >
             Notifications
