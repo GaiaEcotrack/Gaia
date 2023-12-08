@@ -48,7 +48,7 @@ export function SuperUser () {
 
   return (
     <>
-      <div className="flex flex-row flex-wrap justify-center pl-20">      
+      <div className="flex flex-row flex-wrap justify-center pl-20 mb-10">      
 
         <div className="bg-[#1d335b] md:hidden w-[245px] h-[120px] 2xl:h-[300px] rounded overflow-hidden shadow-md flex flex-col justify-center mt-5 mb-2">
           <div className="flex justify-center items-center h-20">

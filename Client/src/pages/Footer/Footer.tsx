@@ -10,38 +10,48 @@ import instagram from "../../assets/instagram.png";
 function Footer() {
   return (
     <footer className="flex flex-col items-center text-center text-white ">
-      <div className="container pt-9">
-        <div className="flex items-center justify-evenly sm:flex-row">
-          <a
-            href="https://vara-network.io/"
-            target="_blank"
-            rel="noreferrer"
-            className="mb-4"
-          >
-            <img
-              src="/VaraWhite.png"
-              alt="Descripción de la imagen 1"
-              className="w-16 h-12 sm:w-48 sm:h-32"
-            />
-          </a>
-          <a
-            href="https://www.andromedacomputer.net/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <img src="/andromeda.png" alt="" className="w-16 h-12 sm:w-48 sm:h-32 mb-12" />
-          </a>
-          <a
-            href="https://www.andromedacomputer.net/dapps/gaia-ecotrack.html"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <img
-              src="/LOGOGAIASOLO.png"
-              alt=""
-              className=" w-16 h-12 sm:w-32 sm:h-28 mb-10"
-            />
-          </a>
+      <div className="container lg:pt-9">
+        <div className="flex items-center justify-evenly sm:flex-row mb-8 lg:mb-14">
+
+          <div >
+            <a
+              href="https://vara-network.io/"
+              target="_blank"
+              rel="noreferrer"
+              className="mb-4"
+            >
+              <img
+                src="/VaraWhite.png"
+                alt="Descripción de la imagen 1"
+                className="w-16 h-12 sm:w-48 sm:h-32"
+              />
+            </a>
+          </div>
+
+          <div>
+            <a
+              href="https://www.andromedacomputer.net/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img src="/andromeda.png" alt="" className="w-16 h-12 sm:w-48 sm:h-32" />
+            </a>
+          </div>
+
+          <div>
+            <a
+              href="https://www.andromedacomputer.net/dapps/gaia-ecotrack.html"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img
+                src="/LOGOGAIASOLO.png"
+                alt=""
+                className=" w-[50px] h-12 sm:w-28 sm:h-28 "
+              />
+            </a>
+          </div>
+          
         </div>
       </div>
       <div className="flex z-10 sm:flex-row sm:gap-16">

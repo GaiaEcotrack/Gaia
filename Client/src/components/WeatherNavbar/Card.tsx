@@ -70,7 +70,7 @@ function Card({ loadingData, showData, weather, forecast }: CardProps) {
     <div>
       {showData === true ? (
         <div className="flex">
-          <div className="mb-3 mx-auto bg-[#1d335b] rounded-lg">
+          <div className="mb-4 mx-auto bg-[#1d335b] rounded-lg">
             <div className="flex flex-row justify-center">
               {/* Tarjeta Principal */}
               <div className="group hover:-rotate-0 [transform:rotate3d(1_,-1,_1,_15deg)] duration-500 overflow-hidden bg-gradient-to-bl from-sky-400 via-sky-500 to-sky-700 p-6 rounded-lg hover:shadow-lg [box-shadow:12px_12px_0px_0px_#0d0d0d] backdrop-filter backdrop-blur-md border border-neutral-600">

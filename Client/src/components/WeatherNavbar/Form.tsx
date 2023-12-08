@@ -1,6 +1,5 @@
 /* eslint-disable */
-
-
+import { TiWeatherPartlySunny } from "react-icons/ti"; 
 import { useState } from "react"
 
 interface FormProps {
@@ -19,11 +18,20 @@ const onSubmit = (e:any) => {
     newLocation(city);
 }
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center mb-2">
         <form onSubmit={onSubmit} action="">
-           <div className="flex mx-auto mb-3 m-2">
-            <input  className="w-full text-black rounded-lg" type="text" placeholder="Ciudad" onChange={(e) =>setCity(e.target.value)} />
-            <button className="text-blackpy-2 px-4 h-10 rounded-lg w-1/2 bg-[#74C7ED]" type="submit" >Buscar</button>
+           <div className="flex flex-col justify-center mx-auto mb-4 m-2">
+
+            <div className="flex justify-center items-center text-lg mb-4">
+              <TiWeatherPartlySunny className="text-[50px] mr-4 "/>
+              <h1>Weather Prediction</h1>
+            </div>
+
+            <div className="flex flex-row">
+              <input  className="w-full text-black rounded-lg pl-4" type="text" placeholder="Ciudad" onChange={(e) =>setCity(e.target.value)} />
+              <button className="text-blackpy-2 px-4 ml-1 h-10 rounded-lg w-1/2 bg-[#1d335b] hover:bg-[#2d497c]" type="submit" >Buscar</button>
+            </div>
+
            </div>
         </form>
     </div>
