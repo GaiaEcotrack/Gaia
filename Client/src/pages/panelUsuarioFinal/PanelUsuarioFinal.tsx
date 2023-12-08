@@ -80,7 +80,7 @@ const PanelUsuarioFinal = () => {
     "https://services.meteored.com/img/article/energy-overhaul-scientists-predict-by-the-2040s-solar-energy-will-dominate-our-power-grids-1697660406587_1280.jpeg";
   return (
     <section
-      className="border-2 border-transparent  "
+      className="border-2 border-transparent  min-h-screen"
       style={{
         backgroundImage: `url(${imageUrl})`,
         backgroundSize: "cover",
