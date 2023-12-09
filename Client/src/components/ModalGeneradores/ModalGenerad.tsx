@@ -25,7 +25,8 @@ function ModalGenerad({ showGenerad, setShowGenerad }: MoodalGenerad) {
         </div>
 
         <h1 className="text-[#000000] text-xl md:text-2xl mb-6">
-          Administrar Generadores
+        Manage Generators
+
         </h1>
 
         <div className="w-full h-10 flex flex-wrap justify-around items-center md:pl-10">
@@ -46,15 +47,15 @@ function ModalGenerad({ showGenerad, setShowGenerad }: MoodalGenerad) {
           <div className="w-[50%] lg:w-[40%] h-10 text-sm flex flex-row justify-center lg:justify-end items-center pr-2 mt-2 lg:mt-0">
             <div className="text-[#5A5A5A] w-20 h-10 mr-4 border-2 flex justify-center items-center">                
               <select name="" id="" className="bg-slate-50">
-                <option value="">Eolico</option>                 
+                <option value="">Wind</option>                 
                 <option value="">Solar</option>
               </select>
             </div>
 
             <div className="text-[#5A5A5A] w-20 h-10 mr-4 border-2 flex justify-center items-center">                
               <select name="" id="" className="bg-slate-50">
-                <option value="">Activo</option>
-                <option value="">Inactivo</option>                 
+                <option value="">Active</option>
+                <option value="">Inactive</option>                 
               </select>
             </div>           
 
@@ -73,20 +74,20 @@ function ModalGenerad({ showGenerad, setShowGenerad }: MoodalGenerad) {
           </h2>
 
           <p className="text-[#5A5A5A] text-[13px]">
-            <strong>Tipo de Dispositivo: </strong> Generador Eolico
+            <strong>Device type: </strong> Wind Generator
           </p>
 
           <p className="text-[#5A5A5A] text-[13px]">
-            <strong>Capacidad de producion: </strong> 100 kWh
+            <strong>Production Capacity: </strong> 100 kWh
           </p>
 
           <p className="text-[#5A5A5A] text-[13px]">
-            <strong>Estado: </strong> Activo
+            <strong>State: </strong> Active
           </p>  
        
 
           <button type="button" className="text-[#5A5A5A] text-[12px] flex justify-end w-full">
-            Desactivar
+            Desactivate
           </button>                 
         </div>
 

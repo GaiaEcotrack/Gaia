@@ -28,8 +28,8 @@ const onSubmit = (e:any) => {
             </div>
 
             <div className="flex flex-row">
-              <input  className="w-full text-black rounded-lg pl-4" type="text" placeholder="Ciudad" onChange={(e) =>setCity(e.target.value)} />
-              <button className="text-blackpy-2 px-4 ml-1 h-10 rounded-lg w-1/2 bg-[#1d335b] hover:bg-[#2d497c]" type="submit" >Buscar</button>
+              <input  className="w-full text-black rounded-lg pl-4" type="text" placeholder="City" onChange={(e) =>setCity(e.target.value)} />
+              <button className="text-blackpy-2 px-4 ml-1 h-10 rounded-lg w-1/2 bg-[#1d335b] hover:bg-[#2d497c]" type="submit" >Search</button>
             </div>
 
            </div>
