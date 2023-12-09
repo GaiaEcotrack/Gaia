@@ -304,7 +304,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
       <div className=" text-white md:pl-24 2xl:pl-32 md:pr-10 md:pb-0">
        
         <div className="flex flex-col lg:flex-row  p-2 justify-center graficos items-center">
-          <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px]   rounded overflow-hidden shadow-lg  m-4">
+          <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px]   rounded overflow-hidden shadow-lg m-4 mt-6">
             <div className=" flex justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center mt-4">
                 {totalGenerado.toFixed(3)} Kw

@@ -1,3 +1,4 @@
+import { CgMenu } from "react-icons/cg"; 
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
@@ -28,19 +29,17 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
     setOpen(false);
   };
 
-
   return (
     
-    <div className="bg-white text-white">
+    <div className="text-white">
       <div
         className={` ${
-          open ? "w-56" : "w-20 "
-        } bg-[#181745] text-white h-full sm:h-screen p-5  pt-8 relative duration-300`}
+          open ? "w-56 bg-[#181745]" : "w-20 sm:bg-[#181745]"
+        }  text-white h-full sm:h-screen p-5 pt-8 relative duration-300`}
       >
         <button
           type="button"
-          className={`absolute cursor-pointer -right-3 top-9 w-7 border-dark-purple
-    border-2 rounded-full ${!open && "rotate-180"}`}
+          className={`${open ? "-right-3 top-[37px]" : "right-5 top-5 sm:top-[37px] sm:-right-3"} absolute cursor-pointer  w-7 border-dark-purple  rounded-full ${!open && "rotate-180"}`}
           onClick={() => setOpen((prevOpen) => !prevOpen)}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -49,7 +48,11 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
           }}
           tabIndex={0}
         >
-          <img src="/control.png" alt="Toggle Sidebar" />
+          {open && window.innerWidth < 640 ? (<img src="/control.png" alt="Toggle Sidebar" className="border-2"/>
+          ) : (window.innerWidth >= 640 ? (<img src="/control.png" alt="Toggle Sidebar" className="border-2"/>
+          ) : (<CgMenu size={35} />)
+          )}
+          
         </button>
         <div className="flex gap-x-2 items-center">
           <img
@@ -57,7 +60,9 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
             alt="Logo"
             className={`h-10 rounded-full cursor-pointer duration-500 ${
               open && "rotate-[360deg] h-16"
-            }`}
+            } ${
+              !open ? "hidden sm:block" : ""
+            }`} 
           />
 
           <div
@@ -68,7 +73,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
 
           {open && (
             <Link to="/">
-            <button type="button" onClick={signOutWithoutAuth} className="text-slate-400 hover:text-white">
+            <button type="button" onClick={signOutWithoutAuth} className="text-slate-400 hover:text-white whitespace-nowrap">
               Cerrar sesión
             </button>
             </Link>
@@ -98,7 +103,9 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
               <Account/>            
               )}       
           </div>
-          <div>
+          <div className={` ${
+          open ? "sm:block" : "hidden sm:block"
+        }`}>
             {!open && (            
               <AccountIcon />            
               )}       

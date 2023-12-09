@@ -48,9 +48,9 @@ export function SuperUser () {
 
   return (
     <>
-      <div className="flex flex-row flex-wrap justify-center pl-20 mb-10">      
+      <div className="flex flex-row flex-wrap justify-center md:pl-20 mb-10">      
 
-        <div className="bg-[#1d335b] md:hidden w-[245px] h-[120px] 2xl:h-[300px] rounded overflow-hidden shadow-md flex flex-col justify-center mt-5 mb-2">
+        <div className="bg-[#1d335b] md:hidden w-[245px] h-[120px] 2xl:h-[300px] rounded overflow-hidden shadow-md flex flex-col justify-center mt-16 mb-4">
           <div className="flex justify-center items-center h-20">
             <span className="text-center text-7xl  text-[#4bc844]">
               <BsCheck2Circle />
@@ -105,8 +105,8 @@ export function SuperUser () {
         <div className="w-full md:w-[40%]">
           <section className="flex justify-center items-center h-[25vh] md:h-[30vh] md:mb-6 mb-0">
             <div style={{ transform: "scale(0.70)" }}>
-              <div className="flex flex-wrap lg:flex-nowrap m-2 p-2 justify-center items-center ">
-                <div className="bg-[#1d335b] w-[349px] h-[150px] lg:h-[203px] rounded overflow-hidden shadow-lg flex flex-col lg:mr-6 2xl:mr-4">
+              <div className="flex flex-wrap lg:flex-nowrap m-2 p-2 justify-center items-center">
+                <div className="bg-[#1d335b] w-[349px] h-[150px] lg:h-[203px] rounded overflow-hidden shadow-lg flex flex-col lg:mr-6 2xl:mr-4 mb-4 md:mb-0">
                   <div className="flex justify-center items-center h-20 md:h-full">
                     <span className="font-[600] text-[40px] 2xl:text-[50px] text-center mt-10 md:mt-auto">
                       100.000 Kw
@@ -133,14 +133,16 @@ export function SuperUser () {
                     </span>
                   </div>
                 </div>
+
               </div>
+
             </div>
           </section>       
 
           <section>
             <div className="flex">
               <Doughnut
-                className="h-[300px] 2xl:h-[400px] mt-4 md:mt-0"
+                className="h-[300px] 2xl:h-[400px] mt-6 md:mt-0"
                 data={data}
                 options={options}
                 />
