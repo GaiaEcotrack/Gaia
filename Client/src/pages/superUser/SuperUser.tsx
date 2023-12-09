@@ -225,7 +225,7 @@ export function SuperUser () {
           </div>
           
           <button type="button" onClick={() => {setShowAdmin(true)}} className="md:hidden w-[150px] h-[40px] bg-[#1d335b] rounded-[5px] text-lg text-[#ffffff]" >
-            Administrar
+            Manage
           </button>
         </section>
         
