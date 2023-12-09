@@ -109,7 +109,7 @@ function PublicProfile () {
                   <input
                     type="email"
                     id="email"
-                    className="bg-indigo-50 border border-indigo-300 text-indigo-50 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                    className="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                     placeholder="your.email@mail.com"
                     value={localStorage.getItem("email")|| "name@email.com"}
                     required
@@ -126,7 +126,7 @@ function PublicProfile () {
                   <input
                     type="text"
                     id="profession"
-                    className="bg-indigo-50 border border-indigo-300 text-indigo-50 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                    className="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                     placeholder="your profession"
                     required
                   />
@@ -141,7 +141,7 @@ function PublicProfile () {
                   </label>
                   <textarea
                     id="message"
-                    className="block p-2.5 w-full text-sm text-indigo-50 bg-indigo-50 rounded-lg border border-indigo-300 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="block p-2.5 w-full text-sm text-indigo-900 bg-indigo-50 rounded-lg border border-indigo-300 focus:ring-indigo-500 focus:border-indigo-500"
                     placeholder="Write your bio here..."
                   > </textarea>
                 </div>
