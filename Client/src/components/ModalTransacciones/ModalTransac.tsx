@@ -80,7 +80,7 @@ function ModalTransac({ showTransac, setShowTransac }: Modaltransac) {
         </div>
 
         <h1 className="text-[#000000] text-xl md:text-2xl mb-6">
-          Administrar Transacciones
+          Manage Transactions
         </h1>
 
         <div className="w-full h-10 flex flex-wrap justify-around items-center md:pl-10">
@@ -90,7 +90,7 @@ function ModalTransac({ showTransac, setShowTransac }: Modaltransac) {
               type="text"
               value={searchName}
               onChange={(e) => setSearchName(e.target.value)}
-              placeholder="Ej. Ana Rodriguez"
+              placeholder="Ex. Ana Rodriguez"
             />
             <button
               type="button"
@@ -104,22 +104,22 @@ function ModalTransac({ showTransac, setShowTransac }: Modaltransac) {
           <div className="w-[50%] lg:w-[40%] h-10 text-sm flex flex-row flex-grow justify-center lg:justify-end items-center pr-2 mt-2 lg:mt-0">
             <div className="text-[#5A5A5A] w-20 h-10 mr-4 border-2 flex justify-center items-center">                
               <select name="" id="" className="bg-slate-50">
-                <option value="">Compra</option>                 
-                <option value="">Venta</option>
+                <option value="">Buys</option>                 
+                <option value="">Sale</option>
               </select>
             </div>
 
             <div className="text-[#5A5A5A] w-20 h-10 mr-4 border-2 flex justify-center items-center">                
               <select name="" id="" className="bg-slate-50">
-                <option value="">Estado</option>
-                <option value="">Activo</option>
-                <option value="">Inactivo</option>                 
+                <option value="">State</option>
+                <option value="">Active</option>
+                <option value="">Inactive</option>                 
               </select>
             </div>   
 
             <div className="text-[#5A5A5A] w-20 h-10 mr-4 border-2 flex justify-center items-center">                
               <select name="" id="" className="bg-slate-50">
-                <option value="">Fecha</option>                 
+                <option value="">Date</option>                 
               </select>
             </div>           
 
@@ -158,7 +158,7 @@ function ModalTransac({ showTransac, setShowTransac }: Modaltransac) {
         )}
 
         <button type="button" className="mt-14 lg:mt-4 text-[#2f2f2f] bg-slate-200 w-36 h-10 rounded-sm">
-          Ver Disputas
+        View Disputes
         </button>
             
       </div>

@@ -43,7 +43,7 @@ ChartJS.register(
 );
 
 const dataPie: ChartData<"doughnut", number[], string> = {
-  labels: ["Energia Eólica", "Energia Térmica", "Energia Solar"],
+  labels: ["Wind Energy", "Thermal Energy", "Solar Energy"],
   datasets: [
     {
       type: "doughnut",
@@ -86,6 +86,7 @@ const optionsBar = {
 
 const GraficoEnergia = () => {  
   
+  
   const [componenteMontado, setComponenteMontado] = useState(true);
   const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
     null
@@ -101,7 +102,7 @@ const GraficoEnergia = () => {
     datasets: [
       {
         type: "bar",
-        label: "Valores de energía",
+        label: "Energy values",
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         backgroundColor: ["#74C7ED", "#F37B7B", "#699CD0"],
         barThickness: 25,
@@ -188,6 +189,7 @@ const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
   Math.max(totalGenerado - totalConsumido, 0);
 
 useEffect(() => {
+  
   if (totalConsumido < totalGenerado) {
     setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
   } else {
@@ -294,7 +296,12 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
 }, [componenteMontado, account?.address]); 
  }
 
-
+ if (addresLocal !== undefined && meta !== undefined && MidWallet !== undefined) {
+  // Resto del código
+} else {
+  // Muestra un alert de error ya que addresLocal es undefined
+  alert.error("Error: No se encuentra conectado a la wallet");
+}
 
 //------------------------------VARA INTEGRATION-----------------------------------------------------------------------
 
@@ -311,7 +318,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
               </span>
             </div>
             <div className="flex justify-end items-end h-20">
-              <span className=" mb-4 mr-4">Total Generado</span>
+              <span className=" mb-4 mr-4">Total generated</span>
             </div>
           </div>
           <div className="flex flex-col bg-[#1d335b] md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg  m-4">
@@ -322,7 +329,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
             </div>
             <div className="flex justify-end items-end h-20">
               <span className=" mb-4 mr-4">
-                Total Consumido
+                Total consumed
               </span>
             </div>
           </div>
@@ -344,7 +351,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
             <div className="flex justify-end items-end h-20">
             <img src="./LOGOGAIASOLO.PNG"  className="w-16 h-16 mr-8 mb-2"  alt="" />
               <span className=" mb-4 mr-4 font-bold text-white">
-                Total Excedente en Tokens: 
+                Total surplus tokens: 
               </span>
               <h2 className="mb-4 mr-4 font-bold text-emerald-400">{excedenteCapturado}</h2>
             </div>
@@ -353,11 +360,11 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
 
         <div className="flex flex-col p-2 mb-6 md:ml-10 justify-center items-center md:items-start">
             <button type="button" className="cursor-not-allowed pointer-events-none  text-[18px] mt-4 md:mt-0 text-center md:text-left">
-              Panel de generación y consumo
+              Generation Panel
             </button>
             <NavLink to="/panelUsuarioFinal">
               <button type="button" className=" text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
-                Administrar Dispositivos.
+                Device Manage
               </button>
             </NavLink>
             <button
@@ -365,7 +372,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
               className=" text-[18px] underline mt-4 md:mt-0 text-center md:text-left"
               onClick={openPopup}
             >
-              Crear Alertas
+              Create Alerts
             </button>
             {popupOpen && <PopUpALert onClose={closePopup} />}
           </div>        
@@ -385,18 +392,18 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
           defaultValue="Energia Solar"
           onChange={(e) => console.log(e.target.value)} // Puedes manejar la selección aquí
         >
-          <option value="Energia Solar">Energia Solar</option>
-          <option value="Energia Termica">Energia Termica</option>
-          <option value="Energia Eolica">Energia Eolica</option>
+          <option value="Energia Solar">Solar Energy</option>
+          <option value="Energia Termica">Thermal Energy</option>
+          <option value="Energia Eolica">Wind Energy</option>
         </select>
         {/* <img src={PolygonDown} alt="" className="ml-2" /> */}
       </div>
           <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] m-1">
-            Generado
+            Generated
             <img src={PolygonDown} alt="" className="ml-2" />
           </button>
           <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] m-1">
-            Tiempo real
+            Real Time
             <img src={PolygonDown} alt="" className="ml-2" />
           </button>
 
@@ -405,13 +412,13 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
               <span className=" text-[16px] font-[700]">
                 0 Kws
               </span>
-              <h3 className=" ml-2 p-2">Actual</h3>
+              <h3 className=" ml-2 p-2">Current</h3>
             </div>
             <div className="flex flex-col items-center mb-2 sm:mb-0 sm:ml-4">
               <span className="t text-[16px] font-[700]">
                 0 Kws
               </span>
-              <h3 className="t ml-2 p-2">Basico</h3>
+              <h3 className="t ml-2 p-2">Basic</h3>
             </div>
             <div className="flex flex-col items-center mb-2 sm:mb-0">
               <span className=" text-[16px] font-[700]">

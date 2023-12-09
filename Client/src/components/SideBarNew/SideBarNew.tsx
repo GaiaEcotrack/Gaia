@@ -5,6 +5,8 @@ import { getAuth, signOut } from "firebase/auth";
 import { Account } from "components/layout/header/account";
 import { AccountIcon } from "components/layout/header/account/AccountIcon";
 
+
+
 /* eslint-disable */
 export interface IHomePageProps {}
 
@@ -16,13 +18,13 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
 
   const [open, setOpen] = useState(false);
   const Menus = [
-    { id: 3, title: "Graficos ", src: "Chart", to: "/Home" },
+    { id: 3, title: "Graphics ", src: "Chart", to: "/Home" },
     { id: 4, title: "Transactions", src: "User", to: "/transactions" },
-    { id: 5, title: "Dispositivos", src: "Search", to: "/panelUsuarioFinal" },
-    { id: 6, title: "Red", src: "Chart_fill", to: "/Red" },
+    { id: 5, title: "Devices", src: "Search", to: "/panelUsuarioFinal" },
+    { id: 6, title: "Network", src: "Chart_fill", to: "/Network" },
     { id: 7, title: "Info ", src: "Folder", gap: true, to: "/superUser" },
     { id: 8, title: "Setting", src: "Setting", to: "/settings" },
-    { title: "Notificaciones", src: "Chat", to: "/notificaciones" },
+    { title: "Notifications", src: "Chat", to: "/notificaciones" },
   ];
 
   const handleMenuClick = () => {
@@ -74,7 +76,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
           {open && (
             <Link to="/">
             <button type="button" onClick={signOutWithoutAuth} className="text-slate-400 hover:text-white whitespace-nowrap">
-              Cerrar sesión
+              Log Out
             </button>
             </Link>
           )}

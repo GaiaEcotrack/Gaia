@@ -93,7 +93,7 @@ function Card({ loadingData, showData, weather, forecast }: CardProps) {
                   <div className="flex items-center justify-between gap-1" />
                   <div className="flex items-center justify-between gap-1">
                     <p className="text-neutral-800">
-                      Viento: {(weather.wind.speed * 4.82).toFixed(1)} km/h
+                      Wind: {(weather.wind.speed * 4.82).toFixed(1)} km/h
                     </p>
                   </div>
                   <div className="flex items-center justify-between gap-1">
