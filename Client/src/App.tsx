@@ -7,7 +7,7 @@ import { Routing } from 'pages';
 import { SideBar } from 'pages/home/SideBar';
 
 /* eslint-disable */
-import GraficoEnergia from './pages/GraficoEnergia/GraficoEnergia';
+// import GraficoEnergia from './pages/GraficoEnergia/GraficoEnergia';
 import { SuperUser } from './pages/superUser/SuperUser';
 import { Labs } from './pages/Labs/Labs';
 import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';

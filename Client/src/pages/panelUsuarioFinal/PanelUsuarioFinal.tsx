@@ -144,14 +144,14 @@ const PanelUsuarioFinal = () => {
               Made By: {dispositivo.Made_By}
             </p>
             <div className="">
-              <p className="text-end text-gray-900 font-bold text-[12px] sm:text-[16px] font-light">
+              <p className="text-end text-gray-900 font-bold text-[12px] sm:text-[16px]">
                 {dispositivo.Connected ? "Connected" : "Disconnected"}
               </p>
               <br />
             </div>
             <div className="flex justify-center mt-[-32px]">
               <button
-                className="flex items-center text-gray-900 font-bold text-[16px] text-base font-semibold"
+                className="flex items-center text-gray-900 font-bold text-[16px] text-base"
                 onClick={() => toggleMenu(index === menuAbierto ? null : index)}
               >
                 <p className="text-[12px] sm:text-[16px]">View Detail</p>
@@ -207,7 +207,7 @@ const PanelUsuarioFinal = () => {
                 <p className="text-[10px] sm:text-[14px]">Advanced setting</p>
               </a>
               <button
-                className="flex ml-auto items-center text-gray-900 font-bold text-[16px] text-base font-semibold"
+                className="flex ml-auto items-center text-gray-900 font-bold text-[16px] text-base"
                 onClick={() => toggleMenu(null)}
               >
                 <p className="text-[12px] sm:text-[16px]">Close</p>

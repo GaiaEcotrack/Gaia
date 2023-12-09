@@ -1,4 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
+// import { signInWithGoogle } from "../../firebase";
 import { useState } from 'react';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
@@ -10,20 +11,34 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const auth = getAuth();
   const navigate = useNavigate();
   const [authing, setAuthing] = useState(false);
-  const [photoURL, setPhotoURL] = useState<string | null>(null);
   
   const signInWithGoogle = async () => {
     setAuthing(true);    
 
     try {
       const response = await signInWithPopup(auth, new GoogleAuthProvider());
-      
-      console.log(response.user.uid);
-      console.log(response.user.photoURL);  
-      const profile = response.user.photoURL
+            
+      const name = response.user.displayName || "Nombre";
+      const email = response.user.email || "default@example.com";
+      const profilePic = response.user.photoURL || "Photo Profile";
 
-      setPhotoURL(profile);
-      
+      console.log(response.user)
+
+      // Para agregar al localStorage
+      localStorage.setItem("name", name);
+      localStorage.setItem("email", email);
+      localStorage.setItem("profilePic", profilePic);
+
+      // Para llamar del localStorage
+      {/* <h1>{localStorage.getItem("email")}</h1>
+        <h1>{localStorage.getItem("email")}</h1>
+        <img src={localStorage.getItem("profilePic") || "" } /> */}
+
+      // Para eliminar del LocalStorage
+      // localStorage.removeItem("name");
+      // localStorage.removeItem("email");
+      // localStorage.removeItem("profilePic");      
+
       navigate('/home');
     } catch (error) {
       console.log(error);
@@ -111,6 +126,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
           </Link>
 
           <button
+          // onClick={signInWithGoogle}
             onClick={() => signInWithGoogle()} disabled={authing}
             type="button"
             className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300"
