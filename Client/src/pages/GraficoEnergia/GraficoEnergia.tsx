@@ -85,7 +85,12 @@ const optionsBar = {
 /* eslint-disable */
 
 const GraficoEnergia = () => {  
-  
+  // estas dos funciones la movi arriba para usarlas en el scop
+  const { accounts, account } = useAccount();
+  const addresLocal = account?.address
+
+  //mensaje de conectar waller
+  const [walletMessage, setWalletMessage] = useState('');
   
   const [componenteMontado, setComponenteMontado] = useState(true);
   const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
@@ -188,34 +193,43 @@ useEffect(() => {
 const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
   Math.max(totalGenerado - totalConsumido, 0);
 
-useEffect(() => {
-  
-  if (totalConsumido < totalGenerado) {
-    setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
-  } else {
-    setTotalExcedente(0);
+  useEffect(() => {
+    if (addresLocal === undefined) {
+      
+      console.log('Conecte su wallet para operar');
+      setWalletMessage('No accounts found, please connect your wallet.');
+      setTotalGenerado(0);
+      setTotalConsumido(0);
+      setTotalExcedente(0)
+    } else {
+    
+    if (totalConsumido < totalGenerado) {
+      setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
+      } else {
+      setTotalExcedente(0);
+    }
+    const handleCaptureExcedente = () => {
+      const excedente = Math.floor(
+        calcularExcedente(totalGenerado, totalConsumido) * 10
+      );
+      setExcedenteCapturado(excedente);
+    };
+    handleCaptureExcedente();
   }
+  }, [totalGenerado, totalConsumido, excedenteCapturado]);
+  
   const handleCaptureExcedente = () => {
     const excedente = Math.floor(
       calcularExcedente(totalGenerado, totalConsumido) * 10
     );
     setExcedenteCapturado(excedente);
   };
-  handleCaptureExcedente()
-}, [totalGenerado, totalConsumido, excedenteCapturado]);
-
-const handleCaptureExcedente = () => {
-  const excedente = Math.floor(
-    calcularExcedente(totalGenerado, totalConsumido) * 10
-  );
-  setExcedenteCapturado(excedente);
-};
-
+  
 
 
 //-------------------------------------------------------------------VARA INTEGRATION
 const alert = useAlert();
-const { accounts, account } = useAccount();
+// const { accounts, account } = useAccount();
 const { api } = useApi();
 // Add your programID
 const programIdKey = process.env.REACT_APP_PROGRAM_ID
@@ -223,7 +237,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
 // Add your metadata.txt
  const meta = process.env.REACT_APP_META_DATA
  const MidWallet = process.env.REACT_APP_MID_KEY
- const addresLocal = account?.address
+//  const addresLocal = account?.address
 
 
 
@@ -357,7 +371,9 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
             </div>
           </div>
         </div>
-
+        <div className="flex justify-center text-center text-emerald-500  ">
+        {walletMessage && <p className="text-xl">{walletMessage}</p>}
+        </div>
         <div className="flex flex-col p-2 mb-6 md:ml-10 justify-center items-center md:items-start">
             <button type="button" className="cursor-not-allowed pointer-events-none  text-[18px] mt-4 md:mt-0 text-center md:text-left">
               Generation Panel
