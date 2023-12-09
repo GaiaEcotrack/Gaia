@@ -84,7 +84,7 @@ function PublicProfile () {
                   <div className="w-full">
                     <label
                       htmlFor="first_name"
-                      className="block mb-2 text-sm font-medium text-white dark:text-white"
+                      className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                     >
                       Your name
                     </label>
@@ -102,14 +102,14 @@ function PublicProfile () {
                 <div className="mb-2 sm:mb-6">
                   <label
                     htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-white dark:text-white"
+                    className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                   >
                     Your email
                   </label>
                   <input
                     type="email"
                     id="email"
-                    className="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                    className="bg-indigo-50 border border-indigo-300 text-indigo-50 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                     placeholder="your.email@mail.com"
                     value={localStorage.getItem("email")|| "name@email.com"}
                     required
@@ -119,14 +119,14 @@ function PublicProfile () {
                 <div className="mb-2 sm:mb-6">
                   <label
                     htmlFor="profession"
-                    className="block mb-2 text-sm font-medium text-white dark:text-white"
+                    className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                   >
                     Profession
                   </label>
                   <input
                     type="text"
                     id="profession"
-                    className="bg-indigo-50 border border-indigo-300 text-indigo-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                    className="bg-indigo-50 border border-indigo-300 text-indigo-50 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                     placeholder="your profession"
                     required
                   />
@@ -135,13 +135,13 @@ function PublicProfile () {
                 <div className="mb-6">
                   <label
                     htmlFor="message"
-                    className="block mb-2 text-sm font-medium text-white dark:text-white"
+                    className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                   >
                     Bio
                   </label>
                   <textarea
                     id="message"
-                    className="block p-2.5 w-full text-sm text-indigo-900 bg-indigo-50 rounded-lg border border-indigo-300 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="block p-2.5 w-full text-sm text-indigo-50 bg-indigo-50 rounded-lg border border-indigo-300 focus:ring-indigo-500 focus:border-indigo-500"
                     placeholder="Write your bio here..."
                   > </textarea>
                 </div>
