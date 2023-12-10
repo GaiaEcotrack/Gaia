@@ -1,4 +1,5 @@
 import { ApiLoader } from "components/loaders/api-loader/ApiLoader";
+import { useState, useEffect } from "react";
 
 interface CardProps {
   loadingData: any;
@@ -7,7 +8,11 @@ interface CardProps {
   forecast: any;
 }
 
+
+
 function Card({ loadingData, showData, weather, forecast }: CardProps) {
+   
+
   const today = new Date();
   const day = today.getDate();
   const month = today.getMonth() + 1;
@@ -65,6 +70,8 @@ function Card({ loadingData, showData, weather, forecast }: CardProps) {
       4
     )}/${forecast.list[3].dt_txt.substring(11, 13)}`;
   }
+
+ 
 
   return (
     <div>
