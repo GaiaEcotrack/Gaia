@@ -7,7 +7,7 @@ import { Routing } from 'pages';
 import { SideBar } from 'pages/home/SideBar';
 
 /* eslint-disable */
-import GraficoEnergia from './pages/GraficoEnergia/GraficoEnergia';
+// import GraficoEnergia from './pages/GraficoEnergia/GraficoEnergia';
 import { SuperUser } from './pages/superUser/SuperUser';
 import { Labs } from './pages/Labs/Labs';
 import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
@@ -16,7 +16,7 @@ import {AuthForm} from 'pages/LoginAct/LoginAct';
 import { PublicProfile } from 'components/UserNew/UserNew';
 import { initializeApp } from 'firebase/app';
 import { config } from "./components/config/config"
-import AuthRoute from './components/AuthRoute';
+// import AuthRoute from './components/AuthRoute';
 import {Footer} from 'pages/Footer/Footer';
 
 initializeApp(config.firebaseConfig);

@@ -3,7 +3,7 @@ import { Burn } from 'pages/home/Burn';
 import { Mint } from 'pages/home/MintButton';
 import { LocalBalanceToken } from 'pages/home/MyBalanceToken';
 import { VarasBalance } from 'pages/home/VarasBalance';
-import {Vouchers} from 'pages/VaraComponents/Vouchers';
+
 
 
 
@@ -25,7 +25,6 @@ function Labs (){
             <Mint/>
             <Burn/>
             <ReadState/>
-            <Vouchers/>
         </div>
     </div>
   );

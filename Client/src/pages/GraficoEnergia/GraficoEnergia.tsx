@@ -43,7 +43,7 @@ ChartJS.register(
 );
 
 const dataPie: ChartData<"doughnut", number[], string> = {
-  labels: ["Energia Eólica", "Energia Térmica", "Energia Solar"],
+  labels: ["Wind Energy", "Thermal Energy", "Solar Energy"],
   datasets: [
     {
       type: "doughnut",
@@ -85,6 +85,12 @@ const optionsBar = {
 /* eslint-disable */
 
 const GraficoEnergia = () => {  
+  // estas dos funciones la movi arriba para usarlas en el scop
+  const { accounts, account } = useAccount();
+  const addresLocal = account?.address
+
+  //mensaje de conectar waller
+  const [walletMessage, setWalletMessage] = useState('');
   
   const [componenteMontado, setComponenteMontado] = useState(true);
   const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
@@ -101,7 +107,7 @@ const GraficoEnergia = () => {
     datasets: [
       {
         type: "bar",
-        label: "Valores de energía",
+        label: "Energy values",
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         backgroundColor: ["#74C7ED", "#F37B7B", "#699CD0"],
         barThickness: 25,
@@ -187,27 +193,43 @@ useEffect(() => {
 const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
   Math.max(totalGenerado - totalConsumido, 0);
 
-useEffect(() => {
-  if (totalConsumido < totalGenerado) {
-    setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
-  } else {
-    setTotalExcedente(0);
+  useEffect(() => {
+    if (addresLocal === undefined) {
+      
+      console.log('Conecte su wallet para operar');
+      setWalletMessage('No accounts found, please connect your wallet.');
+      setTotalGenerado(0);
+      setTotalConsumido(0);
+      setTotalExcedente(0)
+    } else {
+    
+    if (totalConsumido < totalGenerado) {
+      setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
+      } else {
+      setTotalExcedente(0);
+    }
+    const handleCaptureExcedente = () => {
+      const excedente = Math.floor(
+        calcularExcedente(totalGenerado, totalConsumido) * 10
+      );
+      setExcedenteCapturado(excedente);
+    };
+    handleCaptureExcedente();
   }
+  }, [totalGenerado, totalConsumido, excedenteCapturado]);
+  
   const handleCaptureExcedente = () => {
     const excedente = Math.floor(
       calcularExcedente(totalGenerado, totalConsumido) * 10
     );
     setExcedenteCapturado(excedente);
   };
-  handleCaptureExcedente()
-}, [totalGenerado, totalConsumido, excedenteCapturado]);
-
-
+  
 
 
 //-------------------------------------------------------------------VARA INTEGRATION
 const alert = useAlert();
-const { accounts, account } = useAccount();
+// const { accounts, account } = useAccount();
 const { api } = useApi();
 // Add your programID
 const programIdKey = process.env.REACT_APP_PROGRAM_ID
@@ -216,7 +238,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
 // Add your metadata.txt
  const meta = process.env.REACT_APP_META_DATA
  const MidWallet = process.env.REACT_APP_MID_KEY
- const addresLocal = account?.address
+//  const addresLocal = account?.address
 
 
 
@@ -290,7 +312,6 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
  }
 
 
-
 //------------------------------VARA INTEGRATION-----------------------------------------------------------------------
 
 
@@ -299,14 +320,14 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
       <div className=" text-white md:pl-24 2xl:pl-32 md:pr-10 md:pb-0">
        
         <div className="flex flex-col lg:flex-row  p-2 justify-center graficos items-center">
-          <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px]   rounded overflow-hidden shadow-lg  m-4">
+          <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px]   rounded overflow-hidden shadow-lg m-4 mt-6">
             <div className=" flex justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center mt-4">
                 {totalGenerado.toFixed(3)} Kw
               </span>
             </div>
             <div className="flex justify-end items-end h-20">
-              <span className=" mb-4 mr-4">Total Generado</span>
+              <span className=" mb-4 mr-4">Total generated</span>
             </div>
           </div>
           <div className="flex flex-col bg-[#1d335b] md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg  m-4">
@@ -317,7 +338,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
             </div>
             <div className="flex justify-end items-end h-20">
               <span className=" mb-4 mr-4">
-                Total Consumido
+                Total consumed
               </span>
             </div>
           </div>
@@ -339,20 +360,22 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
             <div className="flex justify-end items-end h-20">
             <img src="./LOGOGAIASOLO.png"  className="w-16 h-16 mr-8 mb-2"  alt="" />
               <span className=" mb-4 mr-4 font-bold text-white">
-                Total Excedente en Tokens: 
+                Total surplus tokens: 
               </span>
               <h2 className="mb-4 mr-4 font-bold text-emerald-400">{excedenteCapturado}</h2>
             </div>
           </div>
         </div>
-
+        <div className="flex justify-center text-center text-emerald-500  ">
+        {walletMessage && <p className="text-xl">{walletMessage}</p>}
+        </div>
         <div className="flex flex-col p-2 mb-6 md:ml-10 justify-center items-center md:items-start">
             <button type="button" className="cursor-not-allowed pointer-events-none  text-[18px] mt-4 md:mt-0 text-center md:text-left">
-              Panel de generación y consumo
+              Generation Panel
             </button>
             <NavLink to="/panelUsuarioFinal">
               <button type="button" className=" text-[18px] underline mt-4 md:mt-0 text-center md:text-left">
-                Administrar Dispositivos.
+                Device Manage
               </button>
             </NavLink>
             <button
@@ -360,7 +383,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
               className=" text-[18px] underline mt-4 md:mt-0 text-center md:text-left"
               onClick={openPopup}
             >
-              Crear Alertas
+              Create Alerts
             </button>
             {popupOpen && <PopUpALert onClose={closePopup} />}
           </div>        
@@ -380,18 +403,18 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
           defaultValue="Energia Solar"
           onChange={(e) => console.log(e.target.value)} // Puedes manejar la selección aquí
         >
-          <option value="Energia Solar">Energia Solar</option>
-          <option value="Energia Termica">Energia Termica</option>
-          <option value="Energia Eolica">Energia Eolica</option>
+          <option value="Energia Solar">Solar Energy</option>
+          <option value="Energia Termica">Thermal Energy</option>
+          <option value="Energia Eolica">Wind Energy</option>
         </select>
         {/* <img src={PolygonDown} alt="" className="ml-2" /> */}
       </div>
           <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] m-1">
-            Generado
+            Generated
             <img src={PolygonDown} alt="" className="ml-2" />
           </button>
           <button type="button" className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] m-1">
-            Tiempo real
+            Real Time
             <img src={PolygonDown} alt="" className="ml-2" />
           </button>
 
@@ -400,13 +423,13 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
               <span className=" text-[16px] font-[700]">
                 0 Kws
               </span>
-              <h3 className=" ml-2 p-2">Actual</h3>
+              <h3 className=" ml-2 p-2">Current</h3>
             </div>
             <div className="flex flex-col items-center mb-2 sm:mb-0 sm:ml-4">
               <span className="t text-[16px] font-[700]">
                 0 Kws
               </span>
-              <h3 className="t ml-2 p-2">Basico</h3>
+              <h3 className="t ml-2 p-2">Basic</h3>
             </div>
             <div className="flex flex-col items-center mb-2 sm:mb-0">
               <span className=" text-[16px] font-[700]">

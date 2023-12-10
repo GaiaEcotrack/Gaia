@@ -37,23 +37,23 @@ function ModalAdministrar({ showAdmin, setShowAdmin }: ModalAdministrarProps) {
             <div className="w-[320px] h-full rounded flex flex-col">
               <div className="flex flex-col items-center">           
                 <button type="button" onClick={() => {setShowConfig(true)}} className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
-                  Configuracion del sistema
+                  System configuration
                 </button>
                 
                 <button   type="button" onClick={() => {setShowManten(true)}} className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
-                  Mantenimiento del sistema
+                  System maintenance
                 </button>
 
                 <button  type="button" onClick={() => {setShowGenerad(true)}} className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
-                  Administrar generadores
+                  Manage generators
                 </button>
 
                 <button  type="button" onClick={() => {setShowTransac(true)}} className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
-                  Administrar transacciones
+                  Manage transactions
                 </button>
 
                 <button  type="button" className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
-                  Configuracion de las tarifas
+                  Rate configuration
                 </button>
 
                 <button type="button" className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
@@ -61,7 +61,7 @@ function ModalAdministrar({ showAdmin, setShowAdmin }: ModalAdministrarProps) {
                 </button>
 
                 <button type="button" className="w-[250px] h-[30px] bg-[#1d335b] rounded-[5px] text-md text-[#ffffff] mt-4" >
-                  Informes y Analisis
+                  Reports and Analysis
                 </button>           
               </div>
             </div>

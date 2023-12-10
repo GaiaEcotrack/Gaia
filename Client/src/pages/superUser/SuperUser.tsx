@@ -21,7 +21,7 @@ import { ModalTransac } from "../../components/ModalTransacciones/ModalTransac";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const data = {
-  labels: ["Energia Eólica", "Energia Térmica", "Energia Solar"],
+  labels: ["Wind Energy", "Thermal Energy", "Solar Energy"],
   datasets: [
     {
       data: [10000, 7000, 3000], // VALORES HARDCODEADOS
@@ -48,9 +48,9 @@ export function SuperUser () {
 
   return (
     <>
-      <div className="flex flex-row flex-wrap justify-center pl-20 mb-10">      
+      <div className="flex flex-row flex-wrap justify-center md:pl-20 mb-10">      
 
-        <div className="bg-[#1d335b] md:hidden w-[245px] h-[120px] 2xl:h-[300px] rounded overflow-hidden shadow-md flex flex-col justify-center mt-5 mb-2">
+        <div className="bg-[#1d335b] md:hidden w-[245px] h-[120px] 2xl:h-[300px] rounded overflow-hidden shadow-md flex flex-col justify-center mt-16 mb-4">
           <div className="flex justify-center items-center h-20">
             <span className="text-center text-7xl  text-[#4bc844]">
               <BsCheck2Circle />
@@ -59,7 +59,7 @@ export function SuperUser () {
 
           <div className="flex justify-center items-center h-10">
             <span className="text-center">
-              El estado de la red es seguro
+              Network status is Ok
             </span>
           </div>
         </div>
@@ -73,12 +73,12 @@ export function SuperUser () {
               </div>
               <div className="bg-[#1d335b] flex justify-center items-center h-full">
               <span className="">
-                  La red Gaia esta inestable
+              Gaia network is unstable
                 </span>
               </div>
               <div className="bg-[#1d335b]flex justify-end mr-2">
                 <span className="flex justify-end mr-2">
-                  Alerta
+                  Alert
                 </span>
               </div>
             </div>
@@ -91,12 +91,12 @@ export function SuperUser () {
               </div>
               <div className="flex justify-center items-center h-full">
               <span className="">
-                  Hay actualizaciones de software
+              Software updates available
                 </span>
               </div>
               <div className="flex justify-end mr-2">
                 <span className="">
-                  Notificacion
+                  Notification
                 </span>
               </div>
             </div>
@@ -105,8 +105,8 @@ export function SuperUser () {
         <div className="w-full md:w-[40%]">
           <section className="flex justify-center items-center h-[25vh] md:h-[30vh] md:mb-6 mb-0">
             <div style={{ transform: "scale(0.70)" }}>
-              <div className="flex flex-wrap lg:flex-nowrap m-2 p-2 justify-center items-center ">
-                <div className="bg-[#1d335b] w-[349px] h-[150px] lg:h-[203px] rounded overflow-hidden shadow-lg flex flex-col lg:mr-6 2xl:mr-4">
+              <div className="flex flex-wrap lg:flex-nowrap m-2 p-2 justify-center items-center">
+                <div className="bg-[#1d335b] w-[349px] h-[150px] lg:h-[203px] rounded overflow-hidden shadow-lg flex flex-col lg:mr-6 2xl:mr-4 mb-4 md:mb-0">
                   <div className="flex justify-center items-center h-20 md:h-full">
                     <span className="font-[600] text-[40px] 2xl:text-[50px] text-center mt-10 md:mt-auto">
                       100.000 Kw
@@ -115,7 +115,7 @@ export function SuperUser () {
 
                   <div className="flex justify-end items-end h-16 md:h-full">
                     <span className=" text-[16px] 2xl:text-[22px] mb-4 mr-4">
-                      Total Generado en la red
+                    Total generated on the network
                     </span>
                   </div>
                 </div>
@@ -129,18 +129,20 @@ export function SuperUser () {
 
                   <div className="flex justify-end items-end h-16 md:h-full">
                     <span className="text-[#A7A4B2E0] text-[16px] 2xl:text-[22px] mb-4 mr-4">
-                      Total Consumido en la red
+                      Total Consumed on the network
                     </span>
                   </div>
                 </div>
+
               </div>
+
             </div>
           </section>       
 
           <section>
             <div className="flex">
               <Doughnut
-                className="h-[300px] 2xl:h-[400px] mt-4 md:mt-0"
+                className="h-[300px] 2xl:h-[400px] mt-6 md:mt-0"
                 data={data}
                 options={options}
                 />
@@ -148,18 +150,18 @@ export function SuperUser () {
 
             <div className="mt-6 flex justify-center laptop">            
               <button type="button" className="bg-[#1d335b] w-[113px] 2xl:w-[151px] h-[35px] 2xl:h-[47px] rounded-[15px]  m-1">
-                Energia Solar
+                Solar Energy
               </button>
 
               <button type="button" className="bg-[#1d335b] w-[113px] 2xl:w-[151px] h-[35px] 2xl:h-[47px] rounded-[15px]  m-1 ml-8">
-                Tiempo real 
+                Real Time
               </button>
 
               <div className="ml-8 w-28">
                 <span className=" text-[16px] font-[700]">
                   0 Kws
                 </span>
-                <p className="">Uso de la red</p>
+                <p className="">Network Usage</p>
               </div>      
             </div>
           </section>
@@ -176,13 +178,13 @@ export function SuperUser () {
 
               <div className="flex justify-center items-center h-10">
                 <span className="text-center ">
-                  El estado de la red es seguro
+                  Network status is Ok
                 </span>
               </div>
 
               <div className="flex justify-center items-center h-10">
                 <span className="">
-                  1000 kWh de capacidad actual
+                  1000 kWh current capacity
                 </span>
               </div>
             </div>
@@ -190,38 +192,40 @@ export function SuperUser () {
             <div className="w-[300px] h-full 2xl:h-[450px] rounded flex flex-col m-4 2xl:mt-0">
               <div className="flex flex-col items-end mt-10">           
                 <button type="button" onClick={() => {setShowConfig(true)}} className="w-[250px] h-[40px] bg-[#1d335b] rounded-[5px] text-lg text-[#ffffff]" >
-                  Configuracion del sistema
+                  System Configuration
                 </button>
                 
                 <button type="button" onClick={() => {setShowManten(true)}} className="w-[250px] h-[40px] bg-[#1d335b] rounded-[5px] text-lg text-[#ffffff] mt-4" >
-                  Mantenimiento del sistema
+                System Maintenance
+
                 </button>
 
                 <button type="button" onClick={() => {setShowGenerad(true)}} className="w-[250px] h-[40px] bg-[#1d335b] rounded-[5px] text-lg text-[#ffffff] mt-4" >
-                  Administrar generadores
+                Manage Generators
+
                 </button>
 
                 <button type="button" onClick={() => {setShowTransac(true)}} className="w-[250px] h-[40px] bg-[#1d335b] rounded-[5px] text-lg text-[#ffffff] mt-4" >
-                  Administrar transacciones
+                  Manage Transactions
                 </button>
 
                 <button type="button" className="w-[250px] h-[40px] bg-[#1d335b] rounded-[5px] text-lg text-[#ffffff] mt-4" >
-                  Configuracion de las tarifas
+                  Fee Configurations
                 </button>
 
                 <button type="button" className="w-[250px] h-[40px] bg-[#1d335b] rounded-[5px] text-lg text-[#ffffff] mt-4" >
-                  Control de la red
+                  Network Control
                 </button>
 
                 <button type="button" className="w-[250px] h-[40px] bg-[#1d335b] rounded-[5px] text-lg text-[#ffffff] mt-4" >
-                  Informes y Analisis
+                  Analysis & Reports
                 </button>           
               </div>
             </div>
           </div>
           
           <button type="button" onClick={() => {setShowAdmin(true)}} className="md:hidden w-[150px] h-[40px] bg-[#1d335b] rounded-[5px] text-lg text-[#ffffff]" >
-            Administrar
+            Manage
           </button>
         </section>
         

@@ -23,90 +23,90 @@ function ModalConfig(props:MoodalConfig) {
           </div>
         
           <h1 className="text-[#000000] text-xl md:text-2xl md:mb-6">
-            Configuracion del Sistema
+            System Settings
           </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 md:gap-y-10 mt-6 2xl:mt-10 max-h-[70vh] overflow-y-auto">
 
             <div>
               <div className="text-[#000000] text-xs md:text-sm flex justify-start w-full font-semibold mb-2">
-                <h1>Parámetros de red</h1>        
+                <h1>Network Parameters</h1>        
               </div>
               <ul className="text-[#000000] text-[12px] md:text-[13px] flex flex-col justify-start w-full pl-8 underline list-disc">
-                <li>Establecer limite de capacidad de red</li>
-                <li>Establecer limite de transferencias de datos</li>
-                <li>Configuraciones de seguridad</li>
+                <li>Set network capacity limit</li>
+                <li>Set data transfer limit</li>
+                <li>Security Settings</li>
               </ul>
             </div>            
 
             <div>
               <div className="text-[#000000] text-xs md:text-sm flex justify-start w-full font-semibold mb-2">
-                <h1>Integracion de Blockchain</h1>        
+                <h1>Blockchain Integration</h1>        
               </div>
               <ul className="text-[#000000] text-[12px] md:text-[13px] flex flex-col justify-start w-full pl-8 underline list-disc">
-                <li>Configurar nodos</li>
-                <li>Gestionar direcciones de billetera</li>
-                <li>Sincronizacion de Algorand y supervision de la Blockchain</li>
+                <li>Node Settings</li>
+                <li>Manage wallet addresses</li>
+                <li>Synchronization and Blockchain monitoring</li>
               </ul>
             </div>
 
             <div>
               <div className="text-[#000000] text-xs md:text-sm flex justify-start w-full font-semibold mb-2">
-                <h1>Gestión de Tokens</h1>        
+                <h1>Tokens Manage</h1>        
               </div>
               <ul className="text-[#000000] text-[12px] md:text-[13px] flex flex-col justify-start w-full pl-8 underline list-disc">
-                <li>Crear Tokens</li>
-                <li>Asignar Tokens</li>
-                <li>Monitorizacion de transacciones de Tokens en la red</li>
+                <li>Create Tokens</li>
+                <li>Assigns Tokens</li>
+                <li>Monitoring of Token transactions on the network</li>
               </ul>
             </div>
 
             <div>
               <div className="text-[#000000] text-xs md:text-sm flex justify-start w-full font-semibold mb-2">
-                <h1>Seguridad y privacidad</h1>        
+                <h1>Security & Privacy</h1>        
               </div>
               <ul className="text-[#000000] text-[12px] md:text-[13px] flex flex-col justify-start w-full pl-8 underline list-disc">
-                <li>Establecer limite de capacidad de red</li>
-                <li>Establecer limite de transferencias de datos</li>
-                <li>Configuraciones de seguridad</li>
+                <li>Set network capacity limit</li>
+                <li>Set data transfer limit</li>
+                <li>Security Settings</li>
               </ul>
             </div>
 
             <div>
               <div className="text-[#000000] text-xs md:text-sm flex justify-start w-full font-semibold mb-2">
-                <h1>Mantenimiento y Actualizaciones</h1>        
+                <h1>Updates & Maintenance</h1>        
               </div>
               <ul className="text-[#000000] text-[12px] md:text-[13px] flex flex-col justify-start w-full pl-8 underline list-disc">
-                <li>Establecer limite de capacidad de red</li>
-                <li>Establecer limite de transferencias de datos</li>
-                <li>Configuraciones de seguridad</li>
+              <li>Set network capacity limit</li>
+                <li>Set data transfer limit</li>
+                <li>Security Settings</li>
               </ul>
             </div>
 
             <div>
               <div className="text-[#000000] text-xs md:text-sm flex justify-start w-full font-semibold mb-2">
-                <h1>Registro y Auditoria</h1>        
+                <h1>Register & Auditory</h1>        
               </div>
               <ul className="text-[#000000] text-[12px] md:text-[13px] flex flex-col justify-start w-full pl-8 underline list-disc">
-                <li>Aceder a registros de actividades criticas</li>
+                <li>Access records of critical activities</li>
               </ul>
             </div>            
 
             <div>
               <div className="text-[#000000] text-xs md:text-smflex justify-start w-full font-semibold mb-2">
-                <h1>Gestion de usuarios</h1>        
+                <h1>User Gestion</h1>        
               </div>
               <ul className="text-[#000000] text-[12px] md:text-[13px] flex flex-col justify-start w-full pl-8 underline list-disc">
-                <li>dministrar cuentas de usuario</li>
+                <li>manage user accounts</li>
               </ul>
             </div>
 
             <div>
               <div className="text-[#000000] text-xs md:text-sm flex justify-start w-full font-semibold mb-2">
-                <h1>Soporte y Ayuda</h1>        
+                <h1>Support and Help</h1>        
               </div>
               <ul className="text-[#000000] text-[12px] md:text-[13px] flex flex-col justify-start w-full pl-8 underline list-disc">
-                <li>Recursos de soporte y ayuda</li>
+                <li>Support and Help Resources</li>
               </ul>
             </div>
 

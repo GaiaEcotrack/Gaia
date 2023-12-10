@@ -1,4 +1,5 @@
 import { ApiLoader } from "components/loaders/api-loader/ApiLoader";
+import { useState, useEffect } from "react";
 
 interface CardProps {
   loadingData: any;
@@ -7,7 +8,11 @@ interface CardProps {
   forecast: any;
 }
 
+
+
 function Card({ loadingData, showData, weather, forecast }: CardProps) {
+   
+
   const today = new Date();
   const day = today.getDate();
   const month = today.getMonth() + 1;
@@ -66,6 +71,8 @@ function Card({ loadingData, showData, weather, forecast }: CardProps) {
     )}/${forecast.list[3].dt_txt.substring(11, 13)}`;
   }
 
+ 
+
   return (
     <div>
       {showData === true ? (
@@ -93,7 +100,7 @@ function Card({ loadingData, showData, weather, forecast }: CardProps) {
                   <div className="flex items-center justify-between gap-1" />
                   <div className="flex items-center justify-between gap-1">
                     <p className="text-neutral-800">
-                      Viento: {(weather.wind.speed * 4.82).toFixed(1)} km/h
+                      Wind: {(weather.wind.speed * 4.82).toFixed(1)} km/h
                     </p>
                   </div>
                   <div className="flex items-center justify-between gap-1">
