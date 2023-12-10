@@ -16,7 +16,7 @@ import {AuthForm} from 'pages/LoginAct/LoginAct';
 import { PublicProfile } from 'components/UserNew/UserNew';
 import { initializeApp } from 'firebase/app';
 import { config } from "./components/config/config"
-import AuthRoute from './components/AuthRoute';
+// import AuthRoute from './components/AuthRoute';
 import {Footer} from 'pages/Footer/Footer';
 
 initializeApp(config.firebaseConfig);
