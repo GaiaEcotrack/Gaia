@@ -238,11 +238,13 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
 // Add your metadata.txt
  const meta = process.env.REACT_APP_META_DATA
  const MidWallet = process.env.REACT_APP_MID_KEY
-//  const addresLocal = account?.address
+
+  const addresTransaction = account?.address
+
+console.log(addresTransaction);
 
 
-
- if(addresLocal !== undefined && meta !== undefined && MidWallet !== undefined){
+ if(addresTransaction !== undefined && meta !== undefined && MidWallet !== undefined){
    
  const programIDFT = programIdKey
 
@@ -258,11 +260,11 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
    payload: {
      transfer: [
        decodeAddress(MidWallet),
-       decodeAddress(addresLocal),
+       decodeAddress(addresTransaction),
        3,
      ],
    },
-   gasLimit: gasUsage,
+   gasLimit: 899819245,
    value: 0,
  };
  
@@ -280,6 +282,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
  
      await transferExtrinsic.signAndSend(keyring,(event:any)=>{
          console.log("transferencia a la cuenta local hecha");
+         
          
          
      })
