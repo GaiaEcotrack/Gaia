@@ -12,7 +12,7 @@ import {
   LinearScale,
 } from "chart.js";
 // Gráficos de React
-import { Pie, Bar } from "react-chartjs-2";
+import { Pie, Bar, Doughnut } from "react-chartjs-2";
 // React Hooks
 import { useState, useEffect } from "react";
 // React Router
@@ -42,11 +42,11 @@ ChartJS.register(
   LinearScale
 );
 
-const dataPie: ChartData<"pie", number[], string> = {
+const dataPie: ChartData<"doughnut", number[], string> = {
   labels: ["Energia Eólica", "Energia Térmica", "Energia Solar"],
   datasets: [
     {
-      type: "pie",
+      type: "doughnut",
       data: [10000, 7000, 3000],
       backgroundColor: ["#699CD0", "#74C7ED", "#F0B778"],
     },
@@ -295,10 +295,9 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
 
 
   return (
-    <div className="">
+    <div className="mb-12">
       <div className=" text-white md:pl-24 2xl:pl-32 md:pr-10 md:pb-0">
-        <WeatherNavbar/>
-        <WeatherPanel/>
+       
         <div className="flex flex-col lg:flex-row  p-2 justify-center graficos items-center">
           <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px]   rounded overflow-hidden shadow-lg  m-4">
             <div className=" flex justify-center items-center h-full">
@@ -338,7 +337,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
               </button> */}
             </div>
             <div className="flex justify-end items-end h-20">
-            <img src="./LOGOGAIASOLO.PNG"  className="w-16 h-16 mr-8 mb-2"  alt="" />
+            <img src="./LOGOGAIASOLO.png"  className="w-16 h-16 mr-8 mb-2"  alt="" />
               <span className=" mb-4 mr-4 font-bold text-white">
                 Total Excedente en Tokens: 
               </span>
@@ -364,15 +363,15 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
               Crear Alertas
             </button>
             {popupOpen && <PopUpALert onClose={closePopup} />}
-          </div>
+          </div>        
 
         <div className="justify-center mb-10">
-          <Pie
+          <Doughnut
             className="h-[300px] 2xl:h-[400px] justify-center "
             data={dataPie}
             options={optionsPie}
           />
-        </div>
+        </div>        
 
         <div className="flex flex-col items-center sm:flex-row sm:justify-center">
         <div className="relative inline-block">
@@ -414,14 +413,18 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
                 0 Kws
               </span>
               <h3 className=" ml-2 p-2">Total</h3>
-            </div>
-            <br />
+            </div>          
           </div>
+        </div>
+
+        <div className="lg:absolute lef-[50%] lg:top-[15%] 2xl:top-[20%] lg:left-[76%] 2xl:left-[78%] laptop">
+        <WeatherNavbar/>
+        <WeatherPanel/>
         </div>
 
         <div className="flex mx-auto max-w-screen-md h-[200px] mt-8">
           <Bar data={barData} options={optionsBar} />
-          <div className="border-4 m-auto ml-32 bg-gray-100 h-32 rounded-full hidden lg:flex items-center justify-center border-gray-400">
+          <div className="border-4 mt-10 xl:ml-32 bg-gray-100 h-32 rounded-full hidden lg:flex items-center justify-center border-gray-400">
             <p className="text-[#1d335b] text-xl m-2 text-center">{showDate}</p>
           </div>
         </div>

@@ -51,10 +51,6 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
    const gasTotal = gasLimit * (1+percentage)
    const gasUsage = Math.round(gasTotal)
 
-
-   console.log(gasUsage);
-   
-
   const message: any = {
     destination: programIdKey, // programId
     payload: {

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { Account } from "components/layout/header/account";
+import { AccountIcon } from "components/layout/header/account/AccountIcon";
 
 /* eslint-disable */
 export interface IHomePageProps {}
@@ -23,13 +24,17 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
     { title: "Notificaciones", src: "Chat", to: "/notificaciones" },
   ];
 
+  const handleMenuClick = () => {
+    setOpen(false);
+  };
+
 
   return (
     
     <div className="bg-white text-white">
       <div
         className={` ${
-          open ? "w-72" : "w-20 "
+          open ? "w-56" : "w-20 "
         } bg-[#181745] text-white h-full sm:h-screen p-5  pt-8 relative duration-300`}
       >
         <button
@@ -46,7 +51,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
         >
           <img src="/control.png" alt="Toggle Sidebar" />
         </button>
-        <div className="flex gap-x-4 items-center">
+        <div className="flex gap-x-2 items-center">
           <img
             src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Logo"
@@ -75,7 +80,8 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
               <li
                 key={Menu.id}
                 className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-slate-400 hover:text-white text-sm items-center gap-x-4 
-      ${Menu.gap ? "mt-9" : "mt-2"} ${Menu.id === 0 && "bg-light-white"} `}
+                ${Menu.gap ? "mt-9" : "mt-2"} ${Menu.id === 0 && "bg-light-white"} `}
+                onClick={handleMenuClick}
               >
                 <img src={`/${Menu.src}.png`} alt="logotwo" />
                 <span
@@ -87,7 +93,16 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
             </Link>
           ))}
         </ul>
-        <Account/>
+          <div>
+            {open && (            
+              <Account/>            
+              )}       
+          </div>
+          <div>
+            {!open && (            
+              <AccountIcon />            
+              )}       
+          </div>
       </div>
     </div>
   );

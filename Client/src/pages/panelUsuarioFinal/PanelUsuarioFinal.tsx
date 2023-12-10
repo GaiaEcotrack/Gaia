@@ -80,7 +80,7 @@ const PanelUsuarioFinal = () => {
     "https://services.meteored.com/img/article/energy-overhaul-scientists-predict-by-the-2040s-solar-energy-will-dominate-our-power-grids-1697660406587_1280.jpeg";
   return (
     <section
-      className="border-2 border-transparent  "
+      className="border-2 border-transparent  min-h-screen"
       style={{
         backgroundImage: `url(${imageUrl})`,
         backgroundSize: "cover",
@@ -135,7 +135,7 @@ const PanelUsuarioFinal = () => {
             ${index === menuAbierto ? "hidden" : ""}`}
           >
             <h2 className="text-gray-900 font-bold sm:text-2xl mb-6  ">
-              {dispositivo.Nombre}
+              {dispositivo && dispositivo.Nombre}
             </h2>
             <p className="text-gray-900 font-bold text-sm sm:text-lg">
               Tipo de Dispositivo: {dispositivo.Tipo_de_Dispositivo}

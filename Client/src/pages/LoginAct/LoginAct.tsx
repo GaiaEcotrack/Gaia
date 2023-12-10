@@ -106,7 +106,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
               type="button"
               className="w-full block bg-gray-300 hover:bg-gray-400 focus:bg-gray-400 text-gray-800 font-semibold rounded-lg px-4 py-3 border border-gray-300"
             >
-              Entrar como invitado
+              Enter as a guest
             </button>
           </Link>
 
