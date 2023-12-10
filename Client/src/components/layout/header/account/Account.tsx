@@ -23,7 +23,7 @@ function Account() {
       {account ? (
         <Wallet balance={account.balance} address={account.address} name={account.meta.name} onClick={openModal} />
       ) : (
-        <button type="button" onClick={openModal} aria-label="Abrir modal"><TbWalletOff className='w-8 h-8' /></button>
+        <button type="button" onClick={openModal} aria-label="Abrir modal"><TbWalletOff className='mt-6 ml-2 w-8 h-8' /></button>
       )}
       {isModalOpen && <AccountsModal accounts={accounts} close={closeModal} />}
     </>
