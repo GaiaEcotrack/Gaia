@@ -30,7 +30,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       localStorage.setItem("profilePic", profilePic);
 
       // Para llamar del localStorage
-      {/* <h1>{localStorage.getItem("email")}</h1>
+      {/* <h1>{localStorage.getItem("name")}</h1>
         <h1>{localStorage.getItem("email")}</h1>
         <img src={localStorage.getItem("profilePic") || "" } /> */}
 
