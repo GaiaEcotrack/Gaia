@@ -42,4 +42,6 @@ cargo build --release
 - [Agustin Nazer](https://github.com/AgusNazer)
 - [Diego Rosas](https://github.com/diego34346)
 - [Nicolas Villagra](https://github.com/NicolasVillagra)
-- [Alexander]()
+- [Alexander Castillo](https://github.com/Alexdrcastillo)
+
+<hr>
