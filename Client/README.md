@@ -1,6 +1,13 @@
+##  To run the Frontend, positioned in the directory /Client
 
-# Gear Template for Dapps 
+### STEP 1, Install dependencies:
+**Command:**
+```bash
+npm install --force
+```
 
-
-## Description
-
+### STEP 2, Run the project:
+**Command:**
+```bash
+npm start
+```
