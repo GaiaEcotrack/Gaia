@@ -51,13 +51,13 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   return (
     <section className="flex flex-col md:flex-row h-screen items-center">
       <div className="bg-cover bg-center hidden lg:flex  w-full md:w-1/2 xl:w-2/3 h-screen sm:flex sm:items-center sm:justify-center" style={{ backgroundImage: `url(${imageUrl})` }}>
-        <h1 className="relative text-5xl">Blockchain Impulsa Tu Energía Verde</h1>
+        <h1 className="relative text-5xl">Blockchain Powers Your Green Energy</h1>
       </div>
 
       <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
         <div className="w-full h-100">
-            <div className="flex flex-col gap-2 ml-16 sm:ml-32 lg:ml-44 item-center justify-center">
-                <img className="w-32 h-32" src="/LOGOGAIASOLO.png" alt="" />
+            <div className="flex flex-col gap-2 text-center item-center justify-center ">
+                <img className="w-32 h-32 mx-auto" src="/LOGOGAIASOLO.png" alt="" />
                 <h1 className="text-black text-3xl">Gaia Ecotrack</h1>
             </div>
           <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
@@ -121,7 +121,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
               type="button"
               className="w-full block bg-gray-300 hover:bg-gray-400 focus:bg-gray-400 text-gray-800 font-semibold rounded-lg px-4 py-3 border border-gray-300"
             >
-              Entrar como invitado
+              Enter as a guest
             </button>
           </Link>
 

@@ -1,4 +1,3 @@
-import { LocalBalanceToken } from "pages/home/MyBalanceToken"
 import { VarasBalance } from "pages/home/VarasBalance"
 
 interface Props {
@@ -23,8 +22,9 @@ function CryptoCardVara ({image,quantity,name,onClick,metric}:Props) {
       <h1 className="font-semibold text-xl text-gray-700">${quantity}</h1>
     </div>
         </div>
-      <div className="flex flex-col gap-5 items-center">
-        <span className="font-bold text-green-500">{metric}</span>
+      <div className="flex flex-col gap-1 items-center">
+        <span className="font-bold text-black">{metric}</span>
+        <span className="font-medium text-xl text-gray-700 flex justify-end">Your Balance</span>
         <span className="font-medium text-xs text-gray-500 flex justify-end"><VarasBalance/></span>
         <button type="button" onClick={onClick} className="hover:brightness-110 hover:animate-pulse font-bold py-3 px-6 rounded-full bg-gradient-to-r from-blue-500 to-pink-500 text-white">Enviar</button>
       </div>

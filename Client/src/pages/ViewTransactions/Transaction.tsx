@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { MdOutlineTrendingUp, MdOutlineTrendingDown } from "react-icons/md";
+import { useAccount} from "@gear-js/react-hooks";
 import { useSelector } from 'react-redux';
 // Importaciones locales
 import {CryptoCard} from "components/CryptoCard/CryptoCard";
 import { CryptoCardVara } from "components/CryptoCard/CryptoCardVara";
+import {AlertModal} from "components/AlertModal/AlertModal";
 
 import { ModalSendToken } from "../ModalTransaction/ModalSendToken";
 import { ModalConvertTokens } from "../ModalTransaction/ModalConvertTokens";
@@ -49,15 +50,24 @@ function Transaction () {
   const [sendTokenState, setSendTokenState] = useState(false);
   const [convertTokenState, setConvertTokenState] = useState(false);
   const [fundsState, setFundsState] = useState(false)
+  const [alert, setAlert] = useState(false)
 
+  const { accounts, account } = useAccount();
+  const addresLocal = account?.address
 
   const onClose = () => {
     setSendTokenState(false);
     setConvertTokenState(false);
     setFundsState(false)
+    setAlert(false)
   };
   const openCard = () => {
-    setSendTokenState(true);
+    if(addresLocal !== undefined){
+      setSendTokenState(true);
+    }
+    else{
+      setAlert(true)    
+    }
   };
   const openCardConvert = () => {
     setConvertTokenState(true);
@@ -105,13 +115,9 @@ function Transaction () {
 
 
   
-
-  const porcentajeGaiaColor = porcentajesCambio.gaia > 0 ? "#00ffc3" : "red";
-  const porcentajeVaraColor = porcentajesCambio.vara > 0 ? "#00ffc3" : "red";
-  
   return (
     <div className="flex flex-col items-center">
-      <div className="bg-[#181745] shadow-2xl w-[90%] sm:w-4/5 h-[43rem] gap-5 sm:h-56 rounded-md mt-16 md:mt-10 flex sm:flex-row items-center flex-col sm:gap-10 sm:justify-around p-2.5">
+      <div className="bg-white shadow-2xl w-[90%] sm:w-4/5 h-[43rem] gap-5 sm:h-56 rounded-md mt-16 md:mt-10 flex sm:flex-row items-center flex-col sm:gap-10 sm:justify-around p-2.5">
         {/* <div className="w-80 h-44 shadow-lg sm:w-80 sm:h-48 flex flex-col  bg-gradient-to-r from-secondary to-primary rounded-md"> */}
           {/* <div className="flex gap-10 p-2.5 items-center justify-between">
             <img className="w-14 h-14" src="/LOGOGAIASOLO.png" alt="" />
@@ -243,6 +249,11 @@ active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
               <div>
               <ModalFunds onClose={onClose}/>
             </div>
+      )}
+      {alert && (
+        <div>
+          <AlertModal onClose={onClose}/>
+        </div>
       )}
     </div>
   );

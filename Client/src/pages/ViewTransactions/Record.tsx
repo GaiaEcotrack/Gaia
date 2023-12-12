@@ -17,7 +17,7 @@ const dataLocal: Transaccion[] = JSON.parse(localStorage.getItem('transacciones'
 
   return (
     <div className="flex items-center justify-center mb-10">
-    <div className="bg-[#181745] shadow-2xl w-[90%] sm:w-4/5 h-full overflow-x-auto whitespace-no-wrap p-4 rounded-md mt-5 flex flex-col items-center gap-5">
+    <div className="bg-white shadow-2xl w-[90%] sm:w-4/5 h-full overflow-x-auto whitespace-no-wrap p-4 rounded-md mt-5 flex flex-col items-center gap-5">
       {dataLocal.map((e) => (
         <div
           className="bg-[#1d335b] rounded-md text-white flex items-center justify-around w-full h-14 p-2.5"

@@ -234,14 +234,17 @@ const { api } = useApi();
 // Add your programID
 const programIdKey = process.env.REACT_APP_PROGRAM_ID
 
+
 // Add your metadata.txt
  const meta = process.env.REACT_APP_META_DATA
  const MidWallet = process.env.REACT_APP_MID_KEY
-//  const addresLocal = account?.address
+
+  const addresTransaction = account?.address
+
+console.log(addresTransaction);
 
 
-
- if(addresLocal !== undefined && meta !== undefined && MidWallet !== undefined){
+ if(addresTransaction !== undefined && meta !== undefined && MidWallet !== undefined){
    
  const programIDFT = programIdKey
 
@@ -257,11 +260,11 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
    payload: {
      transfer: [
        decodeAddress(MidWallet),
-       decodeAddress(addresLocal),
-       5,
+       decodeAddress(addresTransaction),
+       3,
      ],
    },
-   gasLimit: gasUsage,
+   gasLimit: 899819245,
    value: 0,
  };
  
@@ -279,6 +282,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
  
      await transferExtrinsic.signAndSend(keyring,(event:any)=>{
          console.log("transferencia a la cuenta local hecha");
+         
          
          
      })
@@ -310,12 +314,6 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
 }, [componenteMontado, account?.address]); 
  }
 
- if (addresLocal !== undefined && meta !== undefined && MidWallet !== undefined) {
-  // Resto del código
-} else {
-  // Muestra un alert de error ya que addresLocal es undefined
-  alert.error("Error: No se encuentra conectado a la wallet");
-}
 
 //------------------------------VARA INTEGRATION-----------------------------------------------------------------------
 
@@ -363,7 +361,7 @@ const programIdKey = process.env.REACT_APP_PROGRAM_ID
               </button> */}
             </div>
             <div className="flex justify-end items-end h-20">
-            <img src="./LOGOGAIASOLO.PNG"  className="w-16 h-16 mr-8 mb-2"  alt="" />
+            <img src="./LOGOGAIASOLO.png"  className="w-16 h-16 mr-8 mb-2"  alt="" />
               <span className=" mb-4 mr-4 font-bold text-white">
                 Total surplus tokens: 
               </span>
