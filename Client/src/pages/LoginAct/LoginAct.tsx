@@ -74,7 +74,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
                 id="email"
                 name="email"
                 placeholder="Enter Email Address"
-                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg text-black bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                 autoComplete="on"
                 required
               />
@@ -90,25 +90,28 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
                 name="password"
                 placeholder="Enter Password"
                 minLength={6}
-                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg text-black bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                 required
               />
             </div>
 
             <div className="text-right gap-5 mt-2">
-              <Link
-                to="/Forget"
+              <button
+                // to="/Forget"
                 className="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700"
+                disabled={true}
               >
                 Forgot Password?
-              </Link>
+              </button>
             </div>
 
             <button
               type="submit"
               className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg px-4 py-3 mt-6"
+              disabled={true}
             >
               Log In
+              
             </button>
           </form>
 
@@ -174,9 +177,9 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
             </div>
           </button>
 
-          <Link to="/register" className="text-blue-500 hover:text-blue-700 font-semibold">
+          <button type="button" disabled={true} className="text-blue-500 hover:text-blue-700 font-semibold">
             Create an account
-          </Link>
+          </button>
           </div>
         </div>
       </div>
