@@ -1,0 +1,256 @@
+{
+    "registros": [
+      {
+        "nombre": "Ana Rodriguez",
+        "id": 1,
+        "estado_pago": "pendiente",
+        "tipo_transaccion": "comprar",
+        "cantidad_kw": 25120,
+        "total": 600,
+        "transacciones":[
+          {
+            "estado": "Exitosa",
+            "tipo": "compra",
+            "fecha": "23/09/23",
+            "cantidad": 75000,
+            "precio": 5000,
+            "usuarioTr": "Ivan Pérez"
+          },
+          {
+            "estado": "Pendiente",
+            "tipo": "venta",
+            "fecha": "24/10/23",
+            "cantidad": 80000,
+            "precio": 6000,
+            "usuarioTr": "Daniela Gómez"
+          },
+          {
+            "estado": "Cancelada",
+            "tipo": "compra",
+            "fecha": "25/11/23",
+            "cantidad": 85000,
+            "precio": 7000,
+            "usuarioTr": "Mario Martinez"
+          },
+          {
+            "estado": "Exitosa",
+            "tipo": "compra",
+            "fecha": "26/12/23",
+            "cantidad": 90000,
+            "precio": 8000,
+            "usuarioTr": "Vanesa Sánchez"
+          }
+        ]        
+      },
+      {
+        "nombre": "Juan Pérez",
+        "id": 2,
+        "estado_pago": "rechazado",
+        "tipo_transaccion": "comprar",
+        "cantidad_kw": 22180,
+        "total": 900,
+        "transacciones":[
+          {
+            "estado": "Exitosa",
+            "tipo": "compra",
+            "fecha": "23/09/23",
+            "cantidad": 75000,
+            "precio": 5000,
+            "usuarioTr": "Ivan Pérez"
+          },
+          {
+            "estado": "Pendiente",
+            "tipo": "venta",
+            "fecha": "24/10/23",
+            "cantidad": 80000,
+            "precio": 6000,
+            "usuarioTr": "Daniela Gómez"
+          },
+          {
+            "estado": "Cancelada",
+            "tipo": "compra",
+            "fecha": "25/11/23",
+            "cantidad": 85000,
+            "precio": 7000,
+            "usuarioTr": "Mario Martinez"
+          },
+          {
+            "estado": "Exitosa",
+            "tipo": "compra",
+            "fecha": "26/12/23",
+            "cantidad": 90000,
+            "precio": 8000,
+            "usuarioTr": "Vanesa Sánchez"
+          }
+        ]
+      },
+      {
+        "nombre": "María Gómez",
+        "id": 3,
+        "estado_pago": "pendiente",
+        "tipo_transaccion": "comprar",
+        "cantidad_kw": 2290,
+        "total": 450,
+        "transacciones":[
+          {
+            "estado": "Exitosa",
+            "tipo": "compra",
+            "fecha": "23/09/23",
+            "cantidad": 75000,
+            "precio": 5000,
+            "usuarioTr": "Ivan Pérez"
+          },
+          {
+            "estado": "Pendiente",
+            "tipo": "venta",
+            "fecha": "24/10/23",
+            "cantidad": 80000,
+            "precio": 6000,
+            "usuarioTr": "Daniela Gómez"
+          },
+          {
+            "estado": "Cancelada",
+            "tipo": "compra",
+            "fecha": "25/11/23",
+            "cantidad": 85000,
+            "precio": 7000,
+            "usuarioTr": "Mario Martinez"
+          },
+          {
+            "estado": "Exitosa",
+            "tipo": "compra",
+            "fecha": "26/12/23",
+            "cantidad": 90000,
+            "precio": 8000,
+            "usuarioTr": "Vanesa Sánchez"
+          }
+        ]
+      },
+      {
+        "nombre": "Carlos Martinez",
+        "id": 4,
+        "estado_pago": "Exitosa",
+        "tipo_transaccion": "comprar",
+        "cantidad_kw": 11250,
+        "total": 1250,
+        "transacciones":[
+          {
+            "estado": "Exitosa",
+            "tipo": "compra",
+            "fecha": "23/09/23",
+            "cantidad": 75000,
+            "precio": 5000,
+            "usuarioTr": "Ivan Pérez"
+          },
+          {
+            "estado": "Pendiente",
+            "tipo": "venta",
+            "fecha": "24/10/23",
+            "cantidad": 80000,
+            "precio": 6000,
+            "usuarioTr": "Daniela Gómez"
+          },
+          {
+            "estado": "Cancelada",
+            "tipo": "compra",
+            "fecha": "25/11/23",
+            "cantidad": 85000,
+            "precio": 7000,
+            "usuarioTr": "Mario Martinez"
+          },
+          {
+            "estado": "Exitosa",
+            "tipo": "compra",
+            "fecha": "26/12/23",
+            "cantidad": 90000,
+            "precio": 8000,
+            "usuarioTr": "Vanesa Sánchez"
+          }
+        ]
+      },
+      {
+        "nombre": "Laura Sánchez",
+        "id": 5,
+        "estado_pago": "Exitosa",
+        "tipo_transaccion": "comprar",
+        "cantidad_kw": 23300,
+        "total": 1500,
+        "transacciones":[
+          {
+            "estado": "Exitosa",
+            "tipo": "compra",
+            "fecha": "23/09/23",
+            "cantidad": 75000,
+            "precio": 5000,
+            "usuarioTr": "Ivan Pérez"
+          },
+          {
+            "estado": "Pendiente",
+            "tipo": "venta",
+            "fecha": "24/10/23",
+            "cantidad": 80000,
+            "precio": 6000,
+            "usuarioTr": "Daniela Gómez"
+          },
+          {
+            "estado": "Cancelada",
+            "tipo": "compra",
+            "fecha": "25/11/23",
+            "cantidad": 85000,
+            "precio": 7000,
+            "usuarioTr": "Mario Martinez"
+          },
+          {
+            "estado": "Exitosa",
+            "tipo": "compra",
+            "fecha": "26/12/23",
+            "cantidad": 90000,
+            "precio": 8000,
+            "usuarioTr": "Vanesa Sánchez"
+          }
+        ]
+      },
+      {
+        "nombre": "Roberto Torres",
+        "id": 6,
+        "estado_pago": "pendiente",
+        "tipo_transaccion": "comprar",
+        "cantidad_kw": 98130,
+        "total": 11650,
+        "transacciones":[
+          {
+            "estado": "Exitosa",
+            "tipo": "compra",
+            "fecha": "23/09/23",
+            "cantidad": 75000,
+            "precio": 5000,
+            "usuarioTr": "Ivan Pérez"
+          },
+          {
+            "estado": "Pendiente",
+            "tipo": "venta",
+            "fecha": "24/10/23",
+            "cantidad": 80000,
+            "precio": 6000,
+            "usuarioTr": "Daniela Gómez"
+          },
+          {
+            "estado": "Cancelada",
+            "tipo": "compra",
+            "fecha": "25/11/23",
+            "cantidad": 85000,
+            "precio": 7000,
+            "usuarioTr": "Mario Martinez"
+          },
+          {
+            "estado": "Exitosa",
+            "tipo": "compra",
+            "fecha": "26/12/23",
+            "cantidad": 90000,
+            "precio": 8000,
+            "usuarioTr": "Vanesa Sánchez"
+          }
+        ]
+      }
+    ]
+  }
