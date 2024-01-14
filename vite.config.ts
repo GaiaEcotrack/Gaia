@@ -4,6 +4,10 @@ import path from 'path';
 import nodePolyfills from 'vite-plugin-node-stdlib-browser';
 import eslint from 'vite-plugin-eslint';
 import svgr from 'vite-plugin-svgr';
+import dotenv from 'dotenv';
+
+// Carga las variables de entorno desde el archivo .env
+dotenv.config();
 
 // https://vitejs.dev/config/
 export default defineConfig({

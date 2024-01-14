@@ -1,7 +1,14 @@
 
+import { LocalBalanceToken } from "./MyBalanceToken";
+import { NameFungibleToken } from "./NameToken";
 
 function Home() {
-  return <h1>Hello World!!!</h1>;
+  return (
+    <div>
+    <NameFungibleToken/>
+    <LocalBalanceToken/>
+    </div>
+  );
 }
 
 export { Home };

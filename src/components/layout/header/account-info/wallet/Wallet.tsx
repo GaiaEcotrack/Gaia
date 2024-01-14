@@ -14,7 +14,7 @@ type Props = {
 function Wallet({ balance, address, name, onClick }: Props) {
   return (
     <div className={styles.wallet}>
-      <p className={styles.balance}>
+      <p className='hidden'>
         {balance?.value} <span className={styles.currency}>{balance?.unit}</span>
       </p>
       <AccountButton address={address} name={name} onClick={onClick} />

@@ -19,7 +19,7 @@ function AccountButton({ address, name, onClick, isActive, block }: Props) {
   );
 
   return (
-    <button type="button" className={className} onClick={onClick}>
+    <button type="button" className='flex flex-col items-center justify-center' onClick={onClick}>
       <Identicon value={address} className={buttonStyles.icon} theme="polkadot" size={28} />
       {name}
     </button>

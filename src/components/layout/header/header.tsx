@@ -11,7 +11,7 @@ export function Header({ isAccountVisible }: Props) {
   const [isMenuOpen] = React.useState(false);
 
   return (
-    <header className={styles.header}>
+    <header className='hidden'>
       <Logo />
       
       {isAccountVisible && <AccountInfo />}
