@@ -27,7 +27,7 @@ if client:
 db = client['gaia']
 collection = db['users']
 
-# # Inserta un documento de ejemplo en la colección "users"
+#  Inserta un documento de ejemplo en la colección "users"
 # example_user = {
 #     'username': 'ejemplo_usuario',
 #     'email': 'usuario@example.com',
