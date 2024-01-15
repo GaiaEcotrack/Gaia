@@ -1,0 +1,9 @@
+###
+POST http://127.0.0.1:5000/users HTTP/1.1
+Content-Type: application/json
+ 
+{
+    "username": "User222 post",
+    "email": "nueo@exa222ple.com",
+    "password": "eded222a"
+} 

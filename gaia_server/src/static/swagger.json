@@ -1,0 +1,227 @@
+{
+    "openapi":"3.0.0",
+    "info": {
+        "description": "This API provides data,measurements and logs from users and devices. This documentation is for developers and is under construction as of today.  ",
+        "version": "1.0.0",
+        "title": "GAIA API",
+        "license":{
+            "name": "MIT",
+            "url":"https://opensource.org/license/MIT"
+        }
+    },
+    "tags": [
+        {
+          "name": "Users API",
+          "description": "Test API"
+        }
+      ],
+      "servers": [
+        {
+        "url": "http://127.0.0.1:5001/"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "Users": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                    "type": "string"
+                    },
+                    "surname": {
+                        "type": "string"
+                        },
+                        "location": {
+                    "type": "string"
+                    }
+                    
+                }
+            },
+            "Id":{
+            "type" : "integer",
+            "properties" : {
+                "name" : {
+                    "type" : "integer"
+                }
+            }
+        },
+            "update":{
+              "type": "object",
+              "properties" :{
+                "name": {
+                    "type": "string"
+                    },
+                  "description": {
+                    "type": "string"
+                  },
+                  "example of data type boolean": {
+                    "type": "boolean"
+                  }
+              }
+            }
+        }
+    },
+    "paths": {
+        "/users": {
+            "post": {
+            "tags": [
+                "Add user API"
+            ],
+            "summary": "Add user",
+            "requestBody": {
+            "description": "Post New user To Database",
+            "required": true,
+            "content": {
+                "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/userList"
+                    }
+                }
+            }
+            },
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                    "$ref": "#/components/schemas/userList"
+                    }
+                },
+                "404": {
+                    "description": "NOT FOUND",
+                    "schema": {
+                    "$ref": "#/components/schemas/userList"
+                    }
+            }
+            }
+            },
+            "get" :{
+                "tags": [
+                    "Get All users API"
+                ],
+                "summary": "Get All users",
+               
+                "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                    "$ref": "#/components/schemas/userList"
+                    }
+                },
+                "404": {
+                    "description": "NOT FOUND",
+                    "schema": {
+                    "$ref": "#/components/schemas/userList"
+                    }
+            }
+            }
+            }
+        },
+        "/user/{id}":{
+
+            "get" :{
+                "tags": [
+                    "Get users from API"
+                ],
+                "summary": "Get users",
+                "parameters": [{
+                  "name": "id",
+                  "in": "path",
+                  "description": "user id to update",
+                  "required": true,
+                  "type": "integer",
+                  "schema" : {
+                      "$ref": "#/components/schemas/Id"
+                  }
+                }],
+               
+                "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                    "$ref": "#/components/schemas/userList"
+                    }
+                },
+                "404": {
+                    "description": "NOT FOUND",
+                    "schema": {
+                    "$ref": "#/components/schemas/userList"
+                    }
+            }
+            }
+            },
+           
+            "put": {
+            "tags": [
+                "Update users on API"
+            ],
+            "parameters": [{
+                "name": "id",
+                "in": "path",
+                "description": "user id to update",
+                "required": true,
+                "type": "integer",
+                "schema" : {
+                    "$ref": "#/components/schemas/Id"
+                }
+            }],
+            "summary": "Update user",
+            "requestBody": {
+            "description": "Update Existing user On Database",
+            "required": true,
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "$ref": "#/components/schemas/update"
+                    }
+                }
+            }
+            },
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                    "$ref": "#/components/schemas/userList"
+                    }
+                },
+                "404": {
+                    "description": "NOT FOUND",
+                    "schema": {
+                    "$ref": "#/components/schemas/userList"
+                    }
+            }
+            }
+        },
+        "delete": {
+            "tags": [
+                "Delete user to API"
+            ],
+            "parameters": [{
+                "name": "id",
+                "in": "path",
+                "description": "user id to delete",
+                "required": true,
+                "type": "integer",
+                "schema" : {
+                    "$ref": "#/components/schemas/Id"
+                }
+            }],
+            "summary": "Delete user",
+            
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                    "$ref": "#/components/schemas/userList"
+                    }
+                },
+                "404": {
+                    "description": "NOT FOUND",
+                    "schema": {
+                    "$ref": "#/components/schemas/userList"
+                    }
+            }
+            }
+        }
+        }
+}
+}
