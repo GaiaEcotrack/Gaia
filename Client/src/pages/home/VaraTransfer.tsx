@@ -83,7 +83,7 @@ const meta =
         .signAndSend(
           account?.address ?? alert.error("No account"),
           { signer: injector.signer },
-          ({ status }) => {
+          ({ status }: { status: any }) => {
             if (status.isInBlock) {
               
               alert.success(status.asInBlock.toString());
