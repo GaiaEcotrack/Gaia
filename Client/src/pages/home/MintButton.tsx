@@ -1,7 +1,7 @@
 
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
-import { ProgramMetadata, decodeAddress } from "@gear-js/api";
+import { ProgramMetadata, decodeAddress, GearKeyring } from "@gear-js/api";
 import { Button } from "@gear-js/ui";
 
 
@@ -20,13 +20,14 @@ function Mint() {
 
   const metadata = ProgramMetadata.from(meta);
 
-  console.log(metadata.getAllTypes());
+  console.log(metadata.types.state?.toString());
   
+  const adress = account!.address
 
   const message: any = {
     destination: programIDFT, // programId
-    payload: {  Burn:50},
-    gasLimit: 9999819245,
+    payload: { getRewards:10},
+    gasLimit: 69999819245,
     value: 0,
   };
 
@@ -36,41 +37,26 @@ function Mint() {
 
 
  async function signer(){
-    const localaccount = account?.address;
-    const isVisibleAccount = accounts.some(
-      (visibleAccount) => visibleAccount.address === localaccount
-    );
+  const localaccount = account?.address;
+  const isVisibleAccount = accounts!.some(
+    (visibleAccount) => visibleAccount.address === localaccount
+  );
 
-    if (isVisibleAccount) {
-      // Create a message extrinsic
-      const transferExtrinsic = await api.message.send(message, metadata);
+  if (isVisibleAccount) {
+    // Create a message extrinsic
+    const transferExtrinsic = await api!.message.send(message, metadata);
+    // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
+    const keyring = await GearKeyring.fromSuri('//Alice');
 
-      const injector = await web3FromSource(accounts[0].meta.source);
-
-
-      transferExtrinsic
-        .signAndSend(
-          account?.address ?? alert.error("No account"),
-          { signer: injector.signer },
-          ({ status }) => {
-            if (status.isInBlock) {
-              alert.success(status.asInBlock.toString());
-            } else {
-                alert.info("In process")
-              if (status.type === "Finalized") {
-                console.log(status.toHuman());
-                
-                alert.success(status.type);
-              }
-            }
-          }
-        )
-        .catch((error: any) => {
-          alert.error(":( transaction failed", error);
-        });
-    } else {
-      alert.error("Account not available to sign");
-    }
+    await transferExtrinsic.signAndSend(keyring,(event:any)=>{
+        console.log("transferencia a la cuenta local hecha");
+        
+        
+        
+    })
+  } else {
+    alert.error("Account not available to sign");
+  }
   };
 
   return <Button text="Mint" onClick={()=>{signer()}} />;

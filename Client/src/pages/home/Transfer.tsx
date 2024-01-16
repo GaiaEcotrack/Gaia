@@ -1,6 +1,4 @@
-
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
-import { web3FromSource } from "@polkadot/extension-dapp";
 import { decodeAddress, ProgramMetadata, GearKeyring } from "@gear-js/api";
 import { useState } from "react";
 import { AlertsTransaction } from "../../components/AlertModal/AlertsTransaction";
@@ -43,21 +41,16 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
   const { accounts, account } = useAccount();
   const { api } = useApi();
   // Add your programID
-  const programIdKey = process.env.REACT_APP_PROGRAM_ID
+  const programIdKey = import.meta.env.VITE_APP_PROGRAM_ID
 
 
   // Add your metadata.txt
-   const meta = process.env.REACT_APP_META_DATA
+   const meta = import.meta.env.VITE_APP_META_DATA
 
 
    const metadata = ProgramMetadata.from(meta!);
 
    const addresLocal = account!.address
-
-   const gasLimit = 375076928
-   const percentage = 0.90
-   const gasTotal = gasLimit * (1+percentage)
-   const gasUsage = Math.round(gasTotal)
 
   const message: any = {
     destination: programIdKey, // programId
@@ -68,7 +61,7 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
         quantity,
       ],
     },
-    gasLimit: gasUsage,
+    gasLimit: 999819245,
     value: 0,
   };
 

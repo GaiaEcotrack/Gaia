@@ -232,11 +232,11 @@ const alert = useAlert();
 // const { accounts, account } = useAccount();
 const { api } = useApi();
 // Add your programID
-const programIdKey = import.meta.env.VITE_APP_PROGRAM_ID
+const programIdKey = import.meta.env.VITE_APP_MAIN_CONTRACT_ID
 
 
 // Add your metadata.txt
- const meta = import.meta.env.VITE_APP_META_DATA
+ const meta = import.meta.env.VITE_APP_MAIN_CONTRACT_METADATA
  const MidWallet = import.meta.env.VITE_APP_MID_KEY
 
   const addresTransaction = account?.address
@@ -255,33 +255,47 @@ console.log(addresTransaction);
   const gasTotal = gasLimit * (1+percentage)
   const gasUsage = Math.round(gasTotal)
  
- const messageTwo: any = {
-   destination: programIDFT, // programId
-   payload: {
-     transfer: [
-       decodeAddress(MidWallet),
-       decodeAddress(addresTransaction),
-       3,
-     ],
-   },
-   gasLimit: 899819245,
-   value: 0,
- };
+//  const messageTwo: any = {
+//    destination: programIDFT, // programId
+//    payload: {
+//      transfer: [
+//        decodeAddress(MidWallet),
+//        decodeAddress(addresTransaction),
+//        3,
+//      ],
+//    },
+//    gasLimit: 999819245,
+//    value: 0,
+//  };
+
+const messageTwo: any = {
+  destination: programIDFT, // programId
+  payload: { generateEnergy:10},
+  gasLimit: 999819245,
+  value: 0,
+};
+const message: any = {
+  destination: programIDFT, // programId
+  payload: { getRewards:10},
+  gasLimit: 9999819245,
+  value: 0,
+};
+
  
  const signerTwo = async () => {
    const localaccount = account?.address;
-   const isVisibleAccount = accounts.some(
+   const isVisibleAccount = accounts!.some(
      (visibleAccount) => visibleAccount.address === localaccount
    );
  
    if (isVisibleAccount) {
      // Create a message extrinsic
-     const transferExtrinsic = await api.message.send(messageTwo, metadata);
+     const transferExtrinsic = await api!.message.send(messageTwo, metadata);
      // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
      const keyring = await GearKeyring.fromSuri('//Alice');
  
      await transferExtrinsic.signAndSend(keyring,(event:any)=>{
-         console.log("transferencia a la cuenta local hecha");
+         console.log("transferencia a la cuenta main hecha hecha");
          
          
          
@@ -290,6 +304,29 @@ console.log(addresTransaction);
      alert.error("Account not available to sign");
    }
  };
+
+ const signer = async () => {
+  const localaccount = account?.address;
+  const isVisibleAccount = accounts!.some(
+    (visibleAccount) => visibleAccount.address === localaccount
+  );
+
+  if (isVisibleAccount) {
+    // Create a message extrinsic
+    const transferExtrinsic = await api!.message.send(message, metadata);
+    // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
+    const keyring = await GearKeyring.fromSuri('//Alice');
+
+    await transferExtrinsic.signAndSend(keyring,(event:any)=>{
+        console.log("transferencia a la cuenta local hecha");
+        
+        
+        
+    })
+  } else {
+    alert.error("Account not available to sign");
+  }
+};
  
  
  
@@ -299,6 +336,7 @@ console.log(addresTransaction);
     if (account?.address !== undefined) {
       await signerTwo();
       await new Promise(resolve => setTimeout(resolve, 15000));
+      await signer()
     }
   };
 
