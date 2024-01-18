@@ -57,7 +57,12 @@ function LocalBalanceToken() {
   });
 
   return (
-        <h2 className="text-3xl text-gray-700">{balance}</h2>
+    <div>
+              <h2 className="text-3xl text-gray-700">{balance}</h2>
+              <h2 className="text-3xl text-white">{balance}</h2>
+              
+    </div>
+        
   );
 }
 
