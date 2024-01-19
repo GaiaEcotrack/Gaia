@@ -4,8 +4,8 @@ use gtest::{Program, System};
 use io::InitFT;
 use io::FTAction;
 use io::FTEvent;
-use io::ActionGaiaEcotrack
-use io::EventsGaiaEcotrack
+use io::ActionGaiaEcotrack;
+use io::EventsGaiaEcotrack;
 const USERS: &[u64] = &[3, 4, 5];
 
 
