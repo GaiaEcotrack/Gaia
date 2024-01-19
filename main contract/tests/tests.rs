@@ -1,5 +1,5 @@
 use io::*;
-use gstd::{Encode, String};
+use gstd::{Encode, String, ActorId};
 use gtest::{Program, System};
 use io::InitFT;
 use io::FTAction;
@@ -216,5 +216,39 @@ fn approve_and_transfer() {
 
 
 // }
+
+const USER: u64 = 3;
+
+#[test]
+    fn generate_energy_and_verify_event() {
+        // Configuración del sistema y del contrato
+        let sys = System::new();
+        init_with_mint(&sys);
+        let gaia_contract = sys.get_program(1);
+
+        // Ejecutar la acción NewGenerator para registrar un generador
+        let generator_actor_id = ActorId::from(2);
+        let generator = Generator {
+            id: 1,
+            wallet: generator_actor_id,
+            total_generated: 0,
+            average_energy: 0,
+            rewards: 0,
+        };
+        let res = gaia_contract.send(
+            USER,
+            ActionGaiaEcotrack::NewGenerator(generator_actor_id, generator.clone()),
+        );
+        assert!(res.contains(&(USER, EventsGaiaEcotrack::Registered.encode())));
+
+        // Ejecutar la acción GenerateEnergy para generar energía
+        let energy_amount = 100;
+        let res = gaia_contract.send(USER, ActionGaiaEcotrack::GenerateEnergy(energy_amount));
+        assert!(res.contains(&(USER, EventsGaiaEcotrack::Generated.encode())));
+
+        // Verificar que el estado del generador se actualizó correctamente
+        let res = gaia_contract.send(USER, ActionGaiaEcotrack::GetRewards(1));
+        assert!(res.contains(&(USER, EventsGaiaEcotrack::RewardsGenerated.encode())));
+    }
 
 
