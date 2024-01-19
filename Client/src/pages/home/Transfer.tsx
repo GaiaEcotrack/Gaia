@@ -16,7 +16,6 @@ interface Transaccion {
   total: any;
 }
 
-
 function Transfer({accountTo, quantity,state}:ModalTypes) {
 
   const [alertTransaction, setAlertTransaction] = useState(false)
@@ -41,11 +40,11 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
   const { accounts, account } = useAccount();
   const { api } = useApi();
   // Add your programID
-  const programIdKey = import.meta.env.VITE_APP_PROGRAM_ID
+  const programIdKey = process.env.VITE_APP_PROGRAM_ID
 
 
   // Add your metadata.txt
-   const meta = import.meta.env.VITE_APP_META_DATA
+  const meta = process.env.VITE_APP_META_DATA 
 
 
    const metadata = ProgramMetadata.from(meta!);
@@ -68,27 +67,33 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
 
 
   const signer = async () => {
-    pushData()
-    const localaccount = account?.address;
-    const isVisibleAccount = accounts.some(
+  pushData();
+
+  if (account) {
+    const localaccount = account.address;
+    const isVisibleAccount = accounts?.some(
       (visibleAccount) => visibleAccount.address === localaccount
     );
 
     if (isVisibleAccount) {
-      // Create a message extrinsic
-      const transferExtrinsic = await api.message.send(message, metadata);
-      // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
-      const keyring = await GearKeyring.fromSuri('//Alice');
-  
-      await transferExtrinsic.signAndSend(keyring,(event:any)=>{
+      if (api) {
+        const transferExtrinsic = await api.message.send(message, metadata);
+        const keyring = await GearKeyring.fromSuri('//Alice');
+
+        await transferExtrinsic.signAndSend(keyring, (event: any) => {
           console.log(event.toHuman());
-          setAlertTransaction(true)
-          
-      })
+          setAlertTransaction(true);
+        });
+      } else {
+        console.error("API is undefined");
+      }
     } else {
       alert.error("Account not available to sign");
     }
-  };
+  } else {
+    console.error("Account is undefined");
+  }
+};
 
   return (
     <div>
