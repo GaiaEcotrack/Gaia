@@ -32,6 +32,10 @@ if client:
 db = client['gaia']
 collection = db['users']
 
+@application.route('/', methods=['GET'])
+def welcome():
+    return jsonify({'message': 'Welcome to the Gaia Server!'})
+
 # Ruta principal para traer usuarios
 @application.route('/users', methods=['GET'])
 def get_users():
@@ -94,7 +98,7 @@ def add_user():
     return jsonify({'message': 'Usuario agregado con éxito', 'user_id': str(inserted_id)})
 
 # Cierra la conexión al finalizar
-@application.teardown_applicationcontext
+@application.teardown_appcontext
 def close_connection(exception=None):
     pass  # No hagas nada en esta función, evita cerrar la conexión aquí
 
