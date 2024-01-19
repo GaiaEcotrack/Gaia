@@ -9,7 +9,8 @@ use gmeta::{In,Out,InOut,Metadata};
 pub enum ActionGaiaEcotrack {
     NewGenerator(ActorId,Generator),
     GenerateEnergy(u128),
-    GetRewards(u128)
+    GetRewards(u128),
+    Transferred(ActorId , ActorId , u128)
     
     // Aqui se pueden implementar acciones adicionales en el contrato
 }
@@ -22,6 +23,7 @@ pub enum EventsGaiaEcotrack {
     Registered,
     Generated,
     RewardsGenerated,
+    TokensTransferred
     // Aqui pueden ir más eventos de respuesta para las acciones
     
 }
