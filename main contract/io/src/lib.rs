@@ -55,6 +55,16 @@ pub enum FTAction {
 // Este Enum define las eventos del token fungible a controlar
 #[derive(Encode, Decode, TypeInfo)]
 pub enum FTEvent {
+    Transfer {
+        from: ActorId,
+        to: ActorId,
+        amount: u128,
+    },
+    Approve {
+        from: ActorId,
+        to: ActorId,
+        amount: u128,
+    },
     Ok,
     Err,
     Balance(u128),
