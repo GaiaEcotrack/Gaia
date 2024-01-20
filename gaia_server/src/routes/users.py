@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from src.models.user import UserSchema
 import os
 from dotenv import load_dotenv
+from bson import ObjectId
 
 load_dotenv()
 
@@ -27,6 +28,25 @@ def get_users():
     for user in users:
         user['_id'] = str(user['_id'])
     return jsonify({'message': 'Hello, Flask and MongoDB Atlas!', 'users': users})
+
+@users_route.route('/<id>', methods=['GET'])
+def get_user_by_id(id):
+    try:
+        # Convertir el id a un ObjectId de MongoDB
+        object_id = ObjectId(id)
+    except:
+        return jsonify({'message': 'ID inválido'}), 400
+
+    # Buscar el usuario en la base de datos
+    user = collection.find_one({'_id': object_id})
+
+    if not user:
+        return jsonify({'message': 'Usuario no encontrado'}), 404
+
+    # Convertir el ObjectId a string para la respuesta JSON
+    user['_id'] = str(user['_id'])
+    return jsonify(user)
+
 
 @users_route.route('/', methods=['POST'])
 def add_user():
@@ -80,6 +100,42 @@ def add_user():
     inserted_id = result.inserted_id
 
     return jsonify({'message': 'Usuario agregado con éxito', 'user_id': str(inserted_id)})
+
+
+@users_route.route('/<id>', methods=['PUT'])
+def update_user(id):
+    try:
+        # Convertir el id a un ObjectId de MongoDB
+        object_id = ObjectId(id)
+    except:
+        return jsonify({'message': 'ID inválido'}), 400
+
+    data = request.json
+    # Aquí puedes agregar validación para los datos si es necesario
+
+    # Actualizar el usuario en la base de datos
+    result = collection.update_one({'_id': object_id}, {'$set': data})
+
+    if result.matched_count == 0:
+        return jsonify({'message': 'Usuario no encontrado'}), 404
+
+    return jsonify({'message': 'Usuario actualizado con éxito'})
+
+@users_route.route('/<id>', methods=['DELETE'])
+def delete_user(id):
+    try:
+        # Convertir el id a un ObjectId de MongoDB
+        object_id = ObjectId(id)
+    except:
+        return jsonify({'message': 'ID inválido'}), 400
+
+    # Eliminar el usuario de la base de datos
+    result = collection.delete_one({'_id': object_id})
+
+    if result.deleted_count == 0:
+        return jsonify({'message': 'Usuario no encontrado'}), 404
+
+    return jsonify({'message': 'Usuario eliminado con éxito'})
 
 if __name__ == '__main__':
     application.run(debug=True)
