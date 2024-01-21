@@ -1,227 +1,348 @@
 {
-    "openapi":"3.0.0",
+    "openapi": "3.0.0",
     "info": {
-        "description": "This API provides data,measurements and logs from users and devices. This documentation is for developers and is under construction as of today.  ",
-        "version": "1.0.0",
-        "title": "GAIA API",
-        "license":{
-            "name": "MIT",
-            "url":"https://opensource.org/license/MIT"
-        }
+      "description": "This API provides data, measurements, and logs from users and devices. This documentation is for developers and is under construction as of today.",
+      "version": "1.0.0",
+      "title": "GAIA API",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/license/MIT"
+      }
     },
     "tags": [
-        {
-          "name": "Users API",
-          "description": "Test API"
-        }
-      ],
-      "servers": [
-        {
-        "url": "http://127.0.0.1:5001/"
-        }
+      {
+        "name": "Gaia API",
+        "description": "Test API"
+      }
+    ],
+    "servers": [
+      {
+        "url": "http://127.0.0.1:5000/"
+      }
     ],
     "components": {
-        "schemas": {
-            "Users": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                    "type": "string"
-                    },
-                    "surname": {
-                        "type": "string"
-                        },
-                        "location": {
-                    "type": "string"
-                    }
-                    
-                }
+      "schemas": {
+        "Users": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
             },
-            "Id":{
-            "type" : "integer",
-            "properties" : {
-                "name" : {
-                    "type" : "integer"
-                }
+            "password": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "nombre_apellido": {
+              "type": "string"
+            },
+            "numero_identificacion": {
+              "type": "integer"
+            },
+            "direccion": {
+              "type": "string"
+            },
+            "telefono": {
+              "type": "integer"
+            },
+            "correo_electronico": {
+              "type": "string"
+            },
+            "documento_identidad": {
+              "type": "integer"
+            },
+            "certificacion_nacimiento": {
+              "type": "string"
+            },
+            "certificaion_matrimonio": {
+              "type": "string"
+            },
+            "estado_cuenta_bancario": {
+              "type": "string"
+            },
+            "declaraciones_impuestos": {
+              "type": "string"
+            },
+            "otros_documentos_financieros": {
+              "type": "string"
             }
+          }
         },
-            "update":{
-              "type": "object",
-              "properties" :{
-                "name": {
-                    "type": "string"
-                    },
-                  "description": {
-                    "type": "string"
-                  },
-                  "example of data type boolean": {
-                    "type": "boolean"
-                  }
-              }
+        "Devices": {
+          "properties": {
+            "plantId": {
+              "type": "string"
+            },
+            "plantName": {
+              "type": "string"
+            },
+            "plantDescription": {
+              "type": "string"
+            },
+            "plantTimezone": {
+              "type": "string"
+            },
+            "deviceId": {
+              "type": "integer"
+            },
+            "deviceName": {
+              "type": "string"
+            },
+            "deviceTimezone": {
+              "type": "string"
+            },
+            "sets": {
+              "type": "string"
             }
+          }
+        },
+        "update": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "example of data type boolean": {
+              "type": "boolean"
+            }
+          }
         }
+      }
     },
     "paths": {
-        "/users": {
-            "post": {
-            "tags": [
-                "Add user API"
-            ],
-            "summary": "Add user",
-            "requestBody": {
+      "/users": {
+        "get": {
+          "tags": ["Get All users API"],
+          "summary": "Get All users",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/userList"
+              }
+            },
+            "404": {
+              "description": "NOT FOUND",
+              "schema": {
+                "$ref": "#/components/schemas/userList"
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": ["Add user API"],
+          "summary": "Add user",
+          "requestBody": {
             "description": "Post New user To Database",
             "required": true,
             "content": {
-                "application/json": {
+              "application/json": {
                 "schema": {
-                    "$ref": "#/components/schemas/userList"
-                    }
+                  "$ref": "#/components/schemas/userList"
                 }
+              }
             }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/userList"
+              }
             },
-            "responses": {
-                "200": {
-                    "description": "OK",
-                    "schema": {
-                    "$ref": "#/components/schemas/userList"
-                    }
-                },
-                "404": {
-                    "description": "NOT FOUND",
-                    "schema": {
-                    "$ref": "#/components/schemas/userList"
-                    }
+            "404": {
+              "description": "NOT FOUND",
+              "schema": {
+                "$ref": "#/components/schemas/userList"
+              }
             }
+          }
+        }
+      },
+      "/user/{id}": {
+        "get": {
+          "tags": ["Get users from API"],
+          "summary": "Get users",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "user id to update",
+              "required": true,
+              "type": "integer",
+              "schema": {
+                "$ref": "#/components/schemas/Id"
+              }
             }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/userList"
+              }
             },
-            "get" :{
-                "tags": [
-                    "Get All users API"
-                ],
-                "summary": "Get All users",
-               
-                "responses": {
-                "200": {
-                    "description": "OK",
-                    "schema": {
-                    "$ref": "#/components/schemas/userList"
-                    }
-                },
-                "404": {
-                    "description": "NOT FOUND",
-                    "schema": {
-                    "$ref": "#/components/schemas/userList"
-                    }
+            "404": {
+              "description": "NOT FOUND",
+              "schema": {
+                "$ref": "#/components/schemas/userList"
+              }
             }
-            }
-            }
+          }
         },
-        "/user/{id}":{
-
-            "get" :{
-                "tags": [
-                    "Get users from API"
-                ],
-                "summary": "Get users",
-                "parameters": [{
-                  "name": "id",
-                  "in": "path",
-                  "description": "user id to update",
-                  "required": true,
-                  "type": "integer",
-                  "schema" : {
-                      "$ref": "#/components/schemas/Id"
-                  }
-                }],
-               
-                "responses": {
-                "200": {
-                    "description": "OK",
-                    "schema": {
-                    "$ref": "#/components/schemas/userList"
-                    }
-                },
-                "404": {
-                    "description": "NOT FOUND",
-                    "schema": {
-                    "$ref": "#/components/schemas/userList"
-                    }
+        "put": {
+          "tags": ["Update users on API"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "user id to update",
+              "required": true,
+              "type": "integer",
+              "schema": {
+                "$ref": "#/components/schemas/Id"
+              }
             }
-            }
-            },
-           
-            "put": {
-            "tags": [
-                "Update users on API"
-            ],
-            "parameters": [{
-                "name": "id",
-                "in": "path",
-                "description": "user id to update",
-                "required": true,
-                "type": "integer",
-                "schema" : {
-                    "$ref": "#/components/schemas/Id"
-                }
-            }],
-            "summary": "Update user",
-            "requestBody": {
+          ],
+          "summary": "Update user",
+          "requestBody": {
             "description": "Update Existing user On Database",
             "required": true,
             "content": {
-                "application/json": {
-                    "schema": {
-                        "$ref": "#/components/schemas/update"
-                    }
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/update"
                 }
+              }
             }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/userList"
+              }
             },
-            "responses": {
-                "200": {
-                    "description": "OK",
-                    "schema": {
-                    "$ref": "#/components/schemas/userList"
-                    }
-                },
-                "404": {
-                    "description": "NOT FOUND",
-                    "schema": {
-                    "$ref": "#/components/schemas/userList"
-                    }
+            "404": {
+              "description": "NOT FOUND",
+              "schema": {
+                "$ref": "#/components/schemas/userList"
+              }
             }
-            }
+          }
         },
         "delete": {
-            "tags": [
-                "Delete user to API"
-            ],
-            "parameters": [{
-                "name": "id",
-                "in": "path",
-                "description": "user id to delete",
-                "required": true,
-                "type": "integer",
-                "schema" : {
-                    "$ref": "#/components/schemas/Id"
-                }
-            }],
-            "summary": "Delete user",
-            
-            "responses": {
-                "200": {
-                    "description": "OK",
-                    "schema": {
-                    "$ref": "#/components/schemas/userList"
-                    }
-                },
-                "404": {
-                    "description": "NOT FOUND",
-                    "schema": {
-                    "$ref": "#/components/schemas/userList"
-                    }
+          "tags": ["Delete user to API"],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "user id to delete",
+              "required": true,
+              "type": "integer",
+              "schema": {
+                "$ref": "#/components/schemas/Id"
+              }
             }
+          ],
+          "summary": "Delete user",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/userList"
+              }
+            },
+            "404": {
+              "description": "NOT FOUND",
+              "schema": {
+                "$ref": "#/components/schemas/userList"
+              }
             }
+          }
         }
+      },
+      "/devices": {
+        "get": {
+          "tags": ["Devices API"],
+          "summary": "Get All Devices",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/Devices"
+              }
+            },
+            "404": {
+              "description": "NOT FOUND",
+              "schema": {
+                "$ref": "#/components/schemas/Devices"
+              }
+            }
+          }
         }
-}
-}
+      },
+      "/devices/{device_id}": {
+        "get": {
+          "tags": ["Devices API"],
+          "summary": "Get Device by ID",
+          "parameters": [
+            {
+              "name": "device_id",
+              "in": "path",
+              "description": "Device ID to retrieve",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/Devices"
+              }
+            },
+            "404": {
+              "description": "NOT FOUND",
+              "schema": {
+                "$ref": "#/components/schemas/Devices"
+              }
+            }
+          }
+        }
+      },
+      "/devices/db": {
+        "get": {
+          "tags": ["Devices API"],
+          "summary": "Get Devices from MONGO DB",
+          "parameters": [
+            {
+              "name": "device_id",
+              "in": "path",
+              "description": "Device from DB MONGO to retrieve",
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/Devices"
+              }
+            },
+            "404": {
+              "description": "NOT FOUND",
+              "schema": {
+                "$ref": "#/components/schemas/Devices"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  

@@ -7,6 +7,7 @@ import os
 from dotenv import load_dotenv
 # from src.routes.users import users_blueprint
 from src.routes.users import users_route
+from src.routes.devices import devices_routes
 
 load_dotenv()
 
@@ -27,6 +28,9 @@ application.register_blueprint(SWAGGER_BLUEPRINT, url_prefix=SWAGGER_URL)
 # Si deseas que la ruta POST /users esté disponible como tal, la definición
 # en el Blueprint debe ser @users_route.route('/', methods=['POST']).
 application.register_blueprint(users_route, url_prefix='/users')
+application.register_blueprint(devices_routes, url_prefix='/devices')
+
+
 
 mongo_uri = os.getenv("MONGO_URI")
 # mongo_uri = 'mongodb+srv://gaiamongodb:84AmBlbGBNRr5CBJ@cluster0.wio4vv2.mongodb.net/?retryWrites=true&w=majority'
