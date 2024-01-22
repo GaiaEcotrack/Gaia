@@ -1,0 +1,30 @@
+[
+    {
+        "plant": {
+            "plantId": "1001",
+            "name": "Solar Plant One",
+            "description": "A solar energy plant in California.",
+            "timezone": "America/Los_Angeles"
+        },
+        "device": {
+            "deviceId": "2001",
+            "name": "Inverter 1A",
+            "timezone": "America/Los_Angeles"
+        },
+        "sets": ["EnergyAndPowerBattery"]
+    },
+    {
+        "plant": {
+            "plantId": "1002",
+            "name": "Wind Farm Two",
+            "description": "A wind energy farm in Texas.",
+            "timezone": "America/Chicago"
+        },
+        "device": {
+            "deviceId": "2002",
+            "name": "Turbine 2B",
+            "timezone": "America/Chicago"
+        },
+        "sets": ["EnergyAndPowerBattery"]
+    }
+]
