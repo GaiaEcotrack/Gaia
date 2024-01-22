@@ -6,7 +6,7 @@ import { ApiLoader } from "@/components";
 import { Header } from "@/components/layout";
 import { withProviders } from "@/app/hocs";
 import { useWalletSync } from "@/features/wallet/hooks";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { Routing } from './pages/index';
 import { SideBar } from './pages/home/SideBar';
 /* eslint-disable */
@@ -27,6 +27,7 @@ initializeApp(config.firebaseConfig);
 function Component() {
   const { isApiReady } = useApi();
   const { isAccountReady } = useAccount();
+  const location = useLocation();
 
   useWalletSync();
 
@@ -37,25 +38,25 @@ function Component() {
       {/* {window.location.pathname !== '/assets/logo' && 
       window.location.pathname !== '/' && <Header isAccountVisible={isAccountReady} />} */}
 
-      {window.location.pathname !== '/assets/logo' &&
-      window.location.pathname !== '/serviceTerms' &&
-      window.location.pathname !== '/dataPrivacy' &&
-      window.location.pathname !== '/' && <SideBar />}      
+      { location.pathname !== '/assets/logo' &&
+        location.pathname !== '/serviceTerms' &&
+        location.pathname !== '/dataPrivacy' &&
+        location.pathname !== '/' && <SideBar />}    
 
       <main>
-        {(window.location.pathname === '/assets/logo') && <Logo />}
-        {(window.location.pathname === '/serviceTerms') && <TermsAndPolicy />}
-        {(window.location.pathname === '/dataPrivacy') && <TermsAndPolicy />}
+        {location.pathname === '/assets/logo' && <Logo />}
+        {location.pathname === '/serviceTerms' && <TermsAndPolicy />}
+        {location.pathname === '/dataPrivacy' && <TermsAndPolicy />}
 
         {isAppReady && 
-        window.location.pathname !== '/assets/logo' &&
-        window.location.pathname !== '/serviceTerms' &&
-        window.location.pathname !== '/dataPrivacy' && <Routing />}
+          location.pathname !== '/assets/logo' &&
+          location.pathname !== '/serviceTerms' &&
+          location.pathname !== '/dataPrivacy' && <Routing />}
 
         {!isAppReady && 
-        window.location.pathname !== '/assets/logo' &&
-        window.location.pathname !== '/serviceTerms' &&
-        window.location.pathname !== '/dataPrivacy' && <ApiLoader />}
+          location.pathname !== '/assets/logo' &&
+          location.pathname !== '/serviceTerms' &&
+          location.pathname !== '/dataPrivacy' && <ApiLoader />}
       </main>
     
         <Routes>
@@ -66,10 +67,10 @@ function Component() {
           <Route path='/loginPrueba' element={<AuthForm/>}/>
         </Routes>
 
-      {window.location.pathname !== '/assets/logo' &&
-      window.location.pathname !== '/serviceTerms' &&
-      window.location.pathname !== '/dataPrivacy' &&
-      window.location.pathname !== '/' && <Footer />}
+        { location.pathname !== '/assets/logo' &&
+        location.pathname !== '/serviceTerms' &&
+        location.pathname !== '/dataPrivacy' &&
+        location.pathname !== '/' && <Footer />}
 
   </div>
   );
