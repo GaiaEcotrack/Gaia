@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 # from src.routes.users import users_blueprint
 from src.routes.users import users_route
 from src.routes.devices import devices_routes
+from src.routes.api_growth import api_growatt_bp
 
 load_dotenv()
 
@@ -29,6 +30,7 @@ application.register_blueprint(SWAGGER_BLUEPRINT, url_prefix=SWAGGER_URL)
 # en el Blueprint debe ser @users_route.route('/', methods=['POST']).
 application.register_blueprint(users_route, url_prefix='/users')
 application.register_blueprint(devices_routes, url_prefix='/devices')
+application.register_blueprint(api_growatt_bp, url_prefix='/api_growatt')
 
 
 
