@@ -65,10 +65,7 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
     value: 0,
   };
 
-
-
-  const signer = async () => {
-    pushData()
+  async function signer(){
     const localaccount = account?.address;
     const isVisibleAccount = accounts.some(
       (visibleAccount) => visibleAccount.address === localaccount
@@ -77,18 +74,54 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
     if (isVisibleAccount) {
       // Create a message extrinsic
       const transferExtrinsic = await api.message.send(message, metadata);
-      // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
-      const keyring = await GearKeyring.fromSuri('//Alice');
-  
-      await transferExtrinsic.signAndSend(keyring,(event:any)=>{
-          console.log(event.toHuman());
-          setAlertTransaction(true)
-          
-      })
+
+      const injector = await web3FromSource(accounts[0].meta.source);
+
+      transferExtrinsic
+        .signAndSend(
+          account?.address ?? alert.error("No account"),
+          { signer: injector.signer },
+          ({ status }: { status: any }) => {
+            if (status.isInBlock) {
+              alert.success(status.asInBlock.toString());
+            } else {
+                alert.info("In process")
+              if (status.type === "Finalized") {
+                alert.success(status.type);
+              }
+            }
+          }
+        )
+        .catch((error: any) => {
+          alert.error(error)
+        });
     } else {
       alert.error("Account not available to sign");
     }
   };
+
+  // const signer = async () => {
+  //   pushData()
+  //   const localaccount = account?.address;
+  //   const isVisibleAccount = accounts.some(
+  //     (visibleAccount) => visibleAccount.address === localaccount
+  //   );
+
+  //   if (isVisibleAccount) {
+  //     // Create a message extrinsic
+  //     const transferExtrinsic = await api.message.send(message, metadata);
+  //     // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
+  //     const keyring = await GearKeyring.fromSuri('//Alice');
+  
+  //     await transferExtrinsic.signAndSend(keyring,(event:any)=>{
+  //         console.log(event.toHuman());
+  //         setAlertTransaction(true)
+          
+  //     })
+  //   } else {
+  //     alert.error("Account not available to sign");
+  //   }
+  // };
 
   return (
     <div>
