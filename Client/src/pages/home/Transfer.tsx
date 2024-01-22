@@ -16,7 +16,6 @@ interface Transaccion {
   total: any;
 }
 
-
 function Transfer({accountTo, quantity,state}:ModalTypes) {
 
   const [alertTransaction, setAlertTransaction] = useState(false)
@@ -41,11 +40,11 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
   const { accounts, account } = useAccount();
   const { api } = useApi();
   // Add your programID
-  const programIdKey = import.meta.env.VITE_APP_PROGRAM_ID
+  const programIdKey = process.env.VITE_APP_PROGRAM_ID
 
 
   // Add your metadata.txt
-   const meta = import.meta.env.VITE_APP_META_DATA
+  const meta = process.env.VITE_APP_META_DATA 
 
 
    const metadata = ProgramMetadata.from(meta!);
@@ -98,7 +97,7 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
     } else {
       alert.error("Account not available to sign");
     }
-  };
+};
 
   // const signer = async () => {
   //   pushData()

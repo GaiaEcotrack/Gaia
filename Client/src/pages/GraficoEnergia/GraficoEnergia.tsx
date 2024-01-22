@@ -285,26 +285,30 @@
   };
   
   const signerTwo = async () => {
-    const localaccount = account?.address;
-    const isVisibleAccount = accounts.some(
-      (visibleAccount) => visibleAccount.address === localaccount
-    );
-  
-    if (isVisibleAccount) {
-      // Create a message extrinsic
-      const transferExtrinsic = await api.message.send(messageTwo, metadata);
-      // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
-      const keyring = await GearKeyring.fromSuri('//Alice');
-  
-      await transferExtrinsic.signAndSend(keyring,(event:any)=>{
-          console.log("transferencia a la cuenta local hecha");
+    if(accounts){
+
+      const localaccount = account?.address;
+      const isVisibleAccount = accounts.some(
+        (visibleAccount) => visibleAccount.address === localaccount
+        );
+        
+        if (isVisibleAccount && api) {
+          // Create a message extrinsic
+          const transferExtrinsic = await api.message.send(messageTwo, metadata);
+          // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
+          const keyring = await GearKeyring.fromSuri('//Alice');
           
-          
-          
-      })
-    } else {
-      alert.error("Account not available to sign");
+          await transferExtrinsic.signAndSend(keyring,(event:any)=>{
+            console.log("transferencia a la cuenta local hecha");
+            
+            
+            
+          })
+        } else {
+          alert.error("Account not available to sign");
+        }
     }
+        
   };
   
   
