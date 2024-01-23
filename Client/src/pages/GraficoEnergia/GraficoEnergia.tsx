@@ -84,10 +84,25 @@
   };
   /* eslint-disable */
 
+  interface SomeConfig {
+    programIdKey: string;
+    meta: string;
+    MidWallet: string;
+  }
+
+  const getConfig = (): SomeConfig => {
+    return {
+      programIdKey: import.meta.env.VITE_APP_PROGRAM_ID,
+      meta: import.meta.env.VITE_APP_META_DATA,
+      MidWallet: import.meta.env.VITE_APP_MID_KEY,
+    };
+  };
+
   const GraficoEnergia = () => {  
     // estas dos funciones la movi arriba para usarlas en el scop
     const { accounts, account } = useAccount();
     const addresLocal = account?.address
+    const config = getConfig();
 
     //mensaje de conectar waller
     const [walletMessage, setWalletMessage] = useState('');
@@ -219,12 +234,12 @@
     }
     }, [totalGenerado, totalConsumido, excedenteCapturado]);
     
-    const handleCaptureExcedente = () => {
-      const excedente = Math.floor(
-        calcularExcedente(totalGenerado, totalConsumido) * 10
-      );
-      setExcedenteCapturado(excedente);
-    };
+    // const handleCaptureExcedente = () => {
+    //   const excedente = Math.floor(
+    //     calcularExcedente(totalGenerado, totalConsumido) * 10
+    //   );
+    //   setExcedenteCapturado(excedente);
+    // };
     
 
 
@@ -235,11 +250,11 @@
   // const { accounts, account } = useAccount();
   const { api } = useApi();
   // Add your programID
-  const programIdKey = process.env.programIdKey // se modico esa linea donde anteriormente estaba import.meta.env.VITE_APP_PROGRAM_ID para correr los test si se desea modificar esta en la linea 95
+  const programIdKey = config.programIdKey // se modico esa linea donde anteriormente estaba import.meta.env.VITE_APP_PROGRAM_ID para correr los test si se desea modificar esta en la linea 95
 
   // Add your metadata.txt
-  const meta = process.env.meta  // se modico esa linea donde anteriormente estaba import.meta.env.VITE_APP_META_DATA para correr los test si se desea modificar esta en la linea 96
-  const MidWallet = process.env.MidWallet  // se modico esa linea donde anteriormente estaba import.meta.env.VITE_APP_MID_KEY para correr los test si se desea modificar esta en la linea 97
+  const meta = config.meta  // se modico esa linea donde anteriormente estaba import.meta.env.VITE_APP_META_DATA para correr los test si se desea modificar esta en la linea 96
+  const MidWallet = config.MidWallet  // se modico esa linea donde anteriormente estaba import.meta.env.VITE_APP_MID_KEY para correr los test si se desea modificar esta en la linea 97
 
     const addresTransaction = account?.address
 
@@ -270,15 +285,14 @@
     value: 0,
   };
   
-  const signerTwo = async () => {
-    if(accounts){
+  const signerTwo = async () => {  
 
       const localaccount = account?.address;
-      const isVisibleAccount = accounts.some(
+      const isVisibleAccount = accounts?.some(
         (visibleAccount) => visibleAccount.address === localaccount
         );
         
-        if (isVisibleAccount && api) {
+        if (isVisibleAccount) {
           // Create a message extrinsic
           const transferExtrinsic = await api.message.send(messageTwo, metadata);
           // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
@@ -293,7 +307,7 @@
         } else {
           alert.error("Account not available to sign");
         }
-    }
+    
         
   };
   
