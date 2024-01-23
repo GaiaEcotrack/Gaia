@@ -57,9 +57,9 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
           tabIndex={0}
         >
           {open && window.innerWidth < 640 ? (
-            <img src="/control.png" alt="Toggle Sidebar" className="border-2" />
+            <img src="/control.png" alt="Toggle Sidebar" className="" />
           ) : window.innerWidth >= 640 ? (
-            <img src="/control.png" alt="Toggle Sidebar" className="border-2" />
+            <img src="/control.png" alt="Toggle Sidebar" className="" />
           ) : (
             <CgMenu size={35} />
           )}
@@ -118,8 +118,9 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
             </Link>
           ))}
         </ul>
-        <div>{open && <AccountInfo />}</div>
-        <div className={` ${open ? "sm:block" : "hidden sm:block"}`}>
+        <div className="mt-5">{open && <AccountInfo />}</div>
+
+        <div className={` ${open ? "sm:block" : "hidden sm:block"} mt-5`}>
           {!open && <AccountInfo />}
         </div>
 

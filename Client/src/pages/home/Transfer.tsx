@@ -1,5 +1,6 @@
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { decodeAddress, ProgramMetadata, GearKeyring } from "@gear-js/api";
+import { web3FromSource } from "@polkadot/extension-dapp";
 import { useState } from "react";
 import { AlertsTransaction } from "../../components/AlertModal/AlertsTransaction";
 
@@ -66,15 +67,15 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
 
   async function signer(){
     const localaccount = account?.address;
-    const isVisibleAccount = accounts.some(
+    const isVisibleAccount = accounts?.some(
       (visibleAccount) => visibleAccount.address === localaccount
     );
 
-    if (isVisibleAccount) {
+    if (isVisibleAccount && api) {
       // Create a message extrinsic
       const transferExtrinsic = await api.message.send(message, metadata);
 
-      const injector = await web3FromSource(accounts[0].meta.source);
+      const injector = await web3FromSource(accounts?.[0]?.meta.source || 'unknown');
 
       transferExtrinsic
         .signAndSend(

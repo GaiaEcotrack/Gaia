@@ -84,25 +84,10 @@
   };
   /* eslint-disable */
 
-  interface SomeConfig {
-    programIdKey: string;
-    meta: string;
-    MidWallet: string;
-  }
-
-  const getConfig = (): SomeConfig => {
-    return {
-      programIdKey: import.meta.env.VITE_APP_PROGRAM_ID,
-      meta: import.meta.env.VITE_APP_META_DATA,
-      MidWallet: import.meta.env.VITE_APP_MID_KEY,
-    };
-  };
-
   const GraficoEnergia = () => {  
     // estas dos funciones la movi arriba para usarlas en el scop
     const { accounts, account } = useAccount();
     const addresLocal = account?.address
-    const config = getConfig();
 
     //mensaje de conectar waller
     const [walletMessage, setWalletMessage] = useState('');
@@ -220,6 +205,7 @@
       
       if (totalConsumido < totalGenerado) {
         setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
+        setWalletMessage("")
         } else {
         setTotalExcedente(0);
       }
@@ -249,11 +235,11 @@
   // const { accounts, account } = useAccount();
   const { api } = useApi();
   // Add your programID
-  const programIdKey = config.programIdKey // se modico esa linea donde anteriormente estaba import.meta.env.VITE_APP_PROGRAM_ID para correr los test si se desea modificar esta en la linea 95
+  const programIdKey = process.env.programIdKey // se modico esa linea donde anteriormente estaba import.meta.env.VITE_APP_PROGRAM_ID para correr los test si se desea modificar esta en la linea 95
 
   // Add your metadata.txt
-  const meta = config.meta  // se modico esa linea donde anteriormente estaba import.meta.env.VITE_APP_META_DATA para correr los test si se desea modificar esta en la linea 96
-  const MidWallet = config.MidWallet  // se modico esa linea donde anteriormente estaba import.meta.env.VITE_APP_MID_KEY para correr los test si se desea modificar esta en la linea 97
+  const meta = process.env.meta  // se modico esa linea donde anteriormente estaba import.meta.env.VITE_APP_META_DATA para correr los test si se desea modificar esta en la linea 96
+  const MidWallet = process.env.MidWallet  // se modico esa linea donde anteriormente estaba import.meta.env.VITE_APP_MID_KEY para correr los test si se desea modificar esta en la linea 97
 
     const addresTransaction = account?.address
 
