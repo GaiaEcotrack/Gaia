@@ -220,6 +220,7 @@
       
       if (totalConsumido < totalGenerado) {
         setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
+        setWalletMessage("")
         } else {
         setTotalExcedente(0);
       }
@@ -233,12 +234,12 @@
     }
     }, [totalGenerado, totalConsumido, excedenteCapturado]);
     
-    const handleCaptureExcedente = () => {
-      const excedente = Math.floor(
-        calcularExcedente(totalGenerado, totalConsumido) * 10
-      );
-      setExcedenteCapturado(excedente);
-    };
+    // const handleCaptureExcedente = () => {
+    //   const excedente = Math.floor(
+    //     calcularExcedente(totalGenerado, totalConsumido) * 10
+    //   );
+    //   setExcedenteCapturado(excedente);
+    // };
     
 
 
@@ -284,15 +285,14 @@
     value: 0,
   };
   
-  const signerTwo = async () => {
-    if(accounts){
+  const signerTwo = async () => {  
 
       const localaccount = account?.address;
-      const isVisibleAccount = accounts.some(
+      const isVisibleAccount = accounts?.some(
         (visibleAccount) => visibleAccount.address === localaccount
         );
         
-        if (isVisibleAccount && api) {
+        if (isVisibleAccount) {
           // Create a message extrinsic
           const transferExtrinsic = await api.message.send(messageTwo, metadata);
           // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
@@ -307,7 +307,7 @@
         } else {
           alert.error("Account not available to sign");
         }
-    }
+    
         
   };
   
