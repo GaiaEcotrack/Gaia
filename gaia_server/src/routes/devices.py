@@ -4,6 +4,7 @@ import os
 from pymongo import MongoClient
 from bson import ObjectId
 from dotenv import load_dotenv
+import requests
 
 load_dotenv()
 
@@ -114,3 +115,6 @@ def get_device_by_id(device_id):
         return jsonify({'message': 'Error interno del servidor', 'error': str(e)})
     
     #PENSAR EN METODO PARA TRAER POR EL ID DE LOS DISPOSITIVOS DE LA API Y NO DE MONGO DB
+# ...
+
+#PENSAR EN METODO PARA TRAER POR EL ID DE LOS DISPOSITIVOS DE LA API Y NO DE MONGO DB

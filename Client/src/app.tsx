@@ -21,6 +21,7 @@ import { config } from "./components/config/config"
 import {Footer} from './pages/Footer/Footer';
 import Logo from "./pages/Logo/Logo";
 import TermsAndPolicy from "./pages/terms&policies/Terms&policy";
+import Face from "./components/Face/Face";
 
 initializeApp(config.firebaseConfig);
 
@@ -64,6 +65,7 @@ function Component() {
           <Route path='/lab' element={<Labs />} />
           <Route path='/settings' element={<PublicProfile/>} />
           <Route path='/loginPrueba' element={<AuthForm/>}/>
+          <Route path='/face' element={<Face/>}/>
         </Routes>
 
       {window.location.pathname !== '/assets/logo' &&
