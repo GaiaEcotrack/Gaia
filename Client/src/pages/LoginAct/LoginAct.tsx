@@ -2,6 +2,7 @@ import { Link, useNavigate} from "react-router-dom";
 // import { signInWithGoogle } from "../../firebase";
 import { useState } from 'react';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { LoginSignUp } from "../../components/LoginSignUp/SignUp";
 import '../../global.css'
 
 /* eslint-disable */
@@ -12,6 +13,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const auth = getAuth();
   const navigate = useNavigate();
   const [authing, setAuthing] = useState(false);
+  const [showSignUp, setShowSignUp] = useState(false)
   
   const signInWithGoogle = async () => {
     setAuthing(true);    
@@ -57,15 +59,15 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
 
       <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
         <div className="w-full h-100">
-            <div className="flex flex-col gap-2 text-center item-center justify-center ">
+            <div className="flex flex-col gap-2 text-center item-center justify-center laptop">
                 <img className="w-32 h-32 mx-auto" src="/LOGOGAIASOLO.png" alt="" />
                 <h1 className="text-black text-3xl">Gaia Ecotrack</h1>
             </div>
-          <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
+          <h1 className="flex justify-center text-2xl text-black font-bold 2xl:text-2xl leading-tight 2xl:mt-12 laptop">
             Log in to your account
           </h1>
 
-          <form className="mt-6" action="#" method="POST">
+          <form className="2xl:mt-6 laptop" action="#" method="POST">
             <div>
               <label htmlFor="email" className="block text-gray-700">
                 Email Address
@@ -107,15 +109,15 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
 
             <button
               type="submit"
-              className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg px-4 py-3 mt-6"
+              className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg px-4 py-3 mt-3 2xl:mt-6"
             >
-              Log In
+              Sign In
             </button>
           </form>
 
-          <hr className="my-6 border-gray-300 w-full" />
+          <hr className="2xl:my-6 border-gray-300 w-full" />
 
-          <div className="flex flex-col gap-5 items-center">
+          <div className="flex flex-col gap-5 items-center laptop">
 
           <Link className="w-full" to="/home">
             <button
@@ -175,12 +177,16 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
             </div>
           </button>
 
-          <Link to="/register" className="text-blue-500 hover:text-blue-700 font-semibold">
-            Create an account
-          </Link>
+          <button type="button"
+            className="text-blue-500 hover:text-blue-700 font-semibold" 
+            onClick={() => {setShowSignUp(true)}}
+            >Create an account
+          </button>
+
           </div>
         </div>
       </div>
+      <LoginSignUp showSignUp={showSignUp} setShowSignUp={setShowSignUp}/>
     </section>
   );
 };
