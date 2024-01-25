@@ -28,6 +28,7 @@
     "@radix-ui/react-select": "1.2.2",
     "@tanstack/react-table": "8.9.3",
     "assert": "2.0.0",
+    "axios": "^1.6.5",
     "buffer": "6.0.3",
     "chart.js": "^4.4.1",
     "class-variance-authority": "0.6.1",

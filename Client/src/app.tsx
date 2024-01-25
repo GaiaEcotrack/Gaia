@@ -9,16 +9,16 @@ import { useWalletSync } from "@/features/wallet/hooks";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Routing } from './pages/index';
 import { SideBar } from './pages/home/SideBar';
+import DashBoard from "./components/DashBoard/DashBoard";
 /* eslint-disable */
 import { SuperUser } from './pages/superUser/SuperUser';
 import { Labs } from './pages/Labs/Labs';
 import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
-import {AuthForm} from './pages/LoginAct/LoginAct';
+import { AuthForm } from './pages/LoginAct/LoginAct';
 import { PublicProfile } from './components/UserNew/UserNew';
 import { initializeApp } from 'firebase/app';
 import { config } from "./components/config/config"
-// import AuthRoute from './components/AuthRoute';
-import {Footer} from './pages/Footer/Footer';
+import { Footer } from './pages/Footer/Footer';
 import Logo from "./pages/Logo/Logo";
 import TermsAndPolicy from "./pages/terms&policies/Terms&policy";
 
@@ -32,13 +32,13 @@ function Component() {
   useWalletSync();
 
   const isAppReady = isApiReady && isAccountReady;
+  const shouldShowSidebar = !['/dashboard'].includes(location.pathname);
+  const shouldShowFooter = !['/dashboard'].includes(location.pathname);
 
   return (    
     <div className='font-sans bg-gradient-to-tr from-[#181745] from-10% via-[#181745] via-30% to-[#216e93] to-90% text-white'>
-      {/* {window.location.pathname !== '/assets/logo' && 
-      window.location.pathname !== '/' && <Header isAccountVisible={isAccountReady} />} */}
-
-      { location.pathname !== '/assets/logo' &&
+      {shouldShowSidebar && 
+        location.pathname !== '/assets/logo' &&
         location.pathname !== '/serviceTerms' &&
         location.pathname !== '/dataPrivacy' &&
         location.pathname !== '/' && <SideBar />}    
@@ -49,30 +49,24 @@ function Component() {
         {location.pathname === '/dataPrivacy' && <TermsAndPolicy />}
 
         {isAppReady && 
-          location.pathname !== '/assets/logo' &&
-          location.pathname !== '/serviceTerms' &&
-          location.pathname !== '/dataPrivacy' && <Routing />}
+          !['/assets/logo', '/serviceTerms', '/dataPrivacy'].includes(location.pathname) && <Routing />}
 
         {!isAppReady && 
-          location.pathname !== '/assets/logo' &&
-          location.pathname !== '/serviceTerms' &&
-          location.pathname !== '/dataPrivacy' && <ApiLoader />}
+          !['/assets/logo', '/serviceTerms', '/dataPrivacy'].includes(location.pathname) && <ApiLoader />}
       </main>
     
-        <Routes>
-          <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
-          <Route path="/superUser" element={<SuperUser />} />
-          <Route path='/lab' element={<Labs />} />
-          <Route path='/settings' element={<PublicProfile/>} />
-          <Route path='/loginPrueba' element={<AuthForm/>}/>
-        </Routes>
+      <Routes>
+        <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
+        <Route path="/superUser" element={<SuperUser />} />
+        <Route path='/lab' element={<Labs />} />
+        <Route path='/settings' element={<PublicProfile/>} />
+        <Route path='/loginPrueba' element={<AuthForm/>}/>
+        <Route path="/dashboard" element={<DashBoard />} />
+      </Routes>
 
-        { location.pathname !== '/assets/logo' &&
-        location.pathname !== '/serviceTerms' &&
-        location.pathname !== '/dataPrivacy' &&
-        location.pathname !== '/' && <Footer />}
+      { shouldShowFooter && <Footer />}
 
-  </div>
+    </div>
   );
 }
 
