@@ -52,7 +52,7 @@ function Transaction () {
   const [fundsState, setFundsState] = useState(false)
   const [alert, setAlert] = useState(false)
 
-  const { accounts, account } = useAccount();
+  const {account } = useAccount();
   const addresLocal = account?.address
 
   const onClose = () => {
@@ -69,9 +69,9 @@ function Transaction () {
       setAlert(true)    
     }
   };
-  const openCardConvert = () => {
-    setConvertTokenState(true);
-  };
+  // const openCardConvert = () => {
+  //   setConvertTokenState(true);
+  // };
   const openCardFunds = () => {
     setFundsState(true);
   };

@@ -2,7 +2,6 @@ import { CgMenu } from "react-icons/cg";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
-import { AccountButton } from "../layout/header/account-info/account-button";
 import { AccountInfo } from "../layout/header/account-info";
 
 /* eslint-disable */
@@ -57,9 +56,9 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
           tabIndex={0}
         >
           {open && window.innerWidth < 640 ? (
-            <img src="/control.png" alt="Toggle Sidebar" className="border-2" />
+            <img src="/control.png" alt="Toggle Sidebar" className="" />
           ) : window.innerWidth >= 640 ? (
-            <img src="/control.png" alt="Toggle Sidebar" className="border-2" />
+            <img src="/control.png" alt="Toggle Sidebar" className="" />
           ) : (
             <CgMenu size={35} />
           )}
@@ -118,8 +117,9 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
             </Link>
           ))}
         </ul>
-        <div>{open && <AccountInfo />}</div>
-        <div className={` ${open ? "sm:block" : "hidden sm:block"}`}>
+        <div className="mt-5">{open && <AccountInfo />}</div>
+
+        <div className={` ${open ? "sm:block" : "hidden sm:block"} mt-5`}>
           {!open && <AccountInfo />}
         </div>
 

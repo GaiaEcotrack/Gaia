@@ -31,6 +31,7 @@
   import PolygonDown from "../../assets/PolygonDown.svg";
   import { WeatherNavbar } from "../../components/WeatherNavbar/WeatherNavbar";
   import { WeatherPanel } from "../../components/WeatherNavbar/WeatherPanel";
+import EnergyMonitor from "@/components/EnergyComponentNew/EnergyMonitor";
   // import { SideBarNew } from "components/SideBarNew/SideBarNew";
 
   ChartJS.register(
@@ -89,6 +90,7 @@
     meta: string;
     MidWallet: string;
   }
+  
 
   const getConfig = (): SomeConfig => {
     return {
@@ -129,6 +131,18 @@
         },
       ],
     });
+
+  const [energyData, setEnergyData] = useState(50);
+
+  useEffect(() => {
+    // Simula la actualización en tiempo real de los datos de energía
+    const interval = setInterval(() => {
+      setEnergyData(Math.random());
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+    
 
     const openPopup = () => {
       setPopupOpen(true);
@@ -220,6 +234,7 @@
       
       if (totalConsumido < totalGenerado) {
         setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
+        setWalletMessage("")
         } else {
         setTotalExcedente(0);
       }
@@ -233,12 +248,12 @@
     }
     }, [totalGenerado, totalConsumido, excedenteCapturado]);
     
-    const handleCaptureExcedente = () => {
-      const excedente = Math.floor(
-        calcularExcedente(totalGenerado, totalConsumido) * 10
-      );
-      setExcedenteCapturado(excedente);
-    };
+    // const handleCaptureExcedente = () => {
+    //   const excedente = Math.floor(
+    //     calcularExcedente(totalGenerado, totalConsumido) * 10
+    //   );
+    //   setExcedenteCapturado(excedente);
+    // };
     
 
 
@@ -284,15 +299,14 @@
     value: 0,
   };
   
-  const signerTwo = async () => {
-    if(accounts){
+  const signerTwo = async () => {  
 
       const localaccount = account?.address;
-      const isVisibleAccount = accounts.some(
+      const isVisibleAccount = accounts?.some(
         (visibleAccount) => visibleAccount.address === localaccount
         );
         
-        if (isVisibleAccount && api) {
+        if (isVisibleAccount) {
           // Create a message extrinsic
           const transferExtrinsic = await api.message.send(messageTwo, metadata);
           // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
@@ -307,7 +321,7 @@
         } else {
           alert.error("Account not available to sign");
         }
-    }
+    
         
   };
   
@@ -466,6 +480,9 @@
               <p className="text-[#1d335b] text-xl m-2 text-center">{showDate}</p>
             </div>
           </div>
+        </div>
+        <div className="flex items-center flex-col justify-center">
+      <EnergyMonitor percentage={60} size={200}/>
         </div>
 
         <ModalMintGaia 

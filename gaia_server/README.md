@@ -1,74 +1,57 @@
- # Creacion del servidor con python flask y conexion con mongoDb (atlas)
+# Gaia eco-track Server
 
-primero crear entorno virtual de python
+Servidor de la plataforma descentralizada Gaia, gestion de energia renovable mediante el uso de la blockchain Vara network.
+El futuro llegó de las energias renovables esta aqui, y su nombre es Gaia Eco-track.
+Backend creado con python, flask mongoDb como base de datos.
 
-1- instalar python ( pip es el gestor de paquetes de python )
+## Requisitos Previos
 
-1- instalar mongo Db (mongo db service y mongo compass) 
+Antes de comenzar, asegúrate de tener instalado Python en tu sistema. Este proyecto requiere Python 3.x.
 
-2- crear un entorno virtual (venv) con el siguiente comando:
+### Instalación de Python en Windows
 
-python o python3 -m venv venv.   
+1. **Descargar el Instalador de Python**:
+   - Visita el [sitio web oficial de Python](https://www.python.org/).
+   - Dirígete a la sección de descargas para Windows o usa este enlace directo: [Descargas de Python para Windows](https://www.python.org/downloads/windows/).
+   - Descarga el instalador más reciente de Python 3 para Windows. Selecciona la versión de 64 bits a menos que tu sistema requiera la versión de 32 bits.
 
-ese comando crea el entorno virtual para separar las dependencias del proyecto
+2. **Ejecutar el Instalador**:
+   - Localiza el archivo descargado y ejecútalo.
+   - Asegúrate de marcar la casilla "Add Python 3.x to PATH" antes de hacer clic en "Install Now".
 
-3-  ubicarnos en el ambiente virtual:
+3. **Verificar la Instalación**:
+   - Abre la línea de comandos y escribe `python --version`. Deberías ver la versión de Python instalada.
 
-mac
+4. **Instalar pip**:
+   - `pip` se instala automáticamente con Python 3.4 y versiones posteriores.
+   - Verifica su instalación con `pip --version`.
 
-source venv/bin/activate
+5. **Actualizar pip** (opcional):
+   - Actualiza pip con el comando `python -m pip install --upgrade pip`.
 
-windows bash
+## Configuración del Proyecto
 
-source venv/Scripts/activate
+Instrucciones para configurar el proyecto localmente. Por ejemplo:
 
-cmd windows:
+```bash
+git clone https://github.com/ilichb/VaraEnergy.git
+cd VaraEnergy
+# Continúa con las instrucciones específicas de configuración del proyecto
 
+# Crear un entorno virtual
+python -m venv venv
+
+# Activar el entorno virtual
+# En Windows
 .\venv\Scripts\activate
 
-crear servidor con flask
+# En Unix o MacOS
+source venv/bin/activate
 
-1- instalar flask:
+Instalacion de dependencias
 
-pip install flask
+pip install -r requirements.txt
 
-2- crear carpeta src en raiz del proyecto y crear archivo app.py
+Iniciar aplicacion
 
-aaaca vamos a levantar el servidor con flask.
-
-3- crear carpeta ‘templates’, y dentro el archivo index.html (puede tener cualquier nombre)
-
-4- en ese arhivo vamos a poner contenido apra mostrar de prueba en nuestro servidor
-
-5- crear carpeta routes, y dentro arhivos con nombres de las rutas.
-
-6- arhivo users.py: importamos Blueprint el cual 
-
-```python
-permite organizar y estructurar tu aplicación de manera modular. Puedes pensar en un Blueprint como un conjunto de rutas, 
-# controladores y recursos que se pueden registrar y luego incorporar en tu aplicación principal.
-# Cuando importas Blueprint desde Flask, puedes crear instancias de esta clase para definir grupos lógicos de rutas y 
-# funciones de vista. Estos blueprints se pueden registrar en tu aplicación principal posteriormente.
-```
-
-MONGODB:
-
-1- pip install python flask-pymongo
-
-2- pip install python-dotenv
-
-ESTRUCTURA DE CARPETAS
-
-SRC: todo el contenido de la app va aca dentro. 
-
-VENV: carpeta del entorno virtual en la raiz del proyecto
-
-.env en la raiz del proyecto
-
-.gitignore en la raiz del proyecto
-
-[README.md](http://README.md) en la raiz del proyecto
-
-dentro de cada carpeta dentro de SRC (menos en carpeta utils), creamos un archivo __init__ .py para que cada una funcione como un paquete de python.
-
-pip freeze > requirements.txt ( crea archivo de dependencias para instalarlas desde alli al compartir el proyecto)
+python application.py

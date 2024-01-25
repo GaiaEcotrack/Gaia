@@ -3,7 +3,6 @@ import 'tailwindcss/tailwind.css';
 import './index.css'
 import { useAccount, useApi } from "@gear-js/react-hooks";
 import { ApiLoader } from "@/components";
-import { Header } from "@/components/layout";
 import { withProviders } from "@/app/hocs";
 import { useWalletSync } from "@/features/wallet/hooks";
 import { Routes, Route, useLocation } from "react-router-dom";
@@ -21,6 +20,7 @@ import { config } from "./components/config/config"
 import { Footer } from './pages/Footer/Footer';
 import Logo from "./pages/Logo/Logo";
 import TermsAndPolicy from "./pages/terms&policies/Terms&policy";
+import Face from "./components/Face/Face";
 
 initializeApp(config.firebaseConfig);
 
@@ -55,14 +55,16 @@ function Component() {
           !['/assets/logo', '/serviceTerms', '/dataPrivacy'].includes(location.pathname) && <ApiLoader />}
       </main>
     
-      <Routes>
-        <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
-        <Route path="/superUser" element={<SuperUser />} />
-        <Route path='/lab' element={<Labs />} />
-        <Route path='/settings' element={<PublicProfile/>} />
-        <Route path='/loginPrueba' element={<AuthForm/>}/>
-        <Route path="/dashboard" element={<DashBoard />} />
-      </Routes>
+        <Routes>
+          <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
+          <Route path="/superUser" element={<SuperUser />} />
+          <Route path='/lab' element={<Labs />} />
+          <Route path='/settings' element={<PublicProfile/>} />
+          <Route path='/loginPrueba' element={<AuthForm/>}/>
+          <Route path='/face' element={<Face/>}/>
+          <Route path="/dashboard" element={<DashBoard />} />
+        </Routes>
+
 
       { shouldShowFooter && <Footer />}
 
