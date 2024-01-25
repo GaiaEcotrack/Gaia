@@ -17,10 +17,12 @@ import {AuthForm} from './pages/LoginAct/LoginAct';
 import { PublicProfile } from './components/UserNew/UserNew';
 import { initializeApp } from 'firebase/app';
 import { config } from "./components/config/config"
-// import AuthRoute from './components/AuthRoute';
 import {Footer} from './pages/Footer/Footer';
 import Logo from "./pages/Logo/Logo";
 import TermsAndPolicy from "./pages/terms&policies/Terms&policy";
+// import AuthRoute from './components/AuthRoute';
+// import { AuthProvider } from "./contexts/AuthContext";
+
 
 initializeApp(config.firebaseConfig);
 
@@ -58,6 +60,7 @@ function Component() {
           location.pathname !== '/serviceTerms' &&
           location.pathname !== '/dataPrivacy' && <ApiLoader />}
       </main>
+
     
         <Routes>
           <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
@@ -66,6 +69,7 @@ function Component() {
           <Route path='/settings' element={<PublicProfile/>} />
           <Route path='/loginPrueba' element={<AuthForm/>}/>
         </Routes>
+   
 
         { location.pathname !== '/assets/logo' &&
         location.pathname !== '/serviceTerms' &&

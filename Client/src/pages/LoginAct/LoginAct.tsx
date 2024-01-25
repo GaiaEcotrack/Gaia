@@ -1,9 +1,10 @@
 import { Link, useNavigate} from "react-router-dom";
-// import { signInWithGoogle } from "../../firebase";
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { LoginSignUp } from "../../components/LoginSignUp/SignUp";
+import { SignUp } from "../../components/LoginSignUp/SignUp";
 import '../../global.css'
+import { AuthProvider } from "@/contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext"
 
 /* eslint-disable */
 export interface ILoginPageProps {}
@@ -14,6 +15,35 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const navigate = useNavigate();
   const [authing, setAuthing] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false)
+
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const { login } = useAuth()
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+
+    if (!emailRef.current || !passwordRef.current) {
+      // Manejar el caso cuando las referencias son nulas o undefined
+      return setError("Password fields are not available");
+    }
+
+    try {
+      setError("")
+      setLoading(true)
+      await login(emailRef.current.value, passwordRef.current.value)
+      navigate("/home");
+    } catch {
+      setError("Failed to sign in")
+    }
+
+    console.log(emailRef.current.value)
+    console.log(passwordRef.current.value)
+
+    setLoading(false)
+  }
   
   const signInWithGoogle = async () => {
     setAuthing(true);    
@@ -67,17 +97,18 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
             Log in to your account
           </h1>
 
-          <form className="2xl:mt-6 laptop" action="#" method="POST">
+          <form className="2xl:mt-6 laptop" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-gray-700">
                 Email Address
               </label>
               <input
+                ref={emailRef}
                 type="email"
                 id="email"
                 name="email"
                 placeholder="Enter Email Address"
-                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg text-black bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                 autoComplete="on"
                 required
               />
@@ -88,12 +119,13 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
                 Password
               </label>
               <input
+                ref={passwordRef}
                 type="password"
                 id="password"
                 name="password"
                 placeholder="Enter Password"
                 minLength={6}
-                className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                className="w-full px-4 py-3 rounded-lg text-black bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                 required
               />
             </div>
@@ -107,7 +139,10 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
               </Link>
             </div>
 
+            {error && <div className="text-red-500">{error}</div>}
+
             <button
+              disabled={loading}
               type="submit"
               className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg px-4 py-3 mt-3 2xl:mt-6"
             >
@@ -186,7 +221,10 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
           </div>
         </div>
       </div>
-      <LoginSignUp showSignUp={showSignUp} setShowSignUp={setShowSignUp}/>
+      <AuthProvider>
+        <SignUp showSignUp={showSignUp} setShowSignUp={setShowSignUp}/>
+      </AuthProvider>
+      
     </section>
   );
 };
