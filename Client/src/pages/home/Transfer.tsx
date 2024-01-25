@@ -41,11 +41,11 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
   const { accounts, account } = useAccount();
   const { api } = useApi();
   // Add your programID
-  const programIdKey = import.meta.env.VITE_APP_PROGRAM_ID
+  const programIdKey = import.meta.env.VITE_APP_MAIN_CONTRACT_ID
 
 
   // Add your metadata.txt
-  const meta = import.meta.env.VITE_APP_META_DATA 
+  const meta = import.meta.env.VITE_APP_MAIN_CONTRACT_METADATA
 
 
    const metadata = ProgramMetadata.from(meta!);
@@ -55,13 +55,13 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
   const message: any = {
     destination: programIdKey, // programId
     payload: {
-      transfer: [
+      transferred: [
         decodeAddress(addresLocal),
         decodeAddress(accountTo),
         quantity,
       ],
     },
-    gasLimit: 999819245,
+    gasLimit: 9999819245,
     value: 0,
   };
 

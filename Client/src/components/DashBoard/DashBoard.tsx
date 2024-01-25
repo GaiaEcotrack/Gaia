@@ -13,7 +13,7 @@ interface UserType {
 }
 
 const DashBoard = () => {
-
+  const url = import.meta.env.VITE_APP_API_URL
 
   const nuevoNombreUsuarioRef = useRef(null);
   const nuevoCorreoElectronicoRef = useRef(null);
@@ -24,10 +24,11 @@ const DashBoard = () => {
   useEffect(() => {
     const callUsers = async () => {
       try {
-
-        const response = await axios("http://localhost:5000/users/");
+        const response = await axios(`${url}/users/`);
         const allUsers = response.data;
         setUsers(allUsers.users);
+        console.log(allUsers);
+        
       } catch (error) {
         console.error('Error al obtener los usuarios:', error);
       }
@@ -38,7 +39,7 @@ const DashBoard = () => {
 
   const handleUpdateUser = async (userId: string, updatedUserData: Partial<UserType>) => {
     try {
-      const response = await axios.put(`http://localhost:5000/users/${userId}`, updatedUserData);
+      const response = await axios.put(`${url}/users/${userId}`, updatedUserData);
       const updatedUser = response.data.updatedUser;
 
       setUsers((prevUsers) =>
@@ -54,7 +55,7 @@ const DashBoard = () => {
     const handleDeleteUser = async (userId: string) => {
       try {
         
-         axios.delete(`http://localhost:5000/users/${userId}`)
+         axios.delete(`${url}/users/${userId}`)
          setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
       } catch (error) {
         console.error('Error al eliminar el usuario:', error);

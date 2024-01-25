@@ -33,7 +33,7 @@ function Mint() {
 
   const messageTwo: any = {
     destination: programIDFT, // programId
-    payload: { generateEnergy:1000},
+    payload: { generateEnergy:1000000},
     gasLimit: 69999819245,
     value: 0,
   };
