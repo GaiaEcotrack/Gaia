@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { useState, useEffect } from "react";
+import axios from 'axios'
 
 //imagenes
 import Polygon from "../../assets/Polygon.svg";
@@ -16,58 +17,68 @@ import back from "../../assets/back.svg";
 import { ApiLoader } from '../../components/loaders/api-loader/ApiLoader'
 
 interface Dispositivo {
-  Name: string;
-  Device_type: string;
-  Made_By: string;
-  Connected: boolean;
-  Model: string;
-  Firmware_version: string;
-  Voltage: string;
-  Temperature: string;
+  deviceId:number;
+  name: string;
+  type: string;
+  vendor: string;
+  productId:number;
+  isActive: boolean;
+  product: string;
+  serial: string;
+  generatorPower: number;
+  timezone: string;
 }
 const PanelUsuarioFinal = () => {
   const [menuAbierto, setMenuAbierto] = useState<number | null>(null); // Cambié el tipo de estado a number | null
-  const [dispositivosEncontrados, setDispositivosEncontrados] = useState<
+  const [devices, setDevices] = useState<
     Dispositivo[]
   >([]);
+  const [scrollPosition, setScrollPosition] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const toggleMenu = (index: number | null) => {
-    setMenuAbierto(index);
+    setMenuAbierto(index === menuAbierto ? null : index);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          // "https://jsonplaceholder.typicode.com/users"
-          "/data-dispositivos-encontrados.json"
-        );
-        const data = await response.json();
-        setDispositivosEncontrados(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
 
-    fetchData();
+
+  useEffect(() => {
+    const fetchByAxios = async ()=>{
+      try {
+        const apiUrl = import.meta.env.VITE_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/devices/plant-devices?plantId=13`)
+        setDevices(response.data.devices)
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+    fetchByAxios()
   }, []);
+
+  useEffect(() => {
+    if (menuAbierto !== null) {
+      // Guardar la posición de desplazamiento actual antes de abrir los detalles
+      setScrollPosition(window.scrollY);
+
+      // Desplazarse al principio del componente para mostrar los detalles
+      window.scrollTo(0, 0);
+    } else {
+      // Volver a la posición de desplazamiento guardada después de cerrar los detalles
+      window.scrollTo(0, scrollPosition);
+    }
+  }, [menuAbierto, scrollPosition]);
 
   const handleUpdate = async () => {
     try {
       setIsLoading(true);
 
       setTimeout(async () => {
-        const response = await fetch("/data-dispositivos-encontrados.json");
-        const data = await response.json();
+        const apiUrl = import.meta.env.VITE_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/devices/plant-devices?plantId=35`);
 
-        // Obtener un índice aleatorio
-        const randomIndex = Math.floor(Math.random() * data.length);
-
-        const dispositivoAleatorio = data[randomIndex];
-
-        // Actualizar el estado scon un dispositivo aleatorio
-        setDispositivosEncontrados([dispositivoAleatorio]);
+        setDevices(response.data.devices)
         setIsLoading(false);
         // alert('actualizado');
       }, 2000);
@@ -76,6 +87,8 @@ const PanelUsuarioFinal = () => {
       setIsLoading(false);
     }
   };
+
+
   const imageUrl =
     "https://services.meteored.com/img/article/energy-overhaul-scientists-predict-by-the-2040s-solar-energy-will-dominate-our-power-grids-1697660406587_1280.jpeg";
   return (
@@ -110,7 +123,7 @@ const PanelUsuarioFinal = () => {
               <button
                 onClick={handleUpdate}
                 disabled={isLoading}
-                className="w-28 h-10 hidden border-2 bg-emerald-500 rounded-[5px] text-gray-900 mb-2 ml-8 mr-8 sm:inline"
+                className="w-28 h-10 hidden border-2 bg-emerald-500 rounded-full text-gray-900 mb-2 ml-8 mr-8 sm:inline"
               >
                 Refresh
               </button>
@@ -128,31 +141,35 @@ const PanelUsuarioFinal = () => {
           </button>
         </div>
 
-        {dispositivosEncontrados.map((dispositivo, index) => (
+        {devices.map((device, index) => (
           <div
             key={index}
             className={`border rounded-lg bg-current opacity-70 shadow-2xl p-4 w-full sm:w-[762px] mx-auto my-auto mb-4 sm:mb-8 
             ${index === menuAbierto ? "hidden" : ""}`}
           >
             <h2 className="text-gray-900 font-bold sm:text-2xl mb-6  ">
-            {dispositivo && dispositivo.Name}
+            {devices && device.name}
             </h2>
             <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Device Type: {dispositivo.Device_type}
+              Device Type: {device.type}
             </p>
             <p className="text-gray-900 font-bold text-sm sm:text-lg ">
-              Made By: {dispositivo.Made_By}
+              Made By: {device.vendor}
             </p>
             <div className="">
               <p className="text-end text-gray-900 font-bold text-[12px] sm:text-[16px]">
-                {dispositivo.Connected ? "Connected" : "Disconnected"}
+                {device.isActive ? "Connected" : "Disconnected"}
               </p>
               <br />
             </div>
             <div className="flex justify-center mt-[-32px]">
               <button
+              
                 className="flex items-center text-gray-900 font-bold text-[16px] text-base"
-                onClick={() => toggleMenu(index === menuAbierto ? null : index)}
+                onClick={(e) => {
+                  e.preventDefault(); // Agrega esta línea para evitar el comportamiento predeterminado
+                  toggleMenu(index === menuAbierto ? null : index);
+                }}
               >
                 <p className="text-[12px] sm:text-[16px]">View Detail</p>
                 <img className="cursor-pointer ml-1" src={Polygon} alt="" />
@@ -162,30 +179,31 @@ const PanelUsuarioFinal = () => {
         ))}
 
         {menuAbierto !== null && (
-          <div className="border-2 rounded-lg bg-current opacity-70 p-4 w-full sm:w-[762px] mx-auto my-auto mt-4 mb-8">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="border-2 rounded-lg bg-white p-4 w-full sm:w-[762px] mx-auto mt-auto mb-8 fixed">
             <h2 className="text-gray-900 font-bold sm:text-2xl mb-6 ">
-              {dispositivosEncontrados[menuAbierto].Name}
+              {devices[menuAbierto].name}
             </h2>
             <p className="text-gray-900 font-bold text-sm sm:text-lg">
               Device Type:{" "}
-              {dispositivosEncontrados[menuAbierto].Device_type}
+              {devices[menuAbierto].type}
             </p>
             <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Made By: {dispositivosEncontrados[menuAbierto].Made_By}
+              Made By: {devices[menuAbierto].vendor}
             </p>
 
             <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Model: {dispositivosEncontrados[menuAbierto].Model}
+              Model: {devices[menuAbierto].product}
             </p>
             <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Firmware Version:{" "}
-              {dispositivosEncontrados[menuAbierto].Firmware_version}
+              Serial:{" "}
+              {devices[menuAbierto].serial || "None"}
             </p>
             <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Voltage: {dispositivosEncontrados[menuAbierto].Voltage}
+              Voltage: {devices[menuAbierto].generatorPower || "None" }
             </p>
             <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Temperature: {dispositivosEncontrados[menuAbierto].Temperature}
+              Ubicate: {devices[menuAbierto].timezone}
             </p>
 
             <div className="mt-4 sm:mt-12">
@@ -208,7 +226,10 @@ const PanelUsuarioFinal = () => {
               </a>
               <button
                 className="flex ml-auto items-center text-gray-900 font-bold text-[16px] text-base"
-                onClick={() => toggleMenu(null)}
+                onClick={(e) => {
+                  e.preventDefault(); // Agrega esta línea para evitar el comportamiento predeterminado
+                  toggleMenu(null);
+                }}
               >
                 <p className="text-[12px] sm:text-[16px]">Close</p>
                 <img
@@ -218,11 +239,12 @@ const PanelUsuarioFinal = () => {
                 />
               </button>
               <span className="text-gray-900 text-[12px] sm:text-[16px] font-light ml-auto">
-                Disconnected
+              {devices[menuAbierto].isActive ? "Connected" : "Disconnected"}
               </span>
               <br />
             </div>
           </div>
+          </div>  
         )}
       </div>
     </section>

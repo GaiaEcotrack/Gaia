@@ -1,11 +1,8 @@
 use io::*;
-use gstd::{Encode, String, ActorId};
+use gstd::{Encode, String, ActorId, msg, prelude::*,};
 use gtest::{Program, System};
-use io::InitFT;
-use io::FTAction;
-use io::FTEvent;
-use io::ActionGaiaEcotrack;
-use io::EventsGaiaEcotrack;
+use io::*;
+use tokio::test;
 const USERS: &[u64] = &[3, 4, 5];
 
 
@@ -34,7 +31,7 @@ fn init_with_mint(sys: &System) {
 }
 
 #[test]
-fn mint() {
+async fn mint() {
     let sys = System::new();
     init_with_mint(&sys);
     let ft = sys.get_program(1);
@@ -43,7 +40,7 @@ fn mint() {
 }
 
 #[test]
-fn burn() {
+async fn burn() {
     let sys = System::new();
     init_with_mint(&sys);
     let ft = sys.get_program(1);
@@ -62,7 +59,7 @@ fn burn() {
 }
 
 #[test]
-fn burn_failures() {
+async fn burn_failures() {
     let sys = System::new();
     sys.init_logger();
     init_with_mint(&sys);
@@ -75,7 +72,7 @@ fn burn_failures() {
 }
 
 #[test]
-fn transfer() {
+async fn transfer() {
     let sys = System::new();
     init_with_mint(&sys);
     let ft = sys.get_program(1);
@@ -106,7 +103,7 @@ fn transfer() {
 }
 
 #[test]
-fn transfer_failures() {
+async fn transfer_failures() {
     let sys = System::new();
     init_with_mint(&sys);
     let ft = sys.get_program(1);
@@ -138,7 +135,7 @@ fn transfer_failures() {
 }
 
 #[test]
-fn approve_and_transfer() {
+async fn approve_and_transfer() {
     let sys = System::new();
     init_with_mint(&sys);
     let ft = sys.get_program(1);
@@ -198,57 +195,80 @@ fn approve_and_transfer() {
     }
 }
 
-// #[test]
-// fn test() {
-//     let system = System::new();
-
-//     system.init_logger();
-
-//     // let state_binary = get_state_binary();
-//     let program = Program::current(&system);
-
-//     let mut result = program.send_bytes(2, []);
-
-//     assert!(!result.main_failed());
-
-//     let result = program.send(2, ActionGaiaEcotrack::GenerateEnergy(100));
-//     assert!(result.contains(&(2, EventsGaiaEcotrack::Generated(100).)))
-
-
-// }
-
 const USER: u64 = 3;
-
 #[test]
-    fn generate_energy_and_verify_event() {
-        // Configuración del sistema y del contrato
-        let sys = System::new();
-        init_with_mint(&sys);
-        let gaia_contract = sys.get_program(1);
+async fn generate_energy_and_verify_event() {
+    // Configuración del sistema y del contrato
+    let sys = System::new();
+    init_with_mint(&sys);
+    let gaia_contract = sys.get_program(1);
 
-        // Ejecutar la acción NewGenerator para registrar un generador
-        let generator_actor_id = ActorId::from(2);
-        let generator = Generator {
-            id: 1,
-            wallet: generator_actor_id,
-            total_generated: 0,
-            average_energy: 0,
-            rewards: 0,
-        };
-        let res = gaia_contract.send(
-            USER,
-            ActionGaiaEcotrack::NewGenerator(generator_actor_id, generator.clone()),
+    // Ejecutar la acción NewGenerator para registrar un generador
+    let generator_actor_id = ActorId::from(2);
+    let generator = Generator {
+        id: 1,
+        wallet: generator_actor_id,
+        total_generated: 0,
+        average_energy: 0,
+        rewards: 0,
+    };
+    let res = gaia_contract.send(
+        USER,
+        ActionGaiaEcotrack::NewGenerator(generator_actor_id, generator.clone()),
+    );
+    assert!(res.contains(&(USER, EventsGaiaEcotrack::Registered.encode())));
+
+    // Ejecutar la acción GenerateEnergy para generar energía
+    let energy_amount = 100;
+    let res = gaia_contract.send(USER, ActionGaiaEcotrack::GenerateEnergy(energy_amount));
+    assert!(res.contains(&(USER, EventsGaiaEcotrack::Generated.encode())));
+
+    // Verificar que el estado del generador se actualizó correctamente
+    let res = gaia_contract.send(USER, ActionGaiaEcotrack::GetRewards(1));
+    assert!(res.contains(&(USER, EventsGaiaEcotrack::RewardsGenerated.encode())));
+}
+
+
+#[tokio::test]
+async fn test_transfer_tokens_between_actors() {
+    // Configura el sistema y el contrato
+    let sys = gtest::System::new();
+    init_with_mint(&sys);
+    let gaia_contract = sys.get_program(1);
+
+    // Actores de origen y destino
+    let from_actor_id = ActorId::from(2);
+    let to_actor_id = ActorId::from(3);
+
+    // Agrega algo de liquidez al contrato principal
+    let liquidity_amount = 1000;
+    gaia_contract.send(3, FTAction::Mint(liquidity_amount));
+
+    // Configura el estado inicial del generador de origen
+    let from_generator = Generator {
+        id: 1,
+        wallet: from_actor_id,
+        total_generated: 0,
+        average_energy: 0,
+        rewards: 0,
+    };
+    gaia_contract
+        .send(3, ActionGaiaEcotrack::NewGenerator(from_actor_id, from_generator.clone()));
+
+    // Ejecuta la transferencia de tokens entre actores (asíncrono)
+    let transfer_amount = 500;
+    gaia_contract
+        .send(
+            3,
+            ActionGaiaEcotrack::Transferred(from_actor_id, to_actor_id, transfer_amount),
         );
-        assert!(res.contains(&(USER, EventsGaiaEcotrack::Registered.encode())));
+        // .await;
 
-        // Ejecutar la acción GenerateEnergy para generar energía
-        let energy_amount = 100;
-        let res = gaia_contract.send(USER, ActionGaiaEcotrack::GenerateEnergy(energy_amount));
-        assert!(res.contains(&(USER, EventsGaiaEcotrack::Generated.encode())));
+    // Verifica que el estado del generador de origen se actualizó correctamente
+    let res = gaia_contract.send(3, ActionGaiaEcotrack::GetRewards(1));
+    assert!(res.contains(&(3, EventsGaiaEcotrack::RewardsGenerated.encode())));
 
-        // Verificar que el estado del generador se actualizó correctamente
-        let res = gaia_contract.send(USER, ActionGaiaEcotrack::GetRewards(1));
-        assert!(res.contains(&(USER, EventsGaiaEcotrack::RewardsGenerated.encode())));
-    }
-
-
+    // Verifica que el balance del actor de destino se actualizó correctamente
+    let res = gaia_contract.send(3, FTAction::BalanceOf(to_actor_id));
+    assert!(res.contains(&(3, FTEvent::Balance(transfer_amount).encode())));
+}

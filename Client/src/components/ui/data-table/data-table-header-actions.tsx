@@ -1,5 +1,4 @@
 import { Header } from '@tanstack/table-core';
-import clsx from 'clsx';
 import { ArrowDownAZ, ArrowUpAZ } from 'lucide-react';
 import { CaretDown } from '@/assets/images';
 import styles from './table.module.scss';

@@ -1,7 +1,7 @@
 import React from 'react'
 import html2canvas from 'html2canvas';
 import './App.css'
-import {useEffect, useRef, useState} from 'react';
+import { useRef, useState} from 'react';
 
 const Face = () => {
     
