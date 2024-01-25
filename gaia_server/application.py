@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from pymongo import MongoClient
 from flask_swagger_ui import get_swaggerui_blueprint
 # from src.routes.users import user_routes
@@ -13,6 +14,7 @@ from src.routes.api_growth import api_growatt_bp
 load_dotenv()
 
 application = Flask(__name__)
+CORS(application)
 
 # Configuración de Swagger
 SWAGGER_URL = "/docs"

@@ -136,6 +136,43 @@ def get_device_data():
         # La solicitud falló, devolver el código de estado y el mensaje de error
         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code
 
+@devices_routes.route('/plant-devices', methods=['GET'])
+def get_plant_devices():
+    # Obtén el parámetro plantId de la solicitud
+    plant_id = request.args.get('plantId')
+
+    # Verifica que el parámetro plantId esté presente
+    if not plant_id:
+        return jsonify({'error': 'Falta el parámetro necesario (plantId)'}), 400
+
+    # URL de la API con el parámetro plantId sustituido
+    url = f'https://sandbox.smaapis.de/monitoring/v1/plants/{plant_id}/devices'
+
+    # Utiliza la función autorizar() para obtener el token de acceso
+    token_response = autorizar()
+
+
+    response_flask, status_code = token_response
+
+    if status_code != 200:
+        return jsonify({'error': 'No se pudo obtener el token de acceso'}), token_response[1]
+
+    # Extraer el token de acceso de la respuesta de la función autorizar
+    access_token = response_flask.get_json()['token']
+
+    # Configurar el encabezado de la solicitud con el token de acceso
+    headers = {'Authorization': f'Bearer {access_token}'}
+
+    # Realizar la solicitud GET a la API
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        # La solicitud fue exitosa, devolver los datos obtenidos
+        data = response.json()
+        return jsonify(data), 200
+    else:
+        # La solicitud falló, devolver el código de estado y el mensaje de error
+        return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code
 
 #################################################################################
 

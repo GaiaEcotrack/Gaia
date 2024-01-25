@@ -33,7 +33,6 @@ const EnergyMonitor: React.FC<EnergyMonitorProps> = ({ percentage,size }) => {
     fetchDataBattery()
   }, [])
 
-  console.log(batteryStatus[0]);
   
 
   const radius = size / 2 - 5; // El radio del círculo

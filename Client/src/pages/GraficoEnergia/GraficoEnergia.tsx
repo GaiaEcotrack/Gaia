@@ -32,6 +32,7 @@
   import { WeatherNavbar } from "../../components/WeatherNavbar/WeatherNavbar";
   import { WeatherPanel } from "../../components/WeatherNavbar/WeatherPanel";
 import EnergyMonitor from "@/components/EnergyComponentNew/EnergyMonitor";
+import EnergyDeviceStatus from "@/components/EnergyComponentNew/EnergyDeviceStatus";
   // import { SideBarNew } from "components/SideBarNew/SideBarNew";
 
   ChartJS.register(
@@ -219,19 +220,22 @@ import EnergyMonitor from "@/components/EnergyComponentNew/EnergyMonitor";
     return () => clearInterval(intervalId);
   }, []);
 
+
+  
+
   const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
     Math.max(totalGenerado - totalConsumido, 0);
 
     useEffect(() => {
-      if (addresLocal === undefined) {
+      if (account === undefined) {
         
         console.log('Conecte su wallet para operar');
         setWalletMessage('No accounts found, please connect your wallet.');
         setTotalGenerado(0);
         setTotalConsumido(0);
         setTotalExcedente(0)
-      } else {
-      
+      }
+      if(account !== undefined){
       if (totalConsumido < totalGenerado) {
         setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
         setWalletMessage("")
@@ -245,7 +249,7 @@ import EnergyMonitor from "@/components/EnergyComponentNew/EnergyMonitor";
         setExcedenteCapturado(excedente);
       };
       handleCaptureExcedente();
-    }
+      }
     }, [totalGenerado, totalConsumido, excedenteCapturado]);
     
     // const handleCaptureExcedente = () => {
@@ -272,7 +276,6 @@ import EnergyMonitor from "@/components/EnergyComponentNew/EnergyMonitor";
 
     const addresTransaction = account?.address
 
-  console.log(addresTransaction);
 
 
   if(addresTransaction !== undefined && meta !== undefined && MidWallet !== undefined){
@@ -481,8 +484,9 @@ import EnergyMonitor from "@/components/EnergyComponentNew/EnergyMonitor";
             </div>
           </div>
         </div>
-        <div className="flex items-center flex-col justify-center">
+        <div className="flex items-center gap-10 justify-center">
       <EnergyMonitor percentage={60} size={200}/>
+      <EnergyDeviceStatus/>
         </div>
 
         <ModalMintGaia 

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "start": "yarn build && vite preview",
-    "build": "vite build --output public ",
+    "build": "vite build",
     "preview": "vite preview",
     "test": "jest"
   },
