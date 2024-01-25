@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from src.routes.users import users_route
 from src.routes.devices import devices_routes
 from src.routes.api_growth import api_growatt_bp
+from flask_cors import CORS
 
 load_dotenv()
 
