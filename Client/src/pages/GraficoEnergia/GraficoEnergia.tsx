@@ -37,6 +37,7 @@ import EnergyDeviceStatus from "@/components/EnergyComponentNew/EnergyDeviceStat
 import { AlertModal } from "@/components/AlertModal/AlertModal";
 import EnergyDeviceList from "@/components/EnergyComponentNew/EnergyDeviceList";
 // import { SideBarNew } from "components/SideBarNew/SideBarNew";
+import { getAuth } from 'firebase/auth';
 
 ChartJS.register(
   ArcElement,
@@ -251,7 +252,41 @@ const GraficoEnergia = () => {
   //   );
   //   setExcedenteCapturado(excedente);
   // };
+  const [token, setToken] = useState('');
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
 
+    if (user) {
+      user.getIdToken().then((idToken) => {
+        setToken(idToken);
+        console.log('Token de Firebase:', idToken);
+
+        // Aquí puedes enviar el token a tu backend si es necesario
+        sendTokenToBackend(idToken); 
+      }).catch((error) => {
+        console.error('Error al obtener el token:', error);
+      });
+    }
+  }, []);
+
+  const sendTokenToBackend = async (token: string) => {
+    try {
+      const url = 'https://tu-backend.com/api/authenticate';
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      const data = await response.json();
+      console.log('Respuesta del backend:', data);
+    } catch (error) {
+      console.error('Error al enviar token al backend:', error);
+    }
+  };
   //-------------------------------------------------------------------VARA INTEGRATION
 
   const alert = useAlert();
