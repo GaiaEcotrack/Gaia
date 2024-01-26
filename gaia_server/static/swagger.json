@@ -342,6 +342,81 @@
             }
           }
         }
+      },
+      "/devices/{deviceId}/measurements/sets/{setType}/{period}": {
+        "get": {
+          "tags": ["Devices API"],
+          "summary": "Get measurements-set for device.",
+          "parameters": [
+            { "name": "device_id",
+            "in": "path",
+            "description": "The device Id. This is the property to be used in the path to retrieve data for a dedicated device",
+            "required": true,
+            "type": "string"
+            },
+            { "name": "setType",
+            "in": "path",
+            "description": "The type of the measurement set.\n \n EnergyAndPowerBattery: \n \n Battery-charging and discharging (energy and power), state of charge (power) and state of health (energy) values for a requested period. \n \n EnergyAndPowerPv: \n \n PV-generation (energy and power) values for a requested period.",
+            "required": true,
+            "type": "string",
+            "enum": ["EnergyAndPowerBattery", "EnergyAndPowerPv"]
+            },
+            { "name": "period",
+            "in": "path",
+            "description": "The period of a measurement set. \n \n Recent: The most recent values for the requested measurement set that has been transmitted from the device(s) to the backend. The update frequence is device-/plant-dependent and is at most five minutes for ennexOS plants/devices and for classic plants/devices with Pro package activated, and lower for classic plants/devices without Pro package activated. When requesting energy values using the parameter ReturnEnergyValues, the values returned represents the most recent total amount of energy (in Wh). \n \n Day: The values for the requested day and measurement set. The values are returned in the highest supported resolution for the day (e.g. 5 minutes, 15 minutes, 1 hour). When requesting energy values using the parameter ReturnEnergyValues, the values returned represents the energy amounts for each interval of the selected period. \n \n Week: The values for the requested week and measurement set. The values are returned in the highest supported resolution for the day (e.g. 5 minutes, 15 minutes, 1 hour). When requesting energy values using the parameter ReturnEnergyValues, the values returned represents the energy amounts for each interval of the selected period. \n \n Month: The day-values for the requested month and measurement set. \n \n Year: The month-values for the requested year and measurement set. \n \n Total: The year-values for the requested month and measurement set.",
+            "required": true,
+            "type": "string"
+            },
+            { "name": "Date",
+            "in": "path",
+            "description": "The date used for getting measurements and logs of a plant-group/plant/sub-plant or device. The format of the date-parameter given in the path depends on the used period. \n \n Recent: No date necessary. \n \n Day: The full date with day, month and year(YYYY-MM-DD, see ISO_8601). \n \n Week: The full date with day, month and year(YYYY-MM-DD, see ISO_8601). \n \n Month: The month and the year(YYYY-MM, see ISO_8601). \n \n Year: Only the year(YYYY, see ISO_8601). \n \n Total: No date necessary.",
+            "required": true,
+            "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/Devices"
+              }
+            },
+            "404": {
+              "description": "NOT FOUND",
+              "schema": {
+                "$ref": "#/components/schemas/Devices"
+              }
+            }
+          }
+        }
+      },
+      "/devices/plant-devices/{plantId}": {
+        "get": {
+          "tags": ["Devices API"],
+          "summary": "Get measurements-set for device.",
+          "parameters": [
+            { "name": "plant_id",
+            "in": "path",
+            "description": "The plant Id. This is the property to be used in the path to retrieve data for a dedicated plant, and show the device in this plant",
+            "required": true,
+            "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/PLant"
+              }
+            },
+            "404": {
+              "description": "NOT FOUND",
+              "schema": {
+                "$ref": "#/components/schemas/PLant"
+              }
+            }
+          }
+        }
       }
     }
   }

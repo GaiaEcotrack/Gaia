@@ -1,5 +1,6 @@
 
 from flask import Flask, Blueprint, jsonify, request
+import requests
 from pymongo import MongoClient
 from src.models.user import UserSchema
 import os
@@ -28,6 +29,29 @@ def get_users():
     for user in users:
         user['_id'] = str(user['_id'])
     return jsonify({'message': 'Hello, Flask and MongoDB Atlas!', 'users': users})
+
+# ruta users deploy
+# @users_route.route('/', methods=['GET'])
+# def get_users():
+#     # URL del servidor remoto que proporciona los datos de los usuarios
+#     remote_server_url = "https://dev-server-2xe8.onrender.com/users"  # Reemplaza con la URL correcta
+    
+#     try:
+#         # Realiza una solicitud GET al servidor remoto
+#         response = requests.get(remote_server_url)
+        
+#         # Verifica si la solicitud fue exitosa (código de estado 200)
+#         if response.status_code == 200:
+#             # Parsea los datos JSON de la respuesta
+#             users = response.json()['users']
+            
+#             # Modifica los datos según sea necesario
+            
+#             return jsonify({'message': 'Usuarios obtenidos desde el servidor remoto', 'users': users})
+#         else:
+#             return jsonify({'error': 'Error al obtener usuarios desde el servidor remoto'})
+#     except Exception as e:
+#         return jsonify({'error': 'Error de conexión con el servidor remoto', 'details': str(e)})
 
 @users_route.route('/<id>', methods=['GET'])
 def get_user_by_id(id):
