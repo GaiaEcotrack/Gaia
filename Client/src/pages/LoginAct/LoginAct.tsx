@@ -15,36 +15,43 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const navigate = useNavigate();
   const [authing, setAuthing] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false)
-
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const { login } = useAuth()
   const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
+  const [loadingE, setLoadingE] = useState(false)
 
+
+  // Funtion to log in with registered email 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
     if (!emailRef.current || !passwordRef.current) {
-      // Manejar el caso cuando las referencias son nulas o undefined
       return setError("Password fields are not available");
     }
 
     try {
-      setError("")
-      setLoading(true)
-      await login(emailRef.current.value, passwordRef.current.value)
-      navigate("/home");
+      setError("");
+      setLoadingE(true);
+      await login(emailRef.current.value, passwordRef.current.value);
+      // En lugar de navegar directamente a "/home", puedes redirigir a la ruta deseada
+      // Puedes obtener la ruta desde la URL o establecer una ruta predeterminada
+      const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
+      navigate(redirectPath);
     } catch {
-      setError("Failed to sign in")
+      setError("Incorrect username or password");
+    } finally {
+      setLoadingE(false);
     }
-
-    console.log(emailRef.current.value)
-    console.log(passwordRef.current.value)
-
-    setLoading(false)
   }
-  
+
+  const email = emailRef.current?.value || "Nombre";
+  localStorage.setItem("email", email);
+
+
+  // ****************************************************************
+
+  // Function to log in with GOOGLE  
   const signInWithGoogle = async () => {
     setAuthing(true);    
 
@@ -55,7 +62,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       const email = response.user.email || "default@example.com";
       const profilePic = response.user.photoURL || "Photo Profile";
 
-      console.log(response.user)
+      // console.log(response.user)
 
       // Para agregar al localStorage
       localStorage.setItem("name", name);
@@ -72,7 +79,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       // localStorage.removeItem("email");
       // localStorage.removeItem("profilePic");      
 
-      navigate('/home');
+      // navigate('/home');
     } catch (error) {
       console.log(error);
       setAuthing(false);
@@ -142,7 +149,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
             {error && <div className="text-red-500">{error}</div>}
 
             <button
-              disabled={loading}
+              disabled={loadingE}
               type="submit"
               className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg px-4 py-3 mt-3 2xl:mt-6"
             >

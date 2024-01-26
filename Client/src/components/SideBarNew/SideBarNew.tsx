@@ -19,7 +19,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
 
   const [open, setOpen] = useState(false);
   const Menus = [
-    { id: 3, title: "Graphics ", src: "Chart", to: "/Home" },
+    { id: 3, title: "Graphics ", src: "Chart", to: "/home" },
     { id: 4, title: "Transactions", src: "User", to: "/transactions" },
     { id: 5, title: "Devices", src: "Search", to: "/panelUsuarioFinal" },
     { id: 6, title: "Network", src: "Chart_fill", to: "/Network" },

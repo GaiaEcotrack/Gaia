@@ -34,6 +34,7 @@ function SignUp(props:SignUp) {
       setLoading(true)
       await signup(emailRef.current?.value, passwordRef.current?.value)
       navigate("/");
+      setShowSignUp(false)
     } catch {
       setError("Failed to create an account")
     }
@@ -49,10 +50,6 @@ function SignUp(props:SignUp) {
       <div className="bg-[#00000073] fixed top-0 left-0 h-full w-full flex justify-center items-center">
         
         <div className="flex flex-col justify-start items-center bg-white rounded-3xl h-[100%] md:h-[85%] w-full md:w-[50%] lg:w-[30%] 2xl:h-[80%] 2xl:w-[40%] p-4 md:p-6 mt-40 md:mt-0">
-
-          {/* <button type="button">
-            x
-          </button> */}
 
           <div className="flex flex-col text-center item-center justify-center h-[25%] laptop">
             <img className="w-32 h-32 mx-auto laptop" src="/LOGOGAIASOLO.png" alt="" />
@@ -119,7 +116,7 @@ function SignUp(props:SignUp) {
               Sign Up
             </button>
 
-            <button className="text-black flex justify-center w-full mt-4" onClick={() => {setShowSignUp(false)}}>Already have an account? Log in</button>
+            <button className="text-black flex justify-center w-full mt-4" onClick={() => {setShowSignUp(false)}}>Already have an account?  <strong> &nbsp; Log in</strong></button>
           
           </form>
 

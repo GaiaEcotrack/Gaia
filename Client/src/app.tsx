@@ -20,7 +20,7 @@ import { config } from "./components/config/config"
 import {Footer} from './pages/Footer/Footer';
 import Logo from "./pages/Logo/Logo";
 import TermsAndPolicy from "./pages/terms&policies/Terms&policy";
-// import AuthRoute from './components/AuthRoute';
+import AuthRoute from "./components/AuthRoute";
 // import { AuthProvider } from "./contexts/AuthContext";
 
 
@@ -61,15 +61,16 @@ function Component() {
           location.pathname !== '/dataPrivacy' && <ApiLoader />}
       </main>
 
-    
-        <Routes>
-          <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
-          <Route path="/superUser" element={<SuperUser />} />
-          <Route path='/lab' element={<Labs />} />
-          <Route path='/settings' element={<PublicProfile/>} />
-          <Route path='/loginPrueba' element={<AuthForm/>}/>
-        </Routes>
-   
+      {/* <AuthRoute> */}
+          <Routes>
+            <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
+            <Route path="/superUser" element={<SuperUser />} />
+            <Route path='/lab' element={<Labs />} />
+            <Route path='/settings' element={<PublicProfile/>} />
+            {/* <Route path='/' element={<AuthForm/>}/> */}
+            // // si se descomenta esta ruta se debe eliminar la otra de src/pages/index.tsx
+          </Routes>
+      {/* </AuthRoute> */}
 
         { location.pathname !== '/assets/logo' &&
         location.pathname !== '/serviceTerms' &&
