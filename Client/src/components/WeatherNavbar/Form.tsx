@@ -71,7 +71,7 @@ function Form({ newLocation }: FormProps) {
   }, []);
 
   return (
-    <div className="flex justify-center mb-2">
+    <div className="flex w-80 h-72 bg-black/20 justify-center items-center mb-2">
       <form onSubmit={onSubmit} action="">
         <div className="flex flex-col justify-center mx-auto mb-4 m-2">
           <div className="flex justify-center items-center text-lg mb-4">

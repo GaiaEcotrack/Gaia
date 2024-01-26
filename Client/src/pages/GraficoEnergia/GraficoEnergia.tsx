@@ -312,7 +312,6 @@ const GraficoEnergia = () => {
 
   const metadata = ProgramMetadata.from(meta);
 
-  console.log(excedenteCapturado);
 
   const signerTwo = async () => {
     const localaccount = account?.address;
@@ -361,7 +360,8 @@ const GraficoEnergia = () => {
           }
         )
         .catch((error: any) => {
-          alert.error(error);
+          alert.error(error.toString());
+          
         });
     } else {
       alert.error("Account not available to sign");
@@ -531,7 +531,7 @@ const GraficoEnergia = () => {
         <h1 className="text-6xl font-bold text-white">
           Status of your devices
         </h1>
-        <div className="flex items-center gap-10 justify-center">
+        <div className="flex flex-col sm:flex-row items-center gap-10 justify-center">
           <EnergyMonitor percentage={60} size={200} />
           <EnergyDeviceStatus />
           <EnergyDeviceList/>
@@ -551,6 +551,7 @@ const GraficoEnergia = () => {
           <AlertModal onClose={onClose} />
         </div>
       )}
+
     </div>
   );
 };

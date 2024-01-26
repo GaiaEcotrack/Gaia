@@ -3,7 +3,6 @@ import { useAccount } from '@gear-js/react-hooks';
 import { isLoggedIn } from  '@/app/utils';
 import { ACCOUNT_ID_LOCAL_STORAGE_KEY } from '@/app/consts';
 import { AccountButton } from '../account-button';
-import styles from './Accounts.module.scss';
 
 type Props = {
   list: InjectedAccountWithMeta[];

@@ -7,6 +7,9 @@ import { CrossIcon } from '@/assets/images';
 export function Alert({ alert, close }: AlertProps) {
   const { content, options } = alert;
   const { type, title, style, isClosed } = options;
+  if (!alert || !alert.options) {
+    return null; // or handle the case where the structure is not as expected
+  }
 
   return (
     <div className={styles.alert} style={style}>

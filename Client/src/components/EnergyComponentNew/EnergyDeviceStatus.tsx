@@ -84,7 +84,6 @@ const EnergyDeviceStatus = () => {
         fetchEnergy()
     }, [selectedOption])
     
-    console.log(selectedOption);
     
     
   return (

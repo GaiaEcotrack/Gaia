@@ -94,7 +94,7 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
           }
         )
         .catch((error: any) => {
-          alert.error(error)
+          alert.error(error.toString());
         });
     } else {
       alert.error("Account not available to sign");
