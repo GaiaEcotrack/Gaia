@@ -21,9 +21,6 @@ import { Footer } from './pages/Footer/Footer';
 import Logo from "./pages/Logo/Logo";
 import TermsAndPolicy from "./pages/terms&policies/Terms&policy";
 import Face from "./components/Face/Face";
-import AuthRoute from "./components/AuthRoute";
-// import { AuthProvider } from "./contexts/AuthContext";
-
 
 initializeApp(config.firebaseConfig);
 
@@ -57,19 +54,16 @@ function Component() {
         {!isAppReady && 
           !['/assets/logo', '/serviceTerms', '/dataPrivacy'].includes(location.pathname) && <ApiLoader />}
       </main>
-
-      {/* <AuthRoute> */}
-          <Routes>
-            <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
-            <Route path="/superUser" element={<SuperUser />} />
-            <Route path='/lab' element={<Labs />} />
-            <Route path='/settings' element={<PublicProfile/>} />
-            {/* <Route path='/' element={<AuthForm/>}/> */}
-            // // si se descomenta esta ruta se debe eliminar la otra de src/pages/index.tsx
+    
+        <Routes>
+          <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
+          <Route path="/superUser" element={<SuperUser />} />
+          <Route path='/lab' element={<Labs />} />
+          <Route path='/settings' element={<PublicProfile/>} />
+          <Route path='/loginPrueba' element={<AuthForm/>}/>
           <Route path='/face' element={<Face/>}/>
           <Route path="/dashboard" element={<DashBoard />} />
-          </Routes>
-      {/* </AuthRoute> */}
+        </Routes>
 
 
       { shouldShowFooter && <Footer />}
