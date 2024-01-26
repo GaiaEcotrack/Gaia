@@ -14,12 +14,12 @@ function AccountsModal({ accounts, close }: Props) {
       {accounts ? (
         <Accounts list={accounts} onChange={close} />
       ) : (
-        <p>
+        <p className='text-white'>
           Wallet extension was not found or disconnected. Please check how to install a supported wallet and create an
           account
           {' '}
           <a href='https://wiki.gear-tech.io/docs/idea/account/create-account' target='_blank' rel='noreferrer'
-             className='link-text'>
+             className='text-white'>
             here
           </a>.
         </p>

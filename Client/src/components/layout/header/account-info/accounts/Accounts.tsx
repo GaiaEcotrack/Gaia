@@ -34,9 +34,9 @@ function Accounts({ list, onChange }: Props) {
     ));
 
   return isAnyAccount ? (
-    <ul className={styles.list}>{getAccounts()}</ul>
+    <ul className='text-white flex flex-col items-center gap-3'>{getAccounts()}</ul>
   ) : (
-    <p>
+    <p className='text-white'>
       No accounts found. Please open Polkadot extension, create a new account or import existing one and reload the
       page.
     </p>

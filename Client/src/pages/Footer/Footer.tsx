@@ -2,11 +2,6 @@ import { FaInstagram,FaTwitter,FaLinkedinIn } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
 
-import inImg from "../../assets/in.png";
-import email2 from "../../assets/email2.jpeg";
-import x from "../../assets/x.png";
-import instagram from "../../assets/instagram.png";
-
 function Footer() {
   return (
     <footer className="flex flex-col items-center text-center text-white">

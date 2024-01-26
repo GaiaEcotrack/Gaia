@@ -2,7 +2,6 @@ import { CgMenu } from "react-icons/cg";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
-import { AccountButton } from "../layout/header/account-info/account-button";
 import { AccountInfo } from "../layout/header/account-info";
 
 /* eslint-disable */

@@ -3,6 +3,7 @@ import { AccountsModal } from './accounts-modal';
 import { useApi, useAccount, useBalance, useBalanceFormat } from '@gear-js/react-hooks';
 import { Button } from '@gear-js/ui';
 import { useState } from 'react';
+import { TbWalletOff } from "react-icons/tb";
 
 export function AccountInfo() {
   const { isApiReady } = useApi();
@@ -26,7 +27,7 @@ export function AccountInfo() {
       {account ? (
         <Wallet balance={formattedBalance} address={account.address} name={account.meta.name} onClick={openModal} />
       ) : (
-        <Button  text="Sign in" onClick={openModal} />
+        <TbWalletOff size='2rem'  onClick={openModal} />
       )}
       {isModalOpen && <AccountsModal accounts={accounts} close={closeModal} />}
     </>

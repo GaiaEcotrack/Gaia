@@ -1,5 +1,4 @@
 import Identicon from '@polkadot/react-identicon';
-import clsx from 'clsx';
 import { buttonStyles } from '@gear-js/ui';
 
 type Props = {
@@ -11,15 +10,9 @@ type Props = {
 };
 
 function AccountButton({ address, name, onClick, isActive, block }: Props) {
-  const className = clsx(
-    buttonStyles.button,
-    buttonStyles.medium,
-    isActive ? buttonStyles.primary : buttonStyles.light,
-    block && buttonStyles.block,
-  );
 
   return (
-    <button type="button" className='flex flex-col items-center justify-center' onClick={onClick}>
+    <button type="button" className='flex flex-col items-center justify-center text-white' onClick={onClick}>
       <Identicon value={address} className={buttonStyles.icon} theme="polkadot" size={28} />
       {name}
     </button>
