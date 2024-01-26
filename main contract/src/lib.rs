@@ -86,6 +86,15 @@ impl GaiaEcotrackMainState {
             amount: amount_tokens,
         };
         let _ = msg::send(address_ft.ft_program_id, payload, 0);
+        msg::reply(
+            EventsGaiaEcotrack::TokensTransferred {
+                from: from,
+                to: to,
+                amount : amount_tokens,
+            },
+            0,
+        )
+        .unwrap();
 
         // Aquí se pueden generar eventos de confirmación al usuario.
     }
