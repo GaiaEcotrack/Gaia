@@ -79,7 +79,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       // localStorage.removeItem("email");
       // localStorage.removeItem("profilePic");      
 
-      // navigate('/home');
+      navigate('/home');
     } catch (error) {
       console.log(error);
       setAuthing(false);
