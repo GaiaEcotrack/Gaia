@@ -10,6 +10,7 @@ import GraficoEnergia from './GraficoEnergia/GraficoEnergia';
 import { AuthForm } from './LoginAct/LoginAct';
 import { NotificacionesConfig } from './notificacionesConfig/NotificacionesConfig';
 import Dashboard from './DashboardUser/Dashboard';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 const routes = [{ path: '/main', Page: Main },
 { path: '/labs', Page: Labs },
@@ -27,7 +28,7 @@ const routes = [{ path: '/main', Page: Main },
 function Routing() {
   const getRoutes = () => routes.map(({ path, Page }) => <Route key={path} path={path} element={<Page />} />);
 
-  return <Routes>{getRoutes()}</Routes>;
+  return <AuthProvider><Routes>{getRoutes()}</Routes></AuthProvider>;
 }
 
 export { Routing };
