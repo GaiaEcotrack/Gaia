@@ -34,8 +34,6 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       setError("");
       setLoadingE(true);
       await login(emailRef.current.value, passwordRef.current.value);
-      // En lugar de navegar directamente a "/home", puedes redirigir a la ruta deseada
-      // Puedes obtener la ruta desde la URL o establecer una ruta predeterminada
       const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
       navigate(redirectPath);
     } catch {

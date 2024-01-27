@@ -19,42 +19,11 @@ export function useAuth() {
  export function AuthProvider({ children }: AuthProviderProps) {
   const [currentUser, setCurrentUser] = useState<any | null>(null);
   const [loadingE, setLoadingE] = useState(true)
-  // const auth = getAuth();
-
-
-  // async function signup(email: string, password: string) {
-  //   try {
-  //     await createUserWithEmailAndPassword(auth, email, password);
-  //     // Signed up
-  //   } catch (error:any) {
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-  //     // Handle errors
-  //     console.error(`Error during signup: ${errorCode} - ${errorMessage}`);
-  //     throw error; // Propagate the error for further handling in your UI
-  //   }
-  // }
-
-  // Esta es una copia de la funcion signup sin async-await
+  
   function signup(email: string, password: string) {
     return createUserWithEmailAndPassword(auth, email, password);  
   }
 
-
-  // async function login(email: string, password: string) {
-  //   try {
-  //     await signInWithEmailAndPassword(auth, email, password);
-  //     // Logged in
-  //   } catch (error:any) {
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-  //     // Handle errors
-  //     console.error(`Error during login: ${errorCode} - ${errorMessage}`);
-  //     throw error; // Propagate the error for further handling in your UI
-  //   }
-  // }
-
-  // copia de login sin async-await
   function login(email: string, password: string) {
     return signInWithEmailAndPassword(auth, email, password);   
   }
@@ -63,20 +32,6 @@ export function useAuth() {
     return auth.signOut()
   }
 
-
-  // async function resetPassword(email: string) {
-  //   try {
-  //     await sendPasswordResetEmail(auth, email);
-  //   } catch (error:any) {
-  //     const errorCode = error.code;
-  //     const errorMessage = error.message;
-  //     // Handle errors
-  //     console.error(`Error during password reset: ${errorCode} - ${errorMessage}`);
-  //     throw error; // Propagate the error for further handling in your UI
-  //   }
-  // }
-
-  // copia de resetPasword sin async-await
   function resetPassword(email: string) {
     return sendPasswordResetEmail(auth, email);    
   }
