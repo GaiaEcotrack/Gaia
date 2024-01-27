@@ -9,6 +9,7 @@ import { Usuarios } from './Usuarios/Usuarios';
 import GraficoEnergia from './GraficoEnergia/GraficoEnergia';
 import { AuthForm } from './LoginAct/LoginAct';
 import { NotificacionesConfig } from './notificacionesConfig/NotificacionesConfig';
+import Dashboard from './DashboardUser/Dashboard';
 
 const routes = [{ path: '/main', Page: Main },
 { path: '/labs', Page: Labs },
@@ -19,6 +20,7 @@ const routes = [{ path: '/main', Page: Main },
 { path: '/home', Page: GraficoEnergia },
 { path: '/', Page: AuthForm },
 { path: '/NotificacionesConfig', Page: NotificacionesConfig },
+{ path: '/DashUser', Page: Dashboard },
 
 ];
 
