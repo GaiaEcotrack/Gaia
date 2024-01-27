@@ -10,7 +10,8 @@ pub enum ActionGaiaEcotrack {
     NewGenerator(ActorId,Generator),
     GenerateEnergy(u128),
     GetRewards(u128),
-    Transferred(ActorId , ActorId , u128)
+    Transferred(ActorId , ActorId , u128),
+    Devices(DevicesInfo)
     
     // Aqui se pueden implementar acciones adicionales en el contrato
 }
@@ -23,7 +24,12 @@ pub enum EventsGaiaEcotrack {
     Registered,
     Generated,
     RewardsGenerated,
-    TokensTransferred
+    TokensTransferred{
+        from: ActorId,
+        to: ActorId,
+        amount: u128,
+    }
+    
     // Aqui pueden ir más eventos de respuesta para las acciones
     
 }
