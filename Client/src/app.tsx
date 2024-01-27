@@ -13,7 +13,6 @@ import DashBoard from "./components/DashBoard/DashBoard";
 import { SuperUser } from './pages/superUser/SuperUser';
 import { Labs } from './pages/Labs/Labs';
 import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
-import { AuthForm } from './pages/LoginAct/LoginAct';
 import { PublicProfile } from './components/UserNew/UserNew';
 import { initializeApp } from 'firebase/app';
 import { config } from "./components/config/config"
@@ -60,13 +59,15 @@ function Component() {
           <Route path="/superUser" element={<SuperUser />} />
           <Route path='/lab' element={<Labs />} />
           <Route path='/settings' element={<PublicProfile/>} />
-          <Route path='/loginPrueba' element={<AuthForm/>}/>
           <Route path='/face' element={<Face/>}/>
           <Route path="/dashboard" element={<DashBoard />} />
         </Routes>
 
-
-      { shouldShowFooter && <Footer />}
+      {shouldShowFooter && 
+        location.pathname !== '/assets/logo' &&
+        location.pathname !== '/serviceTerms' &&
+        location.pathname !== '/dataPrivacy' &&
+        location.pathname !== '/' && <Footer />} 
 
     </div>
   );

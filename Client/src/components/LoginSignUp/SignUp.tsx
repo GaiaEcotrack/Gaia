@@ -21,7 +21,6 @@ function SignUp(props:SignUp) {
     e.preventDefault()
 
     if (!emailRef.current || !passwordRef.current || !passwordConfirmRef.current) {
-      // Manejar el caso cuando las referencias son nulas o undefined
       return setError("Password fields are not available");
     }
 
