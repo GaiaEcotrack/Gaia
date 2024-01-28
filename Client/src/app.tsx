@@ -13,7 +13,7 @@ import DashBoard from "./components/DashBoard/DashBoard";
 import { SuperUser } from './pages/superUser/SuperUser';
 import { Labs } from './pages/Labs/Labs';
 import PanelUsuarioFinal from './pages/panelUsuarioFinal/PanelUsuarioFinal';
-import { PublicProfile } from './components/UserNew/UserNew';
+import { UserRegister } from './components/UserNew/UserRegister';
 import { initializeApp } from 'firebase/app';
 import { config } from "./components/config/config"
 import { Footer } from './pages/Footer/Footer';
@@ -58,7 +58,7 @@ function Component() {
           <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
           <Route path="/superUser" element={<SuperUser />} />
           <Route path='/lab' element={<Labs />} />
-          <Route path='/settings' element={<PublicProfile/>} />
+          <Route path='/userReg' element={<UserRegister/>} />
           <Route path='/face' element={<Face/>}/>
           <Route path="/dashboard" element={<DashBoard />} />
         </Routes>

@@ -8,9 +8,11 @@ import { RedUser } from './red/Red';
 import { Usuarios } from './Usuarios/Usuarios';
 import GraficoEnergia from './GraficoEnergia/GraficoEnergia';
 import { AuthForm } from './LoginAct/LoginAct';
-import { NotificacionesConfig } from './notificacionesConfig/NotificacionesConfig';
 import Dashboard from './DashboardUser/Dashboard';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { DeviceRegister } from '@/components/UserNew/DeviceRegister';
+import { CredentialsReg } from '@/components/UserNew/CredentialsReg';
+import { Notifications } from '@/components/UserNew/Notifications';
 
 const routes = [{ path: '/main', Page: Main },
 { path: '/labs', Page: Labs },
@@ -20,8 +22,10 @@ const routes = [{ path: '/main', Page: Main },
 { path: '/usuarios', Page: Usuarios },
 { path: '/home', Page: GraficoEnergia },
 { path: '/', Page: AuthForm },
-{ path: '/NotificacionesConfig', Page: NotificacionesConfig },
 { path: '/DashUser', Page: Dashboard },
+{ path: '/deviceReg', Page: DeviceRegister },
+{ path: '/credentialsReg', Page: CredentialsReg },
+{ path: '/notifications', Page: Notifications },
 
 ];
 

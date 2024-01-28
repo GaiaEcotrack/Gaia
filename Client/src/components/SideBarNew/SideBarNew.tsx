@@ -25,7 +25,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
     { id: 5, title: "Devices", src: "Search", to: "/panelUsuarioFinal" },
     { id: 6, title: "Network", src: "Chart_fill", to: "/Network" },
     { id: 7, title: "Info ", src: "Folder", gap: true, to: "/superUser" },
-    { id: 8, title: "Setting", src: "Setting", to: "/settings" },
+    { id: 8, title: "Register", src: "Setting", to: "/userReg" },
     { title: "Notifications", src: "Chat", to: "/notificaciones" },
   ];
 
