@@ -35,7 +35,7 @@ const PanelUsuarioFinal = () => {
   );
 
   const [typeEffect] = useTypewriter({
-    words: ["Hello {USER}!", "Here you can check out your conections!⚙️"],
+    words: ["Hello, Gaia Ecotrack!", "Here you can check out your conections!⚙️"],
     loop: {},
     typeSpeed: 100,
     deleteSpeed: 40,
