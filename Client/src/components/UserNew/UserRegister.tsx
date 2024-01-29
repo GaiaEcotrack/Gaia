@@ -85,7 +85,7 @@ function UserRegister() {
     
       try {
         const userId = localStorage.getItem('id');
-        let apiUrl = `${URL}users`;
+        let apiUrl = `${URL}/users`;
         let httpMethod = 'POST';
     
         if (userId) {

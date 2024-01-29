@@ -19,6 +19,7 @@ import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 // Funciones de formato de fecha
 import { format } from "date-fns";
+import axios from 'axios'
 // Vara
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { decodeAddress, ProgramMetadata, GearKeyring } from "@gear-js/api";
@@ -117,6 +118,7 @@ const GraficoEnergia = () => {
     null
   );
   const [alertWallet, setAlertWallet] = useState(false);
+  const [energyPv, setEnergyPv] = useState(0)
   const [modalMint, setModalMint] = useState<boolean>(false);
   const [totalGenerado, setTotalGenerado] = useState<number>(0);
   const [totalConsumido, setTotalConsumido] = useState<number>(0);
@@ -137,7 +139,10 @@ const GraficoEnergia = () => {
 
   const [energyData, setEnergyData] = useState(50);
 
+  
   useEffect(() => {
+
+
     // Simula la actualización en tiempo real de los datos de energía
     const interval = setInterval(() => {
       setEnergyData(Math.random());
@@ -146,6 +151,7 @@ const GraficoEnergia = () => {
     return () => clearInterval(interval);
   }, []);
 
+  console.log(energyPv)
   const openPopup = () => {
     setPopupOpen(true);
   };

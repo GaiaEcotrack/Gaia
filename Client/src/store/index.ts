@@ -3,7 +3,7 @@ import { createStore, combineReducers, Action } from 'redux';
 // Define tu estado inicial y los reducers
 interface AppState {
   valueGaia: number;
-  valueVara: number
+  valueVara: number,
   // ... otras propiedades del estado
 }
 
