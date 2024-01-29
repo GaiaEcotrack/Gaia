@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 function UserRegister() {
 
+  const URL = import.meta.env.VITE_APP_API_URL
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
 
@@ -16,7 +17,7 @@ function UserRegister() {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}users/search`, {
+      const response = await axios.get(`${URL}users/search`, {
         params: {
           email: email,
         },
@@ -50,7 +51,7 @@ function UserRegister() {
 
     useEffect(() => {
       if (foundUserId) {
-        axios.get(`${import.meta.env.VITE_APP_API_URL}users/${foundUserId}`)
+        axios.get(`${URL}users/${foundUserId}`)
           .then(response => {
             const userData = response.data;  
             setFormData({
@@ -84,8 +85,7 @@ function UserRegister() {
     
       try {
         const userId = localStorage.getItem('id');
-    
-        let apiUrl = `${import.meta.env.VITE_APP_API_URL}users`;
+        let apiUrl = `${URL}users`;
         let httpMethod = 'POST';
     
         if (userId) {
