@@ -37,7 +37,8 @@ import EnergyDeviceStatus from "@/components/EnergyComponentNew/EnergyDeviceStat
 import { AlertModal } from "@/components/AlertModal/AlertModal";
 import EnergyDeviceList from "@/components/EnergyComponentNew/EnergyDeviceList";
 // import { SideBarNew } from "components/SideBarNew/SideBarNew";
-import { getAuth } from 'firebase/auth';
+import { getAuth } from "firebase/auth";
+import axios from "axios";
 
 ChartJS.register(
   ArcElement,
@@ -122,6 +123,7 @@ const GraficoEnergia = () => {
   const [totalConsumido, setTotalConsumido] = useState<number>(0);
   const [totalExcedente, setTotalExcedente] = useState<number>(0);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [energy, setEnergy] = useState(null);
   const [barData, setBarData] = useState<ChartData<"bar", number[], string>>({
     labels: ["", "", "", "", "", "", "", "", "", "", ""],
     datasets: [
@@ -138,6 +140,27 @@ const GraficoEnergia = () => {
   const [energyData, setEnergyData] = useState(50);
 
   useEffect(() => {
+    const fetchEnergy = async () => {
+      try {
+        const url = import.meta.env.VITE_APP_API_URL;
+        const response = await axios.get(
+          `${url}devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`
+          
+          
+        );
+        const data = response.data.set;
+        const pvGeneration = data[0].pvGeneration;
+        setTotalGenerado(pvGeneration);
+        console.log(pvGeneration);
+        
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchEnergy();
+    
+
+
     // Simula la actualización en tiempo real de los datos de energía
     const interval = setInterval(() => {
       setEnergyData(Math.random());
@@ -252,39 +275,41 @@ const GraficoEnergia = () => {
   //   );
   //   setExcedenteCapturado(excedente);
   // };
-  const [token, setToken] = useState('');
-  useEffect(() => {
-    const auth = getAuth();
-    const user = auth.currentUser;
+  // const [token, setToken] = useState('');
+  // useEffect(() => {
+  //   const auth = getAuth();
+  //   const user = auth.currentUser;
 
-    if (user) {
-      user.getIdToken().then((idToken) => {
-        setToken(idToken);
-        console.log('Token de Firebase:', idToken);
+  //   if (user) {
+  //     user.getIdToken().then((idToken) => {
+  //       setToken(idToken);
+  //       console.log('Token de Firebase:', idToken);
 
-        // Aquí puedes enviar el token a tu backend si es necesario
-        sendTokenToBackend(idToken); 
-      }).catch((error) => {
-        console.error('Error al obtener el token:', error);
-      });
-    }
-  }, []);
+  //       // Aquí puedes enviar el token a tu backend si es necesario
+  //       sendTokenToBackend(idToken);
+  //     }).catch((error) => {
+  //       console.error('Error al obtener el token:', error);
+  //     });
+  //   }
+  // }, []);
+
+  //////////////
 
   const sendTokenToBackend = async (token: string) => {
     try {
-      const url = 'https://tu-backend.com/api/authenticate';
+      const url = "https://tu-backend.com/api/authenticate";
       const response = await fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ token }),
       });
 
       const data = await response.json();
-      console.log('Respuesta del backend:', data);
+      console.log("Respuesta del backend:", data);
     } catch (error) {
-      console.error('Error al enviar token al backend:', error);
+      console.error("Error al enviar token al backend:", error);
     }
   };
   //-------------------------------------------------------------------VARA INTEGRATION
@@ -347,7 +372,6 @@ const GraficoEnergia = () => {
 
   const metadata = ProgramMetadata.from(meta);
 
-
   const signerTwo = async () => {
     const localaccount = account?.address;
 
@@ -396,7 +420,6 @@ const GraficoEnergia = () => {
         )
         .catch((error: any) => {
           alert.error(error.toString());
-          
         });
     } else {
       alert.error("Account not available to sign");
@@ -569,7 +592,7 @@ const GraficoEnergia = () => {
         <div className="flex flex-col sm:flex-row items-center gap-10 justify-center">
           <EnergyMonitor percentage={60} size={200} />
           <EnergyDeviceStatus />
-          <EnergyDeviceList/>
+          <EnergyDeviceList />
         </div>
       </div>
 
@@ -586,7 +609,6 @@ const GraficoEnergia = () => {
           <AlertModal onClose={onClose} />
         </div>
       )}
-
     </div>
   );
 };
