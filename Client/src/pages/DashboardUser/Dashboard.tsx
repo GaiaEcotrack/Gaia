@@ -130,7 +130,7 @@ function Dashboard() {
   }, [gaia, vara]);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex bg-gray-100 h-screen overflow-hidden">
 
       {/* Sidebar */}
 

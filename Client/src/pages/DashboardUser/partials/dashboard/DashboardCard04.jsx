@@ -1,10 +1,25 @@
-import React from 'react';
+import React, {useState , useEffect} from 'react';
 import BarChart from '../../charts/BarChart01';
 
 // Import utilities
 import { tailwindConfig } from '../../utils/Utils';
 
 function DashboardCard04() {
+
+    const [name, setName] = useState('');
+
+  useEffect(() => {
+    // Obtener el valor almacenado en localStorage cuando el componente se monta
+    const datoAlmacenado = window.localStorage.getItem('name');
+
+    // Establecer el estado con el valor de localStorage, si existe
+    if (datoAlmacenado) {
+      setName(datoAlmacenado);
+    }
+  }, []); // El segundo parámetro [] asegura que useEffect solo se ejecute una vez al montar el componente
+
+
+  console.log(name);
 
   const chartData = {
     labels: [
@@ -57,7 +72,7 @@ function DashboardCard04() {
                                 Name
                             </p>
                             <p className="font-medium tracking-widest">
-                                Karthik P
+                                {name}
                             </p>
                         </div>
                         <img className="w-14 h-14" src="https://i.imgur.com/bbPHJVe.png"/>
@@ -114,7 +129,7 @@ function DashboardCard04() {
                                 Name
                             </p>
                             <p className="font-medium tracking-widest">
-                                Karthik P
+                                {name}
                             </p>
                         </div>
                         <img className="w-14 h-14" src="https://i.imgur.com/bbPHJVe.png"/>
