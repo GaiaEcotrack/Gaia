@@ -5,6 +5,7 @@ from src.models.user import UserSchema
 import os
 from dotenv import load_dotenv
 from bson import ObjectId
+import re
 
 load_dotenv()
 
@@ -139,3 +140,22 @@ def delete_user(id):
 
 if __name__ == '__main__':
     application.run(debug=True)
+
+    
+@users_route.route('/search', methods=['GET'])
+def search_user_by_email():
+    email_query = request.args.get('email')
+
+    # Validar que se proporcionó un email en la consulta
+    if not email_query or not re.match(r"[^@]+@[^@]+\.[^@]+", email_query):
+        return jsonify({'message': 'Email inválido'}), 400
+
+    # Buscar el usuario por email en la base de datos
+    user = collection.find_one({'email': email_query})
+
+    if not user:
+        return jsonify({'message': 'Usuario no encontrado para el email proporcionado'}), 404
+
+    # Convertir el ObjectId a string para la respuesta JSON
+    user['_id'] = str(user['_id'])
+    return jsonify(user)

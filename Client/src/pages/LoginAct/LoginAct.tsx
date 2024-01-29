@@ -1,5 +1,5 @@
 import { Link, useNavigate} from "react-router-dom";
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { SignUp } from "../../components/LoginSignUp/SignUp";
 import '../../global.css'
@@ -21,6 +21,12 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const [error, setError] = useState("")
   const [loadingE, setLoadingE] = useState(false)
 
+  useEffect(() => {
+    localStorage.removeItem('id');
+    localStorage.removeItem('name');
+    localStorage.removeItem('email');
+    localStorage.removeItem('profilePic');
+  }, []);
 
   // Funtion to log in with registered email 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -43,7 +49,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
     }
   }
 
-  const email = emailRef.current?.value || "Nombre";
+  const email = emailRef.current?.value || "";
   localStorage.setItem("email", email);
 
 

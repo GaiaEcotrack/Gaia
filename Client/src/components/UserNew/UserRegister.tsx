@@ -1,8 +1,124 @@
+
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-// const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
 function UserRegister() {
+
+  const [email, setEmail] = useState('');
+  const [foundUserId, setFoundUserId] = useState('');
+
+ useEffect(() => {
+    const storedEmail = localStorage.getItem("email");
+    setEmail(storedEmail || '');    
+    handleSearch();
+  }, [email]);
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_APP_API_URL}users/search`, {
+        params: {
+          email: email,
+        },
+      });      
+      if (response.status === 200) {
+        setFoundUserId(response.data._id);
+      } else if (response.status === 404) {
+        setFoundUserId('');
+        console.log('Usuario no encontrado');
+      } else {
+        console.error('Error al buscar usuario:');
+      }
+    } catch (error) {
+      console.error('Error de red:');
+    }
+  };
+  localStorage.setItem("id", foundUserId);
+
+  // const foundUserId = localStorage.getItem("id")
+
+
+// **********************************************************
+
+    const [formData, setFormData] = useState({
+      nombre_apellidos: '',
+      email: '',
+      numero_identificacion: '',
+      direccion: '',
+      telefono: '',
+    });
+
+    useEffect(() => {
+      if (foundUserId) {
+        axios.get(`${import.meta.env.VITE_APP_API_URL}users/${foundUserId}`)
+          .then(response => {
+            const userData = response.data;  
+            setFormData({
+              nombre_apellidos: userData.nombre_apellidos || '',
+              email: userData.email || '',
+              numero_identificacion: userData.numero_identificacion || '',
+              direccion: userData.direccion || '',
+              telefono: userData.telefono || '',
+            });
+          })
+          .catch(error => {
+            console.error('Error fetching user data:', error);
+          });
+      }
+    }, [foundUserId]);
+
+
+// **********************************************************
+
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    };
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+    
+      console.log('Datos del formulario a enviar:', formData);
+    
+      try {
+        const userId = localStorage.getItem('id');
+    
+        let apiUrl = `${import.meta.env.VITE_APP_API_URL}users`;
+        let httpMethod = 'POST';
+    
+        if (userId) {
+          // Si hay un ID en el localStorage, es una actualización (PUT)
+          apiUrl += `/${userId}`;
+          httpMethod = 'PUT';
+        }
+    
+        const response = await fetch(apiUrl, {
+          method: httpMethod,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Usuario agregado/actualizado con éxito:', data);
+    
+          // Guardar el ID en el localStorage si es un nuevo usuario
+          if (!userId) {
+            localStorage.setItem('id', data.id);
+          }
+        } else {
+          console.error('Error al agregar/actualizar usuario:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error de red:', error);
+      }
+    };
+
+
   return (
     <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
       {/* Aside */}
@@ -66,13 +182,13 @@ function UserRegister() {
                 type="button"
                 className="py-3.5 px-7 text-base font-medium text-indigo-100 focus:outline-none bg-[#202142] rounded-lg border border-indigo-200 hover:bg-indigo-900 focus:z-10 focus:ring-4 focus:ring-indigo-200 "
               >
-                Change Email
+                Change Email Log in
               </button>
               <button
                 type="button"
                 className="py-3.5 px-7 text-base font-medium text-black focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142] focus:z-10 focus:ring-4 focus:ring-indigo-200 "
               >
-                Change Password
+                Change Password Log in
               </button>
             </div>
           </div>
@@ -80,7 +196,7 @@ function UserRegister() {
           {/* Formulario de perfil público */}
 
           <div className="">
-            <form className="grid sm:grid-cols-2 gap-4" action="">
+            <form className="grid sm:grid-cols-2 gap-4" action="" onSubmit={handleSubmit}>
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fullname"
@@ -89,12 +205,14 @@ function UserRegister() {
                   Full name
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="nombre_apellidos"
                   type="text"
                   id="fullname"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Name"
-                  defaultValue={localStorage.getItem("name") || ""}
-                  required
+                  value={formData.nombre_apellidos}                
+                  // required
                 />
               </div>
 
@@ -106,12 +224,14 @@ function UserRegister() {
                   Email
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="email"
                   type="email"
                   id="email"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="your.email@mail.com"
-                  value={localStorage.getItem("email") || "name@email.com"}
-                  required
+                  value={formData.email}                
+                  // required
                 />
               </div>
 
@@ -123,11 +243,14 @@ function UserRegister() {
                   Identification Number
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="numero_identificacion"
                   type="number"
                   id="Identification"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Identification"
-                  required
+                  value={formData.numero_identificacion} 
+                  // required
                 />
               </div>
 
@@ -139,11 +262,14 @@ function UserRegister() {
                   Residence Address
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="direccion"
                   type="text"
                   id="Address"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Address"
-                  required
+                  value={formData.direccion}
+                  // required
                 />
               </div>
 
@@ -155,11 +281,14 @@ function UserRegister() {
                   Phone Number
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="telefono"
                   type="number"
                   id="phone"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Phone"
-                  required
+                  value={formData.telefono}
+                  // required
                 />
               </div>
 
@@ -174,8 +303,8 @@ function UserRegister() {
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
                   id="fileId"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
-                  required
+                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"    
+                  // required
                 />
               </div>
 
@@ -191,7 +320,7 @@ function UserRegister() {
                   accept="image/jpeg, image/png, application/pdf"
                   id="fileBank"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
-                  required
+                  // required
                 />
               </div>
 
@@ -207,7 +336,7 @@ function UserRegister() {
                   accept="image/jpeg, image/png, application/pdf"
                   id="fileTax"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
-                  required
+                  // required
                 />
               </div>
 
@@ -223,7 +352,7 @@ function UserRegister() {
                   accept="image/jpeg, image/png, application/pdf"
                   id="filefin1"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
-                  required
+                  // required
                 />
               </div>
 
@@ -239,7 +368,7 @@ function UserRegister() {
                   accept="image/jpeg, image/png, application/pdf"
                   id="filefin2"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
-                  required
+                  // required
                 />
               </div>
 
@@ -293,3 +422,42 @@ function UserRegister() {
 }
 
 export { UserRegister };
+
+
+
+ // const [emailLogIn, setEmailLogin] = useState('');
+  // const [foundUserId, setFoundUserId] = useState('');
+
+  // useEffect(() => {
+  //   const storedEmail = localStorage.getItem("email");
+  //   setEmailLogin(storedEmail|| '');
+  //   console.log(emailLogIn)
+    
+  //   handleSearch();
+  // }, [emailLogIn]);
+
+  // const handleSearch = async () => {
+  //   try {
+  //     const response = await axios.get(`http://127.0.0.1:5000/users/search`, {
+  //       params: { email: emailLogIn }
+  //     });
+  //     if (foundUserId) {
+  //       const data = response.data;
+  //       setFoundUserId(data._id);
+  //     } else if (!foundUserId) {        
+  //       const postData = { email: emailLogIn };
+  //       axios.post('http://127.0.0.1:5000/users', postData)
+  //         .then(response => {
+  //           console.log('Usuario creado con éxito:', response.data);
+  //         })
+  //         .catch(error => {
+  //           console.error('Error al crear usuario:', error);
+  //         });
+  //       }        
+      
+  //   } catch (error) {
+  //     console.error('Error de red:', error);
+  //   }
+  // };
+
+  // console.log(foundUserId);
