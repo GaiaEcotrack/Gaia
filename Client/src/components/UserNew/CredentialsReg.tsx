@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 function CredentialsReg () {
 
+  const URL = import.meta.env.VITE_APP_API_URL
   const foundUserId = localStorage.getItem("id")
 
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ function CredentialsReg () {
 
   useEffect(() => {
     if (foundUserId) {
-      axios.get(`${import.meta.env.VITE_APP_API_URL}users/${foundUserId}`)
+      axios.get(`${URL}users/${foundUserId}`)
         .then(response => {
           const userData = response.data;
           setFormData({
@@ -46,7 +47,7 @@ const handleSubmit = async (e: React.FormEvent) => {
   try {
     const userId = localStorage.getItem('id');
 
-    let apiUrl = `${import.meta.env.VITE_APP_API_URL}users/`;
+    let apiUrl = `${URL}users/`;
     let httpMethod = 'POST';
 
     if (userId) {
