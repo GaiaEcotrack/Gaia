@@ -4,18 +4,17 @@
 from marshmallow import Schema, fields, validate
 # Esquema para validar datos de entrada
 class UserSchema(Schema):
-    username = fields.String(required=True, validate=validate.Length(min=1))
-    password = fields.String(required=True, validate=validate.Length(min=6))
+    username = fields.String(required=False, validate=validate.Length(min=1))
+    password = fields.String(required=False, validate=validate.Length(min=6))
     email = fields.Email(required=True)
     nombre_apellidos = fields.String(required=True)  # Nombre y apellidos
     numero_identificacion = fields.String(required=True)  # Número de identificación
     direccion = fields.String(required=True)  # Dirección
     telefono = fields.String(required=True)  # Teléfono
-    correo_electronico = fields.Email(required=True)  # Correo electrónico
 
     # Datos de identificación
-    documento_identidad = fields.String(required=True)
-    certificacion_nacimiento = fields.String(required=True)
+    documento_identidad = fields.String(required=False)
+    certificacion_nacimiento = fields.String(required=False)
     certificacion_matrimonio = fields.String(allow_none=True)  # Permitir que sea nulo
 
     # Datos financieros
