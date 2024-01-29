@@ -35,7 +35,7 @@ const PanelUsuarioFinal = () => {
   );
 
   const [typeEffect] = useTypewriter({
-    words: ["Hello {USER}!", "Here you can check out your conections!⚙️"],
+    words: ["Hello, Gaia Ecotrack!", "Here you can check out your conections!⚙️"],
     loop: {},
     typeSpeed: 100,
     deleteSpeed: 40,
@@ -140,103 +140,106 @@ const PanelUsuarioFinal = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 m-20">
-              {devices.map((device, index) => (
-                <div
-                  key={index}
-                  className="border rounded-lg bg-white shadow-md p-4 cursor-pointer"
-                  onClick={() => openModal(device)}
-                >
-                  <div className="flex items-center space-x-4">
-                    <img
-                      src={deviceImages[index % deviceImages.length]}
-                      alt={`Imagen del dispositivo ${device.name}`}
-                      className="w-16 h-16 object-cover rounded-full"
-                    />
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-800">
-                        {device.name}
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        Type: {device.type}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        Vendor: {device.vendor}
-                      </p>
-                    </div>
-                  </div>
+  {devices.map((device, index) => (
+    <div
+      key={index}
+      className="border rounded-lg bg-white shadow-md p-4 cursor-pointer relative"
+      onClick={() => openModal(device)}
+    >
+      {/* Imagen de SMA en el borde superior derecho */}
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Logo_SMA.svg/600px-Logo_SMA.svg.png"
+        alt="SMA Logo"
+        className="absolute top-2 right-2 w-12 h-auto"
+      />
 
-                  <div className="mt-4 text-gray-600">
-                    <p>Model: {device.product}</p>
-                    <p>Serial: {device.serial || "None"}</p>
-                    <p>Voltage: {device.generatorPower || "None"}</p>
-                    <p>Timezone: {device.timezone}</p>
-                    <p
-                      className={`font-semibold ${
-                        device.isActive ? "text-blue-600" : "text-gray-400"
-                      }`}
-                    >
-                      {device.isActive ? "Connected" : "Disconnected"}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+      {/* Contenido principal de la tarjeta */}
+      <div className="flex items-center space-x-4">
+        <img
+          src={deviceImages[index % deviceImages.length]}
+          alt={`Imagen del dispositivo ${device.name}`}
+          className="w-16 h-16 object-cover rounded-full"
+        />
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800">
+            {device.name}
+          </h3>
+          <p className="text-sm text-gray-600">
+            Type: {device.type}
+          </p>
+          <p className="text-sm text-gray-600">
+            Vendor: {device.vendor}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-4 text-gray-600">
+        <p>Model: {device.product}</p>
+        <p>Serial: {device.serial || "None"}</p>
+        <p>Voltage: {device.generatorPower || "None"}</p>
+        <p>Timezone: {device.timezone}</p>
+        <p
+          className={`font-semibold ${
+            device.isActive ? "text-blue-600" : "text-gray-400"
+          }`}
+        >
+          {device.isActive ? "Connected" : "Disconnected"}
+        </p>
+      </div>
+    </div>
+  ))}
+</div>
           </>
         )}
 
-        {isModalOpen && selectedDevice && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-            <div className="bg-white p-4 rounded-lg shadow-lg">
-              <div className="border rounded-lg bg-white shadow-md p-4">
-                <div className="flex items-center space-x-4">
-                  <img
-                    src={
-                      deviceImages[
-                        selectedDevice.deviceId % deviceImages.length
-                      ]
-                    }
-                    alt={`Imagen del dispositivo ${selectedDevice.name}`}
-                    className="w-16 h-16 object-cover rounded-full"
-                  />
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {selectedDevice.name}
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      Type: {selectedDevice.type}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Vendor: {selectedDevice.vendor}
-                    </p>
-                  </div>
-                </div>
+{isModalOpen && selectedDevice && (
+  <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+    <div className="bg-blue-100 p-6 rounded-lg shadow-lg w-3/4 md:w-1/2 lg:w-1/3 relative">
+      {/* Imagen de SMA en el borde superior derecho del modal */}
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Logo_SMA.svg/600px-Logo_SMA.svg.png"
+        alt="SMA Logo"
+        className="absolute top-2 right-2 w-12 h-auto"
+      />
 
-                <div className="mt-4 text-gray-600">
-                  <p>Model: {selectedDevice.product}</p>
-                  <p>Serial: {selectedDevice.serial || "None"}</p>
-                  <p>Voltage: {selectedDevice.generatorPower || "None"}</p>
-                  <p>Timezone: {selectedDevice.timezone}</p>
-                  <p
-                    className={`font-semibold ${
-                      selectedDevice.isActive
-                        ? "text-blue-600"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {selectedDevice.isActive ? "Connected" : "Disconnected"}
-                  </p>
-                </div>
-              </div>
+      <div className="flex items-center space-x-4">
+        <img
+          src={deviceImages[selectedDevice.deviceId % deviceImages.length]}
+          alt={`Imagen del dispositivo ${selectedDevice.name}`}
+          className="w-16 h-16 object-cover rounded-full"
+        />
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800">
+            {selectedDevice.name}
+          </h3>
+          <p className="text-sm text-gray-600">Type: {selectedDevice.type}</p>
+          <p className="text-sm text-gray-600">Vendor: {selectedDevice.vendor}</p>
+        </div>
+      </div>
 
-              <button
-                onClick={closeModal}
-                className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
+      <div className="mt-4 text-gray-600">
+        <p>Model: {selectedDevice.product}</p>
+        <p>Serial: {selectedDevice.serial || "None"}</p>
+        <p>Voltage: {selectedDevice.generatorPower || "None"}</p>
+        <p>Timezone: {selectedDevice.timezone}</p>
+        <p
+          className={`font-semibold ${
+            selectedDevice.isActive ? "text-blue-600" : "text-gray-400"
+          }`}
+        >
+          {selectedDevice.isActive ? "Connected" : "Disconnected"}
+        </p>
+      </div>
+
+      <button
+        onClick={closeModal}
+        className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
       </div>
     </section>
   );
