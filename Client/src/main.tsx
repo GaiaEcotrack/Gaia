@@ -1,7 +1,7 @@
 import React from 'react';
 import 'tailwindcss/tailwind.css';
 import ReactDOM from 'react-dom/client';
-import { App } from '@/app';
+import { App } from './app';
 import dotenv from 'dotenv';
 
 import { Provider } from 'react-redux';
