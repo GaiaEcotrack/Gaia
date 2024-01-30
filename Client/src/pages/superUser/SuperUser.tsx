@@ -10,7 +10,6 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 
 // Importaciones de estilos
-import '../../App.css';
 // Importaciones de componentes propios
 import { ModalAdministrar } from "../../components/ModalAdministrar/ModalAdministrar";
 import { ModalConfig } from "../../components/ModalConfig/ModalConfig";

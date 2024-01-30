@@ -1,6 +1,6 @@
 import { useAccount} from "@gear-js/react-hooks";
-import { Transfer } from "pages/home/Transfer";
-import { VaraTransfer } from "pages/home/VaraTransfer";
+import { Transfer } from "../../pages/home/Transfer";
+import { VaraTransfer } from "../../pages/home/VaraTransfer";
 import { useState } from "react";
 
 interface ModalProps {

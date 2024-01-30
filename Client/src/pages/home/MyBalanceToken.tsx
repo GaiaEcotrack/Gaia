@@ -30,12 +30,15 @@ function LocalBalanceToken() {
   const metadata = ProgramMetadata.from(meta);
 
   const getBalance = () => {
-    api.programState
-      .read({ programId: programIDFT, payload: "" }, metadata)
-      .then((result) => {
-        setFullState(result.toJSON());
-      })
-      .catch(({ message }: Error) => alert.error(message));
+    if (api) {
+      api.programState
+        .read({ programId: programIDFT, payload: "" }, metadata)
+        .then((result: { toJSON: () => any; }) => {
+          setFullState(result.toJSON());
+        })
+        .catch(({ message }: Error) => alert.error(message));
+    }
+      
 
     Localbalances.some(([address, balances]: any) => {
       if (encodeAddress(address) === account?.address) {
@@ -54,7 +57,11 @@ function LocalBalanceToken() {
   });
 
   return (
-        <h2 className="text-3xl text-gray-700">{balance}</h2>
+    <div>
+              <h2 className="text-3xl text-slate-800">{balance}</h2>
+              
+    </div>
+        
   );
 }
 

@@ -1,7 +1,6 @@
-
 #![no_std]
 use gstd::{ prelude::*, ActorId };
-use gmeta::{In, InOut, Metadata};
+use gmeta::{In,Out,InOut,Metadata};
 
 
 
@@ -10,7 +9,9 @@ use gmeta::{In, InOut, Metadata};
 pub enum ActionGaiaEcotrack {
     NewGenerator(ActorId,Generator),
     GenerateEnergy(u128),
-    GetRewards(u128)
+    GetRewards(u128),
+    Transferred(ActorId , ActorId , u128),
+    Devices(DevicesInfo)
     
     // Aqui se pueden implementar acciones adicionales en el contrato
 }
@@ -23,6 +24,12 @@ pub enum EventsGaiaEcotrack {
     Registered,
     Generated,
     RewardsGenerated,
+    TokensTransferred{
+        from: ActorId,
+        to: ActorId,
+        amount: u128,
+    }
+    
     // Aqui pueden ir más eventos de respuesta para las acciones
     
 }
@@ -54,6 +61,16 @@ pub enum FTAction {
 // Este Enum define las eventos del token fungible a controlar
 #[derive(Encode, Decode, TypeInfo)]
 pub enum FTEvent {
+    Transfer {
+        from: ActorId,
+        to: ActorId,
+        amount: u128,
+    },
+    Approve {
+        from: ActorId,
+        to: ActorId,
+        amount: u128,
+    },
     Ok,
     Err,
     Balance(u128),
@@ -126,6 +143,6 @@ impl Metadata for ContractMetadata{
      type Reply=();
      type Signal = ();
      // Definimos el estado
-     type State = IoGaiaEcotrack;
+     type State = Out<IoGaiaEcotrack>;
 
 }

@@ -1,17 +1,39 @@
+import React from 'react';
+import { Logo } from './logo';
+import { AccountInfo } from './account-info';
 
-import { Account } from './account';
-// import styles from './Header.module.scss';
 
 type Props = {
   isAccountVisible: boolean;
 };
 
-function Header({ isAccountVisible }: Props) {
+export function Header({ isAccountVisible }: Props) {
+
   return (
-    <header className="text-white hidden justify-end items-center bg-[#181745]">
-      {isAccountVisible && <Account />}
+    <header className='hidden'>
+      <Logo />
+      
+      {isAccountVisible && <AccountInfo />}
     </header>
   );
-}
 
-export { Header };
+  // return (
+  //   <>
+  //     <header className={styles.header}>
+  //       <Container className={styles.header__container}>
+  //         <Logo className={styles.header__logo} />
+  //         <AccountInfo openWallet={openAndCloseChange} isOpen={isOpenChange} />
+  //       </Container>
+  //       {isOpenChange && (
+  //         <Container>
+  //           <WalletChange onClose={openAndCloseChange} openConnectWallet={openConnectWallet} />
+  //         </Container>
+  //       )}
+  //     </header>
+
+  //     <ModalBackground isOpen={isOpenChange} onClick={closeChange} />
+
+  //     <AnimatePresence>{isOpenConnectWallet && <WalletConnect onClose={closConnectWallet} />}</AnimatePresence>
+  //   </>
+  // );
+}

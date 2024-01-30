@@ -78,8 +78,29 @@ impl GaiaEcotrackMainState {
         // Aquí se pueden generar eventos de confirmación al usuario.
 
     }
+    async fn transfer_tokens_between_actors(&mut self, from: ActorId, to: ActorId, amount_tokens: u128) {
+        let address_ft = addresft_state_mut();
+        let payload = FTAction::Transfer {
+            from,
+            to,
+            amount: amount_tokens,
+        };
+        let _ = msg::send(address_ft.ft_program_id, payload, 0);
+        msg::reply(
+            EventsGaiaEcotrack::TokensTransferred {
+                from: from,
+                to: to,
+                amount : amount_tokens,
+            },
+            0,
+        )
+        .unwrap();
 
-  
+        // Aquí se pueden generar eventos de confirmación al usuario.
+    }
+
+    // ...
+
    
 
   
@@ -215,7 +236,11 @@ async fn main(){
                 
              
             }
-           
+
+            ActionGaiaEcotrack::Transferred(from, to, amount) => {
+                let state = state_mut();
+                state.transfer_tokens_between_actors(from, to, amount).await;
+            }
             };
 
 }
@@ -268,5 +293,3 @@ pub struct InitFT {
    
     pub ft_program_id: ActorId,
 }
-
-

@@ -1,3 +1,1 @@
-import { Logo } from './Logo';
-
-export { Logo };
+export { Logo } from './logo';

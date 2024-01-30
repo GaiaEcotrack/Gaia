@@ -1,4 +1,4 @@
-import { MintGaia } from "pages/home/MintGaia";
+import { MintGaia } from "../../pages/home/MintGaia";
 
 interface MoodalMint {
   modalMint: boolean;

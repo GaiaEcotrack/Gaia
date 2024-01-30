@@ -1,6 +1,6 @@
 import { ProgramMetadata } from "@gear-js/api";
 import { useEffect, useState } from "react";
-import { useApi, useAlert, useAccount } from "@gear-js/react-hooks";
+import { useApi, useAlert } from "@gear-js/react-hooks";
 
 function TotalSupplyTokenFree() {
   const { api } = useApi();

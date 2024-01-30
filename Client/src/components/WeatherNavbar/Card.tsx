@@ -1,5 +1,4 @@
-import { ApiLoader } from "components/loaders/api-loader/ApiLoader";
-import { useState, useEffect } from "react";
+import { ApiLoader } from "../../components/loaders/api-loader/ApiLoader";
 
 interface CardProps {
   loadingData: any;
@@ -20,13 +19,6 @@ function Card({ loadingData, showData, weather, forecast }: CardProps) {
   const date = `${day}/${month}/${year}`;
   let url = "";
   let iconUrl = "";
-  let iconUrl3 = "";
-  let iconUrl6 = "";
-  let iconUrl9 = "";
-
-  let forecastDate3 = "";
-  let forecastDate6 = "";
-  let forecastDate9 = "";
 
   if (loadingData) {
     return <ApiLoader />;

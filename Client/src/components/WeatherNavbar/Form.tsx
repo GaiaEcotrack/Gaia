@@ -45,7 +45,7 @@ function Form({ newLocation }: FormProps) {
     const fetchWeatherData = async (latitude: number, longitude: number) => {
       try {
         setIsLoading(true);
-        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.REACT_APP_WEATHER_API_KEY}&lang=es`;
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${import.meta.env.VITE_APP_WEATHER_API_KEY}&lang=es`;
         const response = await fetch(apiUrl);
         const data = await response.json();
         setWeatherLocation(data);
@@ -71,7 +71,7 @@ function Form({ newLocation }: FormProps) {
   }, []);
 
   return (
-    <div className="flex justify-center mb-2">
+    <div className="flex w-80 h-72 bg-black/20 justify-center items-center mb-2">
       <form onSubmit={onSubmit} action="">
         <div className="flex flex-col justify-center mx-auto mb-4 m-2">
           <div className="flex justify-center items-center text-lg mb-4">

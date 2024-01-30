@@ -3,11 +3,8 @@ import { useState } from "react";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { GearKeyring } from "@gear-js/api";
 import {
-  web3Accounts,
   web3Enable,
-  web3FromSource,
 } from "@polkadot/extension-dapp";
-import { useAlert } from "@gear-js/react-hooks";
 import { Button } from "@gear-js/ui";
 import { Card, Center, Heading, Input } from "@chakra-ui/react";
 
@@ -16,16 +13,13 @@ function TransferCard() {
 
   const [valueAmount, setValueAmount] = useState("");
 
-  const alert = useAlert();
 
   const wsEndpoint = "wss://testnet.vara-network.io";
 
   const transfer = async function main() {
     await web3Enable("my wallet");
 
-    const allAccounts = await web3Accounts();
 
-    const accountextension = allAccounts[0];
 
     const wsProvider = new WsProvider(wsEndpoint);
 

@@ -2,8 +2,7 @@ import { CgMenu } from "react-icons/cg";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
-import { Account } from "components/layout/header/account";
-import { AccountIcon } from "components/layout/header/account/AccountIcon";
+import { AccountInfo } from "../layout/header/account-info";
 
 /* eslint-disable */
 export interface IHomePageProps {}
@@ -20,11 +19,11 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
   const [open, setOpen] = useState(false);
   const Menus = [
     { id: 3, title: "Graphics ", src: "Chart", to: "/Home" },
-    { id: 4, title: "Transactions", src: "User", to: "/transactions" },
+    { id: 4, title: "Transactions", src: "User", to: "/dashUser" },
     { id: 5, title: "Devices", src: "Search", to: "/panelUsuarioFinal" },
     { id: 6, title: "Network", src: "Chart_fill", to: "/Network" },
     { id: 7, title: "Info ", src: "Folder", gap: true, to: "/superUser" },
-    { id: 8, title: "Setting", src: "Setting", to: "/settings" },
+    { id: 8, title: "Register", src: "Setting", to: "/userReg" },
     { title: "Notifications", src: "Chat", to: "/notificaciones" },
   ];
 
@@ -57,9 +56,9 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
           tabIndex={0}
         >
           {open && window.innerWidth < 640 ? (
-            <img src="/control.png" alt="Toggle Sidebar" className="border-2" />
+            <img src="/control.png" alt="Toggle Sidebar" className="" />
           ) : window.innerWidth >= 640 ? (
-            <img src="/control.png" alt="Toggle Sidebar" className="border-2" />
+            <img src="/control.png" alt="Toggle Sidebar" className="" />
           ) : (
             <CgMenu size={35} />
           )}
@@ -118,9 +117,10 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
             </Link>
           ))}
         </ul>
-        <div>{open && <Account />}</div>
-        <div className={` ${open ? "sm:block" : "hidden sm:block"}`}>
-          {!open && <AccountIcon />}
+        <div className="mt-5">{open && <AccountInfo />}</div>
+
+        <div className={` ${open ? "sm:block" : "hidden sm:block"} mt-5`}>
+          {!open && <AccountInfo />}
         </div>
 
       </div>

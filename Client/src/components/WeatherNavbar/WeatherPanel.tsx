@@ -2,16 +2,16 @@
 
 import { useState } from "react";
 
-import { ApiLoader } from "components/loaders/api-loader/ApiLoader";
+import { ApiLoader } from "../../components/loaders/api-loader/ApiLoader";
 
 import { Form } from "./Form";
 import { Card } from "./Card";
 
 function WeatherPanel() {
-  let urlWeather = `https://api.openweathermap.org/data/2.5/weather?appid=${process.env.REACT_APP_WEATHER_API_KEY}&lang=es`;
+  let urlWeather = `https://api.openweathermap.org/data/2.5/weather?appid=${import.meta.env.VITE_APP_WEATHER_API_KEY}&lang=es`;
   const cityUrl = "&q=";
 
-  let urlForecast = `https://api.openweathermap.org/data/2.5/forecast?appid=${process.env.REACT_APP_WEATHER_API_KEY}&lang=es`;
+  let urlForecast = `https://api.openweathermap.org/data/2.5/forecast?appid=${import.meta.env.VITE_APP_WEATHER_API_KEY}&lang=es`;
 
   const [weather, setWeather] = useState([]);
   const [forecast, setForecast] = useState([]);

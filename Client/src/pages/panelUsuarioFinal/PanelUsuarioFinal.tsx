@@ -1,229 +1,245 @@
-/* eslint-disable */
 import { useState, useEffect } from "react";
-
-//imagenes
-import Polygon from "../../assets/Polygon.svg";
-
-import PolygonUp from "../../assets/PolygonUp.svg";
-
-import Update from "../../assets/Update.svg";
-
+import axios from "axios";
 import { NavLink } from "react-router-dom";
+import { MdExpandLess, MdExpandMore } from "react-icons/md";
+import { useTypewriter, Cursor } from "react-simple-typewriter";
 
-import back from "../../assets/back.svg";
-// React hooks
+// import Update from "../../assets/Update.svg";
+// import back from "../../assets/back.svg";
+import arrow from "../../assets/arrow.png";
 
-import { ApiLoader } from '../../components/loaders/api-loader/ApiLoader'
+import { ApiLoader } from "../../components/loaders/api-loader/ApiLoader";
 
+// Definición de la interfaz Dispositivo
 interface Dispositivo {
-  Name: string;
-  Device_type: string;
-  Made_By: string;
-  Connected: boolean;
-  Model: string;
-  Firmware_version: string;
-  Voltage: string;
-  Temperature: string;
+  deviceId: number;
+  name: string;
+  type: string;
+  vendor: string;
+  productId: number;
+  isActive: boolean;
+  product: string;
+  serial: string;
+  generatorPower: number;
+  timezone: string;
 }
-const PanelUsuarioFinal = () => {
-  const [menuAbierto, setMenuAbierto] = useState<number | null>(null); // Cambié el tipo de estado a number | null
-  const [dispositivosEncontrados, setDispositivosEncontrados] = useState<
-    Dispositivo[]
-  >([]);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const toggleMenu = (index: number | null) => {
-    setMenuAbierto(index);
-  };
+const PanelUsuarioFinal = () => {
+  // const [menuAbierto, setMenuAbierto] = useState<number | null>(null);
+  const [devices, setDevices] = useState<Dispositivo[]>([]);
+  // const [scrollPosition, setScrollPosition] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDevice, setSelectedDevice] = useState<Dispositivo | null>(
+    null
+  );
+
+  const [typeEffect] = useTypewriter({
+    words: ["Hello, Gaia Ecotrack!", "Here you can check out your conections!⚙️"],
+    loop: {},
+    typeSpeed: 100,
+    deleteSpeed: 40,
+  });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchByAxios = async () => {
       try {
-        const response = await fetch(
-          // "https://jsonplaceholder.typicode.com/users"
-          "/data-dispositivos-encontrados.json"
+        const apiUrl = import.meta.env.VITE_APP_API_URL;
+        const response = await axios.get(
+          `${apiUrl}/devices/plant-devices?plantId=13`
         );
-        const data = await response.json();
-        setDispositivosEncontrados(data);
+        setDevices(response.data.devices);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.log(error);
       }
     };
 
-    fetchData();
+    fetchByAxios();
   }, []);
+
+  // useEffect(() => {
+  //   if (menuAbierto !== null) {
+  //     setScrollPosition(window.scrollY);
+  //     window.scrollTo(0, 0);
+  //   } else {
+  //     window.scrollTo(0, scrollPosition);
+  //   }
+  // }, [menuAbierto, scrollPosition]);
 
   const handleUpdate = async () => {
     try {
       setIsLoading(true);
-
       setTimeout(async () => {
-        const response = await fetch("/data-dispositivos-encontrados.json");
-        const data = await response.json();
-
-        // Obtener un índice aleatorio
-        const randomIndex = Math.floor(Math.random() * data.length);
-
-        const dispositivoAleatorio = data[randomIndex];
-
-        // Actualizar el estado scon un dispositivo aleatorio
-        setDispositivosEncontrados([dispositivoAleatorio]);
+        const apiUrl = import.meta.env.VITE_APP_API_URL;
+        const response = await axios.get(
+          `${apiUrl}/devices/plant-devices?plantId=35`
+        );
+        setDevices(response.data.devices);
         setIsLoading(false);
-        // alert('actualizado');
       }, 2000);
     } catch (error) {
       console.error("Error fetching data:", error);
       setIsLoading(false);
     }
   };
-  const imageUrl =
-    "https://services.meteored.com/img/article/energy-overhaul-scientists-predict-by-the-2040s-solar-energy-will-dominate-our-power-grids-1697660406587_1280.jpeg";
+
+  const openModal = (device: Dispositivo) => {
+    setSelectedDevice(device);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedDevice(null);
+  };
+
+  // Lista de imágenes de dispositivos (url)
+  const deviceImages = [
+    "https://www.europe-solarshop.com/media/catalog/product/cache/1/image/600x/17f82f742ffe127f42dca9de82fb58b1/s/m/sma_sunny_tripower_6000tl_20.png",
+    "https://i.ebayimg.com/images/g/GH4AAOSwPJlkeiH5/s-l1600.webp",
+    // ... y así sucesivamente para cada dispositivo
+  ];
+
   return (
-    <section
-      className="border-2 border-transparent  min-h-screen"
-      style={{
-        backgroundImage: `url(${imageUrl})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        opacity: "",
-      }}
+    <section className="min-h-screen bg-gray-100 p-6">
+      <div className="text-gray-700">
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <ApiLoader />
+          </div>
+        ) : (
+          <>
+            <div className="flex justify-between items-center">
+              <img
+                src="https://w7.pngwing.com/pngs/206/865/png-transparent-drawing-electrician-others-electrical-contractor-panel-industry.png"
+                alt=""
+                className="ml-24 w-24 h-auto brightness-110 mix-blend-multiply"
+              />
+              <span className="text-md mt-8 ml-24 text-emerald-600">
+                {typeEffect}
+              </span>
+            </div>
+
+            <div className="flex flex-col items-center justify-center mb-6">
+              <h1 className="text-2xl md:text-3xl text-gray-800 my-4">
+                Your Devices
+              </h1>
+              <div className="flex space-x-4">
+                <NavLink to="/home">
+                  <button>
+                    <img className="w-10 h-10 rounded-full" src={arrow} alt="Back" />
+                  </button>
+                </NavLink>
+                <button
+                  onClick={handleUpdate}
+                  className="w-28 h-10 border-2 bg-emerald-500 rounded-full text-gray-900"
+                >
+                  Refresh
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 m-20">
+  {devices.map((device, index) => (
+    <div
+      key={index}
+      className="border rounded-lg bg-white shadow-md p-4 cursor-pointer relative"
+      onClick={() => openModal(device)}
     >
-      <div className=" m-16 sm:m-4 ">
-        <div className="text-end">
-          <p className="text-gray-100 text-[20px] sm:text-[14px]  md:text-[28px] lg:text-[24px] xl:text-[24px] mr-8 mt-8 hidden md:block ">
-           User Panel
+      {/* Imagen de SMA en el borde superior derecho */}
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Logo_SMA.svg/600px-Logo_SMA.svg.png"
+        alt="SMA Logo"
+        className="absolute top-2 right-2 w-12 h-auto"
+      />
+
+      {/* Contenido principal de la tarjeta */}
+      <div className="flex items-center space-x-4">
+        <img
+          src={deviceImages[index % deviceImages.length]}
+          alt={`Imagen del dispositivo ${device.name}`}
+          className="w-16 h-16 object-cover rounded-full"
+        />
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800">
+            {device.name}
+          </h3>
+          <p className="text-sm text-gray-600">
+            Type: {device.type}
+          </p>
+          <p className="text-sm text-gray-600">
+            Vendor: {device.vendor}
           </p>
         </div>
-        <div className="flex flex-col sm:flex-row items-center justify-center mb-4 sm:mb-12 sm:mt-8">
-          <h1 className="sm:text-4xl text-gray-800 my-4 sm:my-0">
-            Your Devices
-          </h1>
+      </div>
 
-          <div>
-            {isLoading ? (
-              <div className="flex justify-center ml-6 mr-6 mb-8">
-              {/* <p className="text-[#857D7D]">Cargando...</p> */}
-              <ApiLoader /> 
-              </div>
-            ) : (
-              <button
-                onClick={handleUpdate}
-                disabled={isLoading}
-                className="w-28 h-10 hidden border-2 bg-emerald-500 rounded-[5px] text-gray-900 mb-2 ml-8 mr-8 sm:inline"
-              >
-                Refresh
-              </button>
-            )}
-          </div>
-          <NavLink to="/home">
-            <button className="mb-2 sm:inline hidden">
-              <img className="w-10 h-10" src={back} alt="" />
-            </button>
-          </NavLink>
-          <button onClick={handleUpdate} disabled={isLoading}>
-            {/* <p className="text-cyan-500 m-2">{isLoading ? "Cargando..." : ""}</p> */}
-
-            <img className="w-10 h-10 sm:hidden" src={Update} alt="" />
-          </button>
-        </div>
-
-        {dispositivosEncontrados.map((dispositivo, index) => (
-          <div
-            key={index}
-            className={`border rounded-lg bg-current opacity-70 shadow-2xl p-4 w-full sm:w-[762px] mx-auto my-auto mb-4 sm:mb-8 
-            ${index === menuAbierto ? "hidden" : ""}`}
-          >
-            <h2 className="text-gray-900 font-bold sm:text-2xl mb-6  ">
-            {dispositivo && dispositivo.Name}
-            </h2>
-            <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Device Type: {dispositivo.Device_type}
-            </p>
-            <p className="text-gray-900 font-bold text-sm sm:text-lg ">
-              Made By: {dispositivo.Made_By}
-            </p>
-            <div className="">
-              <p className="text-end text-gray-900 font-bold text-[12px] sm:text-[16px]">
-                {dispositivo.Connected ? "Connected" : "Disconnected"}
-              </p>
-              <br />
-            </div>
-            <div className="flex justify-center mt-[-32px]">
-              <button
-                className="flex items-center text-gray-900 font-bold text-[16px] text-base"
-                onClick={() => toggleMenu(index === menuAbierto ? null : index)}
-              >
-                <p className="text-[12px] sm:text-[16px]">View Detail</p>
-                <img className="cursor-pointer ml-1" src={Polygon} alt="" />
-              </button>
-            </div>
-          </div>
-        ))}
-
-        {menuAbierto !== null && (
-          <div className="border-2 rounded-lg bg-current opacity-70 p-4 w-full sm:w-[762px] mx-auto my-auto mt-4 mb-8">
-            <h2 className="text-gray-900 font-bold sm:text-2xl mb-6 ">
-              {dispositivosEncontrados[menuAbierto].Name}
-            </h2>
-            <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Device Type:{" "}
-              {dispositivosEncontrados[menuAbierto].Device_type}
-            </p>
-            <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Made By: {dispositivosEncontrados[menuAbierto].Made_By}
-            </p>
-
-            <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Model: {dispositivosEncontrados[menuAbierto].Model}
-            </p>
-            <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Firmware Version:{" "}
-              {dispositivosEncontrados[menuAbierto].Firmware_version}
-            </p>
-            <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Voltage: {dispositivosEncontrados[menuAbierto].Voltage}
-            </p>
-            <p className="text-gray-900 font-bold text-sm sm:text-lg">
-              Temperature: {dispositivosEncontrados[menuAbierto].Temperature}
-            </p>
-
-            <div className="mt-4 sm:mt-12">
-              <button className="sm:w-[103px] w-[78px] h-[40px] bg-emerald-600 font-bold rounded-[5px] text-gray-900 text-[12px] sm:text-[16px] m-1">
-                Refresh
-              </button>
-              <button className="sm:w-[103px] w-[78px] h-[40px] bg-yellow-600 font-bold rounded-[5px] text-gray-900 text-[12px] sm:text-[16px] m-1">
-                Update
-              </button>
-              <button className="sm:w-[103px] w-[78px] h-[40px] bg-red-500 font-bold rounded-[5px] text-gray-900 text-[12px] sm:text-[16px] m-1">
-                Analizate
-              </button>
-            </div>
-            <div className="flex justify-between items-center mt-4 sm:mt-6">
-              <a
-                href="#"
-                className="text-end text-gray-900 font-bold text-[15px] underline "
-              >
-                <p className="text-[10px] sm:text-[14px]">Advanced setting</p>
-              </a>
-              <button
-                className="flex ml-auto items-center text-gray-900 font-bold text-[16px] text-base"
-                onClick={() => toggleMenu(null)}
-              >
-                <p className="text-[12px] sm:text-[16px]">Close</p>
-                <img
-                  className="cursor-pointer ml-1 mt-2.5"
-                  src={PolygonUp}
-                  alt=""
-                />
-              </button>
-              <span className="text-gray-900 text-[12px] sm:text-[16px] font-light ml-auto">
-                Disconnected
-              </span>
-              <br />
-            </div>
-          </div>
+      <div className="mt-4 text-gray-600">
+        <p>Model: {device.product}</p>
+        <p>Serial: {device.serial || "None"}</p>
+        <p>Voltage: {device.generatorPower || "None"}</p>
+        <p>Timezone: {device.timezone}</p>
+        <p
+          className={`font-semibold ${
+            device.isActive ? "text-blue-600" : "text-gray-400"
+          }`}
+        >
+          {device.isActive ? "Connected" : "Disconnected"}
+        </p>
+      </div>
+    </div>
+  ))}
+</div>
+          </>
         )}
+
+{isModalOpen && selectedDevice && (
+  <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+    <div className="bg-blue-100 p-6 rounded-lg shadow-lg w-3/4 md:w-1/2 lg:w-1/3 relative">
+      {/* Imagen de SMA en el borde superior derecho del modal */}
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Logo_SMA.svg/600px-Logo_SMA.svg.png"
+        alt="SMA Logo"
+        className="absolute top-2 right-2 w-12 h-auto"
+      />
+
+      <div className="flex items-center space-x-4">
+        <img
+          src={deviceImages[selectedDevice.deviceId % deviceImages.length]}
+          alt={`Imagen del dispositivo ${selectedDevice.name}`}
+          className="w-16 h-16 object-cover rounded-full"
+        />
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800">
+            {selectedDevice.name}
+          </h3>
+          <p className="text-sm text-gray-600">Type: {selectedDevice.type}</p>
+          <p className="text-sm text-gray-600">Vendor: {selectedDevice.vendor}</p>
+        </div>
+      </div>
+
+      <div className="mt-4 text-gray-600">
+        <p>Model: {selectedDevice.product}</p>
+        <p>Serial: {selectedDevice.serial || "None"}</p>
+        <p>Voltage: {selectedDevice.generatorPower || "None"}</p>
+        <p>Timezone: {selectedDevice.timezone}</p>
+        <p
+          className={`font-semibold ${
+            selectedDevice.isActive ? "text-blue-600" : "text-gray-400"
+          }`}
+        >
+          {selectedDevice.isActive ? "Connected" : "Disconnected"}
+        </p>
+      </div>
+
+      <button
+        onClick={closeModal}
+        className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
       </div>
     </section>
   );

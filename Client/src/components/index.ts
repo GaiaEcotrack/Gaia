@@ -1,4 +1,4 @@
-import { Header, Footer } from "./layout";
+import { Header} from "./layout";
 import { ApiLoader, Loader } from "./loaders";
 
 
@@ -6,7 +6,6 @@ import { ApiLoader, Loader } from "./loaders";
 
 export {
   Header,
-  Footer,
   ApiLoader,
   Loader,
 };

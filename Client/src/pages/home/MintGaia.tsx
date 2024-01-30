@@ -40,21 +40,21 @@ function MintGaia({ excedenteCapturado, setTotalGenerado, setTotalConsumido }: M
 
  async function signer(){
     const localaccount = account?.address;
-    const isVisibleAccount = accounts.some(
+    const isVisibleAccount = accounts?.some(
       (visibleAccount) => visibleAccount.address === localaccount
     );
 
-    if (isVisibleAccount) {
+    if (isVisibleAccount && api) {
       // Create a message extrinsic
       const transferExtrinsic = await api.message.send(message, metadata);
 
-      const injector = await web3FromSource(accounts[0].meta.source);
+      const injector = await web3FromSource(accounts?.[0]?.meta.source || 'unknown');
 
       transferExtrinsic
         .signAndSend(
           account?.address ?? alert.error("No account"),
           { signer: injector.signer },
-          ({ status }) => {
+          ({ status }: { status: any }) => {
             if (status.isInBlock) {
               alert.success(status.asInBlock.toString());
             } else {

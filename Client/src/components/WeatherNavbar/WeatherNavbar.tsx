@@ -1,9 +1,4 @@
 
-
-interface WeatherNavbarProps {
-    newLocation: any;
-  }
-  
  function WeatherNavbar() {
 
 

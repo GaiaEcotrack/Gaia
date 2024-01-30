@@ -1,7 +1,10 @@
 import { Link, useNavigate} from "react-router-dom";
-// import { signInWithGoogle } from "../../firebase";
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { SignUp } from "../../components/LoginSignUp/SignUp";
+import '../../global.css'
+import { AuthProvider } from "@/contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext"
 
 /* eslint-disable */
 export interface ILoginPageProps {}
@@ -11,7 +14,48 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const auth = getAuth();
   const navigate = useNavigate();
   const [authing, setAuthing] = useState(false);
-  
+  const [showSignUp, setShowSignUp] = useState(false)
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const { login } = useAuth()
+  const [error, setError] = useState("")
+  const [loadingE, setLoadingE] = useState(false)
+
+  useEffect(() => {
+    localStorage.removeItem('id');
+    localStorage.removeItem('name');
+    localStorage.removeItem('email');
+    localStorage.removeItem('profilePic');
+  }, []);
+
+  // Funtion to log in with registered email 
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+
+    if (!emailRef.current || !passwordRef.current) {
+      return setError("Password fields are not available");
+    }
+
+    try {
+      setError("");
+      setLoadingE(true);
+      await login(emailRef.current.value, passwordRef.current.value);
+      const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
+      navigate(redirectPath);
+    } catch {
+      setError("Incorrect username or password");
+    } finally {
+      setLoadingE(false);
+    }
+  }
+
+  const email = emailRef.current?.value || "";
+  localStorage.setItem("email", email);
+
+
+  // ****************************************************************
+
+  // Function to log in with GOOGLE  
   const signInWithGoogle = async () => {
     setAuthing(true);    
 
@@ -22,7 +66,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       const email = response.user.email || "default@example.com";
       const profilePic = response.user.photoURL || "Photo Profile";
 
-      console.log(response.user)
+      // console.log(response.user)
 
       // Para agregar al localStorage
       localStorage.setItem("name", name);
@@ -46,7 +90,6 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
     }
   };
 
-  
     const imageUrl = 'https://images.unsplash.com/photo-1467533003447-e295ff1b0435?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
   return (
@@ -57,20 +100,21 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
 
       <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
         <div className="w-full h-100">
-            <div className="flex flex-col gap-2 text-center item-center justify-center ">
+            <div className="flex flex-col gap-2 text-center item-center justify-center laptop">
                 <img className="w-32 h-32 mx-auto" src="/LOGOGAIASOLO.png" alt="" />
                 <h1 className="text-black text-3xl">Gaia Ecotrack</h1>
             </div>
-          <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
+          <h1 className="flex justify-center text-2xl text-black font-bold 2xl:text-2xl leading-tight 2xl:mt-12 laptop">
             Log in to your account
           </h1>
 
-          <form className="mt-6" action="#" method="POST">
+          <form className="2xl:mt-6 laptop" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-gray-700">
                 Email Address
               </label>
               <input
+                ref={emailRef}
                 type="email"
                 id="email"
                 name="email"
@@ -86,6 +130,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
                 Password
               </label>
               <input
+                ref={passwordRef}
                 type="password"
                 id="password"
                 name="password"
@@ -97,28 +142,28 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
             </div>
 
             <div className="text-right gap-5 mt-2">
-              <button
-                // to="/Forget"
+              <Link
+                to="/Forget"
                 className="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700"
-                disabled={true}
               >
                 Forgot Password?
-              </button>
+              </Link>
             </div>
 
+            {error && <div className="text-red-500">{error}</div>}
+
             <button
+              disabled={loadingE}
               type="submit"
-              className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg px-4 py-3 mt-6"
-              disabled={true}
+              className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg px-4 py-3 mt-3 2xl:mt-6"
             >
-              Log In
-              
+              Sign In
             </button>
           </form>
 
-          <hr className="my-6 border-gray-300 w-full" />
+          <hr className="2xl:my-6 border-gray-300 w-full" />
 
-          <div className="flex flex-col gap-5 items-center">
+          <div className="flex flex-col gap-5 items-center laptop">
 
           <Link className="w-full" to="/home">
             <button
@@ -178,12 +223,19 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
             </div>
           </button>
 
-          <button type="button" disabled={true} className="text-blue-500 hover:text-blue-700 font-semibold">
-            Create an account
+          <button type="button"
+            className="text-blue-500 hover:text-blue-700 font-semibold" 
+            onClick={() => {setShowSignUp(true)}}
+            >Create an account
           </button>
+
           </div>
         </div>
       </div>
+      <AuthProvider>
+        <SignUp showSignUp={showSignUp} setShowSignUp={setShowSignUp}/>
+      </AuthProvider>
+      
     </section>
   );
 };
