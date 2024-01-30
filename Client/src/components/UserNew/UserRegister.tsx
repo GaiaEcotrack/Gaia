@@ -85,12 +85,12 @@ function UserRegister() {
     
       try {
         const userId = localStorage.getItem('id');
-        let apiUrl = `${URL}/users`;
+        let apiUrl = `${URL}/users/`;
         let httpMethod = 'POST';
     
         if (userId) {
           // Si hay un ID en el localStorage, es una actualización (PUT)
-          apiUrl += `/${userId}`;
+          apiUrl += `${userId}`;
           httpMethod = 'PUT';
         }
     

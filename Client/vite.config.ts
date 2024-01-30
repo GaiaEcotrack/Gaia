@@ -15,9 +15,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      extensions: ['.tsx', '.ts', '.jsx', '.js'],
     },
-    
   },
   server: {
     host: '0.0.0.0',
