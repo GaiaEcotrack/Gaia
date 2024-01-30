@@ -1,7 +1,7 @@
 import React from 'react';
+import { App } from './app';
 import 'tailwindcss/tailwind.css';
 import ReactDOM from 'react-dom/client';
-import { App } from './app';
 import dotenv from 'dotenv';
 
 import { Provider } from 'react-redux';
@@ -15,7 +15,7 @@ dotenv.config();
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <Provider store={store}>
       <React.StrictMode>
-        <App />
+        <App/>
       </React.StrictMode>
     </Provider>
  
