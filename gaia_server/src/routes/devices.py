@@ -6,7 +6,6 @@ import os
 from pymongo import MongoClient
 from bson import ObjectId
 from dotenv import load_dotenv
-import requests
 
 load_dotenv()
 
@@ -18,7 +17,8 @@ print('Db connected')
 
 db = client['gaia']
 devices = db['devices']
-
+###################################################
+#ROUTES
 stored_token = None
 
 @devices_routes.route('/token', methods=['GET'])
@@ -63,41 +63,42 @@ def autorizar_con_token():
         # Si no hay token almacenado, intentar obtener uno nuevo
         return autorizar()
     
-
-@devices_routes.route('/plants', methods=['GET'])
-def get_plant_data():
-    # URL de la API
-    url = 'https://sandbox.smaapis.de/monitoring/v1/plants'
-
-    
-    token_response = autorizar()
-    
-    
-    response_flask, status_code = token_response
-    
-    if status_code != 200:
-        return jsonify({'error': 'No se pudo obtener el token de acceso'}), token_response[1]
+# llevado a archivo plants.py
+# @devices_routes.route('/plants', methods=['GET'])
+# def get_plant_data():
+#     # URL de la API
+#     url = 'https://sandbox.smaapis.de/monitoring/v1/plants'
 
     
-    access_token = response_flask.get_json()['token']
+#     token_response = autorizar()
+    
+    
+#     response_flask, status_code = token_response
+    
+#     if status_code != 200:
+#         return jsonify({'error': 'No se pudo obtener el token de acceso'}), token_response[1]
+
+    
+#     access_token = response_flask.get_json()['token']
     
 
     
-    headers = {'Authorization': f'Bearer {access_token}'}
+#     headers = {'Authorization': f'Bearer {access_token}'}
    
 
     
-    response = requests.get(url, headers=headers)
+#     response = requests.get(url, headers=headers)
 
-    if response.status_code == 200:
+#     if response.status_code == 200:
         
-        data = response.json()
-        return jsonify(data), 200
-    else:
-        # La solicitud falló, devolver el código de estado y el mensaje de error
-        return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code   
+#         data = response.json()
+#         return jsonify(data), 200
+#     else:
+#         # La solicitud falló, devolver el código de estado y el mensaje de error
+#         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code   
         
 
+#! url ejemplo: http://127.0.0.1:5000/devices/device-data?deviceId=19
 @devices_routes.route('/device-data', methods=['GET'])
 def get_device_data():
     # Obtén el parámetro deviceId de la solicitud
@@ -150,10 +151,10 @@ def get_plant_devices():
 
     # Utiliza la función autorizar() para obtener el token de acceso
     token_response = autorizar()
-
-
+    
+    # token_response es una tupla (response_flask, status_code)
     response_flask, status_code = token_response
-
+    
     if status_code != 200:
         return jsonify({'error': 'No se pudo obtener el token de acceso'}), token_response[1]
 
@@ -173,6 +174,160 @@ def get_plant_devices():
     else:
         # La solicitud falló, devolver el código de estado y el mensaje de error
         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code
+
+
+
+#battery
+#! ejemplo de query que me costo un huevo!: http://127.0.0.1:5000/devices/battery?deviceId=18&setType=EnergyAndPowerBattery&period=Week&Date=2022-08-08
+@devices_routes.route('/battery', methods=['GET'])
+def get_device_measurements_battery():
+    # Obtén los parámetros de la solicitud
+    device_id = request.args.get('deviceId')
+    set_type = request.args.get('setType')
+    period = request.args.get('period')
+    date = request.args.get('Date')
+    print(period)
+
+    # Verifica que los parámetros necesarios estén presentes
+    if not device_id or not set_type or not period:
+        return jsonify({'error': 'Faltan parámetros necesarios (deviceId, setType, period)'}), 400
+    if period in ['Day', 'Week', 'Month', 'Year'] and not date:
+        return jsonify({'error': 'Falta el parámetro necesario (Date) para el periodo seleccionado'}), 400
+
+    # Construye la URL con los parámetros para la API de SMA
+    url = f'https://sandbox.smaapis.de/monitoring/v1/devices/{device_id}/measurements/sets/{set_type}/{period}'
+    if period in ['Day', 'Week', 'Month', 'Year']:
+        url += f'?Date={date}'
+
+    # Aquí asumo que la función autorizar() ya está implementada y funciona correctamente
+    token_response = autorizar()
+    response_flask, status_code = token_response
+
+    if status_code != 200:
+        return jsonify({'error': 'No se pudo obtener el token de acceso'}), status_code
+
+    # Obtén el token de acceso del response
+    access_token = response_flask.get_json()['token']
+
+    # Configura los headers para la solicitud
+    headers = {'Authorization': f'Bearer {access_token}'}
+
+    # Realizar la solicitud GET a la API
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        # La solicitud fue exitosa, devolver los datos obtenidos
+        data = response.json()
+        return jsonify(data), 200
+    else:
+        # La solicitud falló, devolver el código de estado y el mensaje de error
+        return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code
+
+
+
+
+
+#ruta de meciiones de Pv
+#! ejemplo de query que me costo un huevo!: http://127.0.0.1:5000/devices/battery?deviceId=18&setType=EnergyAndPowerBattery&period=Week&Date=2022-08-08
+@devices_routes.route('/pv', methods=['GET'])
+def get_device_measurements_pv():
+    # Obtén los parámetros de la solicitud
+    device_id = request.args.get('deviceId')
+    set_type = request.args.get('setType')
+    period = request.args.get('period')
+    date = request.args.get('Date')
+    print(period)
+
+    # Verifica que los parámetros necesarios estén presentes
+    if not device_id or not set_type or not period:
+        return jsonify({'error': 'Faltan parámetros necesarios (deviceId, setType, period)'}), 400
+    if period in ['Day', 'Week', 'Month', 'Year'] and not date:
+        return jsonify({'error': 'Falta el parámetro necesario (Date) para el periodo seleccionado'}), 400
+
+    # Construye la URL con los parámetros para la API de SMA
+    url = f'https://sandbox.smaapis.de/monitoring/v1/devices/{device_id}/measurements/sets/{set_type}/{period}'
+    if period in ['Day', 'Week', 'Month', 'Year']:
+        url += f'?Date={date}'
+
+    # Aquí asumo que la función autorizar() ya está implementada y funciona correctamente
+    token_response = autorizar()
+    response_flask, status_code = token_response
+
+    if status_code != 200:
+        return jsonify({'error': 'No se pudo obtener el token de acceso'}), status_code
+
+    # Obtén el token de acceso del response
+    access_token = response_flask.get_json()['token']
+
+    # Configura los headers para la solicitud
+    headers = {'Authorization': f'Bearer {access_token}'}
+
+    # Realizar la solicitud GET a la API
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        # La solicitud fue exitosa, devolver los datos obtenidos
+        data = response.json()
+        return jsonify(data), 200
+    else:
+        # La solicitud falló, devolver el código de estado y el mensaje de error
+        return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code
+
+# #! ejemplo de query que me costo un huevo!: http://127.0.0.1:5000/devices/sensor?deviceId=18&setType=Sensor&period=Week&Date=2022-08-08
+# @devices_routes.route('/sensor', methods=['GET'])
+# def get_device_measurements_sensor():
+#     # Obtén los parámetros de la solicitud
+#     device_id = request.args.get('deviceId')
+#     set_type = request.args.get('setType')
+#     period = request.args.get('period')
+#     date = request.args.get('Date')
+#     print(period)
+
+#     # Verifica que los parámetros necesarios estén presentes
+#     if not device_id or not set_type or not period:
+#         return jsonify({'error': 'Faltan parámetros necesarios (deviceId, setType, period)'}), 400
+#     if period in ['Day', 'Week', 'Month', 'Year'] and not date:
+#         return jsonify({'error': 'Falta el parámetro necesario (Date) para el periodo seleccionado'}), 400
+
+#     # Construye la URL con los parámetros para la API de SMA
+#     url = f'https://sandbox.smaapis.de/monitoring/v1/devices/{device_id}/measurements/sets/{set_type}/{period}'
+#     if period in ['Day', 'Week', 'Month', 'Year']:
+#         url += f'?Date={date}'
+
+#     # Aquí asumo que la función autorizar() ya está implementada y funciona correctamente
+#     token_response = autorizar()
+#     response_flask, status_code = token_response
+
+#     if status_code != 200:
+#         return jsonify({'error': 'No se pudo obtener el token de acceso'}), status_code
+
+#     # Obtén el token de acceso del response
+#     access_token = response_flask.get_json()['token']
+
+#     # Configura los headers para la solicitud
+#     headers = {'Authorization': f'Bearer {access_token}'}
+
+#     # Realizar la solicitud GET a la API
+#     response = requests.get(url, headers=headers)
+
+#     if response.status_code == 200:
+#         # La solicitud fue exitosa, devolver los datos obtenidos
+#         data = response.json()
+#         return jsonify(data), 200
+#     else:
+#         # La solicitud falló, devolver el código de estado y el mensaje de error
+#         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code
+
+
+
+
+
+
+
+
+
+
+
 
 #################################################################################
 
@@ -224,6 +379,3 @@ def get_device_by_id(device_id):
         return jsonify({'message': 'Error interno del servidor', 'error': str(e)})
     
     #PENSAR EN METODO PARA TRAER POR EL ID DE LOS DISPOSITIVOS DE LA API Y NO DE MONGO DB
-# ...
-
-#PENSAR EN METODO PARA TRAER POR EL ID DE LOS DISPOSITIVOS DE LA API Y NO DE MONGO DB

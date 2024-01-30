@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
-import { MdExpandLess, MdExpandMore } from "react-icons/md";
+// import { MdExpandLess, MdExpandMore } from "react-icons/md";
 import { useTypewriter, Cursor } from "react-simple-typewriter";
 
 // import Update from "../../assets/Update.svg";
@@ -9,6 +9,8 @@ import { useTypewriter, Cursor } from "react-simple-typewriter";
 import arrow from "../../assets/arrow.png";
 
 import { ApiLoader } from "../../components/loaders/api-loader/ApiLoader";
+import { IoIosAddCircle } from "react-icons/io";
+
 
 // Definición de la interfaz Dispositivo
 interface Dispositivo {
@@ -43,6 +45,7 @@ const PanelUsuarioFinal = () => {
 
   useEffect(() => {
     const fetchByAxios = async () => {
+      setIsLoading(true); // Establecer isLoading en true al iniciar la carga
       try {
         const apiUrl = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
@@ -51,9 +54,11 @@ const PanelUsuarioFinal = () => {
         setDevices(response.data.devices);
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false); // Establecer isLoading en false cuando se completa la carga
       }
     };
-
+  
     fetchByAxios();
   }, []);
 
@@ -119,7 +124,6 @@ const PanelUsuarioFinal = () => {
                 {typeEffect}
               </span>
             </div>
-
             <div className="flex flex-col items-center justify-center mb-6">
               <h1 className="text-2xl md:text-3xl text-gray-800 my-4">
                 Your Devices
@@ -138,7 +142,16 @@ const PanelUsuarioFinal = () => {
                 </button>
               </div>
             </div>
+            <div className="flex items-center justify-start">
+    <NavLink to="/deviceReg" className='flex items-center ml-24'>
+        <span>Add new device</span>
+        <button className="ml-4">
+            <IoIosAddCircle className="w-8 h-8" />
+        </button>
+    </NavLink>
+</div>
 
+            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 m-20">
   {devices.map((device, index) => (
     <div
