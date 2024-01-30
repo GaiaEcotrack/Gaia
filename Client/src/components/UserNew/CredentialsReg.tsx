@@ -15,7 +15,7 @@ function CredentialsReg () {
 
   useEffect(() => {
     if (foundUserId) {
-      axios.get(`${URL}users/${foundUserId}`)
+      axios.get(`${URL}/users/${foundUserId}`)
         .then(response => {
           const userData = response.data;
           setFormData({
@@ -47,14 +47,8 @@ const handleSubmit = async (e: React.FormEvent) => {
   try {
     const userId = localStorage.getItem('id');
 
-    let apiUrl = `${URL}users/`;
-    let httpMethod = 'POST';
-
-    if (userId) {
-      // Si hay un ID en el localStorage, es una actualización (PUT)
-      apiUrl += `${userId}`;
-      httpMethod = 'PUT';
-    }
+    let apiUrl = `${URL}/users/${userId}`;
+    let httpMethod = 'PUT';
 
     const response = await fetch(apiUrl, {
       method: httpMethod,

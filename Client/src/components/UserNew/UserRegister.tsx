@@ -17,7 +17,7 @@ function UserRegister() {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`${URL}users/search`, {
+      const response = await axios.get(`${URL}/users/search`, {
         params: {
           email: email,
         },
@@ -51,7 +51,7 @@ function UserRegister() {
 
     useEffect(() => {
       if (foundUserId) {
-        axios.get(`${URL}users/${foundUserId}`)
+        axios.get(`${URL}/users/${foundUserId}`)
           .then(response => {
             const userData = response.data;  
             setFormData({
