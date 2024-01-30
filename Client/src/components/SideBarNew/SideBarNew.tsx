@@ -105,8 +105,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
                 } `}
                 onClick={handleMenuClick}
               >
-                {/* {iconMapping[Menu.src]} */}
-                <img src={`/${Menu.src}.png`} alt="logotwo" className=" w-7"/> 
+                <img src={`/${Menu.src}.png`} alt="logotwo" className=" w-8"/> 
                 <span
                   className={`${!open && "hidden"} origin-left duration-200`}
                 >
