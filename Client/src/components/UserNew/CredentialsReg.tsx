@@ -52,7 +52,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     if (userId) {
       // Si hay un ID en el localStorage, es una actualización (PUT)
-      apiUrl += `${userId}`;
+      apiUrl += `/${userId}`;
       httpMethod = 'PUT';
     }
 
