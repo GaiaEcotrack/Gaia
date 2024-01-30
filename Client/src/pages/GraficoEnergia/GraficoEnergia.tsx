@@ -570,7 +570,7 @@ const GraficoEnergia = () => {
           </div>
         </div>
 
-        <div className="lg:absolute lef-[50%] lg:top-[15%] 2xl:top-[20%] lg:left-[76%] 2xl:left-[78%] laptop">
+        <div className="lg:absolute lef-[50%] lg:top-[15%] 2xl:top-[20%] lg:left-[76%] 2xl:left-[78%] laptop mt-12">
           <WeatherNavbar />
           <WeatherPanel />
         </div>

@@ -1,11 +1,11 @@
 
 from flask import Flask, Blueprint, jsonify, request
+import requests
 from pymongo import MongoClient
 from src.models.user import UserSchema
 import os
 from dotenv import load_dotenv
 from bson import ObjectId
-import re
 
 load_dotenv()
 
@@ -29,6 +29,29 @@ def get_users():
     for user in users:
         user['_id'] = str(user['_id'])
     return jsonify({'message': 'Hello, Flask and MongoDB Atlas!', 'users': users})
+
+# ruta users deploy
+# @users_route.route('/', methods=['GET'])
+# def get_users():
+#     # URL del servidor remoto que proporciona los datos de los usuarios
+#     remote_server_url = "https://dev-server-2xe8.onrender.com/users"  # Reemplaza con la URL correcta
+    
+#     try:
+#         # Realiza una solicitud GET al servidor remoto
+#         response = requests.get(remote_server_url)
+        
+#         # Verifica si la solicitud fue exitosa (código de estado 200)
+#         if response.status_code == 200:
+#             # Parsea los datos JSON de la respuesta
+#             users = response.json()['users']
+            
+#             # Modifica los datos según sea necesario
+            
+#             return jsonify({'message': 'Usuarios obtenidos desde el servidor remoto', 'users': users})
+#         else:
+#             return jsonify({'error': 'Error al obtener usuarios desde el servidor remoto'})
+#     except Exception as e:
+#         return jsonify({'error': 'Error de conexión con el servidor remoto', 'details': str(e)})
 
 @users_route.route('/<id>', methods=['GET'])
 def get_user_by_id(id):
@@ -140,22 +163,3 @@ def delete_user(id):
 
 if __name__ == '__main__':
     application.run(debug=True)
-
-    
-@users_route.route('/search', methods=['GET'])
-def search_user_by_email():
-    email_query = request.args.get('email')
-
-    # Validar que se proporcionó un email en la consulta
-    if not email_query or not re.match(r"[^@]+@[^@]+\.[^@]+", email_query):
-        return jsonify({'message': 'Email inválido'}), 400
-
-    # Buscar el usuario por email en la base de datos
-    user = collection.find_one({'email': email_query})
-
-    if not user:
-        return jsonify({'message': 'Usuario no encontrado para el email proporcionado'}), 404
-
-    # Convertir el ObjectId a string para la respuesta JSON
-    user['_id'] = str(user['_id'])
-    return jsonify(user)
