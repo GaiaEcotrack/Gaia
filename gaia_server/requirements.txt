@@ -22,3 +22,4 @@ six==1.16.0
 swagger_ui==0.1.2
 Werkzeug==3.0.1
 marshmallow==3.20.2
+requests==2.26.0
