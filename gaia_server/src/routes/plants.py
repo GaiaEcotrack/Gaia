@@ -58,10 +58,12 @@ def get_plant_data():
     # URL de la API
     url = 'https://sandbox.smaapis.de/monitoring/v1/plants'
     
-    access_token = autorizar_con_token()
+    token_response = autorizar()
     
-    if not access_token:
+    if token_response is None:
         return jsonify({'error': 'No se pudo obtener el token de acceso'}), 401
+
+    access_token = token_response
 
     headers = {'Authorization': f'Bearer {access_token}'}
     
