@@ -406,6 +406,9 @@ const GraficoEnergia = () => {
           ({ status }: { status: any }) => {
             if (status.isInBlock) {
               setExcedenteCapturado(0);
+              setTotalExcedente(0);
+              setTotalGenerado(0);
+              setTotalConsumido(0);
               alert.success(status.asInBlock.toString());
             } else {
               alert.info("In process");
