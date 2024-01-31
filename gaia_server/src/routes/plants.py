@@ -66,8 +66,7 @@ def get_plant_data():
     headers = {'Authorization': f'Bearer {access_token}'}
     
     response = requests.get(url, headers=headers)
-   
-    response = requests.get(url, headers=headers)
+
 
     if response.status_code == 200:
         
