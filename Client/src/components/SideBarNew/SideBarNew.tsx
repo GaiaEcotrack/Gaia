@@ -96,9 +96,8 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
         </div>
         <ul className={`${!open && "hidden"} pt-6 sm:block`}>
           {Menus.map((Menu) => (
-            <Link to={Menu.to}>
+            <Link to={Menu.to} key={Menu.id}>
               <li
-                key={Menu.id}
                 className={`flex rounded-md p-2 cursor-pointer hover:bg-light-white text-slate-400 hover:text-white text-sm items-center gap-x-4 
                 ${Menu.gap ? "mt-2" : "mt-2"} ${
                   Menu.id === 0 && "bg-light-white"
