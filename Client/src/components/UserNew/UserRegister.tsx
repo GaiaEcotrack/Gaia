@@ -1,3 +1,5 @@
+import { FcHighPriority } from "react-icons/fc"; 
+import { FcApproval } from "react-icons/fc"; 
 
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -8,6 +10,10 @@ function UserRegister() {
   const URL = import.meta.env.VITE_APP_API_URL
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
+  const [approved, setApproved] = useState(false);
+  const [approvedCredent, setApprovedCredent] = useState(false);
+  const [pendingDocuments, setPendingDocuments] = useState<string[]>([]);
+  const [pendingCredentials, setPendingCredentials] = useState<string[]>([]);
 
  useEffect(() => {
     const storedEmail = localStorage.getItem("email");
@@ -23,7 +29,7 @@ function UserRegister() {
         },
       });      
       if (response.status === 200) {
-        setFoundUserId(response.data._id);
+        setFoundUserId(response.data._id);        
       } else if (response.status === 404) {
         setFoundUserId('');
         console.log('Usuario no encontrado');
@@ -34,7 +40,7 @@ function UserRegister() {
       console.error('Error de red:');
     }
   };
-  localStorage.setItem("id", foundUserId);
+  localStorage.setItem("id", foundUserId);  
 
   // const foundUserId = localStorage.getItem("id")
 
@@ -42,11 +48,15 @@ function UserRegister() {
 // **********************************************************
 
     const [formData, setFormData] = useState({
-      nombre_apellidos: '',
-      email: '',
-      numero_identificacion: '',
-      direccion: '',
-      telefono: '',
+      nombre_apellidos: null,
+      email: null,
+      numero_identificacion: null,
+      direccion: null,
+      telefono: null,
+      documento_identidad: null,
+      estado_cuenta_bancario: null,
+      declaraciones_impuestos: null,
+      otros_documentos_financieros: null,
     });
 
     useEffect(() => {
@@ -55,12 +65,26 @@ function UserRegister() {
           .then(response => {
             const userData = response.data;  
             setFormData({
-              nombre_apellidos: userData.nombre_apellidos || '',
-              email: userData.email || '',
-              numero_identificacion: userData.numero_identificacion || '',
-              direccion: userData.direccion || '',
-              telefono: userData.telefono || '',
+              nombre_apellidos: userData.nombre_apellidos || null,
+              email: userData.email || null,
+              numero_identificacion: userData.numero_identificacion || null,
+              direccion: userData.direccion || null,
+              telefono: userData.telefono || null,
+              documento_identidad: userData.documento_identidad || null,
+              estado_cuenta_bancario: userData.estado_cuenta_bancario || null,
+              declaraciones_impuestos: userData.declaraciones_impuestos || null,
+              otros_documentos_financieros: userData.otros_documentos_financieros || null,
             });
+
+            const pendingDocs = Object.entries(userData)
+            .filter(([key, value]) => value === null)
+            .map(([key]) => key);
+            setPendingDocuments(pendingDocs);
+            
+            const hasNullProperty = Object.values(userData).some(value => value === null);
+            // console.log(hasNullProperty)
+            setApproved(!hasNullProperty)
+            
           })
           .catch(error => {
             console.error('Error fetching user data:', error);
@@ -68,9 +92,7 @@ function UserRegister() {
       }
     }, [foundUserId]);
 
-
-// **********************************************************
-
+    // console.log(approved)
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setFormData({
@@ -118,6 +140,35 @@ function UserRegister() {
       }
     };
 
+    if (pendingDocuments.includes("username")) {
+      setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "username"));
+      setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "username"]);
+    }
+    
+    if (pendingDocuments.includes("password")) {
+      setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "password"));
+      setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "password"]);
+    }
+
+    useEffect(() => {
+      if (pendingDocuments.length > 0) {
+        setApproved(false);
+      } else {
+        setApproved(true);
+      }
+    }, [pendingDocuments]);
+
+    useEffect(() => {
+      if (pendingCredentials.includes("username") && pendingCredentials.includes("password")) {
+        setApprovedCredent(false);
+      } else {
+        setApprovedCredent(true);
+      }
+    }, [pendingCredentials]);
+    
+    // console.log(pendingDocuments)
+    // console.log(pendingCredentials)
+    // console.log(approvedCredent)
 
   return (
     <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
@@ -127,8 +178,8 @@ function UserRegister() {
           <h2 className="pl-3 mb-4 text-2xl font-semibold">Register</h2>
 
           <Link to="/userReg">
-            <h1 className="flex items-center px-3 py-2.5 font-bold bg-white text-black border rounded-full">
-              User Register
+            <h1 className="flex items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
+              User Register {approved ? <FcApproval className="text-xl"/> : <FcHighPriority className="text-xl"/>}
             </h1>
           </Link>
 
@@ -139,8 +190,8 @@ function UserRegister() {
           </Link>
 
           <Link to="/credentialsReg">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
-              Credentials
+            <h1 className="flex items-center justify-between px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+              Credentials {approvedCredent ? <FcApproval className="text-xl"/> : <FcHighPriority className="text-xl"/>}
             </h1>
           </Link>
 
@@ -165,7 +216,7 @@ function UserRegister() {
             USER ACCOUNT
           </h2>
 
-          <div className="flex flex-col justify-start items-center space-y-5 sm:flex-row sm:space-y-0 max-w-2xl my-8">
+          <div className="flex flex-row justify-start items-center space-y-5 sm:flex-row sm:space-y-0 max-w-4xl my-8">
             {/* Imagen del perfil */}
             <img
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500"
@@ -191,6 +242,27 @@ function UserRegister() {
                 Change Password Log in
               </button>
             </div>
+
+            <div className="flex flex-col justify-start items-center w-[50%] h-full">
+              {approved ? (
+                <div className="flex items-center">
+                  <FcApproval className="text-7xl" />
+                </div>
+              ) : (
+                <div className="flex flex-col items-center">
+                  <FcHighPriority className="text-2xl" />
+                  <h1 className="text-xl text-red-800 font-bold">Pending</h1>
+                </div>
+              )} 
+                <div>
+                  {pendingDocuments.map((document: string, index: number) => (
+                    <div key={index} className="flex justify-center">
+                      <h3>{document}</h3>
+                    </div>
+                  ))}
+                </div>
+            </div>
+
           </div>
 
           {/* Formulario de perfil público */}
@@ -211,7 +283,7 @@ function UserRegister() {
                   id="fullname"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Name"
-                  value={formData.nombre_apellidos}                
+                  value={formData.nombre_apellidos || ''}                
                   // required
                 />
               </div>
@@ -230,7 +302,7 @@ function UserRegister() {
                   id="email"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="your.email@mail.com"
-                  value={formData.email}                
+                  value={formData.email || ''}                
                   // required
                 />
               </div>
@@ -249,7 +321,7 @@ function UserRegister() {
                   id="Identification"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Identification"
-                  value={formData.numero_identificacion} 
+                  value={formData.numero_identificacion || ''} 
                   // required
                 />
               </div>
@@ -268,7 +340,7 @@ function UserRegister() {
                   id="Address"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Address"
-                  value={formData.direccion}
+                  value={formData.direccion || ''}
                   // required
                 />
               </div>
@@ -287,7 +359,7 @@ function UserRegister() {
                   id="phone"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Phone"
-                  value={formData.telefono}
+                  value={formData.telefono || ''}
                   // required
                 />
               </div>
@@ -300,12 +372,15 @@ function UserRegister() {
                   Upload a file of your identity document
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="documento_identidad"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
                   id="fileId"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"    
                   // required
                 />
+                <h1 className="text-green-600">{formData.documento_identidad}</h1>
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -316,12 +391,15 @@ function UserRegister() {
                   Upload a file of your bank account status
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="estado_cuenta_bancario"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
                   id="fileBank"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
+                <h1 className="text-green-600">{formData.estado_cuenta_bancario}</h1>
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -332,12 +410,15 @@ function UserRegister() {
                   Upload a file of your tax return
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="declaraciones_impuestos"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
                   id="fileTax"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
+                <h1 className="text-green-600">{formData.declaraciones_impuestos}</h1>
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -348,26 +429,20 @@ function UserRegister() {
                   Upload a file of other financial documents
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="otros_documentos_financieros"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
                   id="filefin1"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
+                <h1 className="text-green-600">{formData.otros_documentos_financieros}</h1>
               </div>
 
               <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="filefin2"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
-                >
-                  Upload a file ofother financial documents
-                </label>
                 <input
-                  type="file"
-                  accept="image/jpeg, image/png, application/pdf"
-                  id="filefin2"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
+                  className="bg-inherit"                  
                   // required
                 />
               </div>
@@ -422,42 +497,3 @@ function UserRegister() {
 }
 
 export { UserRegister };
-
-
-
- // const [emailLogIn, setEmailLogin] = useState('');
-  // const [foundUserId, setFoundUserId] = useState('');
-
-  // useEffect(() => {
-  //   const storedEmail = localStorage.getItem("email");
-  //   setEmailLogin(storedEmail|| '');
-  //   console.log(emailLogIn)
-    
-  //   handleSearch();
-  // }, [emailLogIn]);
-
-  // const handleSearch = async () => {
-  //   try {
-  //     const response = await axios.get(`http://127.0.0.1:5000/users/search`, {
-  //       params: { email: emailLogIn }
-  //     });
-  //     if (foundUserId) {
-  //       const data = response.data;
-  //       setFoundUserId(data._id);
-  //     } else if (!foundUserId) {        
-  //       const postData = { email: emailLogIn };
-  //       axios.post('http://127.0.0.1:5000/users', postData)
-  //         .then(response => {
-  //           console.log('Usuario creado con éxito:', response.data);
-  //         })
-  //         .catch(error => {
-  //           console.error('Error al crear usuario:', error);
-  //         });
-  //       }        
-      
-  //   } catch (error) {
-  //     console.error('Error de red:', error);
-  //   }
-  // };
-
-  // console.log(foundUserId);

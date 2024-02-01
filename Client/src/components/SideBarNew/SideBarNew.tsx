@@ -68,7 +68,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
               : "gap-x-4 items-center"
           }`}
         >
-          <Link to="/settings">
+          <Link to="/userReg">
             <img
               onClick={handleMenuClick}
               src={

@@ -5,13 +5,42 @@ import { Link } from "react-router-dom";
 
 function CredentialsReg () {
 
+  const [email, setEmail] = useState('');
+  const [foundUserId, setFoundUserId] = useState('');
   const URL = import.meta.env.VITE_APP_API_URL
-  const foundUserId = localStorage.getItem("id")
+  // const foundUserId = localStorage.getItem("id")
 
   const [formData, setFormData] = useState({
-    username: '',
-    password: '',
+    username: null,
+    password: null,
   });
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("email");
+    setEmail(storedEmail || '');    
+    handleSearch();
+  }, [email]);
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(`${URL}/users/search`, {
+        params: {
+          email: email,
+        },
+      });      
+      if (response.status === 200) {
+        setFoundUserId(response.data._id);        
+      } else if (response.status === 404) {
+        setFoundUserId('');
+        console.log('Usuario no encontrado');
+      } else {
+        console.error('Error al buscar usuario:');
+      }
+    } catch (error) {
+      console.error('Error de red:');
+    }
+  };
+  localStorage.setItem("id", foundUserId); 
 
   useEffect(() => {
     if (foundUserId) {
@@ -19,8 +48,8 @@ function CredentialsReg () {
         .then(response => {
           const userData = response.data;
           setFormData({
-            username: userData.username || '',
-            password: userData.password || '',
+            username: userData.username || null,
+            password: userData.password || null,
           });
         })
         .catch(error => {
@@ -140,7 +169,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   id="usernameCre"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Username"
-                  value={formData.username}                 
+                  value={formData.username || ''}                 
                   required
                 />
               </div>
@@ -155,11 +184,11 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <input
                   onChange={handleInputChange}
                   name="password"
-                  type="text"
+                  type="password"
                   id="passwordCre"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Password"
-                  value={formData.password} 
+                  value={formData.password || ''} 
                   required
                 />
               </div>              
