@@ -31,8 +31,8 @@ function Component() {
   useWalletSync();
 
   const isAppReady = isApiReady && isAccountReady;
-  const shouldShowSidebar = !['/dashboard'].includes(location.pathname);
-  const shouldShowFooter = !['/dashboard'].includes(location.pathname);
+  const shouldShowSidebar = !['/dashboard', '/dashboard/plants'].includes(location.pathname);
+  const shouldShowFooter = !['/dashboard', '/dashboard/plants'].includes(location.pathname);
 
   return (    
     <div className='font-sans bg-gradient-to-tr from-[#181745] from-10% via-[#181745] via-30% to-[#216e93] to-90% text-white'>

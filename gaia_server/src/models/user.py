@@ -1,24 +1,22 @@
-# clases de python que reflejen la logica de la DB
-#  aca podriamos tener la conexion a la base de datos, actualmente esta en app.py
-
 from marshmallow import Schema, fields, validate
-# Esquema para validar datos de entrada
+
+
+
 class UserSchema(Schema):
     username = fields.String(required=True, validate=validate.Length(min=1))
     password = fields.String(required=True, validate=validate.Length(min=6))
-    email = fields.Email(required=True)
-    nombre_apellidos = fields.String(required=True)  # Nombre y apellidos
-    numero_identificacion = fields.String(required=True)  # Número de identificación
-    direccion = fields.String(required=True)  # Dirección
-    telefono = fields.String(required=True)  # Teléfono
-    correo_electronico = fields.Email(required=True)  # Correo electrónico
+    full_name = fields.String(required=True)
+    identification_number = fields.String(required=True)  
+    address = fields.String(required=True) 
+    phone = fields.String(required=True)  
+    email = fields.Email(required=True)  
 
-    # Datos de identificación
-    documento_identidad = fields.String(required=True)
-    certificacion_nacimiento = fields.String(required=True)
-    certificacion_matrimonio = fields.String(allow_none=True)  # Permitir que sea nulo
+    identity_document = fields.String(required=True)
 
-    # Datos financieros
-    estado_cuenta_bancario = fields.String(allow_none=True)  # Permitir que sea nulo
-    declaraciones_impuestos = fields.String(allow_none=True)  # Permitir que sea nulo
-    otros_documentos_financieros = fields.String(allow_none=True)  # Permitir que sea nulo
+    bank_account_status = fields.String(allow_none=True)  
+    tax_declarations = fields.String(allow_none=True)
+    other_financial_documents = fields.String(allow_none=True)  
+    
+    credentials = fields.String(required=True)
+    secret_key = fields.String(required=True)
+    devices = fields.List(fields.String(), allow_none=True)  
