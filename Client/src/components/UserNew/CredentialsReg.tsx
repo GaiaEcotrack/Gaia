@@ -160,7 +160,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   htmlFor="usernameCre"
                   className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                 >
-                  Username
+                  Credential-ID
                 </label>
                 <input
                   onChange={handleInputChange}
@@ -179,7 +179,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   htmlFor="passwordCre"
                   className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                 >
-                  Password
+                  Secret-key
                 </label>
                 <input
                   onChange={handleInputChange}
