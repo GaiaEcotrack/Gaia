@@ -1,3 +1,4 @@
+import { FcOk } from "react-icons/fc"; 
 import { FcHighPriority } from "react-icons/fc"; 
 import { FcApproval } from "react-icons/fc"; 
 
@@ -10,8 +11,9 @@ function UserRegister() {
   const URL = import.meta.env.VITE_APP_API_URL
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
-  const [approved, setApproved] = useState(false);
-  const [approvedCredent, setApprovedCredent] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [completeCredent, setCompletedCredent] = useState(false);
   const [pendingDocuments, setPendingDocuments] = useState<string[]>([]);
   const [pendingCredentials, setPendingCredentials] = useState<string[]>([]);
 
@@ -83,7 +85,7 @@ function UserRegister() {
             
             const hasNullProperty = Object.values(userData).some(value => value === null);
             // console.log(hasNullProperty)
-            setApproved(!hasNullProperty)
+            setCompleted(!hasNullProperty)
             
           })
           .catch(error => {
@@ -92,7 +94,7 @@ function UserRegister() {
       }
     }, [foundUserId]);
 
-    // console.log(approved)
+    // console.log(completed)
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setFormData({
@@ -152,23 +154,25 @@ function UserRegister() {
 
     useEffect(() => {
       if (pendingDocuments.length > 0) {
-        setApproved(false);
+        setCompleted(false);
       } else {
-        setApproved(true);
+        setCompleted(true);
       }
     }, [pendingDocuments]);
 
     useEffect(() => {
       if (pendingCredentials.includes("username") && pendingCredentials.includes("password")) {
-        setApprovedCredent(false);
+        setCompletedCredent(false);
       } else {
-        setApprovedCredent(true);
+        setCompletedCredent(true);
       }
     }, [pendingCredentials]);
+
+    localStorage.setItem("Completed", `${completeCredent}`);
     
     // console.log(pendingDocuments)
     // console.log(pendingCredentials)
-    // console.log(approvedCredent)
+    // console.log(completeCredent)
 
   return (
     <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
@@ -179,7 +183,7 @@ function UserRegister() {
 
           <Link to="/userReg">
             <h1 className="flex items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
-              User Register {approved ? <FcApproval className="text-xl"/> : <FcHighPriority className="text-xl"/>}
+              User Register {completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
             </h1>
           </Link>
 
@@ -191,7 +195,7 @@ function UserRegister() {
 
           <Link to="/credentialsReg">
             <h1 className="flex items-center justify-between px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
-              Credentials {approvedCredent ? <FcApproval className="text-xl"/> : <FcHighPriority className="text-xl"/>}
+              Credentials {completeCredent ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
             </h1>
           </Link>
 
@@ -212,9 +216,27 @@ function UserRegister() {
       {/* Main */}
       <main className="flex justify-start items-start min-h-screen py-1 w-[100%] p-2 md:p-4">
         <div className="px-6 pb-8 mt-8 sm:rounded-lg w-full">
-          <h2 className="flex justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4">
-            USER ACCOUNT
-          </h2>
+          
+          <div className="flex flex-row justify-between items-end">
+            <h2 className="flex justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4">
+              USER ACCOUNT
+            </h2>
+
+            <div className="flex justify-between w-[40%] mr-8">
+              <h1 className="flex items-center">
+                Pending  <FcHighPriority className="text-xl"/>     
+              </h1>
+
+              <h1 className="flex items-center">
+                Completed  <FcOk className="text-xl"/>
+              </h1>
+
+              <h1 className="flex items-center">
+                Verified  <FcApproval className="text-2xl"/>
+              </h1>      
+            </div>
+          </div>
+          
 
           <div className="flex flex-row justify-start items-center space-y-5 sm:flex-row sm:space-y-0 max-w-4xl my-8">
             {/* Imagen del perfil */}
@@ -243,10 +265,10 @@ function UserRegister() {
               </button>
             </div>
 
-            <div className="flex flex-col justify-start items-center w-[50%] h-full">
-              {approved ? (
+            <div className="flex flex-col justify-start items-center w-[47%] h-full">
+              {completed ? (
                 <div className="flex items-center">
-                  <FcApproval className="text-7xl" />
+                  <FcOk className="text-7xl" />
                 </div>
               ) : (
                 <div className="flex flex-col items-center">

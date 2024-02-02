@@ -1,14 +1,23 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { FcHighPriority, FcOk } from "react-icons/fc";
 import { Link } from "react-router-dom";
 
 function CredentialsReg () {
 
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
+  const [completed, setCompleted] = useState(false);
   const URL = import.meta.env.VITE_APP_API_URL
-  // const foundUserId = localStorage.getItem("id")
+
+  useEffect(() => {
+    const valueCompleted = localStorage.getItem("Completed");
+    const completedValue = !!valueCompleted;
+    setCompleted(completedValue);
+  }, []);
+
+  console.log(completed)
 
   const [formData, setFormData] = useState({
     username: null,
@@ -124,8 +133,8 @@ const handleSubmit = async (e: React.FormEvent) => {
           </Link>
 
           <Link to="/credentialsReg">
-            <h1 className="flex items-center px-3 py-2.5 font-bold bg-white text-black border rounded-full">
-              Credentials
+            <h1 className="flex items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
+              Credentials {completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
             </h1>
           </Link>
 
