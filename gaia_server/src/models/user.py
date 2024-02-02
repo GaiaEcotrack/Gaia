@@ -3,8 +3,8 @@ from marshmallow import Schema, fields, validate
 
 
 class UserSchema(Schema):
-    username = fields.String(required=False, validate=validate.Length(min=1))
-    password = fields.String(required=False, validate=validate.Length(min=6))
+    # username = fields.String(required=False, validate=validate.Length(min=1))
+    # password = fields.String(required=False, validate=validate.Length(min=6))
     full_name = fields.String(required=False)
     identification_number = fields.String(required=False)  
     address = fields.String(required=False) 

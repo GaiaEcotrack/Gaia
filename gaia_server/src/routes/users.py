@@ -80,9 +80,9 @@ def add_user():
     if errors:
         return jsonify({'message': 'Validation errors', 'errors': errors}), 400
 
-    username = data.get('username')
+    # username = data.get('username')
     email = data.get('email')
-    password = data.get('password')
+    # password = data.get('password')
 
     # Obtener los nuevos campos
     full_name = data.get('full_name')
@@ -91,8 +91,8 @@ def add_user():
     phone = data.get('phone')
 
     identity_document = data.get('identity_document')
-    birth_certificate = data.get('birth_certificate')
-    marriage_certificate = data.get('marriage_certificate')
+    # birth_certificate = data.get('birth_certificate')
+    # marriage_certificate = data.get('marriage_certificate')
 
     bank_account_status = data.get('bank_account_status')
     tax_declarations = data.get('tax_declarations')
@@ -105,9 +105,9 @@ def add_user():
 
     # Insertar el nuevo usuario en la colección
     new_user = {
-        'username': username,
+        # 'username': username,
         'email': email,
-        'password': password,
+        # 'password': password,
         'full_name': full_name,
         'identification_number': identification_number,
         'address': address,
