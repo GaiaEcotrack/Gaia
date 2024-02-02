@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
+import UserList from './UserList';
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { Link } from 'react-router-dom';
@@ -65,11 +66,13 @@ const DashBoard = () => {
       }
     }
 
+    const imageUrl = 'https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80'
+
   return (
     <div className=''>
      <div
       id="view"
-      className="h-full w-screen md:w-full flex flex-row"
+      className="h-full bg-white w-screen md:w-full flex flex-row"
       x-data="{ sidenav: true }"
     >
       <button
@@ -286,70 +289,13 @@ const DashBoard = () => {
       </div>
      
       <div
-          className="flex justify-center items-center  md:w-[130vh] h-full rounded-tr md:ml-[50vh]   bg-[#18174584]"
+          className="flex sm:w-[79%] sm:ml-[20%] justify-center items-center h-full rounded-tr"
           >
 
       
-          <div className=''>
+          <div className='w-full bg-white h-full'>
           {users.map(user => (
-            <div className='flex flex-wrap bg-[#26254f] rounded-tr m-3'>
-              <img className='w-12 h-12 rounded-full ml-4 mt-4' src="https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" />
-           <div className='ml-2'>
-              <h1>Username :{user.username}</h1>  
-              <h1>Email: {user.email}</h1>
-              <p>Names and lastNames : {user.nombre_apellidos}</p>
-              <p>phone : {user.telefono}</p>
-              <div className='ml-[50vh]'>
-              <MdOutlineDeleteForever onClick={() => handleDeleteUser(user._id)} className='text-red-500 text-lg transition-transform transform hover:scale-110 cursor-pointer ml-[-3.5vh]'/>
-              </div>
-             {confirm[user._id] && (
-                <div className="mt-5 w-[25vh] ml-12">
-                  <input
-                    ref={nuevoNombreUsuarioRef}
-                    type="text"
-                    placeholder="Nuevo nombre de usuario"
-                    className="mr-2 m-1"
-                  />
-                  <input
-                    ref={nuevoCorreoElectronicoRef}
-                    type="text"
-                    placeholder="Nuevo correo electrónico"
-                    className="mr-2 m-1"
-                  />
-                  {/* Agrega otros campos según sea necesario */}
-                  <button
-                    onClick={() => {
-                      const nuevoNombreUsuario = nuevoNombreUsuarioRef.current.value;
-                      const nuevoCorreoElectronico = nuevoCorreoElectronicoRef.current.value;
-       
-                      handleUpdateUser(user._id, {
-                        username: nuevoNombreUsuario || user.username,
-                        email: nuevoCorreoElectronico || user.email,
-                        // Agrega otros campos según sea necesario
-                      });
-       
-                      setConfirm(false);
-                    }}
-                    className="bg-blue-500 text-white px-2 py-1 mt-2 rounded-md cursor-pointer"
-                  >
-                    Actualizar
-                  </button>
-                  <button onClick={() => setConfirm(false)} className="bg-red-500 mt-2 text-white px-2 py-1 rounded-md cursor-pointer ml-2">
-                    Cancelar
-                  </button>
-                </div>
-              )}
-           </div>
-           <div>
-           <button
-           onClick={() => setConfirm((prevConfirm) => ({ ...prevConfirm, [user._id]: !prevConfirm[user._id] }))}
-             className="text-blue-500 text-lg transition-transform transform hover:scale-110 cursor-pointer ml-[-3.5vh]"
-            >
-               <FaRegEdit />
-         </button>
-             
-              </div>
-            </div>
+              <UserList id={user._id} name={user.nombre_apellidos} email={user.email} role='Generador' image={imageUrl} />
           ))}
           </div>
         </div>
