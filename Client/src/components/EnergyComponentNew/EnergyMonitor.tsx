@@ -43,6 +43,7 @@ const EnergyMonitor: React.FC<EnergyMonitorProps> = ({ percentage,size }) => {
 
   // Calcula la longitud de la línea de progreso según el porcentaje proporcionado
   const progress = (batteryStatus[0] / 100) * circumference;
+  
 
   return (
     <div className="w-72 h-72 gap-5 bg-black/20 rounded-lg flex flex-col items-center justify-center">

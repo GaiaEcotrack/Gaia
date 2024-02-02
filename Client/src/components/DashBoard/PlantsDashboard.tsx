@@ -1,78 +1,45 @@
-import axios from 'axios'
-import React, { useEffect, useRef, useState } from 'react'
-import UserList from './UserList';
-import { MdOutlineDeleteForever } from "react-icons/md";
-import { FaRegEdit } from "react-icons/fa";
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Grapic from "./Grapic";
+import panelImg from "./panelImg.png";
+import rayo from "./rayo.png";
 
+function PlantsDashboard() {
+  const url = import.meta.env.VITE_APP_API_URL;
+  const [plants, setPlants] = useState([]);
+  const [power, setPower] = useState<number>(getRandomPower());
 
-interface UserType {
-  email: string;
-  username: string;
-  nombre_apellidos: string;
-  telefono: string;
-  _id: string;
-}
-
-const DashBoard = () => {
-  const url = import.meta.env.VITE_APP_API_URL
-
-  const nuevoNombreUsuarioRef = useRef(null);
-  const nuevoCorreoElectronicoRef = useRef(null);
   
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPower(getRandomPower());
+    }, 5000);
 
-  const [users, setUsers] = useState<UserType[]>([]);
-  const [confirm, setConfirm] = useState<{ [key: string]: boolean }>({});
+    return () => clearInterval(interval); // Limpia el intervalo al desmontar el componente
+  }, []); // El segundo argumento del useEffect es un arreglo de dependencias. En este caso, está vacío para que se ejecute solo una vez al montar el componente.
+
+
+  function getRandomPower() {
+    return (Math.random() * (2.5 - 1.5) + 1.5).toFixed(2);
+  }
 
   useEffect(() => {
-    const callUsers = async () => {
-      try {
-        const response = await axios(`${url}/users/`);
-        const allUsers = response.data;
-        setUsers(allUsers.users);
-        console.log(allUsers);
-        
-      } catch (error) {
-        console.error('Error al obtener los usuarios:', error);
-      }
+    const callPlants = async () => {
+      const response = await (await axios(`${url}/plants`)).data.plants;
+      setPlants(response);
     };
 
-    callUsers();
-  }, []);
+    callPlants();
+  }, [url]);  // Agrega la dependencia 'url' al arreglo de dependencias de useEffect
 
-
-  const handleUpdateUser = async (userId: string, updatedUserData: Partial<UserType>) => {
-    try {
-      const response = await axios.put(`${url}/users/${userId}`, updatedUserData);
-      const updatedUser = response.data.updatedUser;
-
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === userId ? { ...user, ...updatedUser } : user
-        )
-      );
-    } catch (error) {
-      console.error('Error updating user:', error);
-    }
-  };
-
-    const handleDeleteUser = async (userId: string) => {
-      try {
-        
-         axios.delete(`${url}/users/${userId}`)
-         setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
-      } catch (error) {
-        console.error('Error al eliminar el usuario:', error);
-      }
-    }
-
-    const imageUrl = 'https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80'
+  
 
   return (
-    <div className=''>
+    <div className='min-h-screen'>
      <div
       id="view"
-      className="h-full bg-white w-screen md:w-full flex flex-row"
+      className="h-full w-screen md:w-full flex flex-row"
       x-data="{ sidenav: true }"
     >
       <button
@@ -120,34 +87,10 @@ const DashBoard = () => {
               <p  className="text-xs text-gray-500 text-center">Administrator</p>
             </div>
           </div>
-          <div
-             className="flex border-2 border-gray-200 rounded-md focus-within:ring-2 ring-teal-500"
-          >
-            <input
-              type="text"
-              className="w-full rounded-tl-md rounded-bl-md px-2 py-3 text-sm text-gray-600 focus:outline-none"
-              placeholder="Search"
-            />
-            <button
-              className="rounded-tr-md rounded-br-md px-2 py-3 hidden md:block"
-            >
-              <svg
-                className="w-4 h-4 fill-current"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clip-rule="evenodd"
-                ></path>
-              </svg>
-            </button>
-          </div>
+         
           <div id="menu" className="flex flex-col space-y-2">
-            <a
-              href=""
+            <Link
+              to={"/dashboard"}
               className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-[#26254f] hover:text-white hover:text-base rounded-md transition duration-150 ease-in-out"
             >
               <svg
@@ -161,7 +104,7 @@ const DashBoard = () => {
                 ></path>
               </svg>
               <span className="">Users</span>
-            </a>
+            </Link>
               <Link
                 to={"/dashboard/plants"}
                 className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-[#26254f] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
@@ -289,19 +232,51 @@ const DashBoard = () => {
       </div>
      
       <div
-          className="flex sm:w-[79%] sm:ml-[20%] justify-center items-center h-full rounded-tr"
-          >
+          className="flex justify-center items-center h-screen rounded-tr md:ml-[50vh]  "
+          > 
 
-      
-          <div className='w-full bg-white h-full'>
-          {users.map(user => (
-              <UserList id={user._id} name={user.nombre_apellidos} email={user.email} role='Generador' image={imageUrl} />
-          ))}
-          </div>
+      <div className='w-[120vh] ml-12 mt-[-60vh] dark:bg-[#181745c0] rounded-lg h-[30vh]'>
+
+        <div className='w-[10vh] h-[10vh] bg-white flex justify-center ml-[25vh] mt-10 items-center rounded-full'>
+        <img className='w-20 h-20 ml-[-1vh]' src={panelImg} />
         </div>
+           <h1 className='ml-[27vh] mt-3'>plants</h1>
+           <h1 className='ml-[29vh] mt-2'>{plants && plants.length}</h1>
+
+           
+        <div className='w-[10vh] h-[10vh] bg-white flex justify-center ml-[80vh] mt-[-19vh] items-center rounded-full'>
+        <img className='w-20 h-20 ml-[-1vh]' src={rayo} />
+        </div>
+        <h1 className='ml-[81vh] mt-1'>All plants</h1>
+        <h1 className='text-4xl ml-[76vh] mt-2'>K/w {power}</h1>
+      </div>
+    
+
+      <div className='ml-[-130vh] mt-[30vh]'>
+      <Grapic  />
+      </div>
+
+
+        </div>
+     <div className='dark:bg-[#181745c0] rounded-lg mt-[40vh] ml-12 w-[55vh] h-full'>
+      <h1 className='text-lg ml-[25vh]'>Plants</h1>
+      <h1 className='ml-[12vh]'>name</h1>
+      <h1 className='ml-[25vh] mt-[-3vh]'>ID</h1>
+      <h1 className='ml-[38vh] mt-[-3vh]'>Zone</h1>
+      <div className='mt-6'>
+        {plants.map(plant => (
+          <div className='mb-6'>
+            <img src="https://m.media-amazon.com/images/I/51HMM0Wa2gS._AC_.jpg" className='w-12 h-12 mb-3 ml-2 rounded-3xl'  />
+            <h1 className='ml-[10vh] mt-[-7vh]'>{plant.name}</h1>
+            <h1 className='ml-[25vh] mt-[-3.3vh]'>{plant.plantId}</h1>
+            <h3 className='ml-[35vh] mt-[-3vh]'>{plant.timezone}</h3>
+          </div>
+        ))}
+      </div>
+     </div>
     </div>
     </div>
   )
 }
 
-export default DashBoard
+export { PlantsDashboard }

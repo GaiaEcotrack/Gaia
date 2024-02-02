@@ -70,8 +70,6 @@ def get_user_by_id(id):
     # Convertir el ObjectId a string para la respuesta JSON
     user['_id'] = str(user['_id'])
     return jsonify(user)
-
-
 @users_route.route('/', methods=['POST'])
 def add_user():
     data = request.json
@@ -79,52 +77,54 @@ def add_user():
     user_schema = UserSchema()
     errors = user_schema.validate(data)
 
-
     if errors:
-        return jsonify({'message': 'Errores de validación', 'errors': errors}), 400
+        return jsonify({'message': 'Validation errors', 'errors': errors}), 400
 
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
 
     # Obtener los nuevos campos
-    nombre_apellidos = data.get('nombre_apellidos')
-    numero_identificacion = data.get('numero_identificacion')
-    direccion = data.get('direccion')
-    telefono = data.get('telefono')
-    correo_electronico = data.get('correo_electronico')
+    full_name = data.get('full_name')
+    identification_number = data.get('identification_number')
+    address = data.get('address')
+    phone = data.get('phone')
 
-    documento_identidad = data.get('documento_identidad')
-    certificado_nacimiento = data.get('certificado_nacimiento')
-    certificado_matrimonio = data.get('certificado_matrimonio')
+    identity_document = data.get('identity_document')
+    birth_certificate = data.get('birth_certificate')
+    marriage_certificate = data.get('marriage_certificate')
 
-    estado_cuenta_bancario = data.get('estado_cuenta_bancario')
-    declaraciones_impuestos = data.get('declaraciones_impuestos')
-    otros_documentos_financieros = data.get('otros_documentos_financieros')
+    bank_account_status = data.get('bank_account_status')
+    tax_declarations = data.get('tax_declarations')
+    other_financial_documents = data.get('other_financial_documents')
+
+    # Campos adicionales
+    credentials = data.get('credentials')
+    secret_key = data.get('secret_key')
+    devices = data.get('devices')
 
     # Insertar el nuevo usuario en la colección
     new_user = {
         'username': username,
         'email': email,
         'password': password,
-        'nombre_apellidos': nombre_apellidos,
-        'numero_identificacion': numero_identificacion,
-        'direccion': direccion,
-        'telefono': telefono,
-        'correo_electronico': correo_electronico,
-        'documento_identidad': documento_identidad,
-        'certificado_nacimiento': certificado_nacimiento,
-        'certificado_matrimonio': certificado_matrimonio,
-        'estado_cuenta_bancario': estado_cuenta_bancario,
-        'declaraciones_impuestos': declaraciones_impuestos,
-        'otros_documentos_financieros': otros_documentos_financieros
+        'full_name': full_name,
+        'identification_number': identification_number,
+        'address': address,
+        'phone': phone,
+        'identity_document': identity_document,
+        'bank_account_status': bank_account_status,
+        'tax_declarations': tax_declarations,
+        'other_financial_documents': other_financial_documents,
+        'credentials': credentials,
+        'secret_key': secret_key,
+        'devices': devices
     }
 
     result = collection.insert_one(new_user)
     inserted_id = result.inserted_id
 
     return jsonify({'message': 'Usuario agregado con éxito', 'user_id': str(inserted_id)})
-
 
 @users_route.route('/<id>', methods=['PUT'])
 def update_user(id):

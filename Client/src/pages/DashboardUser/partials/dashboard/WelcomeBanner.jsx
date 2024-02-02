@@ -1,6 +1,19 @@
-import React from 'react';
+import React , {useState, useEffect} from 'react';
 
 function WelcomeBanner() {
+
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    // Obtener el valor almacenado en localStorage cuando el componente se monta
+    const datoAlmacenado = window.localStorage.getItem('name');
+
+    // Establecer el estado con el valor de localStorage, si existe
+    if (datoAlmacenado) {
+      setName(datoAlmacenado);
+    }
+  }, []); // El segundo parámetro [] asegura que useEffect solo se ejecute una vez al montar el componente
+
   return (
     <div className="relative bg-gradient-to-br from-primary to-secondary dark:bg-indigo-500 p-4 sm:p-6 rounded-sm overflow-hidden mb-8">
       {/* Background illustration */}
@@ -47,8 +60,8 @@ function WelcomeBanner() {
 
       {/* Content */}
       <div className="relative">
-        <h1 className="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1">Good afternoon, Gaia EcoTrack. 👋</h1>
-        <p className="dark:text-indigo-200">In this section you can find relevant information on the gaiacotrack system.</p>
+        <h1 className="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1">Good afternoon, {name}. 👋</h1>
+        <p className="dark:text-indigo-200">In this section you can find relevant information on the gaiacotrack Ecosystem.</p>
       </div>
     </div>
   );

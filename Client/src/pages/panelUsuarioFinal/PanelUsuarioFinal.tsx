@@ -35,9 +35,21 @@ const PanelUsuarioFinal = () => {
   const [selectedDevice, setSelectedDevice] = useState<Dispositivo | null>(
     null
   );
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    // Obtener el valor almacenado en localStorage cuando el componente se monta
+    const datoAlmacenado = window.localStorage.getItem('name');
+
+    // Establecer el estado con el valor de localStorage, si existe
+    if (datoAlmacenado) {
+      setName(datoAlmacenado);
+    }
+  }, []); // El segundo parámetro [] asegura que useEffect solo se ejecute una vez al montar el componente
+
 
   const [typeEffect] = useTypewriter({
-    words: ["Hello, Gaia Ecotrack!", "Here you can check out your conections!⚙️"],
+    words: [`Hello, ${name}!, Here you can check out your conections!⚙️`],
     loop: {},
     typeSpeed: 100,
     deleteSpeed: 40,
