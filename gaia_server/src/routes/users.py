@@ -163,3 +163,17 @@ def delete_user(id):
 
 if __name__ == '__main__':
     application.run(debug=True)
+    
+@users_route.route('/search', methods=['GET'])
+def get_user_by_email():
+    email = request.args.get('email')
+
+    if not email:
+        return jsonify({'message': 'Parámetro "email" no proporcionado'}), 400
+    user = collection.find_one({'email': email})
+
+    if not user:
+        return jsonify({'message': 'Usuario no encontrado'}), 404
+
+    user['_id'] = str(user['_id'])
+    return jsonify(user)

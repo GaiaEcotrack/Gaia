@@ -50,15 +50,15 @@ function UserRegister() {
 // **********************************************************
 
     const [formData, setFormData] = useState({
-      nombre_apellidos: null,
+      full_name: null,
       email: null,
-      numero_identificacion: null,
-      direccion: null,
-      telefono: null,
-      documento_identidad: null,
-      estado_cuenta_bancario: null,
-      declaraciones_impuestos: null,
-      otros_documentos_financieros: null,
+      identification_number: null,
+      address: null,
+      phone: null,
+      identity_document: null,
+      bank_account_status: null,
+      tax_declarations: null,
+      other_financial_documents: null,
     });
 
     useEffect(() => {
@@ -67,15 +67,15 @@ function UserRegister() {
           .then(response => {
             const userData = response.data;  
             setFormData({
-              nombre_apellidos: userData.nombre_apellidos || null,
+              full_name: userData.full_name || null,
               email: userData.email || null,
-              numero_identificacion: userData.numero_identificacion || null,
-              direccion: userData.direccion || null,
-              telefono: userData.telefono || null,
-              documento_identidad: userData.documento_identidad || null,
-              estado_cuenta_bancario: userData.estado_cuenta_bancario || null,
-              declaraciones_impuestos: userData.declaraciones_impuestos || null,
-              otros_documentos_financieros: userData.otros_documentos_financieros || null,
+              identification_number: userData.identification_number || null,
+              address: userData.address || null,
+              phone: userData.phone || null,
+              identity_document: userData.identity_document || null,
+              bank_account_status: userData.bank_account_status || null,
+              tax_declarations: userData.tax_declarations || null,
+              other_financial_documents: userData.other_financial_documents || null,
             });
 
             const pendingDocs = Object.entries(userData)
@@ -300,12 +300,12 @@ function UserRegister() {
                 </label>
                 <input
                   onChange={handleInputChange}
-                  name="nombre_apellidos"
+                  name="full_name"
                   type="text"
                   id="fullname"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Name"
-                  value={formData.nombre_apellidos || ''}                
+                  value={formData.full_name || ''}                
                   // required
                 />
               </div>
@@ -338,12 +338,12 @@ function UserRegister() {
                 </label>
                 <input
                   onChange={handleInputChange}
-                  name="numero_identificacion"
+                  name="identification_number"
                   type="number"
                   id="Identification"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Identification"
-                  value={formData.numero_identificacion || ''} 
+                  value={formData.identification_number || ''} 
                   // required
                 />
               </div>
@@ -357,12 +357,12 @@ function UserRegister() {
                 </label>
                 <input
                   onChange={handleInputChange}
-                  name="direccion"
+                  name="address"
                   type="text"
                   id="Address"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Address"
-                  value={formData.direccion || ''}
+                  value={formData.address || ''}
                   // required
                 />
               </div>
@@ -376,12 +376,12 @@ function UserRegister() {
                 </label>
                 <input
                   onChange={handleInputChange}
-                  name="telefono"
+                  name="phone"
                   type="number"
                   id="phone"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Phone"
-                  value={formData.telefono || ''}
+                  value={formData.phone || ''}
                   // required
                 />
               </div>
@@ -395,14 +395,14 @@ function UserRegister() {
                 </label>
                 <input
                   onChange={handleInputChange}
-                  name="documento_identidad"
+                  name="identity_document"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
                   id="fileId"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"    
                   // required
                 />
-                <h1 className="text-green-600">{formData.documento_identidad}</h1>
+                <h1 className="text-green-600">{formData.identity_document}</h1>
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -414,14 +414,14 @@ function UserRegister() {
                 </label>
                 <input
                   onChange={handleInputChange}
-                  name="estado_cuenta_bancario"
+                  name="bank_account_status"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
                   id="fileBank"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-                <h1 className="text-green-600">{formData.estado_cuenta_bancario}</h1>
+                <h1 className="text-green-600">{formData.bank_account_status}</h1>
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -433,14 +433,14 @@ function UserRegister() {
                 </label>
                 <input
                   onChange={handleInputChange}
-                  name="declaraciones_impuestos"
+                  name="tax_declarations"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
                   id="fileTax"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-                <h1 className="text-green-600">{formData.declaraciones_impuestos}</h1>
+                <h1 className="text-green-600">{formData.tax_declarations}</h1>
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -452,14 +452,14 @@ function UserRegister() {
                 </label>
                 <input
                   onChange={handleInputChange}
-                  name="otros_documentos_financieros"
+                  name="other_financial_documents"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
                   id="filefin1"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-                <h1 className="text-green-600">{formData.otros_documentos_financieros}</h1>
+                <h1 className="text-green-600">{formData.other_financial_documents}</h1>
               </div>
 
               <div className="mb-2 sm:mb-6">
