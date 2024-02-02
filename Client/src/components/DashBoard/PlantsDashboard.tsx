@@ -26,7 +26,7 @@ function PlantsDashboard() {
 
   useEffect(() => {
     const callPlants = async () => {
-      const response = await (await axios(`${url}plants`)).data.plants;
+      const response = await (await axios(`${url}/plants`)).data.plants;
       setPlants(response);
     };
 
