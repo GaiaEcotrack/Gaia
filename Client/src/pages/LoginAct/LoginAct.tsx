@@ -26,6 +26,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
     localStorage.removeItem('name');
     localStorage.removeItem('email');
     localStorage.removeItem('profilePic');
+    localStorage.removeItem('completeCredent');
   }, []);
 
   // Funtion to log in with registered email 

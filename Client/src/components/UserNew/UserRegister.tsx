@@ -11,7 +11,7 @@ function UserRegister() {
   const URL = import.meta.env.VITE_APP_API_URL
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
-  const [verified, setVerified] = useState(false);
+  const [verified, setVerified] = useState(false); // manejar el cambio desde el Back
   const [completed, setCompleted] = useState(false);
   const [completeCredent, setCompletedCredent] = useState(false);
   const [pendingDocuments, setPendingDocuments] = useState<string[]>([]);
@@ -44,8 +44,7 @@ function UserRegister() {
   };
   localStorage.setItem("id", foundUserId);  
 
-  // const foundUserId = localStorage.getItem("id")
-
+  // console.log(foundUserId)  
 
 // **********************************************************
 
@@ -60,7 +59,7 @@ function UserRegister() {
       tax_declarations: null,
       other_financial_documents: null,
     });
-
+    
     useEffect(() => {
       if (foundUserId) {
         axios.get(`${URL}/users/${foundUserId}`)
@@ -84,17 +83,13 @@ function UserRegister() {
             setPendingDocuments(pendingDocs);
             
             const hasNullProperty = Object.values(userData).some(value => value === null);
-            // console.log(hasNullProperty)
-            setCompleted(!hasNullProperty)
-            
+            setCompleted(!hasNullProperty)            
           })
           .catch(error => {
             console.error('Error fetching user data:', error);
           });
       }
     }, [foundUserId]);
-
-    // console.log(completed)
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setFormData({
@@ -117,13 +112,17 @@ function UserRegister() {
           apiUrl += `${userId}`;
           httpMethod = 'PUT';
         }
+
+        const cleanedFormData = Object.fromEntries(
+          Object.entries(formData).filter(([key, value]) => value !== null)
+        );
     
         const response = await fetch(apiUrl, {
           method: httpMethod,
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(cleanedFormData),
         });
     
         if (response.ok) {
@@ -142,33 +141,38 @@ function UserRegister() {
       }
     };
 
-    if (pendingDocuments.includes("username")) {
-      setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "username"));
-      setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "username"]);
-    }
-    
-    if (pendingDocuments.includes("password")) {
-      setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "password"));
-      setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "password"]);
-    }
-
     useEffect(() => {
-      if (pendingDocuments.length > 0) {
-        setCompleted(false);
-      } else {
-        setCompleted(true);
-      }
-    }, [pendingDocuments]);
+  if (foundUserId) {
+    if (pendingDocuments.includes("credentials")) {
+      setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "credentials"));
+      setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "credentials"]);
+    }
+    if (pendingDocuments.includes("secret_key")) {
+      setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "secret_key"));
+      setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "secret_key"]);
+    }
+    if (pendingDocuments.includes("devices")) {
+      setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "devices"));
+    }
+    // console.log(pendingDocuments)
 
-    useEffect(() => {
-      if (pendingCredentials.includes("username") && pendingCredentials.includes("password")) {
-        setCompletedCredent(false);
-      } else {
-        setCompletedCredent(true);
-      }
-    }, [pendingCredentials]);
+    if (pendingDocuments.length > 0) {
+      setCompleted(false);
+    } else {
+      setCompleted(true);
+    }
 
-    localStorage.setItem("Completed", `${completeCredent}`);
+    if (pendingCredentials.includes("credentials") && pendingCredentials.includes("secret_key")) {
+      setCompletedCredent(false);
+    } else {
+      setCompletedCredent(true);
+    }
+
+    localStorage.setItem("completeCredent", `${completeCredent}`);
+  }
+}, [foundUserId, pendingDocuments, pendingCredentials, completeCredent]);
+
+    // localStorage.setItem("Completed", `${completeCredent}`);
     
     // console.log(pendingDocuments)
     // console.log(pendingCredentials)
@@ -183,7 +187,8 @@ function UserRegister() {
 
           <Link to="/userReg">
             <h1 className="flex items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
-              User Register {completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
+              User Register {verified ? <FcApproval className="text-xl"/> 
+              : (completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>)}
             </h1>
           </Link>
 
@@ -224,15 +229,15 @@ function UserRegister() {
 
             <div className="flex justify-between w-[40%] mr-8">
               <h1 className="flex items-center">
-                Pending  <FcHighPriority className="text-xl"/>     
+                Pending&nbsp; <FcHighPriority className="text-xl"/>     
               </h1>
 
               <h1 className="flex items-center">
-                Completed  <FcOk className="text-xl"/>
+                Completed&nbsp; <FcOk className="text-xl"/>
               </h1>
 
               <h1 className="flex items-center">
-                Verified  <FcApproval className="text-2xl"/>
+                Verified&nbsp; <FcApproval className="text-[23px]"/>
               </h1>      
             </div>
           </div>
@@ -266,23 +271,30 @@ function UserRegister() {
             </div>
 
             <div className="flex flex-col justify-start items-center w-[47%] h-full">
-              {completed ? (
+              {verified ? (
                 <div className="flex items-center">
-                  <FcOk className="text-7xl" />
+                  <FcApproval className="text-7xl" />
                 </div>
-              ) : (
-                <div className="flex flex-col items-center">
-                  <FcHighPriority className="text-2xl" />
-                  <h1 className="text-xl text-red-800 font-bold">Pending</h1>
-                </div>
-              )} 
-                <div>
-                  {pendingDocuments.map((document: string, index: number) => (
-                    <div key={index} className="flex justify-center">
-                      <h3>{document}</h3>
+                ) : (
+                  completed ? (
+                    <div className="flex items-center">
+                      <FcOk className="text-7xl" />
                     </div>
-                  ))}
-                </div>
+                  ) : (
+                    <div className="flex flex-col items-center">
+                      <FcHighPriority className="text-2xl" />
+                      <h1 className="text-xl text-red-800 font-bold">Pending</h1>
+                    </div>
+                  )
+                )
+              } 
+              <div>
+                {pendingDocuments.map((document: string, index: number) => (
+                  <div key={index} className="flex justify-center">
+                    <h3>{document}</h3>
+                  </div>
+                ))}
+              </div>
             </div>
 
           </div>
@@ -306,7 +318,7 @@ function UserRegister() {
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Name"
                   value={formData.full_name || ''}                
-                  // required
+                  required
                 />
               </div>
 
@@ -323,9 +335,9 @@ function UserRegister() {
                   type="email"
                   id="email"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
-                  placeholder="your.email@mail.com"
-                  value={formData.email || ''}                
-                  // required
+                  placeholder={localStorage.getItem("email") || "example@email.com"}
+                  value={formData.email || ''}
+                  required
                 />
               </div>
 
@@ -344,7 +356,7 @@ function UserRegister() {
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Identification"
                   value={formData.identification_number || ''} 
-                  // required
+                  required
                 />
               </div>
 
@@ -363,7 +375,7 @@ function UserRegister() {
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Address"
                   value={formData.address || ''}
-                  // required
+                  required
                 />
               </div>
 
@@ -382,7 +394,7 @@ function UserRegister() {
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Phone"
                   value={formData.phone || ''}
-                  // required
+                  required
                 />
               </div>
 
@@ -402,7 +414,7 @@ function UserRegister() {
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"    
                   // required
                 />
-                <h1 className="text-green-600">{formData.identity_document}</h1>
+                <h1 className="text-green-600 absolute">{formData.identity_document}</h1>
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -421,7 +433,7 @@ function UserRegister() {
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-                <h1 className="text-green-600">{formData.bank_account_status}</h1>
+                <h1 className="text-green-600 absolute">{formData.bank_account_status}</h1>
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -440,7 +452,7 @@ function UserRegister() {
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-                <h1 className="text-green-600">{formData.tax_declarations}</h1>
+                <h1 className="text-green-600 absolute">{formData.tax_declarations}</h1>
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -459,7 +471,7 @@ function UserRegister() {
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-                <h1 className="text-green-600">{formData.other_financial_documents}</h1>
+                <h1 className="text-green-600 absolute">{formData.other_financial_documents}</h1>
               </div>
 
               <div className="mb-2 sm:mb-6">

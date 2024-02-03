@@ -8,20 +8,21 @@ function CredentialsReg () {
 
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
-  const [completed, setCompleted] = useState(false);
+  const [completeCredent, setCompletedCredent] = useState(false);
   const URL = import.meta.env.VITE_APP_API_URL
 
   useEffect(() => {
-    const valueCompleted = localStorage.getItem("Completed");
-    const completedValue = !!valueCompleted;
-    setCompleted(completedValue);
-  }, []);
-
-  console.log(completed)
+    const valueCompleted = localStorage.getItem("completeCredent");
+    if(valueCompleted === "false"){
+      setCompletedCredent(false);
+    }if(valueCompleted === "true"){
+      setCompletedCredent(true);
+    }
+  }, [completeCredent]);
 
   const [formData, setFormData] = useState({
-    username: null,
-    password: null,
+    credentials: null,
+    secret_key: null,
   });
 
   useEffect(() => {
@@ -57,8 +58,8 @@ function CredentialsReg () {
         .then(response => {
           const userData = response.data;
           setFormData({
-            username: userData.username || null,
-            password: userData.password || null,
+            credentials: userData.credentials || null,
+            secret_key: userData.secret_key || null,
           });
         })
         .catch(error => {
@@ -112,7 +113,6 @@ const handleSubmit = async (e: React.FormEvent) => {
   }
 };
 
-
   return (
     <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
       {/* Aside */}
@@ -134,7 +134,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
           <Link to="/credentialsReg">
             <h1 className="flex items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
-              Credentials {completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
+              Credentials {completeCredent ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
             </h1>
           </Link>
 
@@ -173,12 +173,12 @@ const handleSubmit = async (e: React.FormEvent) => {
                 </label>
                 <input
                   onChange={handleInputChange}
-                  name="username"
+                  name="credentials"
                   type="text"
                   id="usernameCre"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Username"
-                  value={formData.username || ''}                 
+                  value={formData.credentials || ''}                 
                   required
                 />
               </div>
@@ -192,12 +192,12 @@ const handleSubmit = async (e: React.FormEvent) => {
                 </label>
                 <input
                   onChange={handleInputChange}
-                  name="password"
+                  name="secret_key"
                   type="password"
                   id="passwordCre"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Password"
-                  value={formData.password || ''} 
+                  value={formData.secret_key || ''} 
                   required
                 />
               </div>              
