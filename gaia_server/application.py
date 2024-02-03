@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from src.routes.users import users_route
 from src.routes.devices import devices_routes
 from src.routes.plants import plants_routes
+from src.services.s3_bucket import bucket_route
 from src.routes.api_growth import api_growatt_bp
 from flask_cors import CORS
 
@@ -35,6 +36,7 @@ application.register_blueprint(SWAGGER_BLUEPRINT, url_prefix=SWAGGER_URL)
 application.register_blueprint(users_route, url_prefix='/users')
 application.register_blueprint(devices_routes, url_prefix='/devices')
 application.register_blueprint(plants_routes, url_prefix='/plants')
+application.register_blueprint(bucket_route, url_prefix='/bucket')
 application.register_blueprint(api_growatt_bp, url_prefix='/api_growatt')
 
 
