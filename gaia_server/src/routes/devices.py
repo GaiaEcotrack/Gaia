@@ -6,6 +6,8 @@ import os
 from pymongo import MongoClient
 from bson import ObjectId
 from dotenv import load_dotenv
+from src.models.devices import DeviceSchema
+from src.models.user import UserSchema
 
 load_dotenv()
 
@@ -17,6 +19,8 @@ print('Db connected')
 
 db = client['gaia']
 devices = db['devices']
+
+collection = db['users']
 ###################################################
 #ROUTES
 stored_token = None
@@ -379,3 +383,67 @@ def get_device_by_id(device_id):
         return jsonify({'message': 'Error interno del servidor', 'error': str(e)})
     
     #PENSAR EN METODO PARA TRAER POR EL ID DE LOS DISPOSITIVOS DE LA API Y NO DE MONGO DB
+    
+    
+    
+    
+    # Post para agregar nuevo dispositivo a la DB 
+@devices_routes.route('/', methods=['POST'])
+def add_device():
+    data = request.json
+
+    device_schema = DeviceSchema()
+    errors = device_schema.validate(data)
+    
+    # user_schema = UserSchema()
+    # errors = user_schema.validate(data)
+
+    if errors:
+        return jsonify({'message': 'Validation errors', 'errors': errors}), 400
+    
+    user_id = data.get('user_id')
+    
+    user = collection.find_one({'_id': ObjectId(user_id)})
+    if not user:
+        return jsonify({'message': 'Usuario no encontrado'}), 404
+
+    # Obtener los campos del dispositivo
+    plant_data = data.get('plant')
+    device_data = data.get('device')
+    sets = data.get('sets')
+
+    # Insertar el nuevo dispositivo en la colección o hacer lo que sea necesario
+    new_device = {
+    'id': user_id,
+    'plant': {
+        'plantId': plant_data.get('plantId'),
+        'name': plant_data.get('name'),
+        'description': plant_data.get('description'),
+        'timezone': plant_data.get('timezone')
+    },
+    'device': {
+        'deviceId': device_data.get('deviceId'),
+        'name': device_data.get('name'),
+        'timezone': device_data.get('timezone')
+    },
+    'sets': sets
+}
+    result = devices.insert_one(new_device)
+    inserted_id = result.inserted_id
+    
+    # user_id = collection.insert_one(data).inserted_id
+    
+    devices.update_one({'_id': ObjectId(user_id)}, {'$push': {'devices': str(inserted_id)}})
+
+    return jsonify({'message': 'Dispositivo agregado con éxito', 'device_id': str(inserted_id)})
+
+
+    # return jsonify({'message': 'Usuario agregado con éxito', 'user_id': str(user_id)})
+
+
+# app.register_blueprint(devices_route, url_prefix='/devices')
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
+    
+#     return jsonify({'message': 'Dispositivo agregado con éxito'})

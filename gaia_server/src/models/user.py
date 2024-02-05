@@ -1,10 +1,8 @@
 from marshmallow import Schema, fields, validate
-
+from src.models.devices import DeviceSchema
 
 
 class UserSchema(Schema):
-    # username = fields.String(required=False, validate=validate.Length(min=1))
-    # password = fields.String(required=False, validate=validate.Length(min=6))
     full_name = fields.String(required=False)
     identification_number = fields.String(required=False)  
     address = fields.String(required=False) 
@@ -20,3 +18,6 @@ class UserSchema(Schema):
     credentials = fields.String(required=False)
     secret_key = fields.String(required=False)
     devices = fields.List(fields.String(), allow_none=False)  
+    
+    devices = fields.List(fields.Nested(DeviceSchema), allow_none=False)
+    
