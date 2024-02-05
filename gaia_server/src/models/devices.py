@@ -1,15 +1,20 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
+
+class PlantSchema(Schema):
+    plantId = fields.String(required=True)
+    name = fields.String(required=True)
+    description = fields.String(required=True)
+    timezone = fields.String(required=True)
+
+class DeviceDataSchema(Schema):
+    deviceId = fields.String(required=True)
+    name = fields.String(required=True)
+    timezone = fields.String(required=True)
 
 class DeviceSchema(Schema):
-    plantId = fields.String(data_key="plant.plantId", required=True)
-    plantName = fields.String(data_key="plant.name", required=True)
-    plantDescription = fields.String(data_key="plant.description", required=True)
-    plantTimezone = fields.String(data_key="plant.timezone", required=True)
-
-    deviceId = fields.String(data_key="device.deviceId", required=True)
-    deviceName = fields.String(data_key="device.name", required=True)
-    deviceTimezone = fields.String(data_key="device.timezone", required=True)
-
+    user_id = fields.String(required=True, data_key="user_id")
+    plant = fields.Nested(PlantSchema, data_key="plant", required=True)
+    device = fields.Nested(DeviceDataSchema, data_key="device", required=True)
     sets = fields.List(fields.String(), required=True)
 
 
