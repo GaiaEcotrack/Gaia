@@ -101,7 +101,7 @@ def add_user():
     # Campos adicionales
     credentials = data.get('credentials')
     secret_key = data.get('secret_key')
-    devices = data.get('devices')
+    devices = data.get('devices', [])
 
     # Insertar el nuevo usuario en la colección
     new_user = {

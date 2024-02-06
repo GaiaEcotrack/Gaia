@@ -91,6 +91,43 @@ function UserRegister() {
       }
     }, [foundUserId]);
 
+    // subir imagen del document
+    const handleInputChangeDocument = (event: React.ChangeEvent<HTMLInputElement>) => {
+      // Verificar si se ha seleccionado un archivo
+      if (event.target.files && event.target.files.length > 0) {
+        const file = event.target.files[0];
+    
+        // Crear FormData para enviar el archivo
+        const formData = new FormData();
+        formData.append('file', file);
+    
+        // URL del endpoint de tu servidor Flask
+        const url = 'http://127.0.0.1:5000/upload_image';
+    
+        // Realizar la solicitud POST para subir el archivo
+        fetch(url, {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Success:', data);
+          alert('Imagen subida exitosamente!');
+          // Aquí puedes manejar acciones adicionales tras la subida exitosa
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          alert(`Error al subir la imagen: ${error.message}`);
+        });
+      }
+    };
+
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setFormData({
         ...formData,
@@ -406,7 +443,7 @@ function UserRegister() {
                   Upload a file of your identity document
                 </label>
                 <input
-                  onChange={handleInputChange}
+                  onChange={handleInputChangeDocument}
                   name="identity_document"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"

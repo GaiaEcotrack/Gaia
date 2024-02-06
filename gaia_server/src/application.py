@@ -99,3 +99,16 @@
 #         app.run(debug=True)
 #     finally:
 #         client.close()
+
+from flask import Flask
+
+application = Flask(__name__)
+
+from src.models.user import users_route
+from src.models.devices import devices_routes
+
+application.register_blueprint(users_route, url_prefix='/users')
+application.register_blueprint(devices_routes, url_prefix='/devices')
+
+if __name__ == '__main__':
+    application.run(debug=True)
