@@ -36,7 +36,7 @@ application.register_blueprint(SWAGGER_BLUEPRINT, url_prefix=SWAGGER_URL)
 application.register_blueprint(users_route, url_prefix='/users')
 application.register_blueprint(devices_routes, url_prefix='/devices')
 application.register_blueprint(plants_routes, url_prefix='/plants')
-application.register_blueprint(bucket_route, url_prefix='/bucket')
+application.register_blueprint(bucket_route, url_prefix='/upload_image')
 application.register_blueprint(api_growatt_bp, url_prefix='/api_growatt')
 
 
