@@ -1,4 +1,5 @@
 
+import {useState} from 'react'
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
 import { ProgramMetadata, decodeAddress, GearKeyring } from "@gear-js/api";
@@ -10,21 +11,24 @@ function Mint() {
   const { accounts, account } = useAccount();
   const { api } = useApi();
 
-  const programIDFT = import.meta.env.VITE_APP_MAIN_CONTRACT_ID
+  const [error, setError] = useState(null);
+
+  const programIDFT = "0x56691cac78ad46d1454e7c0ca23a168933dfe154810641a0ef5eeeec1856ae2e"
 
 
   // Add your metadata.txt
-  const meta = import.meta.env.VITE_APP_MAIN_CONTRACT_METADATA
+  const meta = "000200010000000000010400000001090000000000000000010a0000005d0e3c000808696f18496e69744654000004013466745f70726f6772616d5f696404011c4163746f72496400000410106773746418636f6d6d6f6e287072696d6974697665731c4163746f724964000004000801205b75383b2033325d000008000003200000000c000c0000050300100808696f48416374696f6e4761696145636f747261636b000114304e657747656e657261746f72080004011c4163746f724964000014012447656e657261746f720000003847656e6572617465456e6572677904001801107531323800010028476574526577617264730400180110753132380002002c5472616e736665727265640c0004011c4163746f724964000004011c4163746f724964000018011075313238000300244e657744657669636508001c0118537472696e67000020012c44657669636573496e666f00040000140808696f2447656e657261746f72000014010869641801107531323800011877616c6c657404011c4163746f72496400013c746f74616c5f67656e65726174656418011075313238000138617665726167655f656e657267791801107531323800011c726577617264731801107531323800001800000507001c0000050200200808696f2c44657669636573496e666f00001001086964180110753132380001106e616d651c0118537472696e6700012c747970655f656e657267791c0118537472696e6700011873657269616c1c0118537472696e670000240808696f484576656e74734761696145636f747261636b00011428526567697374657265640000002447656e657261746564000100405265776172647347656e65726174656400020044546f6b656e735472616e736665727265640c011066726f6d04011c4163746f724964000108746f04011c4163746f724964000118616d6f756e741801107531323800030038446576696365526567697374657204001c0118537472696e6700040000280808696f38496f4761696145636f747261636b0000140158746f74616c5f656e657267795f67656e6572617465641801107531323800012c746f74616c5f757365727318011075313238000140746f74616c5f67656e657261746f72731801107531323800012867656e657261746f72732c01645665633c284163746f7249642c2047656e657261746f72293e00011c646576696365733401685665633c28537472696e672c2044657669636573496e666f293e00002c0000023000300000040804140034000002380038000004081c2000"
   const metadata = ProgramMetadata.from(meta);
 
-  console.log(metadata.types.state?.toString());
   
   
 
+  const adress = account!.address;
+  console.log(decodeAddress(adress));
   const message: any = {
     destination: programIDFT, // programId
-    payload: { getRewards:10},
-    gasLimit: 69999819245,
+    payload: { newDevice:["5HjNGPcdpphBeLq6ffechssztTar6e2xXuavMAdeo3JHGcdR",{"id": 1, "name":"sma-nico", "typeEnergy":"solar","serial":"248-SMA"},{"id": 2, "name":"sma-nico", "typeEnergy":"solar","serial":"248-SMA"}]},
+    gasLimit: 9999819245,
     value: 0,
   };
 
@@ -61,7 +65,7 @@ function Mint() {
 
   if (isVisibleAccount) {
     // Create a message extrinsic
-    const transferExtrinsic = await api!.message.send(message, metadata);
+    const transferExtrinsic = await api!.message.send(messageThree, metadata);
     // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
     const keyring = await GearKeyring.fromSuri('//Alice');
 
@@ -84,7 +88,7 @@ function Mint() {
 
     if (isVisibleAccount && api) {
       // Create a message extrinsic
-      const transferExtrinsic = await api.message.send(messageThree, metadata);
+      const transferExtrinsic = await api.message.send(message, metadata);
 
       const injector = await web3FromSource(accounts?.[0]?.meta.source || 'unknown');
 
@@ -104,7 +108,9 @@ function Mint() {
           }
         )
         .catch((error: any) => {
-          alert.error(error)
+          setError(error)
+          console.log(error);
+          
         });
     } else {
       alert.error("Account not available to sign");
@@ -150,6 +156,7 @@ function Mint() {
     <div>
       <Button text="Sin Firma" className="bg-black" onClick={()=>{signer()}} />;
       <Button text="Con Firma" className="bg-black" onClick={()=>{signerTwo()}} />;
+      {error && <div>Error: {error.toString()}</div>} {/* Muestra el error en el componente */}
       <Button text="Agregar liquidez" className="bg-black" onClick={()=>{signerThree()}} />;
 
     </div>
