@@ -16,8 +16,7 @@ class UserSchema(Schema):
     other_financial_documents = fields.String(allow_none=False)  
     
     credentials = fields.String(required=False)
-    secret_key = fields.String(required=False)
-    devices = fields.List(fields.String(), allow_none=False)  
+    secret_key = fields.String(required=False) 
     
     devices = fields.List(fields.Nested(DeviceSchema), allow_none=False)
     
