@@ -102,13 +102,13 @@
 
 from flask import Flask
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 from src.models.user import users_route
-from src.models.devices import devices_route
+from src.models.devices import devices_routes
 
-app.register_blueprint(users_route, url_prefix='/users')
-app.register_blueprint(devices_route, url_prefix='/devices')
+application.register_blueprint(users_route, url_prefix='/users')
+application.register_blueprint(devices_routes, url_prefix='/devices')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    application.run(debug=True)

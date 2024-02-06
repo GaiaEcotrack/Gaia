@@ -7,7 +7,8 @@ from pymongo import MongoClient
 from bson import ObjectId
 from dotenv import load_dotenv
 from src.models.devices import DeviceSchema
-from src.models.user import UserSchema
+from bson import json_util
+
 
 load_dotenv()
 
@@ -394,27 +395,27 @@ def add_device():
 
     device_schema = DeviceSchema()
     errors = device_schema.validate(data)
-    
-    # user_schema = UserSchema()
-    # errors = user_schema.validate(data)
 
     if errors:
         return jsonify({'message': 'Validation errors', 'errors': errors}), 400
     
     user_id = data.get('user_id')
     
-    user = collection.find_one({'_id': ObjectId(user_id)})
+    user_collection = collection
+    
+    user = user_collection.find_one({'_id': ObjectId(user_id)})
     if not user:
         return jsonify({'message': 'Usuario no encontrado'}), 404
 
+    device_collection = devices
+    
     # Obtener los campos del dispositivo
     plant_data = data.get('plant')
     device_data = data.get('device')
     sets = data.get('sets')
 
-    # Insertar el nuevo dispositivo en la colección o hacer lo que sea necesario
+    # Insertar el nuevo dispositivo en la colección
     new_device = {
-    'id': user_id,
     'plant': {
         'plantId': plant_data.get('plantId'),
         'name': plant_data.get('name'),
@@ -428,22 +429,12 @@ def add_device():
     },
     'sets': sets
 }
-    result = devices.insert_one(new_device)
+    result = device_collection.insert_one(new_device)
     inserted_id = result.inserted_id
     
-    # user_id = collection.insert_one(data).inserted_id
+    user_id = user['_id']
     
-    devices.update_one({'_id': ObjectId(user_id)}, {'$push': {'devices': str(inserted_id)}})
+    user_collection.update_one({'_id': ObjectId(user_id)}, {'$push': {'devices': str(inserted_id)}})
 
     return jsonify({'message': 'Dispositivo agregado con éxito', 'device_id': str(inserted_id)})
 
-
-    # return jsonify({'message': 'Usuario agregado con éxito', 'user_id': str(user_id)})
-
-
-# app.register_blueprint(devices_route, url_prefix='/devices')
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
-    
-#     return jsonify({'message': 'Dispositivo agregado con éxito'})

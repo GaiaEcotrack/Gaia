@@ -1,21 +1,21 @@
 from marshmallow import Schema, fields, validate
 
 class PlantSchema(Schema):
-    plantId = fields.String(required=True)
-    name = fields.String(required=True)
-    description = fields.String(required=True)
-    timezone = fields.String(required=True)
+    plantId = fields.String(required=False)
+    name = fields.String(required=False)
+    description = fields.String(required=False)
+    timezone = fields.String(required=False)
 
 class DeviceDataSchema(Schema):
-    deviceId = fields.String(required=True)
-    name = fields.String(required=True)
-    timezone = fields.String(required=True)
+    deviceId = fields.String(required=False)
+    name = fields.String(required=False)
+    timezone = fields.String(required=False)
 
 class DeviceSchema(Schema):
-    user_id = fields.String(required=True, data_key="user_id")
-    plant = fields.Nested(PlantSchema, data_key="plant", required=True)
-    device = fields.Nested(DeviceDataSchema, data_key="device", required=True)
-    sets = fields.List(fields.String(), required=True)
+    user_id = fields.String(required=False, data_key="user_id")
+    plant = fields.Nested(PlantSchema, data_key="plant", required=False)
+    device = fields.Nested(DeviceDataSchema, data_key="device", required=False)
+    sets = fields.List(fields.String(), required=False)
 
 
 
@@ -24,20 +24,20 @@ class DeviceSchema(Schema):
 # from marshmallow import Schema, fields
 
 # class PlantSchema(Schema):
-#     plantId = fields.String(required=True)
-#     name = fields.String(required=True)
-#     description = fields.String(required=True)
-#     timezone = fields.String(required=True)
+#     plantId = fields.String(required=False)
+#     name = fields.String(required=False)
+#     description = fields.String(required=False)
+#     timezone = fields.String(required=False)
 
 # class DeviceSchema(Schema):
-#     deviceId = fields.String(required=True)
-#     name = fields.String(required=True)
-#     timezone = fields.String(required=True)
+#     deviceId = fields.String(required=False)
+#     name = fields.String(required=False)
+#     timezone = fields.String(required=False)
 
 # class DeviceSetSchema(Schema):
-#     sets = fields.List(fields.String(), required=True)
+#     sets = fields.List(fields.String(), required=False)
 
 # class DevicesSchema(Schema):
-#     plant = fields.Nested(PlantSchema, required=True)
-#     device = fields.Nested(DeviceSchema, required=True)
-#     sets = fields.Nested(DeviceSetSchema, required=True)
+#     plant = fields.Nested(PlantSchema, required=False)
+#     device = fields.Nested(DeviceSchema, required=False)
+#     sets = fields.Nested(DeviceSetSchema, required=False)
