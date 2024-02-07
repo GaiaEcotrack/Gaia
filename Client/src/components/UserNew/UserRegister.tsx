@@ -510,14 +510,11 @@ function UserRegister() {
                 <h1 className="text-green-600 absolute">{formData.other_financial_documents}</h1>
               </div>
 
-              <div className="mb-2 sm:mb-6">
-                <input
-                  className="bg-inherit"                  
-                  // required
-                />
+              <div >                
+                {/* contenedor comidin */}
               </div>
 
-              <div className="flex justify-start w-full">
+              <div className="flex justify-start w-full mt-6">
                 <button
                   type="submit"
                   className="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28"
