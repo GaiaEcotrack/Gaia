@@ -23,7 +23,7 @@ function UserRegister() {
   
     const handleSearchAndCreateUser = async () => {
       await handleSearch();
-      createNewUser();
+      // createNewUser();
     };
   
     handleSearchAndCreateUser();
@@ -51,23 +51,23 @@ function UserRegister() {
 
   console.log(foundUserId)
 
-  const createNewUser = async () => {
-    if(!foundUserId || foundUserId === ''){
-        try {
-          const postResponse = await axios.post(`${URL}/users/`, {
-          email: email,
-        });  
-        if (postResponse.status === 201) {
-          console.log('Usuario creado exitosamente:', postResponse.data);
-          setFoundUserId(postResponse.data._id);
-        } else {
-          console.error('Error al crear usuario:', postResponse.statusText);
-        }
-      } catch (error) {
-        console.error('Error al crear usuario:', error);
-      }
-    }
-  };
+  // const createNewUser = async () => {
+  //   if(!foundUserId || foundUserId === ''){
+  //       try {
+  //         const postResponse = await axios.post(`${URL}/users/`, {
+  //         email: email,
+  //       });  
+  //       if (postResponse.status === 201) {
+  //         console.log('Usuario creado exitosamente:', postResponse.data);
+  //         setFoundUserId(postResponse.data._id);
+  //       } else {
+  //         console.error('Error al crear usuario:', postResponse.statusText);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error al crear usuario:', error);
+  //     }
+  //   }
+  // };
 
   localStorage.setItem("id", foundUserId);  
 
