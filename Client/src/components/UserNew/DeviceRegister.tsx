@@ -1,8 +1,77 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 // const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
 function DeviceRegister() {
+
+  const URL = import.meta.env.VITE_APP_API_URL
+
+  const [formData, setFormData] = useState({
+    user_id: localStorage.getItem("id"),
+    plant: {
+        plantId: "",
+        name: "",
+        description: "",
+        timezone: ""
+    },
+    device: {
+        deviceId: "",
+        name: "",
+				serial: "",
+        timezone: "",
+        image: ""
+    },
+    sets: [""],
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+  
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      device: {
+        ...prevFormData.device,
+        [name]: value,
+      },
+    }));
+  };
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  
+    console.log('Datos del formulario a enviar:', formData);
+  
+    try {
+      const userId = localStorage.getItem('id');
+  
+      let apiUrl = `${URL}/devices/`;
+      let httpMethod = 'POST';
+  
+      const response = await fetch(apiUrl, {
+        method: httpMethod,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('dispositivo agregado con éxito:', data);
+  
+        if (!userId) {
+          console.log("Error")
+        }
+      } else {
+        console.error('Error al agregar/actualizar dispositivo:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+    }
+  };
+
+
   return (
     <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
       {/* Aside */}
@@ -53,7 +122,7 @@ function DeviceRegister() {
           {/* Formulario de perfil público */}
 
           <div className="">
-            <form className="grid sm:grid-cols-2 gap-4" action="">
+            <form className="grid sm:grid-cols-2 gap-4" action="" onSubmit={handleSubmit}>
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="deviceId"
@@ -62,6 +131,8 @@ function DeviceRegister() {
                   Device Id 
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="deviceId"
                   type="number"
                   id="deviceId"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
@@ -78,6 +149,8 @@ function DeviceRegister() {
                   Device Name - Type
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="name"
                   type="text"
                   id="deviceName"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
@@ -94,6 +167,8 @@ function DeviceRegister() {
                   Serial Number
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="serial"
                   type="text"
                   id="serialNumber"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
@@ -110,11 +185,13 @@ function DeviceRegister() {
                   Upload an image of the device
                 </label>
                 <input
+                  onChange={handleInputChange}
+                  name="image"
                   type="file"
                   accept="image/jpeg, image/png"
                   id="filefin2"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
-                  required
+                  // required
                 />
               </div>
 
