@@ -114,38 +114,38 @@ const handleSubmit = async (e: React.FormEvent) => {
 };
 
   return (
-    <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
+    <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
       {/* Aside */}
       <aside className="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
         <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
           <h2 className="pl-3 mb-4 text-2xl font-semibold">Register</h2>
 
           <Link to="/userReg">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               User Register
             </h1>
           </Link>
 
           <Link to="/deviceReg">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               Device Register
             </h1>
           </Link>
 
           <Link to="/credentialsReg">
-            <h1 className="flex items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
+            <h1 className="flex text-black items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
               Credentials {completeCredent ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
             </h1>
           </Link>
 
           <Link to="/notifications">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               Notifications
             </h1>
           </Link>
 
           {/* <Link to="/account"> */}
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               PRO Account
             </h1>
           {/* </Link> */}
@@ -156,7 +156,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       <main className="flex justify-start items-start min-h-screen py-1 w-[100%] p-2 md:p-4">
         <div className="px-6 pb-8 mt-8 sm:rounded-lg w-full">
 
-          <h2 className="flex justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4 mb-8">
+          <h2 className="flex text-black justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4 mb-8">
             DEVICE CREDENTIALS
           </h2>         
 
@@ -167,7 +167,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="usernameCre"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Credential-ID
                 </label>
@@ -186,7 +186,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="passwordCre"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Secret-key
                 </label>

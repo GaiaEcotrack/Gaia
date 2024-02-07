@@ -216,33 +216,33 @@ function UserRegister() {
     // console.log(completeCredent)
 
   return (
-    <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
+    <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
       {/* Aside */}
       <aside className="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
         <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
           <h2 className="pl-3 mb-4 text-2xl font-semibold">Register</h2>
 
           <Link to="/userReg">
-            <h1 className="flex items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
+            <h1 className="flex text-black items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
               User Register {verified ? <FcApproval className="text-xl"/> 
               : (completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>)}
             </h1>
           </Link>
 
           <Link to="/deviceReg">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               Device Register
             </h1>
           </Link>
 
           <Link to="/credentialsReg">
-            <h1 className="flex items-center justify-between px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center text-black justify-between px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               Credentials {completeCredent ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
             </h1>
           </Link>
 
           <Link to="/notifications">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               Notifications
             </h1>
           </Link>
@@ -260,20 +260,20 @@ function UserRegister() {
         <div className="px-6 pb-8 mt-8 sm:rounded-lg w-full">
           
           <div className="flex flex-row justify-between items-end">
-            <h2 className="flex justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4">
+            <h2 className="flex text-black justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4">
               USER ACCOUNT
             </h2>
 
             <div className="flex justify-between w-[40%] mr-8">
-              <h1 className="flex items-center">
+              <h1 className="flex text-black items-center">
                 Pending&nbsp; <FcHighPriority className="text-xl"/>     
               </h1>
 
-              <h1 className="flex items-center">
+              <h1 className="flex text-black items-center">
                 Completed&nbsp; <FcOk className="text-xl"/>
               </h1>
 
-              <h1 className="flex items-center">
+              <h1 className="flex text-black items-center">
                 Verified&nbsp; <FcApproval className="text-[23px]"/>
               </h1>      
             </div>
@@ -343,7 +343,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fullname"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-black text-sm font-medium dark:text-white"
                 >
                   Full name
                 </label>
@@ -362,7 +362,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Email
                 </label>
@@ -381,7 +381,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="Identification"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Identification Number
                 </label>
@@ -400,7 +400,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Residence Address
                 </label>
@@ -419,7 +419,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="phone"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Phone Number
                 </label>
@@ -438,7 +438,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileId"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Upload a file of your identity document
                 </label>
@@ -457,7 +457,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileBank"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Upload a file of your bank account status
                 </label>
@@ -476,7 +476,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileTax"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Upload a file of your tax return
                 </label>
@@ -495,7 +495,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="filefin1"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Upload a file of other financial documents
                 </label>

@@ -4,38 +4,38 @@ import { Link } from "react-router-dom";
 
 function DeviceRegister() {
   return (
-    <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
+    <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
       {/* Aside */}
       <aside className="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
         <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
           <h2 className="pl-3 mb-4 text-2xl font-semibold">Register</h2>
 
           <Link to="/userReg">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               User Register
             </h1>
           </Link>
 
           <Link to="/deviceReg">
-            <h1 className="flex items-center px-3 py-2.5 font-bold bg-white text-black border rounded-full">
+            <h1 className="flex items-center text-black px-3 py-2.5 font-bold bg-white text-black border rounded-full">
               Device Register
             </h1>
           </Link>
 
           <Link to="/credentialsReg">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               Credentials
             </h1>
           </Link>
 
           <Link to="/notifications">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               Notifications
             </h1>
           </Link>
 
           {/* <Link to="/account"> */}
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               PRO Account
             </h1>
           {/* </Link> */}
@@ -46,7 +46,7 @@ function DeviceRegister() {
       <main className="flex justify-start items-start min-h-screen py-1 w-[100%] p-2 md:p-4">
         <div className="px-6 pb-8 mt-8 sm:rounded-lg w-full">
 
-          <h2 className="flex justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4 mb-8">
+          <h2 className="flex justify-center text-black md:justify-start text-2xl font-bold sm:text-xl pt-4 mb-8">
             NEW DEVICE
           </h2>
 
@@ -57,7 +57,7 @@ function DeviceRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="deviceId"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Device Id 
                 </label>
@@ -73,7 +73,7 @@ function DeviceRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="deviceName"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Device Name - Type
                 </label>
@@ -89,7 +89,7 @@ function DeviceRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="serialNumber"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Serial Number
                 </label>
@@ -105,7 +105,7 @@ function DeviceRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="filefin2"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-white"
                 >
                   Upload an image of the device
                 </label>
