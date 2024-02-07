@@ -120,31 +120,31 @@ const handleSubmit = async (e: React.FormEvent) => {
           <h2 className="pl-3 mb-4 text-2xl font-semibold">Register</h2>
 
           <Link to="/userReg">
-            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               User Register
             </h1>
           </Link>
 
           <Link to="/deviceReg">
-            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Device Register
             </h1>
           </Link>
 
           <Link to="/credentialsReg">
-            <h1 className="flex text-black items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
+            <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#202142] border rounded-full">
               Credentials {completeCredent ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
             </h1>
           </Link>
 
           <Link to="/notifications">
-            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Notifications
             </h1>
           </Link>
 
           {/* <Link to="/account"> */}
-            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               PRO Account
             </h1>
           {/* </Link> */}

@@ -17,10 +17,16 @@ function UserRegister() {
   const [pendingDocuments, setPendingDocuments] = useState<string[]>([]);
   const [pendingCredentials, setPendingCredentials] = useState<string[]>([]);
 
- useEffect(() => {
+  useEffect(() => {
     const storedEmail = localStorage.getItem("email");
-    setEmail(storedEmail || '');    
-    handleSearch();
+    setEmail(storedEmail || '');
+  
+    const handleSearchAndCreateUser = async () => {
+      await handleSearch();
+      createNewUser();
+    };
+  
+    handleSearchAndCreateUser();
   }, [email]);
 
   const handleSearch = async () => {
@@ -42,6 +48,27 @@ function UserRegister() {
       console.error('Error de red:');
     }
   };
+
+  console.log(foundUserId)
+
+  const createNewUser = async () => {
+    if(!foundUserId || foundUserId === ''){
+        try {
+          const postResponse = await axios.post(`${URL}/users/`, {
+          email: email,
+        });  
+        if (postResponse.status === 201) {
+          console.log('Usuario creado exitosamente:', postResponse.data);
+          setFoundUserId(postResponse.data._id);
+        } else {
+          console.error('Error al crear usuario:', postResponse.statusText);
+        }
+      } catch (error) {
+        console.error('Error al crear usuario:', error);
+      }
+    }
+  };
+
   localStorage.setItem("id", foundUserId);  
 
   // console.log(foundUserId)  
@@ -222,7 +249,7 @@ function UserRegister() {
           <h2 className="pl-3 mb-4 text-2xl font-semibold">Register</h2>
 
           <Link to="/userReg">
-            <h1 className="flex text-black items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
+            <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#202142] border rounded-full">
               User Register {verified ? <FcApproval className="text-xl"/> 
               : (completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>)}
             </h1>
@@ -247,7 +274,7 @@ function UserRegister() {
           </Link>
 
           {/* <Link to="/account"> */}
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               PRO Account
             </h1>
           {/* </Link> */}
@@ -306,7 +333,7 @@ function UserRegister() {
               </button>
             </div>
 
-            <div className="flex flex-col justify-start items-center w-[47%] h-full">
+            <div className="flex flex-col justify-start items-center w-[45%] h-full">
               {verified ? (
                 <div className="flex items-center">
                   <FcApproval className="text-7xl" />
@@ -326,7 +353,7 @@ function UserRegister() {
               } 
               <div>
                 {pendingDocuments.map((document: string, index: number) => (
-                  <div key={index} className="flex justify-center">
+                  <div key={index} className="flex justify-center text-black">
                     <h3>{document}</h3>
                   </div>
                 ))}
