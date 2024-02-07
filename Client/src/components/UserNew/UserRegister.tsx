@@ -48,17 +48,17 @@ function UserRegister() {
 
 // **********************************************************
 
-    const [formData, setFormData] = useState({
-      full_name: null,
-      email: null,
-      identification_number: null,
-      address: null,
-      phone: null,
-      identity_document: null,
-      bank_account_status: null,
-      tax_declarations: null,
-      other_financial_documents: null,
-    });
+const [formData, setFormData] = useState({
+  full_name: null,
+  email: null,
+  identification_number: null,
+  address: null,
+  phone: null,
+  // identity_document: null,
+  // bank_account_status: null,
+  // tax_declarations: null,
+  // other_financial_documents: null,
+});
     
     useEffect(() => {
       if (foundUserId) {
@@ -91,91 +91,104 @@ function UserRegister() {
       }
     }, [foundUserId]);
 
-    // subir imagen del document
-    const handleInputChangeDocument = (event: React.ChangeEvent<HTMLInputElement>) => {
-      // Verificar si se ha seleccionado un archivo
-      if (event.target.files && event.target.files.length > 0) {
-        const file = event.target.files[0];
+      //* codigo para subir archivos al bucket
+
+      const [selectedFiles, setSelectedFiles] = useState({});
+   
+      //* nueva funcion
+      const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+       const { name, value, type, files } = event.target;
+     
+       if (type === 'file') {
+        // Actualiza el estado con el archivo seleccionado, usando el nombre del input como clave
+        setSelectedFiles(prevFiles => ({
+          ...prevFiles,
+          [name]: files[0] // Asume que solo se selecciona un archivo por input
+        }));
+      } else {
+        // Para otros tipos de inputs, actualiza el estado formData
+        setFormData(prevFormData => ({
+          ...prevFormData,
+          [name]: value,
+        }));
+      }
+    };
+     
+    const handleSubmit = async (e) => {
+      e.preventDefault();
     
-        // Crear FormData para enviar el archivo
+      let allFilesUploaded = true;
+    
+      // Itera sobre cada archivo seleccionado y envíalo
+      for (const [inputName, file] of Object.entries(selectedFiles)) {
         const formData = new FormData();
         formData.append('file', file);
     
-        // URL del endpoint de tu servidor Flask
-        const url = 'http://127.0.0.1:5000/upload_image';
+        const uploadUrl = 'http://127.0.0.1:5000/upload_image';
     
-        // Realizar la solicitud POST para subir el archivo
-        fetch(url, {
-          method: 'POST',
-          body: formData,
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
+        try {
+          const uploadResponse = await fetch(uploadUrl, {
+            method: 'POST',
+            body: formData,
+          });
+    
+          if (!uploadResponse.ok) {
+            throw new Error(`No se pudo cargar el archivo de ${inputName}`);
           }
-          return response.json();
-        })
-        .then(data => {
-          console.log('Success:', data);
-          alert('Imagen subida exitosamente!');
-          // Aquí puedes manejar acciones adicionales tras la subida exitosa
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          alert(`Error al subir la imagen: ${error.message}`);
-        });
+    
+          const uploadData = await uploadResponse.json();
+          console.log(`Archivo de ${inputName} cargado con éxito:`, uploadData);
+        } catch (error) {
+          console.error(`Error al cargar el archivo de ${inputName}:`, error);
+          alert(`Error al cargar el archivo de ${inputName}. Por favor, inténtalo de nuevo.`);
+          allFilesUploaded = false;
+          break; // Detiene el proceso si alguno de los archivos falla al cargar
+        }
       }
-    };
-
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-      });
-    };
-    const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
     
-      console.log('Datos del formulario a enviar:', formData);
-    
-      try {
+      // Si todos los archivos se cargaron exitosamente, procede a enviar el resto del formulario
+      if (allFilesUploaded) {
         const userId = localStorage.getItem('id');
         let apiUrl = `${URL}/users/`;
         let httpMethod = 'POST';
+        alert('Docs uploaded successfully')
     
         if (userId) {
-          // Si hay un ID en el localStorage, es una actualización (PUT)
           apiUrl += `${userId}`;
           httpMethod = 'PUT';
         }
-
+    
+        // Prepara los datos del formulario excluyendo los archivos
         const cleanedFormData = Object.fromEntries(
-          Object.entries(formData).filter(([key, value]) => value !== null)
+          Object.entries(formData).filter(([key, value]) => value !== '')
         );
     
-        const response = await fetch(apiUrl, {
-          method: httpMethod,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(cleanedFormData),
-        });
+        try {
+          const response = await fetch(apiUrl, {
+            method: httpMethod,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cleanedFormData),
+          });
     
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Usuario agregado/actualizado con éxito:', data);
-    
-          if (!userId) {
-            console.log("Error")
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Usuario agregado/actualizado con éxito:', data);
+            alert('Datos guardados exitosamente.');
+            // Aquí puedes incluir cualquier lógica adicional tras el éxito, como redireccionar al usuario
+          } else {
+            throw new Error(`Error al agregar/actualizar usuario: ${response.statusText}`);
           }
-        } else {
-          console.error('Error al agregar/actualizar usuario:', response.statusText);
+        } catch (error) {
+          console.error('Error de red:', error);
+          alert('Error al guardar los datos del formulario. Por favor, inténtalo de nuevo.');
         }
-      } catch (error) {
-        console.error('Error de red:', error);
       }
     };
+    // fin codigo del bucket
+
+   
 
     useEffect(() => {
   if (foundUserId) {
@@ -442,7 +455,7 @@ function UserRegister() {
                   Upload a file of your identity document
                 </label>
                 <input
-                  onChange={handleInputChangeDocument}
+                  onChange={handleInputChange}
                   name="identity_document"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
