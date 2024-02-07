@@ -102,7 +102,7 @@ function UserRegister() {
         formData.append('file', file);
     
         // URL del endpoint de tu servidor Flask
-        const url = 'https://dev-server-2xe8.onrender.com/upload_image';
+        const url = 'http://127.0.0.1:5000/upload_image';
     
         // Realizar la solicitud POST para subir el archivo
         fetch(url, {

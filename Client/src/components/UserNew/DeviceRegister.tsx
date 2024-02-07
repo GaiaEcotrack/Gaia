@@ -80,31 +80,31 @@ function DeviceRegister() {
           <h2 className="pl-3 mb-4 text-2xl font-semibold">Register</h2>
 
           <Link to="/userReg">
-            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               User Register
             </h1>
           </Link>
 
           <Link to="/deviceReg">
-            <h1 className="flex items-center text-black px-3 py-2.5 font-bold bg-white text-black border rounded-full">
+            <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#202142] border rounded-full">
               Device Register
             </h1>
           </Link>
 
           <Link to="/credentialsReg">
-            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Credentials
             </h1>
           </Link>
 
           <Link to="/notifications">
-            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Notifications
             </h1>
           </Link>
 
           {/* <Link to="/account"> */}
-            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               PRO Account
             </h1>
           {/* </Link> */}
