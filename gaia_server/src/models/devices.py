@@ -10,6 +10,8 @@ class DeviceDataSchema(Schema):
     deviceId = fields.String(required=False)
     name = fields.String(required=False)
     timezone = fields.String(required=False)
+    serial = fields.String(required=False)
+    image = fields.String(allow_none=False)
 
 class DeviceSchema(Schema):
     user_id = fields.String(required=False, data_key="user_id")

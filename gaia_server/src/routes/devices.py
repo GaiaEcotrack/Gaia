@@ -1,13 +1,12 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 import requests
-from flask import request
 import json
 import os
 from pymongo import MongoClient
 from bson import ObjectId
 from dotenv import load_dotenv
 from src.models.devices import DeviceSchema
-from bson import json_util
+from bson import ObjectId
 
 
 load_dotenv()
@@ -388,7 +387,7 @@ def get_device_by_id(device_id):
     
     
     
-    # Post para agregar nuevo dispositivo a la DB 
+    # POST para agregar nuevo dispositivo a la DB 
 @devices_routes.route('/', methods=['POST'])
 def add_device():
     data = request.json
@@ -409,13 +408,13 @@ def add_device():
 
     device_collection = devices
     
-    # Obtener los campos del dispositivo
     plant_data = data.get('plant')
     device_data = data.get('device')
     sets = data.get('sets')
+    user_id = data.get('user_id')
 
-    # Insertar el nuevo dispositivo en la colección
     new_device = {
+    'user_id': user_id,
     'plant': {
         'plantId': plant_data.get('plantId'),
         'name': plant_data.get('name'),
@@ -425,16 +424,40 @@ def add_device():
     'device': {
         'deviceId': device_data.get('deviceId'),
         'name': device_data.get('name'),
-        'timezone': device_data.get('timezone')
+        'timezone': device_data.get('timezone'),
+        'serial': device_data.get('serial'),
+        'image': device_data.get('image')
     },
-    'sets': sets
+    'sets': sets,
 }
     result = device_collection.insert_one(new_device)
     inserted_id = result.inserted_id
     
     user_id = user['_id']
-    
     user_collection.update_one({'_id': ObjectId(user_id)}, {'$push': {'devices': str(inserted_id)}})
 
     return jsonify({'message': 'Dispositivo agregado con éxito', 'device_id': str(inserted_id)})
+
+
+    # Eliminar dispositivos de la DB  
+@devices_routes.route('/<user_id>/<device_id>', methods=['DELETE'])
+def delete_device(user_id, device_id):
+    try:
+        user_id = ObjectId(user_id)
+        device_id = ObjectId(device_id)
+    except:
+        return jsonify({'message': 'ID de usuario o dispositivo no válido'}), 400
+
+    user_collection = collection
+    device_collection = devices
+    result = device_collection.delete_one({'_id': device_id})
+    
+    if result.deleted_count == 0:
+        return jsonify({'message': 'Dispositivo no encontrado'}), 404
+
+    user_collection.update_one({'_id': user_id}, {'$pull': {'devices': str(device_id)}})
+
+    return jsonify({'message': 'Dispositivo eliminado con éxito'})
+
+
 

@@ -101,9 +101,8 @@ const handleSubmit = async (e: React.FormEvent) => {
       const data = await response.json();
       console.log('Usuario agregado/actualizado con éxito:', data);
 
-      // Guardar el ID en el localStorage si es un nuevo usuario
       if (!userId) {
-        localStorage.setItem('id', data.id);
+        console.log("Error");
       }
     } else {
       console.error('Error al agregar/actualizar usuario:', response.statusText);

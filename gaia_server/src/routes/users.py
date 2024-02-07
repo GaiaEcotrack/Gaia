@@ -105,9 +105,7 @@ def add_user():
 
     # Insertar el nuevo usuario en la colección
     new_user = {
-        # 'username': username,
         'email': email,
-        # 'password': password,
         'full_name': full_name,
         'identification_number': identification_number,
         'address': address,
