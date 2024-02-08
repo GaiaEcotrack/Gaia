@@ -175,3 +175,29 @@ def get_user_by_email():
 
     user['_id'] = str(user['_id'])
     return jsonify(user)
+
+@users_route.route('save_url', methods=['POST'])
+def guardar_url():
+    data = request.json
+
+    # Aquí extraes la URL y cualquier otro dato relevante de la solicitud
+    user_id = data.get('user_id')  # ID del usuario al que pertenece el archivo
+    archivo_url = data.get('url')  # La URL del archivo subido a S3
+
+    # Aquí es donde actualizarías la base de datos con la nueva URL
+    # El método exacto dependerá de tu base de datos y esquema
+    # A continuación, te muestro un ejemplo genérico usando MongoDB
+
+    # Buscar el usuario por ID y actualizarlo con la URL del archivo
+    user_id_obj = ObjectId(user_id)
+    # Luego usa user_id_obj en tu consulta
+    result = collection.update_one(
+    {'_id': user_id_obj},
+    {'$set': {'archivo_url': archivo_url}}
+)
+
+    if result.modified_count > 0:
+        return jsonify({'message': 'URL del archivo guardada con éxito'}), 200
+
+    else:
+        return jsonify({'message': 'Error al guardar la URL del archivo'}), 400
