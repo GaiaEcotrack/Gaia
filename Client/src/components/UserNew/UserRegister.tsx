@@ -114,10 +114,11 @@ const [formData, setFormData] = useState({
       }
     };
      
-    const handleSubmit = async (e) => {
+    async function handleSubmit(e) {
       e.preventDefault();
     
       let allFilesUploaded = true;
+      let fileUploadData = {}; // Objeto para almacenar las URLs de los archivos subidos
     
       // Itera sobre cada archivo seleccionado y envíalo
       for (const [inputName, file] of Object.entries(selectedFiles)) {
@@ -138,6 +139,11 @@ const [formData, setFormData] = useState({
     
           const uploadData = await uploadResponse.json();
           console.log(`Archivo de ${inputName} cargado con éxito:`, uploadData);
+    
+          // Suponiendo que uploadData contiene la URL del archivo subido
+          // Ajusta la clave según el nombre del input para que coincida con el backend
+          let urlKey = `${inputName}_url`; // Por ejemplo: identity_document_url
+          fileUploadData[urlKey] = uploadData.url;
         } catch (error) {
           console.error(`Error al cargar el archivo de ${inputName}:`, error);
           alert(`Error al cargar el archivo de ${inputName}. Por favor, inténtalo de nuevo.`);
@@ -146,46 +152,36 @@ const [formData, setFormData] = useState({
         }
       }
     
-      // Si todos los archivos se cargaron exitosamente, procede a enviar el resto del formulario
+      // Si todos los archivos se cargaron exitosamente, procede a enviar las URLs al backend
       if (allFilesUploaded) {
-        const userId = localStorage.getItem('id');
-        let apiUrl = `${URL}/users/`;
-        let httpMethod = 'POST';
-        alert('Docs uploaded successfully')
-    
-        if (userId) {
-          apiUrl += `${userId}`;
-          httpMethod = 'PUT';
-        }
-    
-        // Prepara los datos del formulario excluyendo los archivos
-        const cleanedFormData = Object.fromEntries(
-          Object.entries(formData).filter(([key, value]) => value !== '')
-        );
-    
         try {
-          const response = await fetch(apiUrl, {
-            method: httpMethod,
+          const saveUrlResponse = await fetch('http://127.0.0.1:5000/save_url', { // Ajusta esta URL al endpoint correcto
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(cleanedFormData),
+            body: JSON.stringify({
+              user_id: localStorage.getItem('id'), // Asegúrate de tener el ID del usuario disponible
+              ...fileUploadData, // Envía todas las URLs de los archivos subidos
+            }),
           });
     
-          if (response.ok) {
-            const data = await response.json();
-            console.log('Usuario agregado/actualizado con éxito:', data);
-            alert('Datos guardados exitosamente.');
-            // Aquí puedes incluir cualquier lógica adicional tras el éxito, como redireccionar al usuario
-          } else {
-            throw new Error(`Error al agregar/actualizar usuario: ${response.statusText}`);
+          if (!saveUrlResponse.ok) {
+            throw new Error('Error al guardar las URLs en la base de datos');
           }
+    
+          // Respuesta exitosa de guardar las URLs
+          console.log('URLs de los archivos guardadas con éxito en la base de datos');
+          alert('Todos los archivos y sus URLs se han guardado exitosamente.');
+          // Aquí puedes incluir cualquier lógica adicional tras el éxito, como redireccionar al usuario
         } catch (error) {
-          console.error('Error de red:', error);
-          alert('Error al guardar los datos del formulario. Por favor, inténtalo de nuevo.');
+          console.error('Error al guardar las URLs en la base de datos:', error);
+          alert('Error al guardar las URLs de los archivos. Por favor, inténtalo de nuevo.');
         }
       }
-    };
+    }
+    
+    
     // fin codigo del bucket
 
    
@@ -228,21 +224,21 @@ const [formData, setFormData] = useState({
     // console.log(completeCredent)
 
   return (
-    <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
+    <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black bg-white">
       {/* Aside */}
       <aside className="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
         <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
           <h2 className="pl-3 mb-4 text-2xl font-semibold">Register</h2>
 
           <Link to="/userReg">
-            <h1 className="flex items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
+            <h1 className="flex items-center justify-between px-3 py-2.5 font-bold bg-white text-black  border rounded-full">
               User Register {verified ? <FcApproval className="text-xl"/> 
               : (completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>)}
             </h1>
           </Link>
 
           <Link to="/deviceReg">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Device Register
             </h1>
           </Link>
@@ -355,7 +351,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fullname"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
                 >
                   Full name
                 </label>
@@ -374,7 +370,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
                 >
                   Email
                 </label>
@@ -393,7 +389,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="Identification"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
                 >
                   Identification Number
                 </label>
@@ -412,7 +408,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
                 >
                   Residence Address
                 </label>
@@ -431,7 +427,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="phone"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
                 >
                   Phone Number
                 </label>
@@ -450,7 +446,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileId"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
                 >
                   Upload a file of your identity document
                 </label>
@@ -469,7 +465,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileBank"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
                 >
                   Upload a file of your bank account status
                 </label>
@@ -488,7 +484,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileTax"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
                 >
                   Upload a file of your tax return
                 </label>
@@ -507,7 +503,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="filefin1"
-                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
                 >
                   Upload a file of other financial documents
                 </label>
