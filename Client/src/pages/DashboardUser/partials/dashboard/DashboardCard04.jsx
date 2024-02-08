@@ -1,5 +1,6 @@
 import React, {useState , useEffect} from 'react';
 import BarChart from '../../charts/BarChart01';
+import Steps from '../../components/Steps'
 
 // Import utilities
 import { tailwindConfig } from '../../utils/Utils';
@@ -190,7 +191,7 @@ function DashboardCard04() {
 
       {cardContent && (
         <div className='fixed z-10 top-0 left-0 h-full w-full flex justify-center items-center'>
-            <div className="bg-white w-96 h-96 rounded-lg">
+            <div className="bg-[#1d335b] w-96 h-96 rounded-lg">
   <div className="flex p-2 gap-1">
     <div className="">
       <span className="bg-blue-500 inline-block center w-3 h-3 rounded-full"></span>
@@ -202,28 +203,28 @@ function DashboardCard04() {
       <button onClick={handleClose} class="bg-pink-500 box inline-block center w-3 h-3 rounded-full"></button>
     </div>
   </div>
-  <div className="card__content flex items-center justify-center">
-  <div class="flex flex-col w-4/6 bg-black rounded-3xl">
+  <div className="card__content flex flex-col items-center justify-center">
+  <div class="flex flex-col w-4/6 bg-white rounded-3xl">
   <div class="px-6 py-8 sm:p-10 sm:pb-6">
     <div class="grid items-center justify-center w-full grid-cols-1 text-left">
       <div>
-        <h2 class="text-lg font-medium tracking-tighter text-white lg:text-3xl">
+        <h2 class="text-lg font-medium tracking-tighter text-black lg:text-3xl">
           Generator
         </h2>
-        <p class="mt-2 text-sm text-gray-100">Basic plan for a generator</p>
+        <p class="mt-2 text-sm text-black">Basic plan for a generator</p>
       </div>
       <div class="mt-6">
         <p>
-          <span class="text-5xl font-light tracking-tight text-white">
+          <span class="text-5xl font-light tracking-tight text-black">
                                 $60
                               </span>
-          <span class="text-base font-medium text-white"> /mo </span>
+          <span class="text-base font-medium text-black"> /mo </span>
         </p>
       </div>
     </div>
   </div>
   <div class="flex px-6 pb-8 sm:px-8">
-    <button aria-describedby="tier-starter" class="items-center justify-center w-full px-6 py-2.5 text-center text-black duration-200 bg-white border-2 border-white rounded-full nline-flex hover:bg-transparent hover:border-white hover:text-white focus:outline-none focus-visible:outline-white text-sm focus-visible:ring-white" href="#">
+    <button aria-describedby="tier-starter" class="items-center justify-center w-full px-6 py-2.5 text-center text-black duration-200 bg-white border-2 border-black rounded-full nline-flex hover:bg-transparent hover:border-black hover:text-white hover:bg-black focus:outline-none focus-visible:outline-white text-sm focus-visible:ring-white" href="#">
       Get started
     </button>
   </div>
