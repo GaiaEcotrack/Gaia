@@ -42,6 +42,7 @@ function UserRegister() {
       console.error('Error de red:');
     }
   };
+
   localStorage.setItem("id", foundUserId);  
 
   // console.log(foundUserId)  
@@ -54,138 +55,194 @@ const [formData, setFormData] = useState({
   identification_number: null,
   address: null,
   phone: null,
-  // identity_document: null,
-  // bank_account_status: null,
-  // tax_declarations: null,
-  // other_financial_documents: null,
+  identity_document: null,
+  bank_account_status: null,
+  tax_declarations: null,
+  other_financial_documents: null,
 });
     
-    useEffect(() => {
-      if (foundUserId) {
-        axios.get(`${URL}/users/${foundUserId}`)
-          .then(response => {
-            const userData = response.data;  
-            setFormData({
-              full_name: userData.full_name || null,
-              email: userData.email || null,
-              identification_number: userData.identification_number || null,
-              address: userData.address || null,
-              phone: userData.phone || null,
-              identity_document: userData.identity_document || null,
-              bank_account_status: userData.bank_account_status || null,
-              tax_declarations: userData.tax_declarations || null,
-              other_financial_documents: userData.other_financial_documents || null,
-            });
-
-            const pendingDocs = Object.entries(userData)
-            .filter(([key, value]) => value === null)
-            .map(([key]) => key);
-            setPendingDocuments(pendingDocs);
-            
-            const hasNullProperty = Object.values(userData).some(value => value === null);
-            setCompleted(!hasNullProperty)            
-          })
-          .catch(error => {
-            console.error('Error fetching user data:', error);
+  useEffect(() => {
+    if (foundUserId) {
+      axios.get(`${URL}/users/${foundUserId}`)
+        .then(response => {
+          const userData = response.data;  
+          setFormData({
+            full_name: userData.full_name || null,
+            email: userData.email || null,
+            identification_number: userData.identification_number || null,
+            address: userData.address || null,
+            phone: userData.phone || null,
+            identity_document: userData.identity_document || null,
+            bank_account_status: userData.bank_account_status || null,
+            tax_declarations: userData.tax_declarations || null,
+            other_financial_documents: userData.other_financial_documents || null,
           });
-      }
-    }, [foundUserId]);
 
-      //* codigo para subir archivos al bucket
+          const pendingDocs = Object.entries(userData)
+          .filter(([key, value]) => value === null)
+          .map(([key]) => key);
+          setPendingDocuments(pendingDocs);
+          
+          const hasNullProperty = Object.values(userData).some(value => value === null);
+          setCompleted(!hasNullProperty)            
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+        });
+    }
+  }, [foundUserId]);
 
-      const [selectedFiles, setSelectedFiles] = useState({});
-   
-      //* nueva funcion
-      const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-       const { name, value, type, files } = event.target;
-     
-       if (type === 'file') {
-        // Actualiza el estado con el archivo seleccionado, usando el nombre del input como clave
-        setSelectedFiles(prevFiles => ({
-          ...prevFiles,
-          [name]: files[0] // Asume que solo se selecciona un archivo por input
-        }));
-      } else {
-        // Para otros tipos de inputs, actualiza el estado formData
-        setFormData(prevFormData => ({
-          ...prevFormData,
-          [name]: value,
-        }));
-      }
-    };
-     
-    async function handleSubmit(e) {
-      e.preventDefault();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  
+    console.log('Datos del formulario a enviar:', formData);
+
+    const hasFileInputs = Object.keys(selectedFiles).length > 0;
+
+    if (hasFileInputs) {
+      await handleSubmitBucket(e);
+    } else {    
+      try {
+        const userId = localStorage.getItem('id');
+        let apiUrl = `${URL}/users/`;
+        let httpMethod = 'POST';
     
-      let allFilesUploaded = true;
-      let fileUploadData = {}; // Objeto para almacenar las URLs de los archivos subidos
-    
-      // Itera sobre cada archivo seleccionado y envíalo
-      for (const [inputName, file] of Object.entries(selectedFiles)) {
-        const formData = new FormData();
-        formData.append('file', file);
-    
-        const uploadUrl = 'http://127.0.0.1:5000/upload_image';
-    
-        try {
-          const uploadResponse = await fetch(uploadUrl, {
-            method: 'POST',
-            body: formData,
-          });
-    
-          if (!uploadResponse.ok) {
-            throw new Error(`No se pudo cargar el archivo de ${inputName}`);
-          }
-    
-          const uploadData = await uploadResponse.json();
-          console.log(`Archivo de ${inputName} cargado con éxito:`, uploadData);
-    
-          // Suponiendo que uploadData contiene la URL del archivo subido
-          // Ajusta la clave según el nombre del input para que coincida con el backend
-          let urlKey = `${inputName}_url`; // Por ejemplo: identity_document_url
-          fileUploadData[urlKey] = uploadData.url;
-        } catch (error) {
-          console.error(`Error al cargar el archivo de ${inputName}:`, error);
-          alert(`Error al cargar el archivo de ${inputName}. Por favor, inténtalo de nuevo.`);
-          allFilesUploaded = false;
-          break; // Detiene el proceso si alguno de los archivos falla al cargar
+        if (userId) {
+          apiUrl += `${userId}`;
+          httpMethod = 'PUT';
         }
-      }
+        const cleanedFormData = Object.fromEntries(
+          Object.entries(formData).filter(([key, value]) => value !== null)
+        );
     
-      // Si todos los archivos se cargaron exitosamente, procede a enviar las URLs al backend
-      if (allFilesUploaded) {
-        try {
-          const saveUrlResponse = await fetch('http://127.0.0.1:5000/save_url', { // Ajusta esta URL al endpoint correcto
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              user_id: localStorage.getItem('id'), // Asegúrate de tener el ID del usuario disponible
-              ...fileUploadData, // Envía todas las URLs de los archivos subidos
-            }),
-          });
+        const response = await fetch(apiUrl, {
+          method: httpMethod,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(cleanedFormData),
+        });
     
-          if (!saveUrlResponse.ok) {
-            throw new Error('Error al guardar las URLs en la base de datos');
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Usuario agregado/actualizado con éxito:', data);
+    
+          if (!userId) {
+            localStorage.setItem('id', data.id);
           }
-    
-          // Respuesta exitosa de guardar las URLs
-          console.log('URLs de los archivos guardadas con éxito en la base de datos');
-          alert('Todos los archivos y sus URLs se han guardado exitosamente.');
-          // Aquí puedes incluir cualquier lógica adicional tras el éxito, como redireccionar al usuario
-        } catch (error) {
-          console.error('Error al guardar las URLs en la base de datos:', error);
-          alert('Error al guardar las URLs de los archivos. Por favor, inténtalo de nuevo.');
+        } else {
+          console.error('Error al agregar/actualizar usuario:', response.statusText);
         }
+      } catch (error) {
+        console.error('Error de red:', error);
       }
     }
-    
-    
-    // fin codigo del bucket
+  };
+
+
+  //* codigo para subir archivos al bucket
+
+  const [selectedFiles, setSelectedFiles] = useState({});
+
+  //* nueva funcion
+  const handleInputChangeBucket = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, files } = event.target;
+  
+    if (type === 'file') {
+    // Actualiza el estado con el archivo seleccionado, usando el nombre del input como clave
+      setSelectedFiles(prevFiles => ({
+        ...prevFiles,
+        [name]: files && files.length > 0 ? files[0] : null, // Asume que solo se selecciona un archivo por input
+      }));
+    } else {
+      // Para otros tipos de inputs, actualiza el estado formData
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
+  };
+
+  async function handleSubmitBucket(e: React.FormEvent) {
+    e.preventDefault();
+  
+    let allFilesUploaded = true;
+    let fileUploadData: Record<string, string> = {} // Objeto para almacenar las URLs de los archivos subidos
+  
+    // Itera sobre cada archivo seleccionado y envíalo
+    for (const [inputName, file] of Object.entries(selectedFiles) as [string, File | null][]) {
+      const formData = new FormData();
+      if (file !== null) {
+        formData.append('file', file);
+      }
+  
+      const uploadUrl = 'http://127.0.0.1:5000/upload_image';
+  
+      try {
+        const uploadResponse = await fetch(uploadUrl, {
+          method: 'POST',
+          body: formData,
+        });
+  
+        if (!uploadResponse.ok) {
+          throw new Error(`No se pudo cargar el archivo de ${inputName}`);
+        }
+  
+        const uploadData = await uploadResponse.json();
+        console.log(`Archivo de ${inputName} cargado con éxito:`, uploadData);
+  
+        // Suponiendo que uploadData contiene la URL del archivo subido
+        // Ajusta la clave según el nombre del input para que coincida con el backend
+        let urlKey = `${inputName}_url`; // Por ejemplo: identity_document_url
+        fileUploadData[urlKey] = uploadData.url;
+      } catch (error) {
+        console.error(`Error al cargar el archivo de ${inputName}:`, error);
+        alert(`Error al cargar el archivo de ${inputName}. Por favor, inténtalo de nuevo.`);
+        allFilesUploaded = false;
+        break; // Detiene el proceso si alguno de los archivos falla al cargar
+      }
+    }
+  
+    // Si todos los archivos se cargaron exitosamente, procede a enviar las URLs al backend
+    if (allFilesUploaded) {
+      try {
+        const saveUrlResponse = await fetch('http://127.0.0.1:5000/save_url', { // Ajusta esta URL al endpoint correcto
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user_id: localStorage.getItem('id'), // Asegúrate de tener el ID del usuario disponible
+            ...fileUploadData, // Envía todas las URLs de los archivos subidos
+          }),
+        });
+  
+        if (!saveUrlResponse.ok) {
+          throw new Error('Error al guardar las URLs en la base de datos');
+        }
+  
+        // Respuesta exitosa de guardar las URLs
+        console.log('URLs de los archivos guardadas con éxito en la base de datos');
+        alert('Todos los archivos y sus URLs se han guardado exitosamente.');
+        // Aquí puedes incluir cualquier lógica adicional tras el éxito, como redireccionar al usuario
+      } catch (error) {
+        console.error('Error al guardar las URLs en la base de datos:', error);
+        alert('Error al guardar las URLs de los archivos. Por favor, inténtalo de nuevo.');
+      }
+    }
+  }  
+  
+  // fin codigo del bucket
 
    
-
     useEffect(() => {
   if (foundUserId) {
     if (pendingDocuments.includes("credentials")) {
@@ -217,11 +274,6 @@ const [formData, setFormData] = useState({
   }
 }, [foundUserId, pendingDocuments, pendingCredentials, completeCredent]);
 
-    // localStorage.setItem("Completed", `${completeCredent}`);
-    
-    // console.log(pendingDocuments)
-    // console.log(pendingCredentials)
-    // console.log(completeCredent)
 
   return (
     <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black bg-white">
@@ -231,7 +283,7 @@ const [formData, setFormData] = useState({
           <h2 className="pl-3 mb-4 text-2xl font-semibold">Register</h2>
 
           <Link to="/userReg">
-            <h1 className="flex items-center justify-between px-3 py-2.5 font-bold bg-white text-black  border rounded-full">
+            <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#212056] border rounded-full">
               User Register {verified ? <FcApproval className="text-xl"/> 
               : (completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>)}
             </h1>
@@ -291,7 +343,7 @@ const [formData, setFormData] = useState({
           <div className="flex flex-row justify-start items-center space-y-5 sm:flex-row sm:space-y-0 max-w-4xl my-8">
             {/* Imagen del perfil */}
             <img
-              className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-500"
+              className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-300"
               src={
                 localStorage.getItem("profilePic") ||
                 "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -303,7 +355,7 @@ const [formData, setFormData] = useState({
             <div className="flex flex-col space-y-5 sm:ml-8">
               <button
                 type="button"
-                className="py-3.5 px-7 text-base font-medium text-indigo-100 focus:outline-none bg-[#202142] rounded-lg border border-indigo-200 hover:bg-indigo-900 focus:z-10 focus:ring-4 focus:ring-indigo-200 "
+                className="py-3.5 px-7 text-base font-medium text-black focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142] focus:z-10 focus:ring-4 focus:ring-indigo-200"
               >
                 Change Email Log in
               </button>
@@ -315,7 +367,7 @@ const [formData, setFormData] = useState({
               </button>
             </div>
 
-            <div className="flex flex-col justify-start items-center w-[47%] h-full">
+            <div className="flex flex-col justify-start items-center w-[45%] 2xl:w-[49%] h-full">
               {verified ? (
                 <div className="flex items-center">
                   <FcApproval className="text-7xl" />
@@ -389,7 +441,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="Identification"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
                 >
                   Identification Number
                 </label>
@@ -408,7 +460,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
                 >
                   Residence Address
                 </label>
@@ -427,7 +479,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="phone"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
                 >
                   Phone Number
                 </label>
@@ -446,12 +498,12 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileId"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
                 >
                   Upload a file of your identity document
                 </label>
                 <input
-                  onChange={handleInputChange}
+                  onChange={handleInputChangeBucket}
                   name="identity_document"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
@@ -465,12 +517,12 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileBank"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
                 >
                   Upload a file of your bank account status
                 </label>
                 <input
-                  onChange={handleInputChange}
+                  onChange={handleInputChangeBucket}
                   name="bank_account_status"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
@@ -484,12 +536,12 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileTax"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
                 >
                   Upload a file of your tax return
                 </label>
                 <input
-                  onChange={handleInputChange}
+                  onChange={handleInputChangeBucket}
                   name="tax_declarations"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
@@ -503,12 +555,12 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="filefin1"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
                 >
                   Upload a file of other financial documents
                 </label>
                 <input
-                  onChange={handleInputChange}
+                  onChange={handleInputChangeBucket}
                   name="other_financial_documents"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
@@ -519,17 +571,14 @@ const [formData, setFormData] = useState({
                 <h1 className="text-green-600 absolute">{formData.other_financial_documents}</h1>
               </div>
 
-              <div className="mb-2 sm:mb-6">
-                <input
-                  className="bg-inherit"                  
-                  // required
-                />
+              <div className="">
+                  {/* div comodin */}
               </div>
 
               <div className="flex justify-start w-full">
                 <button
                   type="submit"
-                  className="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28"
+                  className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28 mt-4"
                 >
                   Save
                 </button>

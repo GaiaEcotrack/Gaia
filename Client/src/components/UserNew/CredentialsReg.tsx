@@ -113,7 +113,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 };
 
   return (
-    <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
+    <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black">
       {/* Aside */}
       <aside className="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
         <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
@@ -132,7 +132,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           </Link>
 
           <Link to="/credentialsReg">
-            <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#202142] border rounded-full">
+            <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#212056] border rounded-full">
               Credentials {completeCredent ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
             </h1>
           </Link>
@@ -166,7 +166,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="usernameCre"
-                  className="block mb-2 text-sm font-medium text-black dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-black"
                 >
                   Credential-ID
                 </label>
@@ -185,7 +185,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="passwordCre"
-                  className="block mb-2 text-sm font-medium text-black dark:text-white"
+                  className="block mb-2 text-sm font-medium text-black dark:text-black"
                 >
                   Secret-key
                 </label>
@@ -204,7 +204,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <div className="flex justify-start w-full">
                 <button
                   type="submit"
-                  className="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28"
+                  className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28"
                 >
                   Save
                 </button>
