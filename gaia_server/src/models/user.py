@@ -18,5 +18,10 @@ class UserSchema(Schema):
     credentials = fields.String(required=False)
     secret_key = fields.String(required=False) 
     
+    identity_document_url = fields.String(required=False)
+    bank_account_status_url = fields.String(required=False)
+    tax_declarations_url = fields.String(required=False)
+    other_financial_documents_url = fields.String(required=False)
+    
     devices = fields.List(fields.Nested(DeviceSchema), allow_none=False)
     
