@@ -48,17 +48,17 @@ function UserRegister() {
 
 // **********************************************************
 
-    const [formData, setFormData] = useState({
-      full_name: null,
-      email: null,
-      identification_number: null,
-      address: null,
-      phone: null,
-      identity_document: null,
-      bank_account_status: null,
-      tax_declarations: null,
-      other_financial_documents: null,
-    });
+const [formData, setFormData] = useState({
+  full_name: null,
+  email: null,
+  identification_number: null,
+  address: null,
+  phone: null,
+  // identity_document: null,
+  // bank_account_status: null,
+  // tax_declarations: null,
+  // other_financial_documents: null,
+});
     
     useEffect(() => {
       if (foundUserId) {
@@ -91,91 +91,104 @@ function UserRegister() {
       }
     }, [foundUserId]);
 
-    // subir imagen del document
-    const handleInputChangeDocument = (event: React.ChangeEvent<HTMLInputElement>) => {
-      // Verificar si se ha seleccionado un archivo
-      if (event.target.files && event.target.files.length > 0) {
-        const file = event.target.files[0];
+      //* codigo para subir archivos al bucket
+
+      const [selectedFiles, setSelectedFiles] = useState({});
+   
+      //* nueva funcion
+      const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+       const { name, value, type, files } = event.target;
+     
+       if (type === 'file') {
+        // Actualiza el estado con el archivo seleccionado, usando el nombre del input como clave
+        setSelectedFiles(prevFiles => ({
+          ...prevFiles,
+          [name]: files[0] // Asume que solo se selecciona un archivo por input
+        }));
+      } else {
+        // Para otros tipos de inputs, actualiza el estado formData
+        setFormData(prevFormData => ({
+          ...prevFormData,
+          [name]: value,
+        }));
+      }
+    };
+     
+    const handleSubmit = async (e) => {
+      e.preventDefault();
     
-        // Crear FormData para enviar el archivo
+      let allFilesUploaded = true;
+    
+      // Itera sobre cada archivo seleccionado y envíalo
+      for (const [inputName, file] of Object.entries(selectedFiles)) {
         const formData = new FormData();
         formData.append('file', file);
     
-        // URL del endpoint de tu servidor Flask
-        const url = 'http://127.0.0.1:5000/upload_image';
+        const uploadUrl = 'http://127.0.0.1:5000/upload_image';
     
-        // Realizar la solicitud POST para subir el archivo
-        fetch(url, {
-          method: 'POST',
-          body: formData,
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
+        try {
+          const uploadResponse = await fetch(uploadUrl, {
+            method: 'POST',
+            body: formData,
+          });
+    
+          if (!uploadResponse.ok) {
+            throw new Error(`No se pudo cargar el archivo de ${inputName}`);
           }
-          return response.json();
-        })
-        .then(data => {
-          console.log('Success:', data);
-          alert('Imagen subida exitosamente!');
-          // Aquí puedes manejar acciones adicionales tras la subida exitosa
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          alert(`Error al subir la imagen: ${error.message}`);
-        });
+    
+          const uploadData = await uploadResponse.json();
+          console.log(`Archivo de ${inputName} cargado con éxito:`, uploadData);
+        } catch (error) {
+          console.error(`Error al cargar el archivo de ${inputName}:`, error);
+          alert(`Error al cargar el archivo de ${inputName}. Por favor, inténtalo de nuevo.`);
+          allFilesUploaded = false;
+          break; // Detiene el proceso si alguno de los archivos falla al cargar
+        }
       }
-    };
-
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-      });
-    };
-    const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
     
-      console.log('Datos del formulario a enviar:', formData);
-    
-      try {
+      // Si todos los archivos se cargaron exitosamente, procede a enviar el resto del formulario
+      if (allFilesUploaded) {
         const userId = localStorage.getItem('id');
         let apiUrl = `${URL}/users/`;
         let httpMethod = 'POST';
+        alert('Docs uploaded successfully')
     
         if (userId) {
-          // Si hay un ID en el localStorage, es una actualización (PUT)
           apiUrl += `${userId}`;
           httpMethod = 'PUT';
         }
-
+    
+        // Prepara los datos del formulario excluyendo los archivos
         const cleanedFormData = Object.fromEntries(
-          Object.entries(formData).filter(([key, value]) => value !== null)
+          Object.entries(formData).filter(([key, value]) => value !== '')
         );
     
-        const response = await fetch(apiUrl, {
-          method: httpMethod,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(cleanedFormData),
-        });
+        try {
+          const response = await fetch(apiUrl, {
+            method: httpMethod,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cleanedFormData),
+          });
     
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Usuario agregado/actualizado con éxito:', data);
-    
-          if (!userId) {
-            console.log("Error")
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Usuario agregado/actualizado con éxito:', data);
+            alert('Datos guardados exitosamente.');
+            // Aquí puedes incluir cualquier lógica adicional tras el éxito, como redireccionar al usuario
+          } else {
+            throw new Error(`Error al agregar/actualizar usuario: ${response.statusText}`);
           }
-        } else {
-          console.error('Error al agregar/actualizar usuario:', response.statusText);
+        } catch (error) {
+          console.error('Error de red:', error);
+          alert('Error al guardar los datos del formulario. Por favor, inténtalo de nuevo.');
         }
-      } catch (error) {
-        console.error('Error de red:', error);
       }
     };
+    // fin codigo del bucket
+
+   
 
     useEffect(() => {
   if (foundUserId) {
@@ -215,39 +228,39 @@ function UserRegister() {
     // console.log(completeCredent)
 
   return (
-    <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
+    <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
       {/* Aside */}
       <aside className="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
         <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
           <h2 className="pl-3 mb-4 text-2xl font-semibold">Register</h2>
 
           <Link to="/userReg">
-            <h1 className="flex text-black items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
+            <h1 className="flex items-center justify-between px-3 py-2.5 font-bold bg-white text-black border rounded-full">
               User Register {verified ? <FcApproval className="text-xl"/> 
               : (completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>)}
             </h1>
           </Link>
 
           <Link to="/deviceReg">
-            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               Device Register
             </h1>
           </Link>
 
           <Link to="/credentialsReg">
-            <h1 className="flex items-center text-black justify-between px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            <h1 className="flex items-center justify-between px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               Credentials {completeCredent ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
             </h1>
           </Link>
 
           <Link to="/notifications">
-            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               Notifications
             </h1>
           </Link>
 
           {/* <Link to="/account"> */}
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
               PRO Account
             </h1>
           {/* </Link> */}
@@ -259,20 +272,20 @@ function UserRegister() {
         <div className="px-6 pb-8 mt-8 sm:rounded-lg w-full">
           
           <div className="flex flex-row justify-between items-end">
-            <h2 className="flex text-black justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4">
+            <h2 className="flex justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4">
               USER ACCOUNT
             </h2>
 
             <div className="flex justify-between w-[40%] mr-8">
-              <h1 className="flex text-black items-center">
+              <h1 className="flex items-center">
                 Pending&nbsp; <FcHighPriority className="text-xl"/>     
               </h1>
 
-              <h1 className="flex text-black items-center">
+              <h1 className="flex items-center">
                 Completed&nbsp; <FcOk className="text-xl"/>
               </h1>
 
-              <h1 className="flex text-black items-center">
+              <h1 className="flex items-center">
                 Verified&nbsp; <FcApproval className="text-[23px]"/>
               </h1>      
             </div>
@@ -342,7 +355,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fullname"
-                  className="block mb-2 text-black text-sm font-medium dark:text-white"
+                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                 >
                   Full name
                 </label>
@@ -361,7 +374,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-black dark:text-white"
+                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                 >
                   Email
                 </label>
@@ -380,7 +393,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="Identification"
-                  className="block mb-2 text-sm font-medium text-black dark:text-white"
+                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                 >
                   Identification Number
                 </label>
@@ -399,7 +412,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-black dark:text-white"
+                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                 >
                   Residence Address
                 </label>
@@ -418,7 +431,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="phone"
-                  className="block mb-2 text-sm font-medium text-black dark:text-white"
+                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                 >
                   Phone Number
                 </label>
@@ -437,12 +450,12 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileId"
-                  className="block mb-2 text-sm font-medium text-black dark:text-white"
+                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                 >
                   Upload a file of your identity document
                 </label>
                 <input
-                  onChange={handleInputChangeDocument}
+                  onChange={handleInputChange}
                   name="identity_document"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
@@ -456,7 +469,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileBank"
-                  className="block mb-2 text-sm font-medium text-black dark:text-white"
+                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                 >
                   Upload a file of your bank account status
                 </label>
@@ -475,7 +488,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileTax"
-                  className="block mb-2 text-sm font-medium text-black dark:text-white"
+                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                 >
                   Upload a file of your tax return
                 </label>
@@ -494,7 +507,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="filefin1"
-                  className="block mb-2 text-sm font-medium text-black dark:text-white"
+                  className="block mb-2 text-sm font-medium text-indigo-50 dark:text-white"
                 >
                   Upload a file of other financial documents
                 </label>
