@@ -135,9 +135,10 @@
         },
         "post": {
           "tags": ["Add user API"],
-          "summary": "Add user",
+          "summary": "Add a new user",
+          "description": "This endpoint is used to add a new user to the database with detailed information.",
           "requestBody": {
-            "description": "Post New user To Database",
+            "description": "Data for the new user to be added",
             "required": true,
             "content": {
               "application/json": {
@@ -149,92 +150,202 @@
           },
           "responses": {
             "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/components/schemas/userList"
+              "description": "User added successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Usuario agregado con éxito"
+                      },
+                      "user_id": {
+                        "type": "string",
+                        "example": "507f1f77bcf86cd799439011"
+                      }
+                    }
+                  }
+                }
               }
             },
-            "404": {
-              "description": "NOT FOUND",
-              "schema": {
-                "$ref": "#/components/schemas/userList"
+            "400": {
+              "description": "Validation errors",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Validation errors"
+                      },
+                      "errors": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal Server Error in case of unexpected issues.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Error"
+                  }
+                }
               }
             }
           }
         }
+        
       },
-      "/user/{id}": {
+      "/users/{id}": {
         "get": {
           "tags": ["Get users from API"],
-          "summary": "Get users",
+          "summary": "Get user by ID",
+          "description": "Retrieves a user's information from the database by their unique identifier.",
           "parameters": [
             {
               "name": "id",
               "in": "path",
-              "description": "user id to update",
+              "description": "The unique identifier of the user to retrieve, expected to be a MongoDB ObjectId.",
               "required": true,
-              "type": "integer",
               "schema": {
-                "$ref": "#/components/schemas/Id"
+                "type": "string"
               }
             }
           ],
           "responses": {
             "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/components/schemas/userList"
+              "description": "User found successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "description": "The unique identifier of the user, converted to string."
+                      },
+                      "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "The email address of the user."
+                      },
+                      "full_name": {
+                        "type": "string",
+                        "description": "The full name of the user."
+                      }
+
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "ID inválido",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "ID inválido"
+                      }
+                    }
+                  }
+                }
               }
             },
             "404": {
-              "description": "NOT FOUND",
-              "schema": {
-                "$ref": "#/components/schemas/userList"
+              "description": "Usuario no encontrado",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Usuario no encontrado"
+                      }
+                    }
+                  }
+                }
               }
             }
           }
         },
         "put": {
           "tags": ["Update users on API"],
+          "summary": "Update user",
+          "description": "Updates an existing user's information in the database.",
           "parameters": [
             {
               "name": "id",
               "in": "path",
-              "description": "user id to update",
               "required": true,
-              "type": "integer",
+              "description": "The unique identifier of the user to update.",
               "schema": {
-                "$ref": "#/components/schemas/Id"
+                "type": "string"
               }
             }
           ],
-          "summary": "Update user",
           "requestBody": {
-            "description": "Update Existing user On Database",
             "required": true,
+            "description": "Data for updating an existing user",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/update"
+                  "type": "object",
+                  "properties": {
+                    "email": {"type": "string", "format": "email", "description": "User's email address."},
+                    "full_name": {"type": "string", "description": "User's full name."},
+                    "address": {"type": "string", "description": "User's physical address."},
+                    "phone": {"type": "string", "description": "User's phone number."}
+                  },
+                  "example": {
+                    "email": "user@example.com",
+                    "full_name": "John Doe",
+                    "address": "123 Main St, Anytown, Anystate",
+                    "phone": "555-555-5555"
+                  }
                 }
               }
             }
           },
           "responses": {
             "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/components/schemas/userList"
+              "description": "User updated successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/userList"
+                  }
+                }
               }
             },
+            "400": {
+              "description": "Bad Request. Invalid input or missing fields."
+            },
             "404": {
-              "description": "NOT FOUND",
-              "schema": {
-                "$ref": "#/components/schemas/userList"
-              }
+              "description": "User not found."
             }
           }
         },
+       
+        
+        
+        
         "delete": {
           "tags": ["Delete user to API"],
           "parameters": [
@@ -266,50 +377,335 @@
           }
         }
       },
-      "/devices": {
+      "/users/search": {
         "get": {
-          "tags": ["Devices API"],
-          "summary": "Get All Devices",
+          "tags": ["User Search API"],
+          "summary": "Search for a user by email",
+          "description": "Retrieves a user's information from the database by their email address. Requires an 'email' query parameter.",
+          "parameters": [
+            {
+              "name": "email",
+              "in": "query",
+              "required": true,
+              "description": "The email address of the user to search for.",
+              "schema": {
+                "type": "string",
+                "format": "email"
+              }
+            }
+          ],
           "responses": {
             "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/components/schemas/Devices"
+              "description": "User found successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "description": "The MongoDB ObjectId of the user, converted to string."
+                      },
+                      "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "The email address of the user."
+                      },
+                      "full_name": {
+                        "type": "string",
+                        "description": "The full name of the user."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request. 'email' parameter not provided.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Parámetro 'email' no proporcionado"
+                      }
+                    }
+                  }
+                }
               }
             },
             "404": {
-              "description": "NOT FOUND",
-              "schema": {
-                "$ref": "#/components/schemas/Devices"
+              "description": "User not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Usuario no encontrado"
+                      }
+                    }
+                  }
+                }
               }
             }
           }
         }
       },
-      "/devices/{device_id}": {
+      "/devices/device-data": {
         "get": {
           "tags": ["Devices API"],
-          "summary": "Get Device by ID",
+          "summary": "Get Device Data",
+          "description": "Retrieves specific device data from the database using the device's unique identifier.",
           "parameters": [
             {
-              "name": "device_id",
-              "in": "path",
-              "description": "Device ID to retrieve",
+              "name": "deviceId",
+              "in": "query",
+              "description": "The unique identifier of the device to retrieve data for.",
               "required": true,
-              "type": "string"
+              "schema": {
+                "type": "string"
+              }
             }
           ],
           "responses": {
             "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/components/schemas/Devices"
+              "description": "Device data retrieved successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request. Missing necessary parameter (deviceId).",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string",
+                        "example": "Falta el parámetro necesario (deviceId)."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized. No se pudo obtener el token de acceso.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string",
+                        "example": "No se pudo obtener el token de acceso."
+                      }
+                    }
+                  }
+                }
               }
             },
             "404": {
-              "description": "NOT FOUND",
+              "description": "Not Found. Device data for the specified deviceId not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string",
+                        "example": "Datos del dispositivo no encontrados para el deviceId especificado."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/devices/plant-devices": {
+        "get": {
+          "tags": ["Devices API"],
+          "summary": "Get Devices by Plant Id",
+          "description": "Retrieves devices information for a specific plant from the database using the plant's unique identifier.",
+          "parameters": [
+            {
+              "name": "plantId",
+              "in": "query",
+              "description": "The unique identifier of the plant to retrieve devices for.",
+              "required": true,
               "schema": {
-                "$ref": "#/components/schemas/Devices"
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Devices list retrieved successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Devices"
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request. Missing necessary parameter (plantId).",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string",
+                        "example": "Falta el parámetro necesario (plantId)."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found. Plant or devices for the specified plantId not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string",
+                        "example": "Dispositivos no encontrados para el plantId proporcionado."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      
+      },
+      "/battery": {
+        "get": {
+          "tags": ["Devices API"],
+          "summary": "Get Device Battery Measurements",
+          "description": "Retrieves battery measurements for a specific device from the database using the device's unique identifier, set type, period, and optionally a date for certain periods.",
+          "parameters": [
+            {
+              "name": "deviceId",
+              "in": "query",
+              "description": "The unique identifier of the device to retrieve measurements for.",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "setType",
+              "in": "query",
+              "description": "The type of measurement set to retrieve.",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "period",
+              "in": "query",
+              "description": "The period for which measurements are to be retrieved (Day, Week, Month, Year).",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "Date",
+              "in": "query",
+              "description": "The specific date for the measurement set, required for periods Day, Week, Month, and Year.",
+              "required": false,
+              "schema": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Measurements retrieved successfully.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request. Missing necessary parameters (deviceId, setType, period) or Date for selected period.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string",
+                        "example": "Faltan parámetros necesarios (deviceId, setType, period) o Falta el parámetro necesario (Date) para el periodo seleccionado."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized. No se pudo obtener el token de acceso.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string",
+                        "example": "No se pudo obtener el token de acceso."
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found. Device or measurements for the specified parameters not found.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "error": {
+                        "type": "string",
+                        "example": "Dispositivo o medidas no encontrados para los parámetros especificados."
+                      }
+                    }
+                  }
+                }
               }
             }
           }
