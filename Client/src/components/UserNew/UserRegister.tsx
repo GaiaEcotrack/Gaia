@@ -296,13 +296,13 @@ const [formData, setFormData] = useState({
           </Link>
 
           <Link to="/credentialsReg">
-            <h1 className="flex items-center justify-between px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center justify-between px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Credentials {completeCredent ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
             </h1>
           </Link>
 
           <Link to="/notifications">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Notifications
             </h1>
           </Link>
