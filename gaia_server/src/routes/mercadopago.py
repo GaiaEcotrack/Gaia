@@ -22,8 +22,16 @@ def crear_pago():
                 "title": item_data.get("title", "Mi producto"),
                 "quantity": item_data.get("quantity", 1),
                 "unit_price": item_data.get("unit_price", 75.76),
+                "currency_id": "USD",
+                "description": item_data.get("description")
             }
-        ]
+        ],
+        "back_urls": {
+			"success": "https://www.gaiaecotrack.com",
+			"failure": "https://www.gaiaecotrack.com",
+			"pending": "https://www.gaiaecotrack.com"
+		},
+		"auto_return": "approved",
     }
 
     try:

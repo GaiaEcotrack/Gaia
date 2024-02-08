@@ -1,8 +1,16 @@
 import React from 'react'
+import MercadoPago from './MercadoPago'
 
 const TypesPay = () => {
   return (
-    <div>TypesPay</div>
+    <div>
+      <div>
+        <h1>Selecciona Tu Metodo de pago</h1>
+        <div>
+          <MercadoPago/>
+        </div>
+      </div>
+    </div>
   )
 }
 
