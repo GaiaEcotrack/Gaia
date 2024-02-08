@@ -12,12 +12,17 @@ from src.routes.devices import devices_routes
 from src.routes.plants import plants_routes
 from src.services.s3_bucket import bucket_route
 from src.routes.api_growth import api_growatt_bp
+from src.routes.mercadopago import mercadopago_route
 from flask_cors import CORS
 
 load_dotenv()
 
 application = Flask(__name__)
 CORS(application)
+
+application.config['MERCADOPAGO_PUBLIC_KEY'] = 'TEST-37c724d2-e7c4-43a2-9ae5-93e83eff22fd'
+application.config['MERCADOPAGO_ACCESS_TOKEN'] = 'TEST-3966790106439966-020716-c3a20a6a6e44c355d6ce2b2ea6e05969-273198687'
+
 
 # Configuración de Swagger
 SWAGGER_URL = "/docs"
@@ -38,6 +43,7 @@ application.register_blueprint(devices_routes, url_prefix='/devices')
 application.register_blueprint(plants_routes, url_prefix='/plants')
 application.register_blueprint(bucket_route, url_prefix='/upload_image')
 application.register_blueprint(api_growatt_bp, url_prefix='/api_growatt')
+application.register_blueprint(mercadopago_route, url_prefix='/mercadopago')
 
 
 
