@@ -14,7 +14,7 @@ const MercadoPago = () => {
             {
               "title": "suscripcion",
               "quantity": 1,
-              "unit_price": 1000
+              "unit_price": 60
             }
           );
           const initPoint = response.data.init_point;
