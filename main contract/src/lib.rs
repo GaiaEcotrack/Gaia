@@ -18,6 +18,7 @@ struct GaiaEcotrackMainState {
     pub total_users: u128,
     pub total_generators:u128,
     pub generators: HashMap<ActorId, Generator>,
+    pub devices:HashMap<String, Vec<DevicesInfo>>,
     // Aqui se pueden agregar información adicional en el contrato
    
 }
@@ -95,8 +96,6 @@ impl GaiaEcotrackMainState {
             0,
         )
         .unwrap();
-
-        // Aquí se pueden generar eventos de confirmación al usuario.
     }
 
     // ...
@@ -241,6 +240,29 @@ async fn main(){
                 let state = state_mut();
                 state.transfer_tokens_between_actors(from, to, amount).await;
             }
+            ActionGaiaEcotrack::NewDevice(idUser,device) =>  {
+                let state = state_mut();
+
+                // TRANSICIÓN DE ESTADO PRINCIPAL
+                // Buscamos si ya existe un vector de devices para ese idUser
+                let user_devices = state.devices.entry(idUser.clone()).or_insert(vec![]);
+    
+                // Insertamos el nuevo dispositivo en el vector
+                user_devices.push(DevicesInfo {
+                    id: device.id,
+                    name: device.name,
+                    type_energy: device.type_energy,
+                    serial: device.serial,
+                });
+    
+                msg::reply(EventsGaiaEcotrack::DeviceRegister("Registered Device".to_string()), 0)
+                    .expect("failed to encode or reply from `state()`");
+    
+     
+                }
+
+
+
             };
 
 }
@@ -266,11 +288,16 @@ async fn main(){
             total_users,
             total_generators,
             generators,
+            devices
         } = value;
     
     // Aquí se genera el cambio de HashMap a Vector para evitar problemas de compilación por el tipo HashMap.
     // Nota: Es necesario convertir todos los Hashmaps a vectores
         let generators = generators.iter().map(|(k, v)| (*k, v.clone())).collect();
+        let devices = devices
+    .iter()
+    .flat_map(|(k, v)| v.iter().map(move |device| (k.clone(), device.clone())))
+    .collect();
        
     
     // Se devuelve un tipo IoGaiaEcotrack
@@ -280,6 +307,7 @@ async fn main(){
             total_users,
             total_generators,
             generators,
+            devices
         }
     
     }
