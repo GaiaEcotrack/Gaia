@@ -104,47 +104,49 @@ const [formData, setFormData] = useState({
     e.preventDefault();
   
     console.log('Datos del formulario a enviar:', formData);
-
-    const hasFileInputs = Object.keys(selectedFiles).length > 0;
-
-    if (hasFileInputs) {
-      await handleSubmitBucket(e);
-    } else {    
-      try {
-        const userId = localStorage.getItem('id');
-        let apiUrl = `${URL}/users/`;
-        let httpMethod = 'POST';
-    
-        if (userId) {
-          apiUrl += `${userId}`;
-          httpMethod = 'PUT';
-        }
-        const cleanedFormData = Object.fromEntries(
-          Object.entries(formData).filter(([key, value]) => value !== null)
-        );
-    
-        const response = await fetch(apiUrl, {
-          method: httpMethod,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(cleanedFormData),
-        });
-    
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Usuario agregado/actualizado con éxito:', data);
-    
-          if (!userId) {
-            localStorage.setItem('id', data.id);
-          }
-        } else {
-          console.error('Error al agregar/actualizar usuario:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error de red:', error);
+       
+    try {
+      const userId = localStorage.getItem('id');
+      let apiUrl = `${URL}/users/`;
+      let httpMethod = 'POST';
+  
+      if (userId) {
+        apiUrl += `${userId}`;
+        httpMethod = 'PUT';
       }
+      const cleanedFormData = Object.fromEntries(
+        Object.entries(formData).filter(([key, value]) => value !== null)
+      );
+  
+      const response = await fetch(apiUrl, {
+        method: httpMethod,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(cleanedFormData),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Usuario agregado/actualizado con éxito:', data);
+  
+        if (!userId) {
+          localStorage.setItem('id', data.id);
+        }
+
+        const hasFileInputs = Object.keys(selectedFiles).length > 0;
+
+        if (hasFileInputs) {
+          await handleSubmitBucket(e);
+        } 
+        
+      } else {
+        console.error('Error al agregar/actualizar usuario:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
     }
+    
   };
 
 
