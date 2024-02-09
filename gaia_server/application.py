@@ -70,18 +70,18 @@ def is_route_without_validation(path):
     return False
 
 def validate_api_key():
-    # if is_route_without_validation(request.path) or request.method == 'OPTIONS':
+    if is_route_without_validation(request.path) or request.method == 'OPTIONS':
         print('api key desactivada')
         return  # No validar la API Key para estas rutas
     
     
-    # api_key = request.headers.get('X-API-KEY')
-    # if not api_key:
-    #     abort(401, description='API Key missing.')
+    api_key = request.headers.get('X-API-KEY')
+    if not api_key:
+        abort(401, description='API Key missing.')
     
-    # user = db.users.find_one({"api_key": api_key})
-    # if not user:
-    #     abort(401, description='Invalid API Key.')
+    user = db.users.find_one({"api_key": api_key})
+    if not user:
+        abort(401, description='Invalid API Key.')
 
 @application.before_request
 def before_request_func():

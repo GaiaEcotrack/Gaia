@@ -6,6 +6,8 @@ from src.models.user import UserSchema
 import os
 from dotenv import load_dotenv
 from bson import ObjectId
+import secrets
+from werkzeug.security import check_password_hash
 
 load_dotenv()
 
@@ -176,28 +178,27 @@ def get_user_by_email():
     user['_id'] = str(user['_id'])
     return jsonify(user)
 
-@users_route.route('save_url', methods=['POST'])
+@users_route.route('/save_url', methods=['POST'])
 def guardar_url():
     data = request.json
+    user_id = data.get('user_id')
+    archivo_url = data.get('url')
+    tipo_archivo = data.get('tipo_archivo')  # Ejemplo: 'identity_document', 'bank_account_status', etc.
 
-    # Aquí extraes la URL y cualquier otro dato relevante de la solicitud
-    user_id = data.get('user_id')  # ID del usuario al que pertenece el archivo
-    archivo_url = data.get('url')  # La URL del archivo subido a S3
+    # Asegúrate de validar user_id, archivo_url y tipo_archivo aquí
 
-    # Aquí es donde actualizarías la base de datos con la nueva URL
-    # El método exacto dependerá de tu base de datos y esquema
-    # A continuación, te muestro un ejemplo genérico usando MongoDB
-
-    # Buscar el usuario por ID y actualizarlo con la URL del archivo
     user_id_obj = ObjectId(user_id)
-    # Luego usa user_id_obj en tu consulta
+    # Actualiza el campo específico basado en tipo_archivo
+    campo_url = f"{tipo_archivo}_url"  # Construye el nombre del campo dinámicamente
     result = collection.update_one(
-    {'_id': user_id_obj},
-    {'$set': {'archivo_url': archivo_url}}
-)
+        {'_id': user_id_obj},
+        {'$set': {campo_url: archivo_url}}
+    )
 
     if result.modified_count > 0:
         return jsonify({'message': 'URL del archivo guardada con éxito'}), 200
-
     else:
-        return jsonify({'message': 'Error al guardar la URL del archivo'}), 400
+        # Podrías querer verificar si el usuario no existe y devolver un mensaje específico
+        return jsonify({'message': 'Error al guardar la URL del archivo o usuario no encontrado'}), 400
+    
+    
