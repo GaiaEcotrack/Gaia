@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useThemeProvider } from '../utils/ThemeContext';
-
+import axios from "axios"
 import { chartColors } from './ChartjsConfig';
 import {
   Chart, LineController, LineElement, Filler, PointElement, LinearScale, TimeScale, Tooltip,
@@ -25,7 +25,29 @@ function RealtimeChart({
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === 'dark';  
   const { textColor, gridColor, tooltipTitleColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors;
+  const [totalGenerado, setTotalGenerado] = useState()
 
+
+  useEffect(() => {
+    const fetchEnergy = async () => {
+      try {
+        const url = import.meta.env.VITE_APP_API_URL;
+        const response = await axios.get(
+          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`
+        );
+        const data = response.data.set;
+        const pvGeneration = data[0].pvGeneration;
+        setTotalGenerado(pvGeneration);
+        console.log(pvGeneration);
+        
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchEnergy();
+    
+  }, [])
+    
   useEffect(() => {
     const ctx = canvas.current;
     // eslint-disable-next-line no-unused-vars
@@ -147,7 +169,7 @@ function RealtimeChart({
     <React.Fragment>
       <div className="px-5 py-3">
         <div className="flex items-start">
-          <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mr-2 tabular-nums"> K/w <span ref={chartValue}> 0.81</span></div>
+          <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mr-2 tabular-nums" ref={chartValue}>0.81</div>
           <div ref={chartDeviation} className="text-sm font-semibold text-white px-1.5 rounded-full"></div>
         </div>
       </div>

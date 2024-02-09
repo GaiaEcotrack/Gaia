@@ -29,7 +29,7 @@ function Notifications() {
           </Link>
 
           <Link to="/notifications">
-            <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#202142] border rounded-full">
+            <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#212056] border rounded-full">
               Notifications
             </h1>
           </Link>
