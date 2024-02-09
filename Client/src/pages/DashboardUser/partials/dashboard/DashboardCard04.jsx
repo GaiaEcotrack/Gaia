@@ -1,6 +1,8 @@
 import React, {useState , useEffect} from 'react';
 import BarChart from '../../charts/BarChart01';
 import Steps from '../../components/Steps'
+import TypesPay from '../../components/TypesPay'
+import Membership from '../../components/Membership'
 
 // Import utilities
 import { tailwindConfig } from '../../utils/Utils';
@@ -9,9 +11,16 @@ function DashboardCard04() {
 
     const [name, setName] = useState('');
     const [cardContent, setCardContet] = useState(false)
+    const [cardPay, setCardPay] = useState(false)
+    const [cardMember , setCardMember] = useState(false)
 
   const handleOpen = () =>{
     setCardContet(true)
+    setCardMember(true)
+  }
+  const openCardPay = ()=>{
+    setCardPay(true)
+    setCardMember(false)
   }
   const handleClose = ()=>{
     setCardContet(false)
@@ -204,31 +213,16 @@ function DashboardCard04() {
     </div>
   </div>
   <div className="card__content flex flex-col items-center justify-center">
-  <div class="flex flex-col w-4/6 bg-white rounded-3xl">
-  <div class="px-6 py-8 sm:p-10 sm:pb-6">
-    <div class="grid items-center justify-center w-full grid-cols-1 text-left">
-      <div>
-        <h2 class="text-lg font-medium tracking-tighter text-black lg:text-3xl">
-          Generator
-        </h2>
-        <p class="mt-2 text-sm text-black">Basic plan for a generator</p>
-      </div>
-      <div class="mt-6">
-        <p>
-          <span class="text-5xl font-light tracking-tight text-black">
-                                $60
-                              </span>
-          <span class="text-base font-medium text-black"> /mo </span>
-        </p>
-      </div>
-    </div>
-  </div>
-  <div class="flex px-6 pb-8 sm:px-8">
-    <button aria-describedby="tier-starter" class="items-center justify-center w-full px-6 py-2.5 text-center text-black duration-200 bg-white border-2 border-black rounded-full nline-flex hover:bg-transparent hover:border-black hover:text-white hover:bg-black focus:outline-none focus-visible:outline-white text-sm focus-visible:ring-white" href="#">
-      Get started
-    </button>
-  </div>
-</div>
+  {cardPay && (
+        <div>
+          <TypesPay/>
+        </div>
+      )}
+      {cardMember&&(
+        <div>
+        <Membership openCard={openCardPay}/>
+        </div>
+      )}
 
   </div>
 </div>
