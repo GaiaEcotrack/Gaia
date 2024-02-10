@@ -1,9 +1,20 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
-// const [selectedFile, setSelectedFile] = useState<File | null>(null);
+import Swal from "sweetalert2";
 
 function DeviceRegister() {
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    }
+  });
 
   const URL = import.meta.env.VITE_APP_API_URL
 
@@ -40,7 +51,7 @@ function DeviceRegister() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
-    console.log('Datos del formulario a enviar:', formData);
+    // console.log('Datos del formulario a enviar:', formData);
   
     try {
       const userId = localStorage.getItem('id');
@@ -58,13 +69,22 @@ function DeviceRegister() {
   
       if (response.ok) {
         const data = await response.json();
-        console.log('dispositivo agregado con éxito:', data);
+        Toast.fire({
+          icon: "success",
+          title: "Device added successfully"
+        });
   
         if (!userId) {
-          console.log("Error")
+          Toast.fire({
+            icon: "error",
+            title: "Something went wrong"
+          });
         }
       } else {
-        console.error('Error al agregar/actualizar dispositivo:', response.statusText);
+        Toast.fire({
+          icon: "error",
+          title: "Something went wrong"
+        });
       }
     } catch (error) {
       console.error('Error de red:', error);
