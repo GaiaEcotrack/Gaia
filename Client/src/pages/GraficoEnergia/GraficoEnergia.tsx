@@ -11,7 +11,6 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
-import Grapic from "./Grapic"
 // Gráficos de React
 import { Pie, Bar, Doughnut } from "react-chartjs-2";
 // React Hooks
@@ -125,13 +124,14 @@ const GraficoEnergia = () => {
   const [totalExcedente, setTotalExcedente] = useState<number>(0);
   const [popupOpen, setPopupOpen] = useState(false);
   const [energy, setEnergy] = useState(null);
+  const [energyBatery , setEnergyBatery] = useState()
   const [barData, setBarData] = useState<ChartData<"bar", number[], string>>({
-    labels: ["", "", "", "", "", "", "", "", "", "", ""],
+    labels: ["", "", "", "", "", "", "", "", ""],
     datasets: [
       {
         type: "bar",
         label: "Energy values",
-        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // Inicializa con valores en cero
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0],
         backgroundColor: ["#74C7ED", "#F37B7B", "#699CD0"],
         barThickness: 25,
       },
@@ -141,38 +141,21 @@ const GraficoEnergia = () => {
   const [energyData, setEnergyData] = useState(50);
 
   useEffect(() => {
-    // Actualiza solo el primer valor de los datos de la barra cuando totalGenerado cambia
-    setBarData(prevBarData => {
-      const newData = [...prevBarData.datasets[0].data];
-      newData[0] = totalGenerado; // Actualiza el primer valor con totalGenerado
-      return {
-        ...prevBarData,
-        datasets: [{
-          ...prevBarData.datasets[0],
-          data: newData,
-        }],
-      };
-    });
-  }, [totalGenerado]); 
-   useEffect(() => {
     const fetchEnergy = async () => {
       try {
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
-          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`
+          `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2024-02`
         );
         const data = response.data.set;
-        const pvGeneration = data[0].pvGeneration;
-        setTotalGenerado(pvGeneration);
-        console.log(pvGeneration);
-        
+        const energy = data.map(energ => energ.pvGeneration);
+        setEnergyBatery(energy);
       } catch (error) {
         console.log(error);
       }
     };
     fetchEnergy();
-    
-
+  
 
     // Simula la actualización en tiempo real de los datos de energía
     const interval = setInterval(() => {
@@ -207,23 +190,25 @@ const GraficoEnergia = () => {
     setTotalConsumido(storedTotalConsumido);
     setTotalExcedente(storedTotalExcedente);
   }, []); // Se ejecuta solo al montar el componente
+
   useEffect(() => {
     const updateBarChart = () => {
       const newData = Array.from({ length: 12 }, () =>
         Math.floor(Math.random() * 15001)
       );
 
-      const newBarData = {
-        ...barData,
-        datasets: [
-          {
-            ...barData.datasets[0],
-            data: newData,
-          },
-        ],
-      };
-
-      setBarData(newBarData);
+      if (energyBatery) {
+        const newBarData = {
+          ...barData,
+          datasets: [
+            {
+              ...barData.datasets[0],
+              data: energyBatery,
+            },
+          ],
+        };
+        setBarData(newBarData);
+      }
 
       localStorage.setItem("totalGenerado", JSON.stringify(totalGenerado));
       localStorage.setItem("totalConsumido", JSON.stringify(totalConsumido));
@@ -235,8 +220,10 @@ const GraficoEnergia = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, [barData]);
+  }, [energyBatery]);
+  
 
+  
   const currentDate = new Date();
 
   const showDate = format(currentDate, "dd/MM/yyyy HH:mm");
@@ -590,17 +577,15 @@ const GraficoEnergia = () => {
           <WeatherPanel />
         </div>
 
-        <div className="flex mx-auto max-w-screen-md h-[200px] ">
-          <div className="mt-16 ml-12">
-          <Grapic />
-          </div>
+        <div className="flex mx-auto max-w-screen-md h-[200px] mt-8">
+          <Bar data={barData} options={optionsBar} />
           <div className="border-4 mt-10 xl:ml-32 bg-gray-100 h-32 rounded-full hidden lg:flex items-center justify-center border-gray-400">
             <p className="text-[#1d335b] text-xl m-2 text-center">{showDate}</p>
           </div>
         </div>
       </div>
       <div className="flex items-center flex-col gap-10 justify-center">
-        <h1 className="text-6xl font-bold mt-[-28vh] mb-[40vh] text-white">
+        <h1 className="text-6xl font-bold text-white">
           Status of your devices
         </h1>
         <div className="flex flex-col sm:flex-row items-center gap-10 justify-center">
