@@ -6,7 +6,7 @@ import os
 from dotenv import load_dotenv
 
 from src.routes.users import users_route
-from src.routes.api_key import api_key
+# from src.routes.api_key import api_key
 from src.routes.devices import devices_routes
 from src.routes.plants import plants_routes
 from src.services.s3_bucket import bucket_route
@@ -31,7 +31,7 @@ SWAGGER_BLUEPRINT = get_swaggerui_blueprint(
 )
 
 application.register_blueprint(SWAGGER_BLUEPRINT, url_prefix=SWAGGER_URL)
-application.register_blueprint(api_key, url_prefix='/api_key')
+# application.register_blueprint(api_key, url_prefix='/api_key')
 application.register_blueprint(users_route, url_prefix='/users')
 application.register_blueprint(devices_routes, url_prefix='/devices')
 application.register_blueprint(plants_routes, url_prefix='/plants')
@@ -44,48 +44,56 @@ client = MongoClient(mongo_uri, tlsAllowInvalidCertificates=True)
 db = client['gaia']
 collection = db['users']
 
-def is_route_without_validation(path):
-    print(f"Ruta solicitada: {path}")
-    # Rutas exactas sin validación
-    routes_without_validation = ['/', '/upload_image', '/docs', '/static/swagger.json']
-    if path in routes_without_validation or path.startswith('/docs/'):
-        print("Ruta encontrada en rutas exactas sin validación")
-        return True
-    
-    # Descomponer la ruta para manejar parámetros dinámicos
-    path_parts = path.split('/')
-    print(f"Partes de la ruta: {path_parts}")
-    
-    # Verificar ruta de generación de API Key
-    if len(path_parts) == 4 and path_parts[1] == 'api_key' and path_parts[2] == 'generate':
-        print("Ruta de generación de API Key detectada")
-        return True
-    
-     # Excluir la ruta de creación de usuarios del requerimiento de API Key
-    if request.method == 'POST' and path.startswith('/users'):
-        print("Ruta de creación de usuarios detectada")
-        return True
-    
-    print("Ruta requiere validación de API Key")
-    return False
+# ## * Validation, each user MUST to have his api_key to access the api endpnts
 
-def validate_api_key():
-    if is_route_without_validation(request.path) or request.method == 'OPTIONS':
-        print('api key desactivada')
-        return  # No validar la API Key para estas rutas
+# def is_route_without_validation(path):
+#     print(f"Ruta solicitada: {path}")
+#     # Rutas exactas sin validación
+#     routes_without_validation = ['/', '/upload_image', '/docs', '/static/swagger.json', 'api_key/generate']
+#     if path in routes_without_validation or path.startswith('/docs/'):
+#         print("Ruta encontrada en rutas exactas sin validación")
+#         return True
     
+#     # Descomponer la ruta para manejar parámetros dinámicos
+#     path_parts = path.split('/')
+#     print(f"Partes de la ruta: {path_parts}")
     
-    api_key = request.headers.get('X-API-KEY')
-    if not api_key:
-        abort(401, description='API Key missing.')
+#     # Verificar ruta de generación de API Key
+#     if len(path_parts) == 4 and path_parts[1] == 'api_key' and path_parts[2] == 'generate':
+#         print("Ruta de generación de API Key detectada")
+#         return True
     
-    user = db.users.find_one({"api_key": api_key})
-    if not user:
-        abort(401, description='Invalid API Key.')
+#     if path.startswith('/api_key/generate'):
+#         print("Ruta de generación de API Key detectada")
+#         return True
+    
+#      # Excluir la ruta de creación de usuarios del requerimiento de API Key
+#     if request.method == 'POST' and path.startswith('/users'):
+#         print("Ruta de creación de usuarios detectada")
+#         return True
+    
+#     print("Ruta requiere validación de API Key")
+#     return False
 
-@application.before_request
-def before_request_func():
-    validate_api_key()
+# def validate_api_key():
+#     if is_route_without_validation(request.path) or request.method == 'OPTIONS':
+#         print('api key desactivada')
+#         return  # No validar la API Key para estas rutas
+    
+    
+#     api_key = request.headers.get('X-API-KEY')
+#     if not api_key:
+#         abort(401, description='API Key missing.')
+    
+#     user = db.users.find_one({"api_key": api_key})
+#     if not user:
+#         abort(401, description='Invalid API Key.')
+
+# @application.before_request
+# def before_request_func():
+#     validate_api_key()
+
+# ## * End validacion.
 
 @application.route('/', methods=['GET'])
 def welcome():
