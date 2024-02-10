@@ -16,7 +16,7 @@ import { Pie, Bar, Doughnut } from "react-chartjs-2";
 // React Hooks
 import { useState, useEffect } from "react";
 // React Router
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 // Funciones de formato de fecha
 import { format } from "date-fns";
 // Vara
@@ -39,7 +39,11 @@ import EnergyDeviceList from "@/components/EnergyComponentNew/EnergyDeviceList";
 // import { SideBarNew } from "components/SideBarNew/SideBarNew";
 import { getAuth } from "firebase/auth";
 import axios from "axios";
+<<<<<<< HEAD
 import { getTokenFromFirebase, sendTokenToBackend } from "../../TokenFirebaseToBackend"
+=======
+import Swal from "sweetalert2";
+>>>>>>> d7f85c9af1fa2b07a71e446adc6eb2405d44bd1b
 
 ChartJS.register(
   ArcElement,
@@ -340,7 +344,7 @@ const GraficoEnergia = () => {
   // };
   //-------------------------------------------------------------------VARA INTEGRATION
 
-  const alert = useAlert();
+  const alerta = useAlert();
   // const { accounts, account } = useAccount();
   const { api } = useApi();
   // Add your programID
@@ -427,7 +431,7 @@ const GraficoEnergia = () => {
 
       transferExtrinsic
         .signAndSend(
-          account?.address ?? alert.error("No account"),
+          account?.address ?? alerta.error("No account"),
           { signer: injector.signer },
           ({ status }: { status: any }) => {
             if (status.isInBlock) {
@@ -435,20 +439,20 @@ const GraficoEnergia = () => {
               setTotalExcedente(0);
               setTotalGenerado(0);
               setTotalConsumido(0);
-              alert.success(status.asInBlock.toString());
+              alerta.success(status.asInBlock.toString());
             } else {
-              alert.info("In process");
+              alerta.info("In process");
               if (status.type === "Finalized") {
-                alert.success(status.type);
+                alerta.success(status.type);
               }
             }
           }
         )
         .catch((error: any) => {
-          alert.error(error.toString());
+          alerta.error(error.toString());
         });
     } else {
-      alert.error("Account not available to sign");
+      alerta.error("Account not available to sign");
     }
   };
 
@@ -463,6 +467,63 @@ const GraficoEnergia = () => {
       signerTwo();
     }
   };
+
+
+// Validacion de email en DB (alerta de registro)
+  const URL = import.meta.env.VITE_APP_API_URL
+  const [email, setEmail] = useState('');
+  const [foundUserId, setFoundUserId] = useState('');
+
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("email");
+    setEmail(storedEmail || '');    
+    handleSearch();
+  }, [email]);
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(`${URL}/users/search`, {
+        params: {
+          email: email,
+        },
+      });  
+      if (response.status === 200) {
+        setFoundUserId(response.data._id);
+      } else if (response.status === 404) {
+        setFoundUserId('');
+        console.log('Usuario no encontrado');
+      } else {
+        console.error('Error al buscar usuario:', response.status);
+      }
+    } catch (error) {
+      // console.error('Error de red:');
+    }  
+  };
+
+  localStorage.setItem("id", foundUserId);  
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      if (!(localStorage.getItem("id"))) {
+        Swal.fire({
+          title: "Don't forget to complete your registration",         
+          icon: "warning",
+          iconColor: "#3085d6",
+          showCancelButton: true,
+          confirmButtonText: "Go register !",
+          confirmButtonColor: "#1f69b4de",
+          cancelButtonText: "Later",
+          cancelButtonColor: "#b82828cd",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.href = "/userReg";             
+          }
+        });
+      }
+    }, 10000);
+    return () => clearTimeout(timerId);
+  }, []);
+  
 
   //------------------------------VARA INTEGRATION-----------------------------------------------------------------------
 

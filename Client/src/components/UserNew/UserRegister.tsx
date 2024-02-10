@@ -5,23 +5,43 @@ import { FcApproval } from "react-icons/fc";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function UserRegister() {
 
   const URL = import.meta.env.VITE_APP_API_URL
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
-  const [verified, setVerified] = useState(false); // manejar el cambio desde el Back
+  const [verifiedDoc, setVerifiedDoc] = useState(false); // manejar el cambio desde el Back
   const [completed, setCompleted] = useState(false);
   const [completeCredent, setCompletedCredent] = useState(false);
   const [pendingDocuments, setPendingDocuments] = useState<string[]>([]);
   const [pendingCredentials, setPendingCredentials] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
 
- useEffect(() => {
-    const storedEmail = localStorage.getItem("email");
-    setEmail(storedEmail || '');    
-    handleSearch();
-  }, [email]);
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    }
+  }); 
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 10000);
+  }, []);
+
+  useEffect(() => {
+      const storedEmail = localStorage.getItem("email");
+      setEmail(storedEmail || '');    
+      handleSearch();
+    }, [email]);
 
   const handleSearch = async () => {
     try {
@@ -39,27 +59,26 @@ function UserRegister() {
         console.error('Error al buscar usuario:');
       }
     } catch (error) {
-      console.error('Error de red:');
+      // console.error('Error de red:');
     }
   };
 
   localStorage.setItem("id", foundUserId);  
 
-  // console.log(foundUserId)  
 
 // **********************************************************
 
-const [formData, setFormData] = useState({
-  full_name: null,
-  email: null,
-  identification_number: null,
-  address: null,
-  phone: null,
-  identity_document: null,
-  bank_account_status: null,
-  tax_declarations: null,
-  other_financial_documents: null,
-});
+  const [formData, setFormData] = useState({
+    full_name: null,
+    email: localStorage.getItem("email") || null,
+    identification_number: null,
+    address: null,
+    phone: null,
+    identity_document: null,
+    bank_account_status: null,
+    tax_declarations: null,
+    other_financial_documents: null,
+  });
     
   useEffect(() => {
     if (foundUserId) {
@@ -84,7 +103,8 @@ const [formData, setFormData] = useState({
           setPendingDocuments(pendingDocs);
           
           const hasNullProperty = Object.values(userData).some(value => value === null);
-          setCompleted(!hasNullProperty)            
+          setCompleted(!hasNullProperty)  
+          setLoading(false)         
         })
         .catch(error => {
           console.error('Error fetching user data:', error);
@@ -103,7 +123,7 @@ const [formData, setFormData] = useState({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
-    console.log('Datos del formulario a enviar:', formData);
+    // console.log('Datos del formulario a enviar:', formData);
        
     try {
       const userId = localStorage.getItem('id');
@@ -128,8 +148,10 @@ const [formData, setFormData] = useState({
   
       if (response.ok) {
         const data = await response.json();
-        console.log('Usuario agregado/actualizado con éxito:', data);
-  
+        Toast.fire({
+          icon: "success",
+          title: "User updated successfully"
+        });  
         if (!userId) {
           localStorage.setItem('id', data.id);
         }
@@ -141,7 +163,10 @@ const [formData, setFormData] = useState({
         } 
         
       } else {
-        console.error('Error al agregar/actualizar usuario:', response.statusText);
+        Toast.fire({
+          icon: "error",
+          title: "Something went wrong"
+        }); 
       }
     } catch (error) {
       console.error('Error de red:', error);
@@ -245,36 +270,35 @@ const [formData, setFormData] = useState({
   // fin codigo del bucket
 
    
-    useEffect(() => {
-  if (foundUserId) {
-    if (pendingDocuments.includes("credentials")) {
-      setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "credentials"));
-      setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "credentials"]);
-    }
-    if (pendingDocuments.includes("secret_key")) {
-      setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "secret_key"));
-      setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "secret_key"]);
-    }
-    if (pendingDocuments.includes("devices")) {
-      setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "devices"));
-    }
-    // console.log(pendingDocuments)
+  useEffect(() => {
+    if (foundUserId) {
+      if (pendingDocuments.includes("credentials")) {
+        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "credentials"));
+        setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "credentials"]);
+      }
+      if (pendingDocuments.includes("secret_key")) {
+        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "secret_key"));
+        setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "secret_key"]);
+      }
+      if (pendingDocuments.includes("devices")) {
+        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "devices"));
+      }
 
-    if (pendingDocuments.length > 0) {
-      setCompleted(false);
-    } else {
-      setCompleted(true);
-    }
+      if (pendingDocuments.length > 0) {
+        setCompleted(false);
+      } else {
+        setCompleted(true);
+      }
 
-    if (pendingCredentials.includes("credentials") && pendingCredentials.includes("secret_key")) {
-      setCompletedCredent(false);
-    } else {
-      setCompletedCredent(true);
-    }
+      if (pendingCredentials.includes("credentials") && pendingCredentials.includes("secret_key")) {
+        setCompletedCredent(false);
+      } else {
+        setCompletedCredent(true);
+      }
 
-    localStorage.setItem("completeCredent", `${completeCredent}`);
-  }
-}, [foundUserId, pendingDocuments, pendingCredentials, completeCredent]);
+      localStorage.setItem("completeCredent", `${completeCredent}`);
+    }
+  }, [foundUserId, pendingDocuments, pendingCredentials, completeCredent]);
 
 
   return (
@@ -286,8 +310,12 @@ const [formData, setFormData] = useState({
 
           <Link to="/userReg">
             <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#212056] border rounded-full">
-              User Register {verified ? <FcApproval className="text-xl"/> 
-              : (completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>)}
+              User Register {loading ? (
+                <div className="" role="status"></div>
+              ) : (
+                verifiedDoc ? <FcApproval className="text-xl"/> 
+              : (completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>)
+              )}              
             </h1>
           </Link>
 
@@ -299,7 +327,11 @@ const [formData, setFormData] = useState({
 
           <Link to="/credentialsReg">
             <h1 className="flex items-center justify-between px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
-              Credentials {completeCredent ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
+              Credentials {loading ? (
+                <div className="" role="status"></div>
+              ) : (
+                completeCredent ? <FcOk className="text-xl" /> : <FcHighPriority className="text-xl" />
+              )}
             </h1>
           </Link>
 
@@ -310,7 +342,7 @@ const [formData, setFormData] = useState({
           </Link>
 
           {/* <Link to="/account"> */}
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               PRO Account
             </h1>
           {/* </Link> */}
@@ -370,23 +402,29 @@ const [formData, setFormData] = useState({
             </div>
 
             <div className="flex flex-col justify-start items-center w-[45%] 2xl:w-[49%] h-full">
-              {verified ? (
-                <div className="flex items-center">
-                  <FcApproval className="text-7xl" />
-                </div>
+
+            {loading ? (
+              <div className="inline-block text-[#6899b86f] h-20 w-20 animate-spin rounded-full border-8 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status"></div>
+            ) : (
+              <div>
+                {verifiedDoc ? (
+                  <div className="flex items-center">
+                    <FcApproval className="text-7xl" />
+                  </div>
                 ) : (
-                  completed ? (
-                    <div className="flex items-center">
-                      <FcOk className="text-7xl" />
-                    </div>
-                  ) : (
+                  !completed ? (
                     <div className="flex flex-col items-center">
                       <FcHighPriority className="text-2xl" />
                       <h1 className="text-xl text-red-800 font-bold">Pending</h1>
+                    </div>                    
+                  ) : (
+                    <div className="flex items-center">
+                      <FcOk className="text-7xl" />
                     </div>
                   )
-                )
-              } 
+                )}
+              </div>
+            )}
               <div>
                 {pendingDocuments.map((document: string, index: number) => (
                   <div key={index} className="flex justify-center">
@@ -434,9 +472,10 @@ const [formData, setFormData] = useState({
                   type="email"
                   id="email"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
-                  placeholder={localStorage.getItem("email") || "example@email.com"}
+                  placeholder="example@email.com"
                   value={formData.email || ''}
                   required
+                  disabled
                 />
               </div>
 
