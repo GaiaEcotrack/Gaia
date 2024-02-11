@@ -6,8 +6,10 @@ from firebase_admin import auth
 def require_firebase_auth(f):
     @wraps(f)
     def middleware_function(*args, **kwargs):
+        print("Verificando token...") 
         # Obtener el token JWT desde los headers de la solicitud
         id_token = request.headers.get('Authorization')
+        print(f"Token recibido: {id_token}")
         if not id_token or not id_token.startswith('Bearer '):
             return jsonify({'message': 'Authorization token is missing or invalid'}), 401
         
