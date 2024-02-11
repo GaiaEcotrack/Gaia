@@ -39,7 +39,9 @@ import EnergyDeviceList from "@/components/EnergyComponentNew/EnergyDeviceList";
 // import { SideBarNew } from "components/SideBarNew/SideBarNew";
 import { getAuth } from "firebase/auth";
 import axios from "axios";
+import { getTokenFromFirebase, sendTokenToBackend } from "../../TokenFirebaseToBackend"
 import Swal from "sweetalert2";
+import { log } from "console";
 
 ChartJS.register(
   ArcElement,
@@ -106,6 +108,10 @@ const getConfig = (): SomeConfig => {
 };
 
 const GraficoEnergia = () => {
+
+  const [token, setToken] = useState('');
+
+
   // estas dos funciones la movi arriba para usarlas en el scop
   const { accounts, account } = useAccount();
   const addresLocal = account?.address;
@@ -144,17 +150,36 @@ const GraficoEnergia = () => {
   useEffect(() => {
     const fetchEnergy = async () => {
       try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        console.log(user);
+        
+
+        if (!user) {
+          throw new Error('User is not authenticated');
+        }
+
+        const idToken = await user.getIdToken();
+        console.log(idToken)
+
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
-          `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2024-02`
+          `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
+          {
+            headers: {
+              "Authorization": `Bearer ${idToken}`,
+              "Content-Type": "application/json"
+            }
+          }
         );
         const data = response.data.set;
         const energy = data.map(energ => energ.pvGeneration);
         setEnergyBatery(energy);
       } catch (error) {
-        console.log(error);
+        console.error('Error fetching energy data:', error);
       }
     };
+
     fetchEnergy();
   
 
@@ -275,6 +300,27 @@ const GraficoEnergia = () => {
   //   );
   //   setExcedenteCapturado(excedente);
   // };
+
+
+  //* token firabse to backend
+
+  // const [token, setToken] = useState('');
+
+  // useEffect(() => {
+  //   const auth = getAuth();
+  //   const user = auth.currentUser;
+  
+  //   if (user) {
+  //     user.getIdToken().then((idToken) => {
+  //       console.log('Token de Firebase:', idToken); // Esta línea imprime el token en la consola
+  //       // Aquí puedes enviar el token a tu backend si es necesario
+  //       sendTokenToBackend('http://127.0.0.1:5000/your/endpoint', 'GET', idToken);
+  //     }).catch((error) => {
+  //       console.error('Error al obtener el token:', error);
+  //     });
+  //   }
+  // }, []);
+
   // const [token, setToken] = useState('');
   // useEffect(() => {
   //   const auth = getAuth();
@@ -293,25 +339,29 @@ const GraficoEnergia = () => {
   //   }
   // }, []);
 
-  //////////////
+  // //////////////
 
-  const sendTokenToBackend = async (token: string) => {
-    try {
-      const url = "https://tu-backend.com/api/authenticate";
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token }),
-      });
-
-      const data = await response.json();
-      console.log("Respuesta del backend:", data);
-    } catch (error) {
-      console.error("Error al enviar token al backend:", error);
-    }
-  };
+  // const sendTokenToBackend = async (token: string) => {
+  //   try {
+  //     // Asegúrate de reemplazar esta URL con la URL de tu servidor Flask
+  //     const url = "http://127.0.0.1:5000/users";
+  //     const response = await fetch(url, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         // Opcionalmente, puedes enviar el token en un header Authorization
+  //         "Authorization": `Bearer ${token}`,
+  //       },
+  //       // O enviar el token en el cuerpo de la solicitud, según prefieras
+  //       body: JSON.stringify({ token }),
+  //     });
+  
+  //     const data = await response.json();
+  //     console.log("Respuesta del backend:", data);
+  //   } catch (error) {
+  //     console.error("Error al enviar token al backend:", error);
+  //   }
+  // };
   //-------------------------------------------------------------------VARA INTEGRATION
 
   const alerta = useAlert();
@@ -494,6 +544,7 @@ const GraficoEnergia = () => {
     return () => clearTimeout(timerId);
   }, []);
   
+
 
   //------------------------------VARA INTEGRATION-----------------------------------------------------------------------
 

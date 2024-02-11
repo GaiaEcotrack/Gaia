@@ -25,3 +25,4 @@ class UserSchema(Schema):
     
     devices = fields.List(fields.Nested(DeviceSchema), allow_none=False)
     
+    api_key = fields.String(required=False)

@@ -261,8 +261,8 @@ function UserRegister() {
         alert('Todos los archivos y sus URLs se han guardado exitosamente.');
         // Aquí puedes incluir cualquier lógica adicional tras el éxito, como redireccionar al usuario
       } catch (error) {
-        console.error('Error al guardar las URLs en la base de datos:', error);
-        alert('Error al guardar las URLs de los archivos. Por favor, inténtalo de nuevo.');
+        // console.error('Error al guardar las URLs en la base de datos:', error);
+        // alert('Error al guardar las URLs de los archivos. Por favor, inténtalo de nuevo.');
       }
     }
   }  

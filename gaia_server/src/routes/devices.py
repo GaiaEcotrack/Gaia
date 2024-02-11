@@ -7,6 +7,10 @@ from bson import ObjectId
 from dotenv import load_dotenv
 from src.models.devices import DeviceSchema
 from bson import ObjectId
+## middleware apikey
+from src.middlewares import require_firebase_auth
+from src.services.firebase_admin.firebase_config import verify_firebase_token
+
 
 
 load_dotenv()
@@ -184,6 +188,7 @@ def get_plant_devices():
 #battery
 #! ejemplo de query que me costo un huevo!: http://127.0.0.1:5000/devices/battery?deviceId=18&setType=EnergyAndPowerBattery&period=Week&Date=2022-08-08
 @devices_routes.route('/battery', methods=['GET'])
+@require_firebase_auth
 def get_device_measurements_battery():
     # Obtén los parámetros de la solicitud
     device_id = request.args.get('deviceId')
@@ -234,6 +239,7 @@ def get_device_measurements_battery():
 #ruta de meciiones de Pv
 #! ejemplo de query que me costo un huevo!: http://127.0.0.1:5000/devices/battery?deviceId=18&setType=EnergyAndPowerBattery&period=Week&Date=2022-08-08
 @devices_routes.route('/pv', methods=['GET'])
+# @require_firebase_auth
 def get_device_measurements_pv():
     # Obtén los parámetros de la solicitud
     device_id = request.args.get('deviceId')
