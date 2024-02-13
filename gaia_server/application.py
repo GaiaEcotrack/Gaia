@@ -13,6 +13,7 @@ from src.routes.plants import plants_routes
 from src.services.s3_bucket import bucket_route
 from src.routes.api_growth import api_growatt_bp
 from src.routes.mercadopago import mercadopago_route
+from src.routes.face import face_route
 from flask_cors import CORS
 
 load_dotenv()
@@ -44,6 +45,7 @@ application.register_blueprint(plants_routes, url_prefix='/plants')
 application.register_blueprint(bucket_route, url_prefix='/upload_image')
 application.register_blueprint(api_growatt_bp, url_prefix='/api_growatt')
 application.register_blueprint(mercadopago_route, url_prefix='/mercadopago')
+application.register_blueprint(face_route, url_prefix='/face')
 
 
 

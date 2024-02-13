@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparación de imágenes</title>
+</head>
+<body>
+    <h1>Comparación de imágenes</h1>
+    <form action="/compare" method="post" enctype="multipart/form-data">
+        <label for="person_image">Imagen de la persona:</label>
+        <input type="file" id="person_image" name="person_image" accept="image/*" required>
+        <br>
+        <label for="document_image">Imagen del documento:</label>
+        <input type="file" id="document_image" name="document_image" accept="image/*" required>
+        <br>
+        <button type="submit">Comparar</button>
+    </form>
+</body>
+</html>
