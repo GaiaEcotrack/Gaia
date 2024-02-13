@@ -21,15 +21,6 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const [error, setError] = useState("")
   const [loadingE, setLoadingE] = useState(false)
 
-  useEffect(() => {
-    localStorage.removeItem('id');
-    localStorage.removeItem('name');
-    localStorage.removeItem('email');
-    localStorage.removeItem('profilePic');
-    localStorage.removeItem('completeCredent');
-    localStorage.removeItem('verified');
-  }, []);
-
   // Funtion to log in with registered email 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
