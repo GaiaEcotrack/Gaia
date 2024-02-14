@@ -358,17 +358,17 @@ function UserRegister() {
               USER ACCOUNT
             </h2>
 
-            <div className="flex justify-between w-[40%] mr-8">
-              <h1 className="flex items-center">
+            <div className="flex justify-between w-[45%] 2xl:w-[50%] mr-2">
+              <h1 className="flex items-center font-normal">
                 Pending&nbsp; <FcHighPriority className="text-xl"/>     
               </h1>
 
-              <h1 className="flex items-center">
+              <h1 className="flex items-center font-normal">
                 Completed&nbsp; <FcOk className="text-xl"/>
               </h1>
 
-              <h1 className="flex items-center">
-                Verified&nbsp; <FcApproval className="text-[23px]"/>
+              <h1 className="flex items-center font-normal">
+                Verified Docu.&nbsp; <FcApproval className="text-[23px]"/>
               </h1>      
             </div>
           </div>
@@ -389,19 +389,19 @@ function UserRegister() {
             <div className="flex flex-col space-y-5 sm:ml-8">
               <button
                 type="button"
-                className="py-3.5 px-7 text-base font-medium text-black focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142] focus:z-10 focus:ring-4 focus:ring-indigo-200"
+                className="py-3 px-7 w-52 text-base font-bold text-black focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142] focus:z-10 focus:ring-4 focus:ring-indigo-200"
               >
-                Change Email Log in
+                Change Email
               </button>
               <button
                 type="button"
-                className="py-3.5 px-7 text-base font-medium text-black focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142] focus:z-10 focus:ring-4 focus:ring-indigo-200 "
+                className="py-3.5 px-7 w-52 text-base font-bold text-black focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142] focus:z-10 focus:ring-4 focus:ring-indigo-200 "
               >
-                Change Password Log in
+                Change Password
               </button>
             </div>
 
-            <div className="flex flex-col justify-start items-center w-[45%] 2xl:w-[49%] h-full">
+            <div className="flex flex-col justify-start items-center w-[48%] 2xl:w-[51%] h-full">
 
             {loading ? (
               <div className="inline-block text-[#6899b86f] h-20 w-20 animate-spin rounded-full border-8 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status"></div>
@@ -439,13 +439,13 @@ function UserRegister() {
           {/* Formulario de perfil público */}
 
           <div className="">
-            <form className="grid sm:grid-cols-2 gap-4" action="" onSubmit={handleSubmit}>
+            <form className="grid sm:grid-cols-2 gap-x-14" action="" onSubmit={handleSubmit}>
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fullname"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                 >
-                  Full name
+                  Full name<span className="text-red-600">*</span>
                 </label>
                 <input
                   onChange={handleInputChange}
@@ -455,16 +455,16 @@ function UserRegister() {
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Name"
                   value={formData.full_name || ''}                
-                  required
+                  required                  
                 />
               </div>
 
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                 >
-                  Email
+                  Email<span className="text-red-600">*</span>
                 </label>
                 <input
                   onChange={handleInputChange}
@@ -482,9 +482,9 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="Identification"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                 >
-                  Identification Number
+                  Identification Number<span className="text-red-600">*</span>
                 </label>
                 <input
                   onChange={handleInputChange}
@@ -501,9 +501,9 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                 >
-                  Residence Address
+                  Residence Address<span className="text-red-600">*</span>
                 </label>
                 <input
                   onChange={handleInputChange}
@@ -520,9 +520,9 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="phone"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                 >
-                  Phone Number
+                  Phone Number<span className="text-red-600">*</span>
                 </label>
                 <input
                   onChange={handleInputChange}
@@ -539,9 +539,9 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileId"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                 >
-                  Upload a file of your identity document
+                  Upload a file of your identity document<span className="text-red-600">*</span>
                 </label>
                 <input
                   onChange={handleInputChangeBucket}
@@ -558,9 +558,9 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileBank"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                 >
-                  Upload a file of your bank account status
+                  Upload a file of your bank account status<span className="text-red-600">*</span>
                 </label>
                 <input
                   onChange={handleInputChangeBucket}
@@ -577,9 +577,9 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="fileTax"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                 >
-                  Upload a file of your tax return
+                  Upload a file of your tax return<span className="text-red-600">*</span>
                 </label>
                 <input
                   onChange={handleInputChangeBucket}
@@ -596,7 +596,7 @@ function UserRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="filefin1"
-                  className="block mb-2 text-sm font-medium text-black-50 dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                 >
                   Upload a file of other financial documents
                 </label>
