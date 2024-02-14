@@ -9,7 +9,7 @@ from bson import ObjectId
 import secrets
 from werkzeug.security import check_password_hash
 
-## middleware apikey
+## middleware apikey 
 from src.middlewares import require_firebase_auth
 from src.services.firebase_admin.firebase_config import verify_firebase_token
 
@@ -21,7 +21,7 @@ application = Flask(__name__)
 
 users_route = Blueprint('users_route', __name__)
 
-# Obtener la URI de MongoDB de las variables de entorno
+
 mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri, tlsAllowInvalidCertificates=True)
 if client:
@@ -70,7 +70,7 @@ def get_user_by_id(id):
     except:
         return jsonify({'message': 'ID inválido'}), 400
 
-    # Buscar el usuario en la base de datos
+  
     user = collection.find_one({'_id': object_id})
 
     if not user:
@@ -79,6 +79,9 @@ def get_user_by_id(id):
     # Convertir el ObjectId a string para la respuesta JSON
     user['_id'] = str(user['_id'])
     return jsonify(user)
+
+
+
 @users_route.route('/', methods=['POST'])
 def add_user():
     data = request.json
@@ -93,7 +96,7 @@ def add_user():
     email = data.get('email')
     # password = data.get('password')
 
-    # Obtener los nuevos campos
+
     full_name = data.get('full_name')
     identification_number = data.get('identification_number')
     address = data.get('address')
@@ -142,9 +145,9 @@ def update_user(id):
         return jsonify({'message': 'ID inválido'}), 400
 
     data = request.json
-    # Aquí puedes agregar validación para los datos si es necesario
+   
 
-    # Actualizar el usuario en la base de datos
+
     result = collection.update_one({'_id': object_id}, {'$set': data})
 
     if result.matched_count == 0:
@@ -155,12 +158,12 @@ def update_user(id):
 @users_route.route('/<id>', methods=['DELETE'])
 def delete_user(id):
     try:
-        # Convertir el id a un ObjectId de MongoDB
+        # convertir el id a un ObjectId de MongoDB
         object_id = ObjectId(id)
     except:
         return jsonify({'message': 'ID inválido'}), 400
 
-    # Eliminar el usuario de la base de datos
+ 
     result = collection.delete_one({'_id': object_id})
 
     if result.deleted_count == 0:
@@ -190,12 +193,12 @@ def get_user_by_email():
 def endpoint():
     token = request.headers.get('Authorization')
     print('Token recibido en el backend:', token)
-     # Verificar si el token está presente
+   
     if token:
-        # Si el token está presente, devolver una respuesta 200 OK con un mensaje
+       
         return jsonify({'message': 'Token recibido correctamente'}), 200
     else:
-        # Si el token no está presente, devolver una respuesta 400 Bad Request con un mensaje de error
+        
         return jsonify({'error': 'Token no encontrado en el encabezado de la solicitud'}), 400
 
 

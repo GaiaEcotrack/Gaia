@@ -10,6 +10,8 @@ import arrow from "../../assets/arrow.png";
 
 import { ApiLoader } from "../../components/loaders/api-loader/ApiLoader";
 import { IoIosAddCircle } from "react-icons/io";
+import { getAuth } from "firebase/auth";
+
 
 
 // Definición de la interfaz Dispositivo
@@ -56,22 +58,42 @@ const PanelUsuarioFinal = () => {
   });
 
   useEffect(() => {
-    const fetchByAxios = async () => {
-      setIsLoading(true); // Establecer isLoading en true al iniciar la carga
+    const fetchDevices = async () => {
+      setIsLoading(true);
       try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        if (!user) {
+          throw new Error('User is not authenticated');
+        }
+        const idToken = await user.getIdToken();
+  
         const apiUrl = import.meta.env.VITE_APP_API_URL;
-        const response = await axios.get(
-          `${apiUrl}/devices/plant-devices?plantId=13`
-        );
-        setDevices(response.data.devices);
+        // Cambia esta URL a la variable apiUrl si lo necesitas
+        const url = `${apiUrl}/devices/plant-devices?plantId=13`;
+  
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            "Authorization": `Bearer ${idToken}`,
+            "Content-Type": "application/json"
+          }
+        });
+  
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+  
+        const data = await response.json();
+        setDevices(data.devices);
       } catch (error) {
         console.log(error);
       } finally {
-        setIsLoading(false); // Establecer isLoading en false cuando se completa la carga
+        setIsLoading(false);
       }
     };
   
-    fetchByAxios();
+    fetchDevices();
   }, []);
 
   // useEffect(() => {
