@@ -1128,7 +1128,6 @@
     "@babel/parser" "^7.22.15"
     "@babel/types" "^7.22.15"
 
-<<<<<<< HEAD
 "@babel/traverse@^7.23.2", "@babel/traverse@^7.4.5":
   "integrity" "sha512-azpe59SQ48qG6nu2CzcMLbxUudtN+dOM9kDbUqGq3HXUJRlo7i8fvPoxQUzYgLZ4cMVmuZgm8vvBpNeRhd6XSw=="
   "resolved" "https://registry.npmjs.org/@babel/traverse/-/traverse-7.23.2.tgz"
@@ -1149,12 +1148,10 @@
   "integrity" "sha512-tY3mM8rH9jM0YHFGyfC0/xf+SB5eKUu7HPj7/k3fpi9dAlsMc5YbQvDi0Sh2QTPXqMhyaAtzAr807TIyfQrmyg=="
   "resolved" "https://registry.npmjs.org/@babel/traverse/-/traverse-7.23.7.tgz"
   "version" "7.23.7"
-=======
 "@babel/traverse@^7.23.2", "@babel/traverse@^7.23.7", "@babel/traverse@^7.4.5":
   version "7.23.7"
   resolved "https://registry.npmjs.org/@babel/traverse/-/traverse-7.23.7.tgz"
   integrity sha512-tY3mM8rH9jM0YHFGyfC0/xf+SB5eKUu7HPj7/k3fpi9dAlsMc5YbQvDi0Sh2QTPXqMhyaAtzAr807TIyfQrmyg==
->>>>>>> 0731a498e2f5475a1d3d5ecb40963425f326cda8
   dependencies:
     "@babel/code-frame" "^7.23.5"
     "@babel/generator" "^7.23.6"
@@ -1222,6 +1219,12 @@
   "resolved" "https://registry.npmjs.org/@emotion/unitless/-/unitless-0.7.5.tgz"
   "version" "0.7.5"
 
+<<<<<<< HEAD
+"@esbuild/darwin-arm64@0.17.19":
+  version "0.17.19"
+  resolved "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.17.19.tgz"
+  integrity sha512-80wEoCfF/hFKM6WE1FyBHc9SfUblloAWx6FJkFWTWiCoht9Mc0ARGEM47e67W9rI09YoUxJL68WHfDRYEAvOhg==
+=======
 "@esbuild/win32-x64@0.17.19":
 <<<<<<< HEAD
   "integrity" "sha512-lAhycmKnVOuRYNtRtatQR1LPQf2oYCkRGkSFnseDAKPl8lu5SOsK/e1sXe5a0Pc5kHIHe6P2I/ilntNv2xf3cA=="
@@ -1232,6 +1235,7 @@
   resolved "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.17.19.tgz"
   integrity sha512-lAhycmKnVOuRYNtRtatQR1LPQf2oYCkRGkSFnseDAKPl8lu5SOsK/e1sXe5a0Pc5kHIHe6P2I/ilntNv2xf3cA==
 >>>>>>> 0731a498e2f5475a1d3d5ecb40963425f326cda8
+>>>>>>> 7b6e2c16f8872879a97294c53702e04b51b34cfc
 
 "@eslint-community/eslint-utils@^4.2.0":
   "integrity" "sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA=="
@@ -3143,6 +3147,12 @@
     "@svgr/hast-util-to-babel-ast" "^7.0.0"
     "svg-parser" "^2.0.4"
 
+<<<<<<< HEAD
+"@swc/core-darwin-arm64@1.3.100":
+  version "1.3.100"
+  resolved "https://registry.npmjs.org/@swc/core-darwin-arm64/-/core-darwin-arm64-1.3.100.tgz"
+  integrity sha512-XVWFsKe6ei+SsDbwmsuRkYck1SXRpO60Hioa4hoLwR8fxbA9eVp6enZtMxzVVMBi8ej5seZ4HZQeAWepbukiBw==
+=======
 "@swc/core-win32-x64-msvc@1.3.100":
 <<<<<<< HEAD
   "integrity" "sha512-b7J0rPoMkRTa3XyUGt8PwCaIBuYWsL2DqbirrQKRESzgCvif5iNpqaM6kjIjI/5y5q1Ycv564CB51YDpiS8EtQ=="
@@ -3153,6 +3163,7 @@
   resolved "https://registry.npmjs.org/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.3.100.tgz"
   integrity sha512-b7J0rPoMkRTa3XyUGt8PwCaIBuYWsL2DqbirrQKRESzgCvif5iNpqaM6kjIjI/5y5q1Ycv564CB51YDpiS8EtQ==
 >>>>>>> 0731a498e2f5475a1d3d5ecb40963425f326cda8
+>>>>>>> 7b6e2c16f8872879a97294c53702e04b51b34cfc
 
 "@swc/core@^1.3.10", "@swc/core@^1.3.61", "@swc/core@>=1.2.50":
   "integrity" "sha512-7dKgTyxJjlrMwFZYb1auj3Xq0D8ZBe+5oeIgfMlRU05doXZypYJe0LAk0yjj3WdbwYzpF+T1PLxwTWizI0pckw=="
@@ -5555,6 +5566,18 @@ find-up@^4.0.0, find-up@^4.1.0:
   optionalDependencies:
     "@emotion/is-prop-valid" "^0.8.2"
 
+<<<<<<< HEAD
+fs.realpath@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
+  integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
+
+fsevents@^2.3.2, fsevents@~2.3.2:
+  version "2.3.3"
+  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
+  integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
+
+=======
 "fs.realpath@^1.0.0":
   "integrity" "sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw=="
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
@@ -5571,6 +5594,7 @@ find-up@^4.0.0, find-up@^4.1.0:
   "resolved" "https://registry.npmjs.org/function.prototype.name/-/function.prototype.name-1.1.6.tgz"
   "version" "1.1.6"
 =======
+>>>>>>> 7b6e2c16f8872879a97294c53702e04b51b34cfc
 function-bind@^1.1.1, function-bind@^1.1.2:
   version "1.1.2"
   resolved "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz"
