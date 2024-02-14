@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado de la comparación</title>
+    <style>
+        .imagen {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resultado de la comparación</h1>
+    <p>{{ resultado }}</p>
+    <p>Distancia entre las codificaciones: {{ distancia }}</p>
+    <div>
+        <img class="imagen" src="{{ imagen_cara }}">
+        <img class="imagen" src="{{ imagen_dni }}">
+    </div>
+</body>
+</html>

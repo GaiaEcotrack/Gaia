@@ -211,7 +211,7 @@ function UserRegister() {
         formData.append('file', file);
       }
   
-      const uploadUrl = 'http://127.0.0.1:5000/upload_image';
+      const uploadUrl = `${URL}/upload_image`;
   
       try {
         const uploadResponse = await fetch(uploadUrl, {
@@ -241,7 +241,7 @@ function UserRegister() {
     // Si todos los archivos se cargaron exitosamente, procede a enviar las URLs al backend
     if (allFilesUploaded) {
       try {
-        const saveUrlResponse = await fetch('http://127.0.0.1:5000/save_url', { // Ajusta esta URL al endpoint correcto
+        const saveUrlResponse = await fetch(`${URL}/save_url`, { // Ajusta esta URL al endpoint correcto
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -545,7 +545,7 @@ function UserRegister() {
                 </label>
                 <input
                   onChange={handleInputChangeBucket}
-                  name="identity_document"
+                  name="identity_document_url"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
                   id="fileId"
