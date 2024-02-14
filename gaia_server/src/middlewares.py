@@ -8,16 +8,17 @@ def require_firebase_auth(f):
     def middleware_function(*args, **kwargs):
         print("Verificando token...") 
         # Obtener el token JWT desde los headers de la solicitud
-        id_token = request.headers.get('Authorization')
-        print(f"Token recibido: {id_token}")
-        if not id_token or not id_token.startswith('Bearer '):
+        idToken = request.headers.get('Authorization')
+        print(f"Token recibido: {idToken}")
+        if not idToken or not idToken.startswith('Bearer '):
             return jsonify({'message': 'Authorization token is missing or invalid'}), 401
         
         try:
             # Extraer el token JWT sin el prefijo "Bearer "
-            id_token = id_token.split('Bearer ')[1]
+            idToken = idToken.split('Bearer ')[1]
             # Verificar el token JWT con Firebase Admin SDK
-            decoded_token = auth.verify_id_token(id_token)
+            decoded_token = auth.verify_id_token(idToken)
+            print(decoded_token)
             uid = decoded_token['uid']
             # Aquí puedes opcionalmente buscar al usuario en tu base de datos por su UID
             # y realizar cualquier otra verificación o logística necesaria
