@@ -3,13 +3,33 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { FcHighPriority, FcOk } from "react-icons/fc";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function CredentialsReg () {
 
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
   const [completeCredent, setCompletedCredent] = useState(false);
+  const [loading, setLoading] = useState(true);
   const URL = import.meta.env.VITE_APP_API_URL
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    }
+  });
+  
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }, []);
 
   useEffect(() => {
     const valueCompleted = localStorage.getItem("completeCredent");
@@ -47,7 +67,7 @@ function CredentialsReg () {
         console.error('Error al buscar usuario:');
       }
     } catch (error) {
-      console.error('Error de red:');
+      // console.error('Error de red:');
     }
   };
   localStorage.setItem("id", foundUserId); 
@@ -61,6 +81,7 @@ function CredentialsReg () {
             credentials: userData.credentials || null,
             secret_key: userData.secret_key || null,
           });
+          setLoading(false)  
         })
         .catch(error => {
           console.error('Error fetching user data:', error);
@@ -80,8 +101,8 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
-
-  console.log('Datos del formulario a enviar:', formData);
+  
+  // console.log('Datos del formulario a enviar:', formData);
 
   try {
     const userId = localStorage.getItem('id');
@@ -99,16 +120,25 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log('Usuario agregado/actualizado con éxito:', data);
+      Toast.fire({
+        icon: "success",
+        title: "User updated successfully"
+      }); 
 
       if (!userId) {
-        console.log("Error");
+        Toast.fire({
+          icon: "error",
+          title: "Something went wrong"
+        });
       }
     } else {
-      console.error('Error al agregar/actualizar usuario:', response.statusText);
+      Toast.fire({
+        icon: "error",
+        title: "Something went wrong"
+      });
     }
   } catch (error) {
-    console.error('Error de red:', error);
+    // console.error('Error de red:', error);
   }
 };
 
@@ -133,7 +163,11 @@ const handleSubmit = async (e: React.FormEvent) => {
 
           <Link to="/credentialsReg">
             <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#212056] border rounded-full">
-              Credentials {completeCredent ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>}
+              Credentials {loading ? (
+                <div className="inline-block text-white h-5 w-5 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status"></div>
+              ) : (
+                completeCredent ? <FcOk className="text-xl" /> : <FcHighPriority className="text-xl" />
+              )}
             </h1>
           </Link>
 

@@ -1,6 +1,8 @@
 import { useRef, useState } from "react"
 import { useAuth } from "../../contexts/AuthContext"
 import { useNavigate } from "react-router-dom";
+import { sendEmailVerification } from "firebase/auth";
+import Swal from 'sweetalert2'
 
 interface SignUp {
   showSignUp: boolean;
@@ -8,7 +10,7 @@ interface SignUp {
 }
 
 function SignUp(props:SignUp) {
-
+  
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordConfirmRef = useRef<HTMLInputElement>(null);
@@ -31,18 +33,26 @@ function SignUp(props:SignUp) {
     try {
       setError("")
       setLoading(true)
-      await signup(emailRef.current?.value, passwordRef.current?.value)
+      await signup(emailRef.current?.value, passwordRef.current?.value).then(
+        async(userCred: { user: any; }) => {
+          const user = userCred.user;
+          await sendEmailVerification(user)
+        }
+        );
       navigate("/");
       setShowSignUp(false)
+      Swal.fire({
+        title: "Verify your account!",
+        text: "Go to your email acount and check your inbox, then come back and Sign In",
+        icon: "info",
+        confirmButtonColor: "#6366f1",
+        confirmButtonText: "Ok !"
+      });
     } catch {
       setError("Failed to create an account")
     }
-
     setLoading(false)
   }
-
-  // console.log(currentUser)
-  // console.log(emailRef.current?.value)
 
   const { showSignUp, setShowSignUp } = props;
     return showSignUp ? (
@@ -107,7 +117,7 @@ function SignUp(props:SignUp) {
 
             {error && <div className="text-red-500">{error}</div>}
 
-            <button              
+            <button         
               disabled={loading}
               type="submit"
               className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg px-4 py-3 mt-6 2xl:mt-10"
