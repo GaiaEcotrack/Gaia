@@ -142,11 +142,11 @@ function DeviceRegister() {
           {/* Formulario de perfil público */}
 
           <div className="">
-            <form className="grid sm:grid-cols-2 gap-4" action="" onSubmit={handleSubmit}>
+            <form className="grid sm:grid-cols-2 gap-x-14" action="" onSubmit={handleSubmit}>
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="deviceId"
-                  className="block mb-2 text-sm font-medium text-black dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black dark:text-black"
                 >
                   Device Id 
                 </label>
@@ -164,7 +164,7 @@ function DeviceRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="deviceName"
-                  className="block mb-2 text-sm font-medium text-black dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black dark:text-black"
                 >
                   Device Name - Type
                 </label>
@@ -182,7 +182,7 @@ function DeviceRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="serialNumber"
-                  className="block mb-2 text-sm font-medium text-black dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black dark:text-black"
                 >
                   Serial Number
                 </label>
@@ -200,7 +200,7 @@ function DeviceRegister() {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="filefin2"
-                  className="block mb-2 text-sm font-medium text-black dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black dark:text-black"
                 >
                   Upload an image of the device
                 </label>
@@ -218,7 +218,7 @@ function DeviceRegister() {
               <div className="flex justify-start w-full">
                 <button
                   type="submit"
-                  className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28"
+                  className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28 mt-4"
                 >
                   Save
                 </button>

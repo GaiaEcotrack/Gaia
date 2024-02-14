@@ -495,7 +495,13 @@ const GraficoEnergia = () => {
   const [foundUserId, setFoundUserId] = useState('');
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem("email");
+    const auth = getAuth();
+    const user = auth.currentUser;
+    // console.log(user?.email);
+    const storedEmail = localStorage.getItem("email") ?? '';
+    if(!storedEmail && user?.email){
+      localStorage.setItem("email", user.email);
+    }
     setEmail(storedEmail || '');    
     handleSearch();
   }, [email]);

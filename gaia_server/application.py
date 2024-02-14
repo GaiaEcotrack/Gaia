@@ -18,7 +18,7 @@ from flask_cors import CORS
 load_dotenv()
 
 application = Flask(__name__)
-CORS(application)
+CORS(application,supports_credentials=True, resources={r"/*": {"origins": "*"}}, allow_headers=["Authorization", "Content-Type"])
 
 application.config['MERCADOPAGO_PUBLIC_KEY'] = os.getenv('MERCADOPAGO_PUBLIC_KEY')
 application.config['MERCADOPAGO_ACCESS_TOKEN'] = os.getenv('MERCADOPAGO_ACCESS_TOKEN')

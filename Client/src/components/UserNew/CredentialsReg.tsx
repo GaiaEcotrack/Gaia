@@ -196,11 +196,11 @@ const handleSubmit = async (e: React.FormEvent) => {
           {/* Formulario de perfil público */}
 
           <div className="">
-            <form className="grid sm:grid-cols-2 gap-4" action="" onSubmit={handleSubmit}>
+            <form className="grid sm:grid-cols-2 gap-x-14" action="" onSubmit={handleSubmit}>
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="usernameCre"
-                  className="block mb-2 text-sm font-medium text-black dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black dark:text-black"
                 >
                   Credential-ID
                 </label>
@@ -219,7 +219,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="passwordCre"
-                  className="block mb-2 text-sm font-medium text-black dark:text-black"
+                  className="block mb-2 text-sm font-bold text-black dark:text-black"
                 >
                   Secret-key
                 </label>
@@ -238,7 +238,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <div className="flex justify-start w-full">
                 <button
                   type="submit"
-                  className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28"
+                  className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28 mt-4"
                 >
                   Save
                 </button>
