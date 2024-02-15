@@ -18,6 +18,8 @@ function UserRegister() {
   const [pendingDocuments, setPendingDocuments] = useState<string[]>([]);
   const [pendingCredentials, setPendingCredentials] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isLoadingUser, setIsLoadingUser] = useState(true)
+  
 
   const Toast = Swal.mixin({
     toast: true,
@@ -198,74 +200,176 @@ function UserRegister() {
     }
   };
 
-  async function handleSubmitBucket(e: React.FormEvent) {
+  //! funcion orignal donde no funciona la obtencion de la url
+  // async function handleSubmitBucket(e: React.FormEvent) {
+  //   e.preventDefault();
+  
+  //   let allFilesUploaded = true;
+  //   let fileUploadData: Record<string, string> = {} // Objeto para almacenar las URLs de los archivos subidos
+  
+  //   // Itera sobre cada archivo seleccionado y envíalo
+  //   for (const [inputName, file] of Object.entries(selectedFiles) as [string, File | null][]) {
+  //     const formData = new FormData();
+  //     if (file !== null) {
+  //       formData.append('file', file);
+  //     }
+  
+  //     const uploadUrl = `${URL}/upload_image`;
+  //     console.log();
+      
+  
+  //     try {
+  //       const uploadResponse = await fetch(uploadUrl, {
+  //         method: 'POST',
+  //         body: formData,
+  //       });
+  
+  //       if (!uploadResponse.ok) {
+  //         throw new Error(`No se pudo cargar el archivo de ${inputName}`);
+  //       }
+  
+  //       const uploadData = await uploadResponse.json();
+  //       console.log(`Archivo de ${inputName} cargado con éxito:`, uploadData);
+  
+  //       // Suponiendo que uploadData contiene la URL del archivo subido
+  //       // Ajusta la clave según el nombre del input para que coincida con el backend
+  //       let urlKey = `${inputName}_url`; // Por ejemplo: identity_document_url
+  //       fileUploadData[urlKey] = uploadData.url;
+  //     } catch (error) {
+  //       console.error(`Error al cargar el archivo de ${inputName}:`, error);
+  //       alert(`Error al cargar el archivo de ${inputName}. Por favor, inténtalo de nuevo.`);
+  //       allFilesUploaded = false;
+  //       break; // Detiene el proceso si alguno de los archivos falla al cargar
+  //     }
+  //   }
+  
+  //   // Si todos los archivos se cargaron exitosamente, procede a enviar las URLs al backend
+  //   if (allFilesUploaded) {
+  //     try {
+  //       const saveUrlResponse = await fetch("http://127.0.0.1:5000/save_url", { // Ajusta esta URL al endpoint correcto
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           user_id: localStorage.getItem('id'), // Asegúrate de tener el ID del usuario disponible
+  //           ...fileUploadData, // Envía todas las URLs de los archivos subidos
+  //         }),
+  //       });
+  
+  //       if (!saveUrlResponse.ok) {
+  //         throw new Error('Error al guardar las URLs en la base de datos');
+  //       }
+  
+  //       // Respuesta exitosa de guardar las URLs
+  //       console.log('URLs de los archivos guardadas con éxito en la base de datos');
+  //       alert('Todos los archivos y sus URLs se han guardado exitosamente.');
+  //       // Aquí puedes incluir cualquier lógica adicional tras el éxito, como redireccionar al usuario
+  //     } catch (error) {
+  //       // console.error('Error al guardar las URLs en la base de datos:', error);
+  //       // alert('Error al guardar las URLs de los archivos. Por favor, inténtalo de nuevo.');
+  //     }
+  //   }
+  // }  
+
+  // obtener le id del usiario del lcoalstorage luego de cargar
+  useEffect(() => {
+    const userId = localStorage.getItem('id');
+    
+    if (userId) {
+      setFoundUserId(userId);
+    }
+    setIsLoadingUser(false);
+  }, []);
+  async function handleSubmitBucket(e:any) {
     e.preventDefault();
+
+    if (isLoadingUser) {
+      console.error('El ID del usuario aún se está cargando');
+      alert('Por favor, espera a que se cargue el ID del usuario.');
+      return;
+    }
+
+    if (!foundUserId) {
+      console.error('No se encontró el ID del usuario');
+      alert('No se encontró el ID del usuario. Por favor, inténtalo de nuevo.');
+      return;
+    }
   
     let allFilesUploaded = true;
-    let fileUploadData: Record<string, string> = {} // Objeto para almacenar las URLs de los archivos subidos
+    // Usar direcemtante userID del foundUserId para evitar que se ejecute antes de obtenerlo
+  // const userId = foundUserId;  
+  //   console.log(userId);
+    
+  
+    // if (!userId) {
+    //   console.error('No se encontró el ID del usuario');
+    //   alert('No se encontró el ID del usuario. Por favor, inténtalo de nuevo.');
+    //   return;
+    // }
   
     // Itera sobre cada archivo seleccionado y envíalo
-    for (const [inputName, file] of Object.entries(selectedFiles) as [string, File | null][]) {
-      const formData = new FormData();
-      if (file !== null) {
+    for (const [inputName, file] of Object.entries(selectedFiles)) {
+      if (file) {
+        const formData = new FormData();
         formData.append('file', file);
-      }
   
-      const uploadUrl = `${URL}/upload_image`;
+        const uploadUrl = "http://127.0.0.1:5000/upload_image";
+
   
-      try {
-        const uploadResponse = await fetch(uploadUrl, {
-          method: 'POST',
-          body: formData,
-        });
+        try {
+          const uploadResponse = await fetch(uploadUrl, {
+            method: 'POST',
+            body: formData,
+          });
   
-        if (!uploadResponse.ok) {
-          throw new Error(`No se pudo cargar el archivo de ${inputName}`);
+          if (!uploadResponse.ok) {
+            throw new Error(`No se pudo cargar el archivo de ${inputName}`);
+          }
+  
+          const uploadData = await uploadResponse.json();
+          console.log("URL a enviar:", uploadData.url);
+          console.log(`Archivo de ${inputName} cargado con éxito:`, uploadData);
+  
+          // Envío la URL del archivo subido al backend para guardarla
+          const tipoArchivo = inputName; 
+          try {
+            const saveUrlResponse = await fetch("http://127.0.0.1:5000/users/save_url", {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                user_id: foundUserId,
+                url: uploadData.url, 
+                tipo_archivo: tipoArchivo, 
+              }),
+            });
+  
+            if (!saveUrlResponse.ok) {
+              throw new Error(`Error al guardar la URL del archivo ${tipoArchivo} en la base de datos`);
+            }
+  
+            console.log(`URL del archivo ${tipoArchivo} guardada con éxito en la base de datos`);
+          } catch (error) {
+            console.error(`Error al guardar la URL del archivo ${tipoArchivo} en la base de datos:`, error);
+            alert(`Error al guardar la URL del archivo ${tipoArchivo}. Por favor, inténtalo de nuevo.`);
+            allFilesUploaded = false;
+            break; 
+          }
+        } catch (error) {
+          console.error(`Error al cargar el archivo de ${inputName}:`, error);
+          alert(`Error al cargar el archivo de ${inputName}. Por favor, inténtalo de nuevo.`);
+          allFilesUploaded = false;
+          break; 
         }
-  
-        const uploadData = await uploadResponse.json();
-        console.log(`Archivo de ${inputName} cargado con éxito:`, uploadData);
-  
-        // Suponiendo que uploadData contiene la URL del archivo subido
-        // Ajusta la clave según el nombre del input para que coincida con el backend
-        let urlKey = `${inputName}_url`; // Por ejemplo: identity_document_url
-        fileUploadData[urlKey] = uploadData.url;
-      } catch (error) {
-        console.error(`Error al cargar el archivo de ${inputName}:`, error);
-        alert(`Error al cargar el archivo de ${inputName}. Por favor, inténtalo de nuevo.`);
-        allFilesUploaded = false;
-        break; // Detiene el proceso si alguno de los archivos falla al cargar
       }
     }
   
-    // Si todos los archivos se cargaron exitosamente, procede a enviar las URLs al backend
     if (allFilesUploaded) {
-      try {
-        const saveUrlResponse = await fetch(`${URL}/save_url`, { // Ajusta esta URL al endpoint correcto
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user_id: localStorage.getItem('id'), // Asegúrate de tener el ID del usuario disponible
-            ...fileUploadData, // Envía todas las URLs de los archivos subidos
-          }),
-        });
-  
-        if (!saveUrlResponse.ok) {
-          throw new Error('Error al guardar las URLs en la base de datos');
-        }
-  
-        // Respuesta exitosa de guardar las URLs
-        console.log('URLs de los archivos guardadas con éxito en la base de datos');
-        alert('Todos los archivos y sus URLs se han guardado exitosamente.');
-        // Aquí puedes incluir cualquier lógica adicional tras el éxito, como redireccionar al usuario
-      } catch (error) {
-        // console.error('Error al guardar las URLs en la base de datos:', error);
-        // alert('Error al guardar las URLs de los archivos. Por favor, inténtalo de nuevo.');
-      }
+      alert('Todos los archivos y sus URLs se han guardado exitosamente.');
     }
-  }  
+  }
   
   // fin codigo del bucket
 

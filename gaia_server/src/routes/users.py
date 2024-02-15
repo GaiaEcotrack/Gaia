@@ -202,28 +202,28 @@ def endpoint():
         return jsonify({'error': 'Token no encontrado en el encabezado de la solicitud'}), 400
 
 
-## por el momento no al necesitamos
-# @users_route.route('/save_url', methods=['POST'])
-# def guardar_url():
-#     data = request.json
-#     user_id = data.get('user_id')
-#     archivo_url = data.get('url')
-#     tipo_archivo = data.get('tipo_archivo')  # Ejemplo: 'identity_document', 'bank_account_status', etc.
+# por el momento no al necesitamos
+@users_route.route('/save_url', methods=['POST'])
+def guardar_url():
+    data = request.json
+    user_id = data.get('user_id')
+    archivo_url = data.get('url')
+    tipo_archivo = data.get('tipo_archivo')  # Ejemplo: 'identity_document', 'bank_account_status', etc.
 
-#     # Asegúrate de validar user_id, archivo_url y tipo_archivo aquí
+    # Asegúrate de validar user_id, archivo_url y tipo_archivo aquí
 
-#     user_id_obj = ObjectId(user_id)
-#     # Actualiza el campo específico basado en tipo_archivo
-#     campo_url = f"{tipo_archivo}_url"  # Construye el nombre del campo dinámicamente
-#     result = collection.update_one(
-#         {'_id': user_id_obj},
-#         {'$set': {campo_url: archivo_url}}
-#     )
+    user_id_obj = ObjectId(user_id)
+    # Actualiza el campo específico basado en tipo_archivo
+    campo_url = f"{tipo_archivo}_url"  # Construye el nombre del campo dinámicamente
+    result = collection.update_one(
+        {'_id': user_id_obj},
+        {'$set': {campo_url: archivo_url}}
+    )
 
-#     if result.modified_count > 0:
-#         return jsonify({'message': 'URL del archivo guardada con éxito'}), 200
-#     else:
-#         # Podrías querer verificar si el usuario no existe y devolver un mensaje específico
-#         return jsonify({'message': 'Error al guardar la URL del archivo o usuario no encontrado'}), 400
+    if result.modified_count > 0:
+        return jsonify({'message': 'URL del archivo guardada con éxito', 'url': archivo_url}), 200
+    else:
+        # Podrías querer verificar si el usuario no existe y devolver un mensaje específico
+        return jsonify({'message': 'Error al guardar la URL del archivo o usuario no encontrado'}), 400
     
     
