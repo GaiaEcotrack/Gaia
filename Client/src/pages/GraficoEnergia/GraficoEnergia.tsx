@@ -160,7 +160,6 @@ const GraficoEnergia = () => {
         }
 
         const idToken = await user.getIdToken();
-        console.log(idToken)
 
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
@@ -180,6 +179,22 @@ const GraficoEnergia = () => {
       }
     };
 
+    const fetchEnergyTwo = async () => {
+      try {
+        const url = import.meta.env.VITE_APP_API_URL;
+        const response = await axios.get(
+          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`
+        );
+        const data = response.data.set;
+        const pvGeneration = data[0].pvGeneration;
+        console.log(pvGeneration);
+        
+        setTotalGenerado(pvGeneration);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchEnergyTwo()
     fetchEnergy();
   
 
