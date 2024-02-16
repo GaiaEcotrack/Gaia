@@ -3,6 +3,7 @@ import { Burn } from '../../pages/home/Burn';
 import { Mint } from '../../pages/home/MintButton';
 import { LocalBalanceToken } from '../../pages/home/MyBalanceToken';
 import { VarasBalance } from '../../pages/home/VarasBalance';
+import PaypalButton from './PaypalButton';
 
 
 
@@ -25,6 +26,7 @@ function Labs (){
             <Mint/>
             <Burn/>
             <ReadState/>
+            <PaypalButton totalValue="4.99" invoice="Kws" />
         </div>
     </div>
   );
