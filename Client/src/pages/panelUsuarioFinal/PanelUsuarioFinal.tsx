@@ -67,6 +67,7 @@ const PanelUsuarioFinal = () => {
           throw new Error('User is not authenticated');
         }
         const idToken = await user.getIdToken();
+        console.log(idToken);
   
         const apiUrl = import.meta.env.VITE_APP_API_URL;
         // Cambia esta URL a la variable apiUrl si lo necesitas
@@ -113,6 +114,8 @@ const PanelUsuarioFinal = () => {
           throw new Error('User is not authenticated');
         }
         const idToken = await user.getIdToken();
+       
+        
       setIsLoading(true);
       setTimeout(async () => {
         const apiUrl = import.meta.env.VITE_APP_API_URL;
