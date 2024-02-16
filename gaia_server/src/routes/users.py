@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 from bson import ObjectId
 import secrets
 from werkzeug.security import check_password_hash
+from bson import json_util
+from flask import Response
 
 ## middleware apikey 
 from src.middlewares import require_firebase_auth
@@ -35,9 +37,8 @@ collection = db['users']
 # @require_firebase_auth
 def get_users():
     users = list(collection.find())
-    for user in users:
-        user['_id'] = str(user['_id'])
-    return jsonify({'message': 'Hello, Flask and MongoDB Atlas!', 'users': users})
+    # Devuelve directamente la respuesta usando json_util.dumps y Response
+    return Response(json_util.dumps({'message': 'Hello, Flask and MongoDB Atlas!', 'users': users}), mimetype='application/json')
 
 # ruta users deploy
 # @users_route.route('/', methods=['GET'])
@@ -202,19 +203,19 @@ def endpoint():
         return jsonify({'error': 'Token no encontrado en el encabezado de la solicitud'}), 400
 
 
-# por el momento no al necesitamos
+# guardamos la url del archivo subido al bucket
 @users_route.route('/save_url', methods=['POST'])
 def guardar_url():
     data = request.json
     user_id = data.get('user_id')
     archivo_url = data.get('url')
-    tipo_archivo = data.get('tipo_archivo')  # Ejemplo: 'identity_document', 'bank_account_status', etc.
+    tipo_archivo = data.get('tipo_archivo') 
 
-    # Asegúrate de validar user_id, archivo_url y tipo_archivo aquí
+
 
     user_id_obj = ObjectId(user_id)
     # Actualiza el campo específico basado en tipo_archivo
-    campo_url = f"{tipo_archivo}_url"  # Construye el nombre del campo dinámicamente
+    campo_url = f"{tipo_archivo}_url"  
     result = collection.update_one(
         {'_id': user_id_obj},
         {'$set': {campo_url: archivo_url}}
@@ -223,7 +224,7 @@ def guardar_url():
     if result.modified_count > 0:
         return jsonify({'message': 'URL del archivo guardada con éxito', 'url': archivo_url}), 200
     else:
-        # Podrías querer verificar si el usuario no existe y devolver un mensaje específico
+
         return jsonify({'message': 'Error al guardar la URL del archivo o usuario no encontrado'}), 400
     
     

@@ -769,6 +769,147 @@
           }
         }
       }
+    },
+    "/upload_image": {
+      "post": {
+        "tags": ["Image Upload API"],
+        "summary": "Upload an image to AWS S3",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The file to upload."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "file uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Presigned URL to access the uploaded file."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - No file part or no selected file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error - Error during the file upload",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Error": {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "string",
+              "description": "Error message detailing what went wrong."
+            }
+          }
+        }
+      }
+    },
+    "/save_url": {
+      "post": {
+        "tags": ["User Management API"],
+        "summary": "Save a specific URL to a user's file",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "user_id": {
+                    "type": "string",
+                    "description": "The ID of the user to save the URL for"
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The URL of the file to save"
+                  },
+                  "tipo_archivo": {
+                    "type": "string",
+                    "description": "The type of file (e.g., 'identity_document', 'bank_account_status')"
+                  }
+                },
+                "required": ["user_id", "url", "tipo_archivo"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "URL del archivo guardada con éxito",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "The saved file URL."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error al guardar la URL del archivo o usuario no encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
