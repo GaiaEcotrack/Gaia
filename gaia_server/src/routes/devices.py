@@ -348,7 +348,6 @@ def get_device_measurements_pv():
 @devices_routes.route('/', methods=['GET'])
 def get_devices():
     try:
-        # Suponiendo que 'devices' es el nombre de tu colección de dispositivos
         devices_collection = devices  
         devices_list = list(devices_collection.find({}, {'_id': 1, 'user_id': 1, 'plant': 1, 'device': 1, 'sets': 1}))
 
@@ -381,7 +380,7 @@ def get_device_by_id(device_id):
         return jsonify({'message': str(e)}), 500
     
     
-    # Agregar nuevo dispositivo a la DB 
+    # Agregar nuevo Dispositivo a la DB (en el modelo devices y en la propiedad devices[] en el modelo users)
 @devices_routes.route('/', methods=['POST'])
 def add_device_to_user():
     try:
@@ -411,7 +410,6 @@ def add_device_to_user():
             'sets': sets_data
         } 
         
-        # Actualiza el usuario con la ID proporcionada, agregando el objeto al array 'devices'
         user_collection = collection
         result = user_collection.update_one(
             {'_id': ObjectId(user_id)},
@@ -419,7 +417,6 @@ def add_device_to_user():
         )
         
         if result.modified_count == 1:
-            # Agrega el nuevo dispositivo al modelo devices
             devices_collection = devices
             device_result = devices_collection.insert_one(device_object)
 
@@ -449,8 +446,28 @@ def add_device_to_user():
     #   },
     #   "sets": ["set1_value", "set2_value"]
     # }
+#----------------------------------------------------
 
 
+    # Eliminar Dispositivo de la DB (en el modelo devices y en la propiedad devices[] en el modelo users)
+@devices_routes.route('/<device_id>', methods=['DELETE'])
+def delete_device(device_id):
+    try:
+        devices_collection = devices
+        result = devices_collection.delete_one({'_id': ObjectId(device_id)})
 
+        if result.deleted_count == 1:
+            user_collection = collection
+            user_result = user_collection.update_one(
+                {'devices._id': ObjectId(device_id)},
+                {'$pull': {'devices': {'_id': ObjectId(device_id)}}}
+            )
 
-    # Eliminar dispositivos de la DB
+            if user_result.modified_count == 1:
+                return jsonify({'message': 'Dispositivo eliminado correctamente'}), 200
+            else:
+                return jsonify({'message': 'Dispositivo no encontrado en la propiedad devices del usuario'}), 404
+        else:
+            return jsonify({'message': 'Dispositivo no encontrado en la colección devices'}), 404
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
