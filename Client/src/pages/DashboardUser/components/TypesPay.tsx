@@ -1,6 +1,7 @@
 import React from 'react'
 import MercadoPago from './MercadoPago'
 import CoinbaseButton from './Coinbase'
+import PaypalButton from './PaypalButton'
 
 const TypesPay = () => {
   return (
@@ -10,6 +11,7 @@ const TypesPay = () => {
         <div>
           <MercadoPago/>
           <CoinbaseButton/>
+          <PaypalButton totalValue="4.99" invoice="Kws"/>
         </div>
       </div>
     </div>

@@ -2009,6 +2009,28 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@paypal/paypal-js@^7.0.0":
+  version "7.1.1"
+  resolved "https://registry.npmjs.org/@paypal/paypal-js/-/paypal-js-7.1.1.tgz"
+  integrity sha512-fVpExBrHINGHsyODYKBXSMinxrgPKzmVW7ZCaCqUaMl7kTSR1ZsVi2IhgLvsPpXF4LWSAMkPTP/J6aetQ6ZlNA==
+  dependencies:
+    promise-polyfill "^8.3.0"
+
+"@paypal/react-paypal-js@^8.1.3":
+  version "8.1.3"
+  resolved "https://registry.npmjs.org/@paypal/react-paypal-js/-/react-paypal-js-8.1.3.tgz"
+  integrity sha512-hEm27iYP/UHS3XPBhDdiK2U4PH1FxrOD5O3f9tstAVLJd82l/laCjq751HiESSm63PVOoFeKE41Fe1mYGab+oA==
+  dependencies:
+    "@paypal/paypal-js" "^7.0.0"
+    "@paypal/sdk-constants" "^1.0.122"
+
+"@paypal/sdk-constants@^1.0.122":
+  version "1.0.142"
+  resolved "https://registry.npmjs.org/@paypal/sdk-constants/-/sdk-constants-1.0.142.tgz"
+  integrity sha512-NMmWx4hisnexoE4ptfdb0XogHjB0ntcCjlly8NVy8bdbwfaZkDzmhppt4EsQNbX22reAUN1ff86sZdQVLTOFPA==
+  dependencies:
+    hi-base32 "^0.5.0"
+
 "@polkadot/api-augment@10.10.1":
   version "10.10.1"
   resolved "https://registry.npmjs.org/@polkadot/api-augment/-/api-augment-10.10.1.tgz"
@@ -5706,6 +5728,11 @@ hasown@^2.0.0:
   dependencies:
     function-bind "^1.1.2"
 
+hi-base32@^0.5.0:
+  version "0.5.1"
+  resolved "https://registry.npmjs.org/hi-base32/-/hi-base32-0.5.1.tgz"
+  integrity sha512-EmBBpvdYh/4XxsnUybsPag6VikPYnN30td+vQk+GI3qpahVEG9+gTkG0aXVxTjBqQ5T6ijbWIu77O+C5WFWsnA==
+
 hmac-drbg@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/hmac-drbg/-/hmac-drbg-1.0.1.tgz"
@@ -7408,6 +7435,11 @@ process@^0.11.10:
   resolved "https://registry.npmjs.org/process/-/process-0.11.10.tgz"
   integrity sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==
 
+promise-polyfill@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.npmjs.org/promise-polyfill/-/promise-polyfill-8.3.0.tgz"
+  integrity sha512-H5oELycFml5yto/atYqmjyigJoAo3+OXwolYiH7OfQuYlAqhxNvTfiNMbV9hsC6Yp83yE5r2KTVmtrG6R9i6Pg==
+
 prompts@^2.0.1:
   version "2.4.2"
   resolved "https://registry.npmjs.org/prompts/-/prompts-2.4.2.tgz"
@@ -7557,7 +7589,7 @@ react-countdown@2.3.5:
   dependencies:
     prop-types "^15.7.2"
 
-react-dom@*, "react-dom@^16.8 || ^17.0 || ^18.0", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0", react-dom@^18.0.0, react-dom@^18.2.0, "react-dom@>= 15", "react-dom@>= 16.8.0", react-dom@>=16, react-dom@>=16.6.0, react-dom@>=16.8, react-dom@>=16.8.0, react-dom@>=18.0.0, react-dom@18.2.0:
+react-dom@*, "react-dom@^16.8 || ^17.0 || ^18.0", "react-dom@^16.8.0 || ^17.0.0 || ^18.0.0", react-dom@^18.0.0, react-dom@^18.2.0, "react-dom@>= 15", "react-dom@>= 16.8.0", react-dom@>=16, react-dom@>=16.2.0, react-dom@>=16.6.0, react-dom@>=16.8, react-dom@>=16.8.0, react-dom@>=18.0.0, react-dom@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz"
   integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
@@ -7664,7 +7696,12 @@ react-transition-group@4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react@*, "react@^15.3.0 || 16 || 17 || 18", "react@^16.5.1 || ^17.0.0 || ^18.0.0", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", react@^18.0, react@^18.0.0, react@^18.2.0, "react@>= 15", "react@>= 16.8.0", react@>=16, "react@>=16, <=18", react@>=16.6.0, react@>=16.8, react@>=16.8.0, react@>=17.0.0, react@>=17.0.2, react@>=18.0.0, react@18.2.0:
+react-webcam@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.npmjs.org/react-webcam/-/react-webcam-7.2.0.tgz"
+  integrity sha512-xkrzYPqa1ag2DP+2Q/kLKBmCIfEx49bVdgCCCcZf88oF+0NPEbkwYk3/s/C7Zy0mhM8k+hpdNkBLzxg8H0aWcg==
+
+react@*, "react@^15.3.0 || 16 || 17 || 18", "react@^16.5.1 || ^17.0.0 || ^18.0.0", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", react@^18.0, react@^18.0.0, react@^18.2.0, "react@>= 15", "react@>= 16.8.0", react@>=16, "react@>=16, <=18", react@>=16.2.0, react@>=16.6.0, react@>=16.8, react@>=16.8.0, react@>=17.0.0, react@>=17.0.2, react@>=18.0.0, react@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
