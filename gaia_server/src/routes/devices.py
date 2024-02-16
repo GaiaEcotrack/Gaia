@@ -437,16 +437,62 @@ def add_device():
     },
     'sets': sets,
 }
-    result = device_collection.insert_one(new_device)
-    inserted_id = result.inserted_id
+     #result = device_collection.insert_one(new_device)
+     #inserted_id = result.inserted_id
     
-    user_id = user['_id']
-    user_collection.update_one({'_id': ObjectId(user_id)}, {'$push': {'devices': str(inserted_id)}})
+    # user_id = user['_id']
+    # user_collection.update_one({'_id': ObjectId(user_id)}, {'$push': {'devices': str(inserted_id)}})
+
+    device_collection.insert_one(new_device)
+
+    # Opcionalmente, tambiÃ©n puedes actualizar la propiedad devices del usuario
+    user_collection.update_one({'_id': ObjectId(user_id)}, {'$push': {'devices': new_device}})
 
     return jsonify({'message': 'Dispositivo agregado con éxito', 'device_id': str(inserted_id)})
 
 
+
     # Eliminar dispositivos de la DB  
+@devices_routes.route('/add', methods=['POST'])
+def add_device_to_user():
+    try:
+        user_id = request.json['user_id']
+        device_data = request.json['device']
+        
+        # Objeto a agregar al array 'devices'
+        device_object = {
+            'user_id': user_id,
+            'plant': {
+                'plantId': device_data.get('plantId'),
+                'name': device_data.get('name'),
+                'description': device_data.get('description'),
+                'timezone': device_data.get('timezone')
+            },
+            'device': {
+                'deviceId': device_data.get('deviceId'),
+                'name': device_data.get('name'),
+                'timezone': device_data.get('timezone'),
+                'serial': device_data.get('serial'),
+                'image': device_data.get('image')
+            },
+            'sets': device_data.get('sets')
+        }
+        user_collection = collection
+
+        # Actualiza el usuario con la ID proporcionada, agregando el objeto al array 'devices'
+        result = user_collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$push': {'devices': device_object}}
+        )
+        
+        if result.modified_count == 1:
+            return jsonify({'message': 'Dispositivo agregado correctamente al usuario.'}), 200
+        else:
+            return jsonify({'message': 'Usuario no encontrado.'}), 404
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
+
 @devices_routes.route('/<user_id>/<device_id>', methods=['DELETE'])
 def delete_device(user_id, device_id):
     try:
