@@ -86,7 +86,7 @@ function UserRegister() {
     if (foundUserId) {
       axios.get(`${URL}/users/${foundUserId}`)
         .then(response => {
-          const userData = response.data;  
+          const userData = response.data.user;  
           setFormData({
             full_name: userData.full_name || null,
             email: userData.email || null,
@@ -649,14 +649,14 @@ function UserRegister() {
                 </label>
                 <input
                   onChange={handleInputChangeBucket}
-                  name="identity_document_url"
+                  name="identity_document"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
                   id="fileId"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"    
                   // required
                 />
-                <h1 className="text-green-600 absolute">{formData.identity_document}</h1>
+                {/* <h1 className="text-green-600 absolute">{formData.identity_document}</h1> */}
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -675,7 +675,7 @@ function UserRegister() {
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-                <h1 className="text-green-600 absolute">{formData.bank_account_status}</h1>
+                {/* <h1 className="text-green-600 absolute">{formData.bank_account_status}</h1> */}
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -694,7 +694,7 @@ function UserRegister() {
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-                <h1 className="text-green-600 absolute">{formData.tax_declarations}</h1>
+                {/* <h1 className="text-green-600 absolute">{formData.tax_declarations}</h1> */}
               </div>
 
               <div className="mb-2 sm:mb-6">
@@ -713,7 +713,7 @@ function UserRegister() {
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-                <h1 className="text-green-600 absolute">{formData.other_financial_documents}</h1>
+                {/* <h1 className="text-green-600 absolute">{formData.other_financial_documents}</h1> */}
               </div>
 
               <div className="">

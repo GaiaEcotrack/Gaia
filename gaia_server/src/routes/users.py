@@ -69,23 +69,22 @@ def get_users():
 #     except Exception as e:
 #         return jsonify({'error': 'Error de conexión con el servidor remoto', 'details': str(e)})
 
-@users_route.route('/<id>', methods=['GET'])
-def get_user_by_id(id):
-    try:
-        # Convertir el id a un ObjectId de MongoDB
-        object_id = ObjectId(id)
-    except:
-        return jsonify({'message': 'ID inválido'}), 400
+@users_route.route('/<user_id>', methods=['GET'])
+# @require_firebase_auth
+def get_user_by_id(user_id):
+    user = collection.find_one({'_id': ObjectId(user_id)})
+    
+    if user:
+        user['_id'] = str(user['_id'])
+        devices = user.get('devices')
+        if devices and isinstance(devices, list):
+            for device in devices:
+                if '_id' in device:
+                    device['_id'] = str(device['_id'])
 
-  
-    user = collection.find_one({'_id': object_id})
-
-    if not user:
-        return jsonify({'message': 'Usuario no encontrado'}), 404
-
-    # Convertir el ObjectId a string para la respuesta JSON
-    user['_id'] = str(user['_id'])
-    return jsonify(user)
+        return jsonify({'message': 'User found', 'user': user})
+    else:
+        return jsonify({'message': 'User not found'}), 404
 
 
 
@@ -142,6 +141,8 @@ def add_user():
 
     return jsonify({'message': 'Usuario agregado con éxito', 'user_id': str(inserted_id)})
 
+
+
 @users_route.route('/<id>', methods=['PUT'])
 def update_user(id):
     try:
@@ -151,8 +152,6 @@ def update_user(id):
         return jsonify({'message': 'ID inválido'}), 400
 
     data = request.json
-   
-
 
     result = collection.update_one({'_id': object_id}, {'$set': data})
 
@@ -160,6 +159,8 @@ def update_user(id):
         return jsonify({'message': 'Usuario no encontrado'}), 404
 
     return jsonify({'message': 'Usuario actualizado con éxito'})
+
+
 
 @users_route.route('/<id>', methods=['DELETE'])
 def delete_user(id):
@@ -180,18 +181,25 @@ def delete_user(id):
 if __name__ == '__main__':
     application.run(debug=True)
     
+    
+    
 @users_route.route('/search', methods=['GET'])
 def get_user_by_email():
     email = request.args.get('email')
 
     if not email:
         return jsonify({'message': 'Parámetro "email" no proporcionado'}), 400
+    
     user = collection.find_one({'email': email})
 
     if not user:
         return jsonify({'message': 'Usuario no encontrado'}), 404
 
+    # Convertir todos los ObjectId a cadenas antes de devolver la respuesta JSON
     user['_id'] = str(user['_id'])
+    for device in user.get('devices', []):
+        device['_id'] = str(device['_id'])
+    
     return jsonify(user)
 
 ## verificar si llega el token fb del frontend 
@@ -220,7 +228,7 @@ def guardar_url():
 
     user_id_obj = ObjectId(user_id)
     # Actualiza el campo específico basado en tipo_archivo
-    campo_url = f"{tipo_archivo}_url"  # Construye el nombre del campo dinámicamente
+    campo_url = f"{tipo_archivo}"  # Construye el nombre del campo dinámicamente
     result = collection.update_one(
         {'_id': user_id_obj},
         {'$set': {campo_url: archivo_url}}

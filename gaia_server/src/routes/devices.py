@@ -471,7 +471,12 @@ def delete_device(device_id):
             return jsonify({'message': 'Dispositivo no encontrado en la colección devices'}), 404
     except Exception as e:
         return jsonify({'message': str(e)}), 500
+    
+    
+    
+    
 
+# ------- Las siguiente rutas se usarian unicamente en casos especificos de lo contrario usar la ruta anterior --------
 
     #Eliminar dispositivo unicamente del modelo devices. 
 @devices_routes.route('/delete/<device_id>', methods=['DELETE'])

@@ -76,7 +76,7 @@ function CredentialsReg () {
     if (foundUserId) {
       axios.get(`${URL}/users/${foundUserId}`)
         .then(response => {
-          const userData = response.data;
+          const userData = response.data.user;
           setFormData({
             credentials: userData.credentials || null,
             secret_key: userData.secret_key || null,

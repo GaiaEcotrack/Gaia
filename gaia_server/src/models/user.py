@@ -27,9 +27,3 @@ class UserSchema(Schema):
     
     api_key = fields.String(required=False)
     
-@validates('email')
-def validate_unique_email(self, value):
-    # Verificar en tu base de datos si ya existe un usuario con este correo electrónico
-    # Puedes adaptar esta lógica según la forma en que estés manejando tu base de datos
-    if user_exists_with_email(value):
-        raise ValidationError('El correo electrónico ya está en uso. Debe ser único.')
