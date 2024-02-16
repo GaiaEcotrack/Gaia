@@ -67,6 +67,7 @@ const PanelUsuarioFinal = () => {
           throw new Error('User is not authenticated');
         }
         const idToken = await user.getIdToken();
+        console.log(idToken);
   
         const apiUrl = import.meta.env.VITE_APP_API_URL;
         // Cambia esta URL a la variable apiUrl si lo necesitas
@@ -107,12 +108,27 @@ const PanelUsuarioFinal = () => {
 
   const handleUpdate = async () => {
     try {
+      const auth = getAuth();
+        const user = auth.currentUser;
+        if (!user) {
+          throw new Error('User is not authenticated');
+        }
+        const idToken = await user.getIdToken();
+       
+        
       setIsLoading(true);
       setTimeout(async () => {
         const apiUrl = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
-          `${apiUrl}/devices/plant-devices?plantId=35`
-        );
+          `${apiUrl}/devices/plant-devices?plantId=35`,
+          {
+            method: 'GET',
+            headers: {
+              "Authorization": `Bearer ${idToken}`,
+              "Content-Type": "application/json"
+            }
+          });
+    
         setDevices(response.data.devices);
         setIsLoading(false);
       }, 2000);
