@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 from bson import ObjectId
 import secrets
 from werkzeug.security import check_password_hash
+from bson import json_util
+from flask import Response
 
 ## middleware apikey 
 from src.middlewares import require_firebase_auth
@@ -35,9 +37,8 @@ collection = db['users']
 # @require_firebase_auth
 def get_users():
     users = list(collection.find())
-    for user in users:
-        user['_id'] = str(user['_id'])
-    return jsonify({'message': 'Hello, Flask and MongoDB Atlas!', 'users': users})
+    # Devuelve directamente la respuesta usando json_util.dumps y Response
+    return Response(json_util.dumps({'message': 'Hello, Flask and MongoDB Atlas!', 'users': users}), mimetype='application/json')
 
 # ruta users deploy
 # @users_route.route('/', methods=['GET'])
