@@ -2,14 +2,14 @@ from marshmallow import Schema, fields, validate
 
 class PlantSchema(Schema):
     plantId = fields.String(required=False)
-    name = fields.String(required=False)
+    plantName = fields.String(required=False)
+    plantTimezone = fields.String(required=False)
     description = fields.String(required=False)
-    timezone = fields.String(required=False)
 
 class DeviceDataSchema(Schema):
     deviceId = fields.String(required=False)
-    name = fields.String(required=False)
-    timezone = fields.String(required=False)
+    deviceName = fields.String(required=False)
+    deviceTimezone = fields.String(required=False)
     serial = fields.String(required=False)
     image = fields.String(allow_none=False)
 

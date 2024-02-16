@@ -37,6 +37,13 @@ def get_users():
     users = list(collection.find())
     for user in users:
         user['_id'] = str(user['_id'])
+        # Convertir ObjectId a cadena en la lista de dispositivos
+        devices = user.get('devices')
+        if devices and isinstance(devices, list):
+            for device in devices:
+                if '_id' in device:
+                    device['_id'] = str(device['_id'])
+
     return jsonify({'message': 'Hello, Flask and MongoDB Atlas!', 'users': users})
 
 # ruta users deploy

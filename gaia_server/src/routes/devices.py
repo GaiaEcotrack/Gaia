@@ -342,175 +342,115 @@ def get_device_measurements_pv():
 
 #################################################################################
 
-# obtener  devices solo de la db
+# obtener  devices solo de la db   
 
-@devices_routes.route('/db', methods=['GET'])
-def get_devices_from_db():
+    # Consulta de todos los Dispositivos
+@devices_routes.route('/', methods=['GET'])
+def get_devices():
     try:
-        # Consulta todos los dispositivos almacenados en la base de datos
-        devices_data = list(devices.find())
+        # Suponiendo que 'devices' es el nombre de tu colección de dispositivos
+        devices_collection = devices  
+        devices_list = list(devices_collection.find({}, {'_id': 1, 'user_id': 1, 'plant': 1, 'device': 1, 'sets': 1}))
 
-        # Convertir los ObjectId a strings para la respuesta JSON
-        devices_list = []
-        for device in devices_data:
-            device_data = {
-                '_id': str(device['_id']),
-                'plant': device['plant'],
-                'device': device['device'],
-                'sets': device['sets']
-            }
-            devices_list.append(device_data)
-            print(f'Datos de la DB de MONGO')
-        
-        return jsonify(devices_list)
+        formatted_devices = []
+        for device in devices_list:
+            device['_id'] = str(device['_id'])
+            formatted_devices.append(device)
+
+        return jsonify({'devices': formatted_devices}), 200
     except Exception as e:
-        return jsonify({'message': 'Error interno del servidor', 'error': str(e)})
+        return jsonify({'message': str(e)}), 500
     
-    
-    # Get device by ID de la DB MONGO
-    
-@devices_routes.route('/<string:device_id>', methods=['GET'])
+
+    # Consulta de Dispositivo por ID
+@devices_routes.route('/<device_id>', methods=['GET'])
 def get_device_by_id(device_id):
     try:
-        # Consulta el dispositivo por su ID en la base de datos
-        device = devices.find_one({'_id': ObjectId(device_id)})
-        
+        devices_collection = devices 
+        device_object_id = ObjectId(device_id)
+        device = devices_collection.find_one({'_id': device_object_id}, {'_id': 1, 'user_id': 1, 'device': 1, 'plant': 1, 'sets': 1})
+
         if device:
-            # Convierte el ObjectId a string para la respuesta JSON
-            device_data = {
-                '_id': str(device['_id']),
-                'plant': device['plant'],
-                'device': device['device'],
-                'sets': device['sets']
-            }
-            return jsonify(device_data)
+            device['_id'] = str(device['_id'])
+            device['user_id'] = str(device.get('user_id'))
+            return jsonify(device), 200
         else:
             return jsonify({'message': 'Dispositivo no encontrado'}), 404
+
     except Exception as e:
-        return jsonify({'message': 'Error interno del servidor', 'error': str(e)})
-    
-    #PENSAR EN METODO PARA TRAER POR EL ID DE LOS DISPOSITIVOS DE LA API Y NO DE MONGO DB
+        return jsonify({'message': str(e)}), 500
     
     
-    
-    
-    # POST para agregar nuevo dispositivo a la DB 
+    # Agregar nuevo dispositivo a la DB 
 @devices_routes.route('/', methods=['POST'])
-def add_device():
-    data = request.json
-
-    device_schema = DeviceSchema()
-    errors = device_schema.validate(data)
-
-    if errors:
-        return jsonify({'message': 'Validation errors', 'errors': errors}), 400
-    
-    user_id = data.get('user_id')
-    
-    user_collection = collection
-    
-    user = user_collection.find_one({'_id': ObjectId(user_id)})
-    if not user:
-        return jsonify({'message': 'Usuario no encontrado'}), 404
-
-    device_collection = devices
-    
-    plant_data = data.get('plant')
-    device_data = data.get('device')
-    sets = data.get('sets')
-    user_id = data.get('user_id')
-
-    new_device = {
-    'user_id': user_id,
-    'plant': {
-        'plantId': plant_data.get('plantId'),
-        'name': plant_data.get('name'),
-        'description': plant_data.get('description'),
-        'timezone': plant_data.get('timezone')
-    },
-    'device': {
-        'deviceId': device_data.get('deviceId'),
-        'name': device_data.get('name'),
-        'timezone': device_data.get('timezone'),
-        'serial': device_data.get('serial'),
-        'image': device_data.get('image')
-    },
-    'sets': sets,
-}
-     #result = device_collection.insert_one(new_device)
-     #inserted_id = result.inserted_id
-    
-    # user_id = user['_id']
-    # user_collection.update_one({'_id': ObjectId(user_id)}, {'$push': {'devices': str(inserted_id)}})
-
-    device_collection.insert_one(new_device)
-
-    # Opcionalmente, tambiÃ©n puedes actualizar la propiedad devices del usuario
-    user_collection.update_one({'_id': ObjectId(user_id)}, {'$push': {'devices': new_device}})
-
-    return jsonify({'message': 'Dispositivo agregado con éxito', 'device_id': str(inserted_id)})
-
-
-
-    # Eliminar dispositivos de la DB  
-@devices_routes.route('/add', methods=['POST'])
 def add_device_to_user():
     try:
         user_id = request.json['user_id']
         device_data = request.json['device']
+        plant_data = request.json['plant']        
+        sets_data = request.json['sets']  
         
-        # Objeto a agregar al array 'devices'
+        device_id = ObjectId()
+        
         device_object = {
+            '_id': device_id,
             'user_id': user_id,
             'plant': {
-                'plantId': device_data.get('plantId'),
-                'name': device_data.get('name'),
-                'description': device_data.get('description'),
-                'timezone': device_data.get('timezone')
+                'plantId': plant_data.get('plantId'),
+                'plantName': plant_data.get('plantName'),
+                'plantTimezone': plant_data.get('plantTimezone'),
+                'description': plant_data.get('description')
             },
             'device': {
                 'deviceId': device_data.get('deviceId'),
-                'name': device_data.get('name'),
-                'timezone': device_data.get('timezone'),
+                'deviceName': device_data.get('deviceName'),
+                'deviceTimezone': device_data.get('deviceTimezone'),
                 'serial': device_data.get('serial'),
                 'image': device_data.get('image')
             },
-            'sets': device_data.get('sets')
-        }
-        user_collection = collection
-
+            'sets': sets_data
+        } 
+        
         # Actualiza el usuario con la ID proporcionada, agregando el objeto al array 'devices'
+        user_collection = collection
         result = user_collection.update_one(
             {'_id': ObjectId(user_id)},
             {'$push': {'devices': device_object}}
         )
         
         if result.modified_count == 1:
-            return jsonify({'message': 'Dispositivo agregado correctamente al usuario.'}), 200
+            # Agrega el nuevo dispositivo al modelo devices
+            devices_collection = devices
+            device_result = devices_collection.insert_one(device_object)
+
+            if device_result.inserted_id:
+                return jsonify({'message': 'Dispositivo creado y agregado correctamente', 'device_id': str(device_id)}), 200
+            else:
+                return jsonify({'message': 'Error al crear el dispositivo en devices.'}), 500
         else:
             return jsonify({'message': 'Usuario no encontrado.'}), 404
     except Exception as e:
         return jsonify({'message': str(e)}), 500
+      
+    # {
+    #   "user_id": " ID DEL USUARIO ",
+    #   "plant": {
+    #     "plantId": "plantId_value",
+    #     "plantName": "plantName_value",
+    #     "description": "plantDescription_value",
+    #     "plantTimezone": "plantTimezone_value"
+    #   },
+    #   "device": {
+    #     "deviceId": "deviceId_value",
+    #     "deviceName": "deviceName_value",
+    #     "deviceTimezone": "deviceTimezone_value",
+    #     "serial": "deviceSerial_value",
+    #     "image": "deviceImage_value"
+    #   },
+    #   "sets": ["set1_value", "set2_value"]
+    # }
 
 
-@devices_routes.route('/<user_id>/<device_id>', methods=['DELETE'])
-def delete_device(user_id, device_id):
-    try:
-        user_id = ObjectId(user_id)
-        device_id = ObjectId(device_id)
-    except:
-        return jsonify({'message': 'ID de usuario o dispositivo no válido'}), 400
-
-    user_collection = collection
-    device_collection = devices
-    result = device_collection.delete_one({'_id': device_id})
-    
-    if result.deleted_count == 0:
-        return jsonify({'message': 'Dispositivo no encontrado'}), 404
-
-    user_collection.update_one({'_id': user_id}, {'$pull': {'devices': str(device_id)}})
-
-    return jsonify({'message': 'Dispositivo eliminado con éxito'})
 
 
-
+    # Eliminar dispositivos de la DB
