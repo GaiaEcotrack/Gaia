@@ -101,8 +101,10 @@ def add_user():
 
     # username = data.get('username')
     email = data.get('email')
-    # password = data.get('password')
-
+    
+    existing_user = collection.find_one({'email': email})
+    if existing_user:
+        return jsonify({'message': 'El correo electrónico ya está registrado'}), 400
 
     full_name = data.get('full_name')
     identification_number = data.get('identification_number')
@@ -110,9 +112,6 @@ def add_user():
     phone = data.get('phone')
 
     identity_document = data.get('identity_document')
-    # birth_certificate = data.get('birth_certificate')
-    # marriage_certificate = data.get('marriage_certificate')
-
     bank_account_status = data.get('bank_account_status')
     tax_declarations = data.get('tax_declarations')
     other_financial_documents = data.get('other_financial_documents')

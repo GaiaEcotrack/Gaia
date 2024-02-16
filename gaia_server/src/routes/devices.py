@@ -471,3 +471,40 @@ def delete_device(device_id):
             return jsonify({'message': 'Dispositivo no encontrado en la colección devices'}), 404
     except Exception as e:
         return jsonify({'message': str(e)}), 500
+
+
+    #Eliminar dispositivo unicamente del modelo devices. 
+@devices_routes.route('/delete/<device_id>', methods=['DELETE'])
+def delete_device_from_devices_model(device_id):
+    try:
+        # Delete device from devices collection
+        devices_collection = devices
+        result = devices_collection.delete_one({'_id': ObjectId(device_id)})
+
+        if result.deleted_count == 1:
+            return jsonify({'message': 'Dispositivo eliminado correctamente del modelo devices'}), 200
+        else:
+            return jsonify({'message': 'Dispositivo no encontrado en la colección devices'}), 404
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500    
+    
+    
+    # Eliminar dispositivo unicamente de modelo user - propiedad devices
+@devices_routes.route('/delete/<user_id>/<device_id>', methods=['DELETE'])
+def delete_device_from_user_model(user_id, device_id):
+    try:
+        # Delete device from user's devices property
+        user_collection = collection
+        result = user_collection.update_one(
+            {'_id': ObjectId(user_id)},
+            {'$pull': {'devices': {'_id': ObjectId(device_id)}}}
+        )
+
+        if result.modified_count == 1:
+            return jsonify({'message': 'Dispositivo eliminado correctamente de la propiedad devices del usuario'}), 200
+        else:
+            return jsonify({'message': 'Dispositivo no encontrado en la propiedad devices del usuario'}), 404
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+    
+    
