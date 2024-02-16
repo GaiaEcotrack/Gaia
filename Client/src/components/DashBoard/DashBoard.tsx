@@ -1,8 +1,6 @@
 import axios from 'axios'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import UserList from './UserList';
-import { MdOutlineDeleteForever } from "react-icons/md";
-import { FaRegEdit } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 
 
@@ -17,12 +15,10 @@ interface UserType {
 const DashBoard = () => {
   const url = import.meta.env.VITE_APP_API_URL
 
-  const nuevoNombreUsuarioRef = useRef(null);
-  const nuevoCorreoElectronicoRef = useRef(null);
   
 
   const [users, setUsers] = useState<UserType[]>([]);
-  const [confirm, setConfirm] = useState<{ [key: string]: boolean }>({});
+
 
   useEffect(() => {
     const callUsers = async () => {
@@ -38,33 +34,9 @@ const DashBoard = () => {
     };
 
     callUsers();
-  }, []);
+  },);
 
 
-  const handleUpdateUser = async (userId: string, updatedUserData: Partial<UserType>) => {
-    try {
-      const response = await axios.put(`${url}/users/${userId}`, updatedUserData);
-      const updatedUser = response.data.updatedUser;
-
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user._id === userId ? { ...user, ...updatedUser } : user
-        )
-      );
-    } catch (error) {
-      console.error('Error updating user:', error);
-    }
-  };
-
-    const handleDeleteUser = async (userId: string) => {
-      try {
-        
-         axios.delete(`${url}/users/${userId}`)
-         setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
-      } catch (error) {
-        console.error('Error al eliminar el usuario:', error);
-      }
-    }
 
     const imageUrl = 'https://images.unsplash.com/photo-1628157588553-5eeea00af15c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80'
 
@@ -146,8 +118,7 @@ const DashBoard = () => {
             </button>
           </div>
           <div id="menu" className="flex flex-col space-y-2">
-            <a
-              href=""
+            <button
               className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-[#26254f] hover:text-white hover:text-base rounded-md transition duration-150 ease-in-out"
             >
               <svg
@@ -161,7 +132,7 @@ const DashBoard = () => {
                 ></path>
               </svg>
               <span className="">Users</span>
-            </a>
+            </button>
               <Link
                 to={"/dashboard/plants"}
                 className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-[#26254f] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
@@ -178,8 +149,7 @@ const DashBoard = () => {
                 </svg>
                 <span className="">Plants</span>
               </Link>
-            <a
-              href=""
+            <button
               className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-[#26254f] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
@@ -196,9 +166,8 @@ const DashBoard = () => {
                 ></path>
               </svg>
               <span className="">Reports</span>
-            </a>  
-            <a
-              href=""
+            </button>  
+            <button
               className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-[#26254f] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
@@ -215,9 +184,8 @@ const DashBoard = () => {
                 ></path>
               </svg>
               <span className="">Messages</span>
-            </a>
-            <a
-              href=""
+            </button>
+            <button
               className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-[#26254f] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
@@ -233,9 +201,8 @@ const DashBoard = () => {
                 ></path>
               </svg>
               <span className="">Calendar</span>
-            </a>
-            <a
-              href=""
+            </button>
+            <button
               className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-[#26254f] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
@@ -251,9 +218,8 @@ const DashBoard = () => {
                 ></path>
               </svg>
               <span className="">Table</span>
-            </a>
-            <a
-              href=""
+            </button>
+            <button
               className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-[#26254f] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
             >
               <svg
@@ -267,8 +233,8 @@ const DashBoard = () => {
                 ></path>
               </svg>
               <span className="">UI Components</span>
-            </a>
-            <a
+            </button>
+            <button
               className="text-sm font-medium text-gray-700 py-2 px-2 hover:bg-[#26254f] hover:text-white hover:scale-105 rounded-md transition duration-150 ease-in-out"
               >
               <svg
@@ -282,7 +248,7 @@ const DashBoard = () => {
                 ></path>
               </svg>
               <span className="">Products</span>
-            </a>
+            </button>
           </div>
         </div>
 

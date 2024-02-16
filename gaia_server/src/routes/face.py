@@ -1,4 +1,4 @@
-from flask import render_template, request, Blueprint , redirect, url_for
+from flask import render_template, request, Blueprint , redirect, url_for , jsonify
 import cv2
 import numpy as np
 import face_recognition
@@ -21,55 +21,37 @@ def compare():
         imagen_dni = request.files["imagen_dni"]
 
         # Convertir las imágenes a formato OpenCV
-        imagen_cara_opencv = cv2.imdecode(np.fromstring(imagen_cara.read(), np.uint8), cv2.IMREAD_COLOR)
-        imagen_dni_opencv = cv2.imdecode(np.fromstring(imagen_dni.read(), np.uint8), cv2.IMREAD_COLOR)
-
+        imagen_cara_opencv = cv2.imdecode(np.frombuffer(imagen_cara.read(), np.uint8), cv2.IMREAD_COLOR)
+        imagen_dni_opencv = cv2.imdecode(np.frombuffer(imagen_dni.read(), np.uint8), cv2.IMREAD_COLOR)
 
         # Detección de rostros
         cara_en_foto_tu_cara = face_recognition.face_locations(imagen_cara_opencv)
         cara_en_foto_dni = face_recognition.face_locations(imagen_dni_opencv)
 
-        # Alineación de rostros
-        if cara_en_foto_tu_cara:
-            rostro_cara = cara_en_foto_tu_cara[0]
-            imagen_cara_alineada = alinear_rostro(imagen_cara_opencv, rostro_cara)
-        else:
-            imagen_cara_alineada = None
-
-        if cara_en_foto_dni:
-            rostro_dni = cara_en_foto_dni[0]
-            imagen_dni_alineada = alinear_rostro(imagen_dni_opencv, rostro_dni)
-        else:
-            imagen_dni_alineada = None
-
-        # Normalización de la iluminación
-        if imagen_cara_alineada is not None:
-            imagen_cara_alineada = normalizar_iluminacion(imagen_cara_alineada)
-
-        if imagen_dni_alineada is not None:
-            imagen_dni_alineada = normalizar_iluminacion(imagen_dni_alineada)
-
+        # Verificar si se detectaron rostros en ambas imágenes
+        if not cara_en_foto_tu_cara or not cara_en_foto_dni:
+            resultado = "No se detectaron rostros en ambas imágenes."
+            return jsonify({"resultado": resultado})
 
         # Codificar los rostros
-        if imagen_cara_alineada is not None and imagen_dni_alineada is not None:
-            codificacion_cara_tu_cara = face_recognition.face_encodings(imagen_cara_alineada, [rostro_cara])[0]
-            codificacion_cara_dni = face_recognition.face_encodings(imagen_dni_alineada, [rostro_dni])[0]
-        else:
-            resultado = "No se detectaron rostros en ambas imágenes."
-            return render_template("resultado.html", resultado=resultado)
+        codificacion_cara_tu_cara = face_recognition.face_encodings(imagen_cara_opencv, cara_en_foto_tu_cara)
+        codificacion_cara_dni = face_recognition.face_encodings(imagen_dni_opencv, cara_en_foto_dni)
 
-        # Calcular la distancia
-        distancia = np.linalg.norm(codificacion_cara_tu_cara - codificacion_cara_dni)
+        if not codificacion_cara_tu_cara or not codificacion_cara_dni:
+            resultado = "No se pudieron codificar los rostros en ambas imágenes."
+            return jsonify({"resultado": resultado})
+
+        # Calcular la distancia entre las codificaciones de rostros
+        distancia = np.linalg.norm(codificacion_cara_tu_cara[0] - codificacion_cara_dni[0])
 
         # Evaluar la distancia
-        if distancia < 0.1:
-            resultado = "Las caras son muy similares, probablemente sean la misma persona."
-        elif distancia < 0.8:
-            resultado = "Las caras son similares, pero hay algunas diferencias."
+        if distancia < 0.6:
+            resultado = "Coinciden."
         else:
-            resultado = "Las caras son diferentes, probablemente no sean la misma persona."
+            resultado = "No coinciden."
 
-        return render_template("resultado.html", resultado=resultado)
+        return jsonify({"resultado": resultado})
+
 
 # Función para alinear rostros
 # Función para alinear rostros
