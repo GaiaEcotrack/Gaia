@@ -6,6 +6,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { getAuth } from "@firebase/auth";
 
 function UserRegister() {
 
@@ -19,8 +20,8 @@ function UserRegister() {
   const [pendingCredentials, setPendingCredentials] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLoadingUser, setIsLoadingUser] = useState(true)
+  const [photo, setPhoto] = useState<string | null>(null);
   
-
   const Toast = Swal.mixin({
     toast: true,
     position: "top-end",
@@ -32,6 +33,14 @@ function UserRegister() {
       toast.onmouseleave = Swal.resumeTimer;
     }
   }); 
+
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if(user){
+      setPhoto(user.photoURL)
+    }
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -423,6 +432,12 @@ function UserRegister() {
             </h1>
           </Link>
 
+          <Link to="/idVerification">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+              Identity Verification
+            </h1>
+          </Link>
+
           <Link to="/deviceReg">
             <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Device Register
@@ -483,7 +498,7 @@ function UserRegister() {
             <img
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-300"
               src={
-                localStorage.getItem("profilePic") ||
+                photo || localStorage.getItem("profilePic") ||
                 "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               }
               alt="Bordered avatar"

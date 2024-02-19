@@ -1,8 +1,12 @@
+import { FcSelfie } from "react-icons/fc"; 
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { ModalIdVerifi } from "./Modal_IdVerifi";
 
-function DeviceRegister() {
+function IdVerification() {
+
+  const [showIdVerifi, setShowIdVerifi] = useState(false)
 
   const Toast = Swal.mixin({
     toast: true,
@@ -106,13 +110,13 @@ function DeviceRegister() {
           </Link>
 
           <Link to="/idVerification">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#212056] border rounded-full">
               Identity Verification
             </h1>
           </Link>
 
           <Link to="/deviceReg">
-            <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#212056] border rounded-full">
+            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Device Register
             </h1>
           </Link>
@@ -142,94 +146,25 @@ function DeviceRegister() {
         <div className="px-6 pb-8 mt-8 sm:rounded-lg w-full">
 
           <h2 className="flex justify-center text-black md:justify-start text-2xl font-bold sm:text-xl pt-4 mb-8">
-            NEW DEVICE
+            IDENTITY VERIFICATION
           </h2>
+
+          <div className="flex justify-center items-center p-6 px-8 mb-8 border rounded-lg  border-indigo-200 ">
+            <FcSelfie className="text-9xl w-[20%] "/> 
+
+            <h1 className="flex justify-center items-center text-black font-normal md:justify-start text-2xl sm:text-xl mx-8 w-[60%]">
+              Requirements: Basic information, identification document, facial recognition.
+            </h1> 
+
+            <button onClick={() => {setShowIdVerifi(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%] mt-4">
+              Verify Now
+            </button>
+          </div>
 
           {/* Formulario de perfil público */}
 
           <div className="">
-            <form className="grid sm:grid-cols-2 gap-x-14" action="" onSubmit={handleSubmit}>
-              <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="deviceId"
-                  className="block mb-2 text-sm font-bold text-black dark:text-black"
-                >
-                  Device Id 
-                </label>
-                <input
-                  onChange={handleInputChange}
-                  name="deviceId"
-                  type="number"
-                  id="deviceId"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
-                  placeholder="Device Id"                  
-                  required
-                />
-              </div>
-
-              <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="deviceName"
-                  className="block mb-2 text-sm font-bold text-black dark:text-black"
-                >
-                  Device Name - Type
-                </label>
-                <input
-                  onChange={handleInputChange}
-                  name="deviceName"
-                  type="text"
-                  id="deviceName"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
-                  placeholder="Device Name"                  
-                  required
-                />
-              </div>
-
-              <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="serialNumber"
-                  className="block mb-2 text-sm font-bold text-black dark:text-black"
-                >
-                  Serial Number
-                </label>
-                <input
-                  onChange={handleInputChange}
-                  name="serial"
-                  type="text"
-                  id="serialNumber"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
-                  placeholder="Serial Number"
-                  required
-                />
-              </div>             
-
-              <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="filefin2"
-                  className="block mb-2 text-sm font-bold text-black dark:text-black"
-                >
-                  Upload an image of the device
-                </label>
-                <input
-                  onChange={handleInputChange}
-                  name="image"
-                  type="file"
-                  accept="image/jpeg, image/png"
-                  id="filefin2"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
-                  // required
-                />
-              </div>
-
-              <div className="flex justify-start w-full">
-                <button
-                  type="submit"
-                  className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28 mt-4"
-                >
-                  Save
-                </button>
-              </div> 
-            </form>
+           
           </div>
         </div>
       </main>
@@ -266,8 +201,9 @@ function DeviceRegister() {
           </h1>
         </Link>
       </div>
+      <ModalIdVerifi showIdVerifi={showIdVerifi} setShowIdVerifi={setShowIdVerifi}/>
     </div>
   );
 }
 
-export { DeviceRegister };
+export { IdVerification };

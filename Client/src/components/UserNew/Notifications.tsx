@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Notifications() {
   return (
-    <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-white">
+    <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black">
       {/* Aside */}
       <aside className="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
         <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
@@ -13,6 +13,12 @@ function Notifications() {
           <Link to="/userReg">
             <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               User Register
+            </h1>
+          </Link>
+
+          <Link to="/idVerification">
+            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+              Identity Verification
             </h1>
           </Link>
 
