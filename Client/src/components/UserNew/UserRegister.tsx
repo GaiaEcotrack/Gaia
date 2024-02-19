@@ -320,6 +320,10 @@ function UserRegister() {
     // Itera sobre cada archivo seleccionado y envíalo
     for (const [inputName, file] of Object.entries(selectedFiles)) {
       if (file) {
+        if (!(file instanceof Blob)) {
+          console.error(`El archivo de ${inputName} no es un Blob válido.`);
+          continue;
+        }
         const formData = new FormData();
         formData.append('file', file);
   
