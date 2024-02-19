@@ -22,15 +22,15 @@ function DeviceRegister() {
     user_id: localStorage.getItem("id"),
     plant: {
         plantId: "",
-        name: "",
-        description: "",
-        timezone: ""
+        plantName: "",
+        plantTimezone: "",
+        description: ""
     },
     device: {
         deviceId: "",
-        name: "",
+        deviceName: "",
+        deviceTimezone: "",
 				serial: "",
-        timezone: "",
         image: ""
     },
     sets: [""],
@@ -170,7 +170,7 @@ function DeviceRegister() {
                 </label>
                 <input
                   onChange={handleInputChange}
-                  name="name"
+                  name="deviceName"
                   type="text"
                   id="deviceName"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"

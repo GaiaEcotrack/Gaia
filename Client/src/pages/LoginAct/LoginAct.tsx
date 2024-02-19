@@ -99,7 +99,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
         <div className="w-full h-100">
             <div className="flex flex-col gap-2 text-center item-center justify-center laptop">
                 <img className="w-32 h-32 mx-auto" src="/LOGOGAIASOLO.png" alt="" />
-                <h1 className="text-black text-3xl">Gaia Ecotrack</h1>
+                <h1 className="text-black text-3xl">Gaia EcoTrack</h1>
             </div>
           <h1 className="flex justify-center text-2xl text-black font-bold 2xl:text-2xl leading-tight 2xl:mt-12 laptop">
             Log in to your account
