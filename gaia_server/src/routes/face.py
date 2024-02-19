@@ -33,6 +33,10 @@ def compare():
             resultado = "No se detectaron rostros en ambas imágenes."
             return jsonify({"resultado": resultado})
 
+        # Rotar la imagen del DNI si está en posición vertical
+        if imagen_dni_opencv.shape[0] > imagen_dni_opencv.shape[1]:
+            imagen_dni_opencv = cv2.rotate(imagen_dni_opencv, cv2.ROTATE_90_CLOCKWISE)
+
         # Codificar los rostros
         codificacion_cara_tu_cara = face_recognition.face_encodings(imagen_cara_opencv, cara_en_foto_tu_cara)
         codificacion_cara_dni = face_recognition.face_encodings(imagen_dni_opencv, cara_en_foto_dni)
@@ -46,9 +50,9 @@ def compare():
 
         # Evaluar la distancia
         if distancia < 0.6:
-            resultado = "Coinciden."
+            resultado = "coinciden"
         else:
-            resultado = "No coinciden."
+            resultado = "no coinciden"
 
         return jsonify({"resultado": resultado})
 
