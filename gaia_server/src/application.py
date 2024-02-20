@@ -106,8 +106,12 @@ application = Flask(__name__)
 
 from src.models.user import users_route
 from src.models.devices import devices_routes
+from src.models import paypal_route
+
+application.register_blueprint(paypal_route.paypal_route, url_prefix='/paypal')
 
 application.register_blueprint(users_route, url_prefix='/users')
+
 application.register_blueprint(devices_routes, url_prefix='/devices')
 
 if __name__ == '__main__':

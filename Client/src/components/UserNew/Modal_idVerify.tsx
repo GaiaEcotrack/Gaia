@@ -1,11 +1,11 @@
-interface MoodalConfig {
-  showIdVerifi: boolean;
-  setShowIdVerifi(showIdVerifi: boolean): void;
+interface MoodalId {
+  showIdVerify: boolean;
+  setShowIdVerify(showIdVerify: boolean): void;
 }
 
-function ModalIdVerifi(props:MoodalConfig) {
-  const { showIdVerifi, setShowIdVerifi } = props;
-    return showIdVerifi ? (
+function ModalIdVerify(props:MoodalId) {
+  const { showIdVerify, setShowIdVerify } = props;
+    return showIdVerify ? (
       <div className="bg-[#0000003d] fixed top-0 left-0 h-full w-full flex justify-center items-center">
         
         <div className="flex flex-col justify-start items-center bg-white h-[100%] md:h-full w-full md:w-[60%] p-4 md:p-6 mt-40 md:mt-0">
@@ -13,7 +13,7 @@ function ModalIdVerifi(props:MoodalConfig) {
           <div className="text-[#000000] text-2xl flex justify-end w-full">
             <button
             type="button"
-            onClick={() => {setShowIdVerifi(false)}}            
+            onClick={() => {setShowIdVerify(false)}}            
             >
             Cerrar
             </button>          
@@ -29,4 +29,4 @@ function ModalIdVerifi(props:MoodalConfig) {
     ) : null
   } 
 
-  export { ModalIdVerifi };
+  export { ModalIdVerify };
