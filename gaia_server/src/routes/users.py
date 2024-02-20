@@ -1,4 +1,3 @@
-
 from flask import Flask, Blueprint, jsonify, request
 import requests
 from pymongo import MongoClient
@@ -14,15 +13,13 @@ from flask import Response
 ## middleware apikey 
 from src.middlewares import require_firebase_auth
 from src.services.firebase_admin.firebase_config import verify_firebase_token
-
-
+from src.models.paypal import PayPalTransactionSchema
 
 load_dotenv()
 
 application = Flask(__name__)
 
 users_route = Blueprint('users_route', __name__)
-
 
 mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri, tlsAllowInvalidCertificates=True)
@@ -31,6 +28,48 @@ if client:
 
 db = client['gaia']
 collection = db['users']
+transactions_collection = db['transactions']
+
+@users_route.route('/transaction', methods=['POST'])
+def save_paypal_transaction():
+    data = request.json
+    print('Datos de transacción recibidos:', data)
+
+    # Verificar si 'payer' está presente en los datos
+    if 'payerId' not in data or 'orderId' not in data or 'paymentId' not in data or 'totalValue' not in data or 'invoice' not in data:
+        return jsonify({'error': 'Datos de transacción de PayPal incompletos'}), 400
+
+    # Extraer los datos relevantes de la transacción
+    orderId = data.get('orderId')
+    payerId = data.get('payerId')
+    paymentId = data.get('paymentId')
+    totalValue = data.get('totalValue')
+    invoice = data.get('invoice')
+
+    # Guardar los datos en la colección de transacciones
+    transaction_data = {
+        'orderId': orderId,
+        'payerId': payerId,
+        'paymentId': paymentId,
+        'totalValue': totalValue,
+        'invoice': invoice
+    }
+
+    result = transactions_collection.insert_one(transaction_data)
+    inserted_id = result.inserted_id
+
+    return jsonify({'message': 'Transacción de PayPal guardada correctamente', 'transaction_id': str(inserted_id)})
+
+@users_route.route('/transactions', methods=['GET'])
+def get_paypal_transactions():
+    transactions = transactions_collection.find({}, {'_id': False, 'orderId': True, 'payerId': True, 'paymentId': True, 'totalValue': True, 'invoice': True})
+    # Convertir las transacciones a una lista para jsonify
+    transactions_list = []
+    for transaction in transactions:
+        transactions_list.append(transaction)
+    return jsonify({'transactions': transactions_list})
+
+# Aquí puedes agregar más rutas relacionadas con PayPal si es necesario
 
 # RUTEO
 @users_route.route('/', methods=['GET'])
@@ -48,28 +87,6 @@ def get_users():
 
     return jsonify({'message': 'Hello, Flask and MongoDB Atlas!', 'users': users})
 
-# ruta users deploy
-# @users_route.route('/', methods=['GET'])
-# def get_users():
-#     # URL del servidor remoto que proporciona los datos de los usuarios
-#     remote_server_url = "https://dev-server-2xe8.onrender.com/users"  # Reemplaza con la URL correcta
-    
-#     try:
-#         # Realiza una solicitud GET al servidor remoto
-#         response = requests.get(remote_server_url)
-        
-#         # Verifica si la solicitud fue exitosa (código de estado 200)
-#         if response.status_code == 200:
-#             # Parsea los datos JSON de la respuesta
-#             users = response.json()['users']
-            
-#             # Modifica los datos según sea necesario
-            
-#             return jsonify({'message': 'Usuarios obtenidos desde el servidor remoto', 'users': users})
-#         else:
-#             return jsonify({'error': 'Error al obtener usuarios desde el servidor remoto'})
-#     except Exception as e:
-#         return jsonify({'error': 'Error de conexión con el servidor remoto', 'details': str(e)})
 
 @users_route.route('/<user_id>', methods=['GET'])
 # @require_firebase_auth
@@ -89,7 +106,6 @@ def get_user_by_id(user_id):
         return jsonify({'message': 'User not found'}), 404
 
 
-
 @users_route.route('/', methods=['POST'])
 def add_user():
     data = request.json
@@ -100,7 +116,6 @@ def add_user():
     if errors:
         return jsonify({'message': 'Validation errors', 'errors': errors}), 400
 
-    # username = data.get('username')
     email = data.get('email')
     
     existing_user = collection.find_one({'email': email})
@@ -144,7 +159,6 @@ def add_user():
     return jsonify({'message': 'Usuario agregado con éxito', 'user_id': str(inserted_id)})
 
 
-
 @users_route.route('/<id>', methods=['PUT'])
 def update_user(id):
     try:
@@ -163,7 +177,6 @@ def update_user(id):
     return jsonify({'message': 'Usuario actualizado con éxito'})
 
 
-
 @users_route.route('/<id>', methods=['DELETE'])
 def delete_user(id):
     try:
@@ -172,7 +185,6 @@ def delete_user(id):
     except:
         return jsonify({'message': 'ID inválido'}), 400
 
- 
     result = collection.delete_one({'_id': object_id})
 
     if result.deleted_count == 0:
@@ -180,11 +192,7 @@ def delete_user(id):
 
     return jsonify({'message': 'Usuario eliminado con éxito'})
 
-if __name__ == '__main__':
-    application.run(debug=True)
-    
-    
-    
+
 @users_route.route('/search', methods=['GET'])
 def get_user_by_email():
     email = request.args.get('email')
@@ -216,30 +224,7 @@ def endpoint():
     else:
         
         return jsonify({'error': 'Token no encontrado en el encabezado de la solicitud'}), 400
-
-
-# guardamos la url del archivo subido al bucket
-@users_route.route('/save_url', methods=['POST'])
-def guardar_url():
-    data = request.json
-    user_id = data.get('user_id')
-    archivo_url = data.get('url')
-    tipo_archivo = data.get('tipo_archivo') 
-
-
-
-    user_id_obj = ObjectId(user_id)
-    # Actualiza el campo específico basado en tipo_archivo
-    campo_url = f"{tipo_archivo}"  # Construye el nombre del campo dinámicamente
-    result = collection.update_one(
-        {'_id': user_id_obj},
-        {'$set': {campo_url: archivo_url}}
-    )
-
-    if result.modified_count > 0:
-        return jsonify({'message': 'URL del archivo guardada con éxito', 'url': archivo_url}), 200
-    else:
-
-        return jsonify({'message': 'Error al guardar la URL del archivo o usuario no encontrado'}), 400
     
     
+if __name__ == '__main__':
+    application.run(debug=True)

@@ -910,6 +910,207 @@
           }
         }
       }
+    },
+    "/compare": {
+      "post": {
+        "tags": ["Face Comparison API"],
+        "summary": "Compare faces from two different images",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "imagen_cara": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The image of the user's face."
+                  },
+                  "imagen_dni": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The image of the user's ID document."
+                  }
+                },
+                "required": ["imagen_cara", "imagen_dni"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Face comparison result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "resultado": {
+                      "type": "string",
+                      "description": "The result of the face comparison ('coinciden' or 'no coinciden')."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error processing images or faces not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/paypal/transaction": {
+      "post": {
+        "tags": ["Payment Processing API"],
+        "summary": "Save details of a PayPal transaction",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "payerId": {
+                    "type": "string",
+                    "description": "The unique identifier for the payer"
+                  },
+                  "orderId": {
+                    "type": "string",
+                    "description": "The order identifier associated with the transaction"
+                  },
+                  "paymentId": {
+                    "type": "string",
+                    "description": "The payment identifier for the transaction"
+                  },
+                  "totalValue": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "The total value of the transaction"
+                  },
+                  "invoice": {
+                    "type": "string",
+                    "description": "Invoice number or identifier for the transaction"
+                  }
+                },
+                "required": ["payerId", "orderId", "paymentId", "totalValue", "invoice"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PayPal transaction details saved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Confirmation message"
+                    },
+                    "transaction_id": {
+                      "type": "string",
+                      "description": "The unique identifier of the saved transaction in the database"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Incomplete PayPal transaction data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message indicating missing transaction data"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/paypal/transactions": {
+      "get": {
+        "tags": ["Payment Processing API"],
+        "summary": "Retrieve a list of PayPal transactions",
+        "responses": {
+          "200": {
+            "description": "List of PayPal transactions retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "transactions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "orderId": {
+                            "type": "string",
+                            "description": "The order identifier associated with the transaction"
+                          },
+                          "payerId": {
+                            "type": "string",
+                            "description": "The unique identifier for the payer"
+                          },
+                          "paymentId": {
+                            "type": "string",
+                            "description": "The payment identifier for the transaction"
+                          },
+                          "totalValue": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "The total value of the transaction"
+                          },
+                          "invoice": {
+                            "type": "string",
+                            "description": "Invoice number or identifier for the transaction"
+                          }
+                        }
+                      },
+                      "description": "An array of PayPal transaction objects"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error retrieving the list of transactions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "description": "Error message indicating the problem encountered while retrieving transactions"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -1,11 +1,14 @@
 import { FcOk } from "react-icons/fc"; 
 import { FcHighPriority } from "react-icons/fc"; 
-import { FcApproval } from "react-icons/fc"; 
-
+import { FcApproval } from "react-icons/fc";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { getAuth } from "@firebase/auth";
+import { ModalSMSVerify } from "./Modal_smsVerify";
 
 function UserRegister() {
 
@@ -19,8 +22,11 @@ function UserRegister() {
   const [pendingCredentials, setPendingCredentials] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLoadingUser, setIsLoadingUser] = useState(true)
+  const [photo, setPhoto] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cellPhone, setCellPhone] = useState("");
+  const [showSmsVerify, setShowSmsVerify] = useState(false)
   
-
   const Toast = Swal.mixin({
     toast: true,
     position: "top-end",
@@ -32,6 +38,14 @@ function UserRegister() {
       toast.onmouseleave = Swal.resumeTimer;
     }
   }); 
+
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if(user){
+      setPhoto(user.photoURL)
+    }
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -70,18 +84,18 @@ function UserRegister() {
 
 // **********************************************************
 
-  const [formData, setFormData] = useState({
-    full_name: null,
-    email: localStorage.getItem("email") || null,
-    identification_number: null,
-    address: null,
-    phone: null,
-    identity_document: null,
-    bank_account_status: null,
-    tax_declarations: null,
-    other_financial_documents: null,
-  });
-    
+const [formData, setFormData] = useState({
+  full_name: null,
+  email: localStorage.getItem("email") || null,
+  identification_number: null,
+  address: null,
+  phone: cellPhone || null,
+  identity_document: null,
+  bank_account_status: null,
+  tax_declarations: null,
+  other_financial_documents: null,
+});
+
   useEffect(() => {
     if (foundUserId) {
       axios.get(`${URL}/users/${foundUserId}`)
@@ -125,7 +139,7 @@ function UserRegister() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
-    // console.log('Datos del formulario a enviar:', formData);
+    console.log('Datos del formulario a enviar:', formData);
        
     try {
       const userId = localStorage.getItem('id');
@@ -139,6 +153,8 @@ function UserRegister() {
       const cleanedFormData = Object.fromEntries(
         Object.entries(formData).filter(([key, value]) => value !== null)
       );
+
+      // await handleSms(e);
   
       const response = await fetch(apiUrl, {
         method: httpMethod,
@@ -311,6 +327,10 @@ function UserRegister() {
     // Itera sobre cada archivo seleccionado y envíalo
     for (const [inputName, file] of Object.entries(selectedFiles)) {
       if (file) {
+        if (!(file instanceof Blob)) {
+          console.error(`El archivo de ${inputName} no es un Blob válido.`);
+          continue;
+        }
         const formData = new FormData();
         formData.append('file', file);
   
@@ -373,7 +393,39 @@ function UserRegister() {
   
   // fin codigo del bucket
 
-   
+
+
+  // Codigo para envio de SMS 
+
+  const handlePhoneChange = (formattedValue: string) => {
+    setCellPhone(formattedValue); // Actualiza el estado de cellPhone
+    setFormData({
+      ...formData,
+      phone: formattedValue, // Actualiza el estado de formData.phone
+    });
+  };
+
+  const handleSms = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+
+    const formatCellPhone = "+" + cellPhone;
+
+    try {
+      const response = await axios.post(`${URL}/sms/send-otp`, {
+        phone_number: formatCellPhone,
+      });
+
+      if (response.data.success) {
+        console.log('OTP sent successfully');
+      } else {
+        console.error('Error sending OTP');
+      }
+    } catch (error) {
+      console.error('Network or server error:', error);
+    }
+  };
+
+
   useEffect(() => {
     if (foundUserId) {
       if (pendingDocuments.includes("credentials")) {
@@ -420,6 +472,12 @@ function UserRegister() {
                 verifiedDoc ? <FcApproval className="text-xl"/> 
               : (completed ? <FcOk className="text-xl"/> : <FcHighPriority className="text-xl"/>)
               )}              
+            </h1>
+          </Link>
+
+          <Link to="/idVerification">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+              Identity Verification
             </h1>
           </Link>
 
@@ -483,7 +541,7 @@ function UserRegister() {
             <img
               className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-300"
               src={
-                localStorage.getItem("profilePic") ||
+                photo || localStorage.getItem("profilePic") ||
                 "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               }
               alt="Bordered avatar"
@@ -628,15 +686,21 @@ function UserRegister() {
                 >
                   Phone Number<span className="text-red-600">*</span>
                 </label>
-                <input
-                  onChange={handleInputChange}
-                  name="phone"
-                  type="number"
-                  id="phone"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
-                  placeholder="Phone"
+
+                <PhoneInput
+                  onChange={handlePhoneChange}
+                  country={"co"}
                   value={formData.phone || ''}
-                  required
+                  inputStyle={{
+                    background: '#eef2ff',
+                    border: '1px solid #a5b4fc',
+                    color: '#000000',
+                    fontSize: '0.875rem',
+                    borderRadius: '8px',
+                    outline: 'none',
+                    width: '100%',
+                    height: '47px',
+                  }}
                 />
               </div>
 
@@ -722,6 +786,7 @@ function UserRegister() {
 
               <div className="flex justify-start w-full">
                 <button
+                  onClick={() => {setShowSmsVerify(true)}}
                   type="submit"
                   className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28 mt-4"
                 >
@@ -765,6 +830,7 @@ function UserRegister() {
           </h1>
         </Link>
       </div>
+      <ModalSMSVerify showSmsVerify={showSmsVerify} setShowSmsVerify={setShowSmsVerify}/>
     </div>
   );
 }

@@ -35,6 +35,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       await login(emailRef.current.value, passwordRef.current.value);
       const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
       navigate(redirectPath);
+      // llamado a "verified" (pruebas) - (pendiente la implementacion)
       auth.onAuthStateChanged((userCred: any) => {
         const Verified = userCred.emailVerified
         localStorage.setItem("verified", Verified);       

@@ -105,6 +105,12 @@ function DeviceRegister() {
             </h1>
           </Link>
 
+          <Link to="/idVerification">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+              Identity Verification
+            </h1>
+          </Link>
+
           <Link to="/deviceReg">
             <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#212056] border rounded-full">
               Device Register

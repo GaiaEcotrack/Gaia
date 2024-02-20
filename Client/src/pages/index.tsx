@@ -13,6 +13,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { DeviceRegister } from '@/components/UserNew/DeviceRegister';
 import { CredentialsReg } from '@/components/UserNew/CredentialsReg';
 import { Notifications } from '@/components/UserNew/Notifications';
+import { IdVerification } from '@/components/UserNew/IdVerification';
 import { PlantsDashboard } from '@/components/DashBoard/PlantsDashboard';
 import AuthRoute from '@/components/AuthRoute';
 
@@ -28,6 +29,7 @@ const routes = [{ path: '/main', Page: Main },
 { path: '/deviceReg', Page: DeviceRegister },
 { path: '/credentialsReg', Page: CredentialsReg },
 { path: '/notifications', Page: Notifications },
+{ path: '/idVerification', Page: IdVerification },
 { path: 'dashboard/plants', Page: PlantsDashboard },
 
 ];
