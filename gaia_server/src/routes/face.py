@@ -2,6 +2,7 @@ from flask import render_template, request, Blueprint , redirect, url_for , json
 import cv2
 import numpy as np
 import face_recognition
+import requests
 
 # Importar librerías adicionales
 import imutils
@@ -13,6 +14,7 @@ face_route = Blueprint('face', __name__)
 @face_route.route('/')
 def index():
     return render_template('face.html')
+
 
 @face_route.route('/compare', methods=['POST'])
 def compare():
