@@ -1,6 +1,23 @@
-import React from 'react';
+import React ,{useState, useEffect}  from 'react';
+import axios from 'axios'
 
 function DashboardCard07() {
+  const [cryptoPrice, setCryptoPrice] = useState("")
+
+  useEffect(() => {
+    const fetchData = async ()=>{
+      try {
+        const request = await axios.get('http://127.0.0.1:5000/coinbase')
+        const response = request.data
+        setCryptoPrice(response)
+      } catch (error) {
+        
+      }
+    }
+    fetchData()
+  },[])
+
+  console.log(cryptoPrice);
   return (
     <div className="col-span-full xl:col-span-8 bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
       <header className="px-5 py-4 border-b border-slate-100 dark:border-slate-700">
@@ -65,7 +82,7 @@ function DashboardCard07() {
                   <div className="text-center text-black">21M</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-emerald-500">$40,426</div>
+                  <div className="text-center text-emerald-500">${cryptoPrice.btc?.data?.amount}</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center text-black">320M</div>
@@ -86,7 +103,7 @@ function DashboardCard07() {
                   <div className="text-center text-black">120M</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-emerald-500">$1,444</div>
+                  <div className="text-center text-emerald-500">${cryptoPrice.eth?.data?.amount}</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center text-black">50M</div>
@@ -107,7 +124,7 @@ function DashboardCard07() {
                   <div className="text-center text-black">701,8M</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-emerald-500">$7,23</div>
+                  <div className="text-center text-emerald-500">${cryptoPrice.dot?.data?.amount}</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center text-black">11M</div>
@@ -128,7 +145,7 @@ function DashboardCard07() {
                   <div className="text-center text-black">841M</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-emerald-500">$0,064</div>
+                  <div className="text-center text-emerald-500">${cryptoPrice.vara?.data?.amount}</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center text-black">800K</div>
