@@ -1,99 +1,12 @@
 import { FcSelfie } from "react-icons/fc"; 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
-import { ModalIdVerifi } from "./Modal_IdVerifi";
+// import Swal from "sweetalert2";
+import { ModalIdVerify } from "./Modal_IdVerify";
 
 function IdVerification() {
 
-  const [showIdVerifi, setShowIdVerifi] = useState(false)
-
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    }
-  });
-
-  const URL = import.meta.env.VITE_APP_API_URL
-
-  const [formData, setFormData] = useState({
-    user_id: localStorage.getItem("id"),
-    plant: {
-        plantId: "",
-        plantName: "",
-        plantTimezone: "",
-        description: ""
-    },
-    device: {
-        deviceId: "",
-        deviceName: "",
-        deviceTimezone: "",
-				serial: "",
-        image: ""
-    },
-    sets: [""],
-  });
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-  
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      device: {
-        ...prevFormData.device,
-        [name]: value,
-      },
-    }));
-  };
-  
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-  
-    // console.log('Datos del formulario a enviar:', formData);
-  
-    try {
-      const userId = localStorage.getItem('id');
-  
-      let apiUrl = `${URL}/devices/`;
-      let httpMethod = 'POST';
-  
-      const response = await fetch(apiUrl, {
-        method: httpMethod,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-  
-      if (response.ok) {
-        const data = await response.json();
-        Toast.fire({
-          icon: "success",
-          title: "Device added successfully"
-        });
-  
-        if (!userId) {
-          Toast.fire({
-            icon: "error",
-            title: "Something went wrong"
-          });
-        }
-      } else {
-        Toast.fire({
-          icon: "error",
-          title: "Something went wrong"
-        });
-      }
-    } catch (error) {
-      console.error('Error de red:', error);
-    }
-  };
+  const [showIdVerify, setShowIdVerify] = useState(false)
 
 
   return (
@@ -156,7 +69,7 @@ function IdVerification() {
               Requirements: Basic information, identification document, facial recognition.
             </h1> 
 
-            <button onClick={() => {setShowIdVerifi(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%] mt-4">
+            <button onClick={() => {setShowIdVerify(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%] mt-4">
               Verify Now
             </button>
           </div>
@@ -201,7 +114,7 @@ function IdVerification() {
           </h1>
         </Link>
       </div>
-      <ModalIdVerifi showIdVerifi={showIdVerifi} setShowIdVerifi={setShowIdVerifi}/>
+      <ModalIdVerify showIdVerify={showIdVerify} setShowIdVerify={setShowIdVerify}/>
     </div>
   );
 }

@@ -1,12 +1,14 @@
 import { FcOk } from "react-icons/fc"; 
 import { FcHighPriority } from "react-icons/fc"; 
-import { FcApproval } from "react-icons/fc"; 
-
+import { FcApproval } from "react-icons/fc";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { getAuth } from "@firebase/auth";
+import { ModalSMSVerify } from "./Modal_smsVerify";
 
 function UserRegister() {
 
@@ -21,6 +23,9 @@ function UserRegister() {
   const [loading, setLoading] = useState(true);
   const [isLoadingUser, setIsLoadingUser] = useState(true)
   const [photo, setPhoto] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cellPhone, setCellPhone] = useState("");
+  const [showSmsVerify, setShowSmsVerify] = useState(false)
   
   const Toast = Swal.mixin({
     toast: true,
@@ -79,18 +84,18 @@ function UserRegister() {
 
 // **********************************************************
 
-  const [formData, setFormData] = useState({
-    full_name: null,
-    email: localStorage.getItem("email") || null,
-    identification_number: null,
-    address: null,
-    phone: null,
-    identity_document: null,
-    bank_account_status: null,
-    tax_declarations: null,
-    other_financial_documents: null,
-  });
-    
+const [formData, setFormData] = useState({
+  full_name: null,
+  email: localStorage.getItem("email") || null,
+  identification_number: null,
+  address: null,
+  phone: cellPhone || null,
+  identity_document: null,
+  bank_account_status: null,
+  tax_declarations: null,
+  other_financial_documents: null,
+});
+
   useEffect(() => {
     if (foundUserId) {
       axios.get(`${URL}/users/${foundUserId}`)
@@ -134,7 +139,7 @@ function UserRegister() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
-    // console.log('Datos del formulario a enviar:', formData);
+    console.log('Datos del formulario a enviar:', formData);
        
     try {
       const userId = localStorage.getItem('id');
@@ -148,6 +153,8 @@ function UserRegister() {
       const cleanedFormData = Object.fromEntries(
         Object.entries(formData).filter(([key, value]) => value !== null)
       );
+
+      // await handleSms(e);
   
       const response = await fetch(apiUrl, {
         method: httpMethod,
@@ -386,7 +393,39 @@ function UserRegister() {
   
   // fin codigo del bucket
 
-   
+
+
+  // Codigo para envio de SMS 
+
+  const handlePhoneChange = (formattedValue: string) => {
+    setCellPhone(formattedValue); // Actualiza el estado de cellPhone
+    setFormData({
+      ...formData,
+      phone: formattedValue, // Actualiza el estado de formData.phone
+    });
+  };
+
+  const handleSms = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+
+    const formatCellPhone = "+" + cellPhone;
+
+    try {
+      const response = await axios.post(`${URL}/sms/send-otp`, {
+        phone_number: formatCellPhone,
+      });
+
+      if (response.data.success) {
+        console.log('OTP sent successfully');
+      } else {
+        console.error('Error sending OTP');
+      }
+    } catch (error) {
+      console.error('Network or server error:', error);
+    }
+  };
+
+
   useEffect(() => {
     if (foundUserId) {
       if (pendingDocuments.includes("credentials")) {
@@ -647,15 +686,21 @@ function UserRegister() {
                 >
                   Phone Number<span className="text-red-600">*</span>
                 </label>
-                <input
-                  onChange={handleInputChange}
-                  name="phone"
-                  type="number"
-                  id="phone"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
-                  placeholder="Phone"
+
+                <PhoneInput
+                  onChange={handlePhoneChange}
+                  country={"co"}
                   value={formData.phone || ''}
-                  required
+                  inputStyle={{
+                    background: '#eef2ff',
+                    border: '1px solid #a5b4fc',
+                    color: '#000000',
+                    fontSize: '0.875rem',
+                    borderRadius: '8px',
+                    outline: 'none',
+                    width: '100%',
+                    height: '47px',
+                  }}
                 />
               </div>
 
@@ -741,6 +786,7 @@ function UserRegister() {
 
               <div className="flex justify-start w-full">
                 <button
+                  onClick={() => {setShowSmsVerify(true)}}
                   type="submit"
                   className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28 mt-4"
                 >
@@ -784,6 +830,7 @@ function UserRegister() {
           </h1>
         </Link>
       </div>
+      <ModalSMSVerify showSmsVerify={showSmsVerify} setShowSmsVerify={setShowSmsVerify}/>
     </div>
   );
 }
