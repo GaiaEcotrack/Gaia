@@ -21,11 +21,12 @@ def test_get_users(client):
 
 # test GET by Id
 def test_get_user_by_id(client):
-
-    valid_id = '65c64cd2e2f234746d155f7d'
+    valid_id = '65cf7e65bea773af146543f2'
     response = client.get(f'/users/{valid_id}')
     assert response.status_code == 200
-    assert 'email' in response.get_json()
+    json_data = response.get_json()
+    assert 'user' in json_data  # Verifica que el objeto 'user' esté en la respuesta
+    assert 'email' in json_data['user']
     
 # Función para mockear la inserción en la base de datos 
 ##! NO testear en la DB de desarrollo
@@ -38,9 +39,11 @@ def mock_insert_one(new_user):
     return InsertOneResult('abc123')
 
 # Test para la ruta POST /
+# Asegura que mock_find_one simule la ausencia de un usuario existente con el email dado
+@patch('src.routes.users.collection.find_one', return_value=None)
+# Asegura que mock_insert_one simule una inserción exitosa
 @patch('src.routes.users.collection.insert_one', side_effect=mock_insert_one)
-def test_add_user(mock_insert, client):
-    # Datos del usuario para agregar
+def test_add_user(mock_insert, mock_find_one, client):
     user_data = {
         "email": "PYTEST@example.com",
         "full_name": "PYTEST",
@@ -56,17 +59,13 @@ def test_add_user(mock_insert, client):
         "devices": []
     }
     
-   
     response = client.post('/users/', data=json.dumps(user_data), content_type='application/json')
     
-
     assert response.status_code == 200
-
     assert response.get_json()['message'] == 'Usuario agregado con éxito'
-
-    assert response.get_json()['user_id'] == 'abc123'
-    # Verificar si la función mock fue llamada
-    mock_insert.assert_called_once()
+    # Verifica que los mocks fueron llamados
+    mock_find_one.assert_called_once_with({'email': "PYTEST@example.com"})
+    mock_insert.assert_called_once_with(user_data)
  
  
  # PUT test   
