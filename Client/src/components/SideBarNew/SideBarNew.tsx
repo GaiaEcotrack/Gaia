@@ -1,5 +1,5 @@
 import { CgMenu } from "react-icons/cg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { AccountInfo } from "../layout/header/account-info";
@@ -31,6 +31,15 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
   const handleMenuClick = () => {
     setOpen(false);
   };
+
+  const [photo, setPhoto] = useState<string | null>(null);
+  useEffect(() => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if(user){
+      setPhoto(user.photoURL)
+    }
+  }, []);
 
   return (
     <div className="text-white">
@@ -75,7 +84,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
             <img
               onClick={handleMenuClick}
               src={
-                localStorage.getItem("profilePic") ||
+                photo || localStorage.getItem("profilePic") ||
                 "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               }
               alt="Profile"
