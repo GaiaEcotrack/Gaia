@@ -2,7 +2,7 @@ import { FcSelfie } from "react-icons/fc";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 // import Swal from "sweetalert2";
-import { ModalIdVerify } from "./Modal_IdVerify";
+import { ModalIdVerify } from "./Modal_idVerify";
 
 function IdVerification() {
 

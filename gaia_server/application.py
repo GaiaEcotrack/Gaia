@@ -16,7 +16,6 @@ from src.routes.face import face_route
 from src.routes.coinbase import coinbase_route
 from src.routes.sms import sms_route
 
-
 load_dotenv()
 
 application = Flask(__name__)
