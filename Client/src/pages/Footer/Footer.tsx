@@ -49,7 +49,7 @@ function Footer() {
           
         </div>
       </div>
-      <div className="flex z-10 sm:flex-row sm:gap-16">
+      <div className="flex sm:flex-row sm:gap-16">
         <a
           href="https://www.linkedin.com/showcase/gaia-ecotrack/"
           className="mx-4 my-2 flex flex-col items-center"

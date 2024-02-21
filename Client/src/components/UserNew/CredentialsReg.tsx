@@ -162,7 +162,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           </Link>
 
           <Link to="/deviceReg">
-            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Device Register
             </h1>
           </Link>
@@ -178,13 +178,13 @@ const handleSubmit = async (e: React.FormEvent) => {
           </Link>
 
           <Link to="/notifications">
-            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Notifications
             </h1>
           </Link>
 
           {/* <Link to="/account"> */}
-            <h1 className="flex text-black items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               PRO Account
             </h1>
           {/* </Link> */}
@@ -195,7 +195,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       <main className="flex justify-start items-start min-h-screen py-1 w-[100%] p-2 md:p-4">
         <div className="px-6 pb-8 mt-8 sm:rounded-lg w-full">
 
-          <h2 className="flex text-black justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4 mb-8">
+          <h2 className="flex justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4 mb-8">
             DEVICE CREDENTIALS
           </h2>         
 
@@ -206,7 +206,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="usernameCre"
-                  className="block mb-2 text-sm font-bold text-black dark:text-black"
+                  className="block mb-2 text-sm font-bold dark:text-black"
                 >
                   Credential-ID
                 </label>
@@ -215,7 +215,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   name="credentials"
                   type="text"
                   id="usernameCre"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                  className="bg-indigo-50 border outline-none border-indigo-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Username"
                   value={formData.credentials || ''}                 
                   required
@@ -225,7 +225,7 @@ const handleSubmit = async (e: React.FormEvent) => {
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="passwordCre"
-                  className="block mb-2 text-sm font-bold text-black dark:text-black"
+                  className="block mb-2 text-sm font-bold dark:text-black"
                 >
                   Secret-key
                 </label>
@@ -234,7 +234,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   name="secret_key"
                   type="password"
                   id="passwordCre"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                  className="bg-indigo-50 border outline-none border-indigo-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Password"
                   value={formData.secret_key || ''} 
                   required

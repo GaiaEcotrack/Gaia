@@ -154,7 +154,7 @@ const [formData, setFormData] = useState({
         Object.entries(formData).filter(([key, value]) => value !== null)
       );
 
-      // await handleSms(e);
+      await handleSms(e);
   
       const response = await fetch(apiUrl, {
         method: httpMethod,
@@ -408,11 +408,11 @@ const [formData, setFormData] = useState({
   const handleSms = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
-    const formatCellPhone = "+" + cellPhone;
+    const formatPhone = "+" + cellPhone;
 
     try {
       const response = await axios.post(`${URL}/sms/send-otp`, {
-        phone_number: formatCellPhone,
+        phone_number: formatPhone,
       });
 
       if (response.data.success) {
@@ -425,6 +425,9 @@ const [formData, setFormData] = useState({
     }
   };
 
+  const telephone = formData.phone || ""; // const para exportar a Modal
+
+  // fin sms verification
 
   useEffect(() => {
     if (foundUserId) {
@@ -536,16 +539,18 @@ const [formData, setFormData] = useState({
           </div>
           
 
-          <div className="flex flex-row justify-start items-center space-y-5 sm:flex-row sm:space-y-0 max-w-4xl my-8">
+          <div className="flex flex-row justify-start items-center space-y-5 sm:flex-row sm:space-y-0 w-full my-8">
             {/* Imagen del perfil */}
-            <img
-              className="object-cover w-40 h-40 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-300"
-              src={
-                photo || localStorage.getItem("profilePic") ||
-                "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              }
-              alt="Bordered avatar"
-            />
+            <div className="w-[40%]">
+              <img
+                className="object-cover w-36 h-36 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-300"
+                src={
+                  photo || localStorage.getItem("profilePic") ||
+                  "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                }
+                alt="Bordered avatar"
+                />
+            </div>
 
             {/* Botones para cambiar y eliminar la imagen */}
             <div className="flex flex-col space-y-5 sm:ml-8">
@@ -563,7 +568,7 @@ const [formData, setFormData] = useState({
               </button>
             </div>
 
-            <div className="flex flex-col justify-start items-center w-[48%] 2xl:w-[51%] h-full">
+            <div className="flex flex-col justify-start items-center w-full h-full">
 
             {loading ? (
               <div className="inline-block text-[#6899b86f] h-20 w-20 animate-spin rounded-full border-8 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status"></div>
@@ -614,7 +619,7 @@ const [formData, setFormData] = useState({
                   name="full_name"
                   type="text"
                   id="fullname"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                  className="bg-indigo-50 border outline-none border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Name"
                   value={formData.full_name || ''}                
                   required                  
@@ -633,7 +638,7 @@ const [formData, setFormData] = useState({
                   name="email"
                   type="email"
                   id="email"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                  className="bg-indigo-50 border outline-none border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="example@email.com"
                   value={formData.email || ''}
                   required
@@ -653,7 +658,7 @@ const [formData, setFormData] = useState({
                   name="identification_number"
                   type="number"
                   id="Identification"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                  className="bg-indigo-50 border outline-none border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Identification"
                   value={formData.identification_number || ''} 
                   required
@@ -672,7 +677,7 @@ const [formData, setFormData] = useState({
                   name="address"
                   type="text"
                   id="Address"
-                  className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                  className="bg-indigo-50 border outline-none border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Address"
                   value={formData.address || ''}
                   required
@@ -705,12 +710,18 @@ const [formData, setFormData] = useState({
               </div>
 
               <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="fileId"
-                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
-                >
-                  Upload a file of your identity document<span className="text-red-600">*</span>
-                </label>
+                <div className="flex justify-between items-center">
+                  <label
+                    htmlFor="filefin1"
+                    className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
+                    >
+                    Upload a file of your identity document<span className="text-red-600">*</span>                  
+                  </label>
+                  {formData.other_financial_documents && (
+                    <h1 className="text-green-600 text-xs font-normal mb-2">Uploaded file</h1>
+                  )}
+                </div>
+  
                 <input
                   onChange={handleInputChangeBucket}
                   name="identity_document"
@@ -720,16 +731,21 @@ const [formData, setFormData] = useState({
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"    
                   // required
                 />
-                {/* <h1 className="text-green-600 absolute">{formData.identity_document}</h1> */}
               </div>
 
               <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="fileBank"
-                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
-                >
-                  Upload a file of your bank account status<span className="text-red-600">*</span>
-                </label>
+                <div className="flex justify-between items-center">
+                  <label
+                    htmlFor="filefin1"
+                    className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
+                    >
+                    Upload a file of your bank account status<span className="text-red-600">*</span>                   
+                  </label>
+                  {formData.other_financial_documents && (
+                    <h1 className="text-green-600 text-xs font-normal mb-2">Uploaded file</h1>
+                  )}
+                </div>
+
                 <input
                   onChange={handleInputChangeBucket}
                   name="bank_account_status"
@@ -739,16 +755,21 @@ const [formData, setFormData] = useState({
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-                {/* <h1 className="text-green-600 absolute">{formData.bank_account_status}</h1> */}
               </div>
 
               <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="fileTax"
-                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
-                >
-                  Upload a file of your tax return<span className="text-red-600">*</span>
-                </label>
+                <div className="flex justify-between items-center">
+                  <label
+                    htmlFor="filefin1"
+                    className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
+                    >
+                    Upload a file of your tax return<span className="text-red-600">*</span>                   
+                  </label>
+                  {formData.other_financial_documents && (
+                    <h1 className="text-green-600 text-xs font-normal mb-2">Uploaded file</h1>
+                  )}
+                </div>
+               
                 <input
                   onChange={handleInputChangeBucket}
                   name="tax_declarations"
@@ -758,16 +779,20 @@ const [formData, setFormData] = useState({
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-                {/* <h1 className="text-green-600 absolute">{formData.tax_declarations}</h1> */}
               </div>
 
               <div className="mb-2 sm:mb-6">
-                <label
-                  htmlFor="filefin1"
-                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
-                >
-                  Upload a file of other financial documents
-                </label>
+                <div className="flex justify-between items-center">
+                  <label
+                    htmlFor="filefin1"
+                    className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
+                    >
+                    Upload a file of other financial documents                    
+                  </label>
+                  {formData.other_financial_documents && (
+                    <h1 className="text-green-600 text-xs font-normal mb-2">Uploaded file</h1>
+                  )}
+                </div>
                 <input
                   onChange={handleInputChangeBucket}
                   name="other_financial_documents"
@@ -777,7 +802,6 @@ const [formData, setFormData] = useState({
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-                {/* <h1 className="text-green-600 absolute">{formData.other_financial_documents}</h1> */}
               </div>
 
               <div className="">
@@ -830,7 +854,7 @@ const [formData, setFormData] = useState({
           </h1>
         </Link>
       </div>
-      <ModalSMSVerify showSmsVerify={showSmsVerify} setShowSmsVerify={setShowSmsVerify}/>
+      <ModalSMSVerify showSmsVerify={showSmsVerify} setShowSmsVerify={setShowSmsVerify} telephone={telephone}/>
     </div>
   );
 }
