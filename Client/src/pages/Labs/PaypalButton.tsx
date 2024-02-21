@@ -25,7 +25,7 @@
                 const order = await actions.order?.capture()
                 console.log("order", order)
                 // Envía la información al backend
-                fetch('http://localhost:5000/users/paypal/transaction', {
+                fetch('http://localhost:5000/users/transaction', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

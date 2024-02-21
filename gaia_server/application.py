@@ -13,6 +13,7 @@ from src.services.s3_bucket import bucket_route
 from src.routes.api_growth import api_growatt_bp
 from src.routes.mercadopago import mercadopago_route
 from src.routes.face import face_route
+from src.routes.coinbase import coinbase_route
 from src.routes.sms import sms_route
 from flask_cors import CORS
 
@@ -42,6 +43,7 @@ application.register_blueprint(bucket_route, url_prefix='/upload_image')
 application.register_blueprint(api_growatt_bp, url_prefix='/api_growatt')
 application.register_blueprint(mercadopago_route, url_prefix='/mercadopago')
 application.register_blueprint(face_route, url_prefix='/face')
+application.register_blueprint(coinbase_route, url_prefix='/coinbase')
 application.register_blueprint(sms_route, url_prefix='/sms')
 
 mongo_uri = os.getenv("MONGO_URI")
