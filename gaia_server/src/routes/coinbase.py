@@ -17,6 +17,10 @@ API_KEY = os.getenv("API_KEY")
 API_SECRET = os.getenv("API_SECRET")
 SECRET_KEY = os.getenv("SECRET_KEY")
 BASE_URL = os.getenv("BASE_URL")
+GATE_IO_API_KEY = os.getenv("GATE_IO_API_KEY")
+GATE_IO_API_SECRET_KEY = os.getenv("GATE_IO_API_SECRET_KEY")
+
+
 
 
 coinbase_route = Blueprint('coinbase', __name__)
@@ -194,8 +198,8 @@ def get_ticker():
     return jsonify(data)
 
 def gen_sign(method, url, query_string=None, payload_string=None):
-    key = '1458d93b39f6bee06d0c8a4205567fe0'        # api_key gate io
-    secret = 'c596479146ab778d370a45858bae304dee88e6a4ecb60a6f4c69fe11bb11c199'     # api_secret gateio
+    key = GATE_IO_API_KEY       # api_key gate io
+    secret = GATE_IO_API_SECRET_KEY     # api_secret gateio
 
     t = time.time()
     m = hashlib.sha512()
