@@ -13,14 +13,13 @@ def require_firebase_auth(f):
             return jsonify({'message': 'Authorization token is missing or invalid'}), 401
         
         try:
-            # Extraer el token JWT sin el prefijo "Bearer "
             idToken = idToken.split('Bearer ')[1]
             decoded_token = auth.verify_id_token(idToken)
             print(decoded_token)
             uid = decoded_token['uid']
-            #agregar verificacion si son necesarias
+
         except Exception as e:
-            # Si la verificación falla, rechazar la solicitud
+
             return jsonify({'message': 'Unauthorized', 'error': str(e)}), 401
         
         # Si el token es válido, continuar con la ejecución de la función original
