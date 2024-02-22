@@ -70,8 +70,9 @@ const PanelUsuarioFinal = () => {
         console.log(idToken);
   
         const apiUrl = import.meta.env.VITE_APP_API_URL;
-        // Cambia esta URL a la variable apiUrl si lo necesitas
-        const url = `${apiUrl}/devices/plant-devices?plantId=13`;
+        console.log(apiUrl);
+        
+        const url = `${apiUrl}devices/plant-devices?plantId=35`;
   
         const response = await fetch(url, {
           method: 'GET',
@@ -97,14 +98,7 @@ const PanelUsuarioFinal = () => {
     fetchDevices();
   }, []);
 
-  // useEffect(() => {
-  //   if (menuAbierto !== null) {
-  //     setScrollPosition(window.scrollY);
-  //     window.scrollTo(0, 0);
-  //   } else {
-  //     window.scrollTo(0, scrollPosition);
-  //   }
-  // }, [menuAbierto, scrollPosition]);
+
 
   const handleUpdate = async () => {
     try {
@@ -121,6 +115,7 @@ const PanelUsuarioFinal = () => {
         const apiUrl = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
           `${apiUrl}/devices/plant-devices?plantId=35`,
+          // "http://127.0.0.1:5000/devices/plant-devices?plantId=35",
           {
             method: 'GET',
             headers: {
