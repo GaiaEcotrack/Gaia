@@ -11,6 +11,7 @@ export interface ILoginPageProps {}
   
 function AuthForm (props: ILoginPageProps): JSX.Element {
 
+  const URL = import.meta.env.VITE_APP_API_URL
   const auth = getAuth();
   const navigate = useNavigate();
   const [authing, setAuthing] = useState(false);
@@ -23,27 +24,48 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
 
   // Funtion to log in with registered email 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-
+    e.preventDefault();
+  
     if (!emailRef.current || !passwordRef.current) {
       return setError("Password fields are not available");
     }
-
-    localStorage.clear()
-
+  
+    localStorage.clear();
+  
     try {
       setError("");
       setLoadingE(true);
+  
+      // Crear el objeto de usuario con solo el correo electrónico
+      const userData = {
+        email: emailRef.current.value,
+      };
+  
+      // Realizar la solicitud al servidor
+      const response = await fetch(`${URL}/users/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+  
       await login(emailRef.current.value, passwordRef.current.value);
+  
       const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
       navigate(redirectPath);
-      // llamado a "verified" (pruebas) - (pendiente la implementacion)
+  
       auth.onAuthStateChanged((userCred: any) => {
         const Verified = userCred.emailVerified
         localStorage.setItem("verified", Verified);       
-      })
-    } catch {
+      });
+    } catch (error) {
       setError("Incorrect username or password");
+      console.error(error);
     } finally {
       setLoadingE(false);
     }
@@ -66,23 +88,22 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       const name = response.user.displayName || "Nombre";
       const email = response.user.email || "default@example.com";
       const profilePic = response.user.photoURL || "Photo Profile";
+      
+      const createUserResponse = await fetch(`${URL}/users/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+      
+      if (!createUserResponse.ok) {
+        throw new Error(`Error creating user: ${createUserResponse.statusText}`);
+      }
 
-      // console.log(response.user)
-
-      // Para agregar al localStorage
       localStorage.setItem("name", name);
       localStorage.setItem("email", email);
-      localStorage.setItem("profilePic", profilePic);
-
-      // Para llamar del localStorage
-      {/* <h1>{localStorage.getItem("name")}</h1>
-        <h1>{localStorage.getItem("email")}</h1>
-        <img src={localStorage.getItem("profilePic") || "" } /> */}
-
-      // Para eliminar del LocalStorage
-      // localStorage.removeItem("name");
-      // localStorage.removeItem("email");
-      // localStorage.removeItem("profilePic");      
+      localStorage.setItem("profilePic", profilePic);  
 
       navigate('/home');
     } catch (error) {
