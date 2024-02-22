@@ -118,9 +118,9 @@ const PanelUsuarioFinal = () => {
         
       setIsLoading(true);
       setTimeout(async () => {
-        const apiUrl = import.meta.env.VITE_APP_API_URL;
+        // const apiUrl = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
-          `${apiUrl}/devices/plant-devices?plantId=35`,
+          `http://127.0.0.1:5000/devices/plant-devices?plantId=35`,
           {
             method: 'GET',
             headers: {
