@@ -79,10 +79,10 @@ function DashboardCard07() {
                   </div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-black">21M</div>
+                  <div className="text-center text-black">{parseFloat(cryptoPrice.btc?.vol).toFixed(1)}M</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-emerald-500">${cryptoPrice.btc?.data?.amount}</div>
+                  <div className="text-center text-emerald-500">${cryptoPrice.btc?.price?.data?.amount}</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center text-black">320M</div>
@@ -100,10 +100,10 @@ function DashboardCard07() {
                   </div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-black">120M</div>
+                  <div className="text-center text-black">{parseFloat(cryptoPrice.eth?.vol).toFixed(1)}M</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-emerald-500">${cryptoPrice.eth?.data?.amount}</div>
+                  <div className="text-center text-emerald-500">${cryptoPrice.eth?.price?.data?.amount}</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center text-black">50M</div>
@@ -121,10 +121,10 @@ function DashboardCard07() {
                   </div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-black">701,8M</div>
+                  <div className="text-center text-black">{parseFloat(cryptoPrice.dot?.vol).toFixed(1)}M</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-emerald-500">${cryptoPrice.dot?.data?.amount}</div>
+                  <div className="text-center text-emerald-500">${cryptoPrice.dot?.price?.data?.amount}</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center text-black">11M</div>
@@ -142,10 +142,10 @@ function DashboardCard07() {
                   </div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-black">841M</div>
+                  <div className="text-center text-black">{parseFloat(cryptoPrice.vara?.vol).toFixed(1)}M</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-emerald-500">${cryptoPrice.vara?.data?.amount}</div>
+                  <div className="text-center text-emerald-500">${cryptoPrice.vara?.price?.data?.amount}</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center text-black">800K</div>
