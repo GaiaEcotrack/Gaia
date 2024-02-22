@@ -58,44 +58,40 @@ const PanelUsuarioFinal = () => {
   });
 
   useEffect(() => {
-    const fetchDevices = async () => {
-      setIsLoading(true);
-      try {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (!user) {
-          throw new Error('User is not authenticated');
-        }
-        const idToken = await user.getIdToken();
-        console.log(idToken);
+    const auth = getAuth();
+    // Escucha los cambios en el estado de autenticación
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setIsLoading(true);
+        try {
+          const idToken = await user.getIdToken();
+          const apiUrl = import.meta.env.VITE_APP_API_URL;
+          const url = `${apiUrl}/devices/plant-devices?plantId=13`;
   
-        const apiUrl = import.meta.env.VITE_APP_API_URL;
-        console.log(apiUrl);
-        
-        const url = `${apiUrl}devices/plant-devices?plantId=35`;
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              "Authorization": `Bearer ${idToken}`,
+              "Content-Type": "application/json"
+            },
+          });
   
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            "Authorization": `Bearer ${idToken}`,
-            "Content-Type": "application/json"
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
           }
-        });
   
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+          const data = await response.json();
+          setDevices(data.devices);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setIsLoading(false);
         }
-  
-        const data = await response.json();
-        setDevices(data.devices);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
       }
-    };
+    });
   
-    fetchDevices();
+    // Limpieza al desmontar el componente
+    return () => unsubscribe();
   }, []);
 
 
