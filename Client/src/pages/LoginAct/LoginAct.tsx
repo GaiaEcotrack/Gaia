@@ -29,6 +29,8 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       return setError("Password fields are not available");
     }
 
+    localStorage.clear()
+
     try {
       setError("");
       setLoadingE(true);
@@ -56,6 +58,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   // Function to log in with GOOGLE  
   const signInWithGoogle = async () => {
     setAuthing(true);    
+    localStorage.clear()
 
     try {
       const response = await signInWithPopup(auth, new GoogleAuthProvider());
