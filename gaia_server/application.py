@@ -16,7 +16,7 @@ from src.routes.face import face_route
 from src.routes.coinbase import coinbase_route
 from src.routes.sms import sms_route
 from src.routes.paypal import paypal_route
-from flask_cors import CORS
+
 
 load_dotenv()
 

@@ -8,12 +8,20 @@ import jwt
 from cryptography.hazmat.primitives import serialization
 import secrets
 import json
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+API_KEY = os.getenv("API_KEY")
+API_SECRET = os.getenv("API_SECRET")
+SECRET_KEY = os.getenv("SECRET_KEY")
+BASE_URL = os.getenv("BASE_URL")
+GATE_IO_API_KEY = os.getenv("GATE_IO_API_KEY")
+GATE_IO_API_SECRET_KEY = os.getenv("GATE_IO_API_SECRET_KEY")
 
 
-API_KEY = 'iDmn11Ml9Z18QAtN' #coinbase
-API_SECRET = 'GIIsvP3jvM6xodSXTUahOugoEBCnUoMl' #coinbase
-SECRET_KEY = 'GIIsvP3jvM6xodSXTUahOugoEBCnUoMl' #coinbase
-BASE_URL = "https://api.coinbase.com"
+
 
 coinbase_route = Blueprint('coinbase', __name__)
 client = Client(API_KEY, API_SECRET)
@@ -190,8 +198,8 @@ def get_ticker():
     return jsonify(data)
 
 def gen_sign(method, url, query_string=None, payload_string=None):
-    key = '1458d93b39f6bee06d0c8a4205567fe0'        # api_key gate io
-    secret = 'c596479146ab778d370a45858bae304dee88e6a4ecb60a6f4c69fe11bb11c199'     # api_secret gateio
+    key = GATE_IO_API_KEY       # api_key gate io
+    secret = GATE_IO_API_SECRET_KEY     # api_secret gateio
 
     t = time.time()
     m = hashlib.sha512()
@@ -318,6 +326,3 @@ def get_all_info():
         # Manejar cualquier error que pueda ocurrir durante la obtención de datos
         error_message = f"Error al obtener datos: {str(e)}"
         return jsonify({"error": error_message}), 500
-
-
-
