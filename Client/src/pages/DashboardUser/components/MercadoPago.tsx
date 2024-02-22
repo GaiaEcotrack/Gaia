@@ -34,7 +34,7 @@ const MercadoPago = () => {
       };
   return (
     <div>
-        <button className='bg-white w-44 flex items-center justify-center h-14 rounded-full ' onClick={handleBuy}>
+        <button className='bg-white border border-black w-44 flex items-center justify-center h-14 rounded-full ' onClick={handleBuy}>
           <img src="/mercadopago.svg" className='w-32' alt="" />
         </button>
 
