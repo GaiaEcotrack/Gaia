@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejemplo de integración de la API de Coinbase Pro</title>
+</head>
+<body>
+    <h1>Ejemplo de integración de la API de Coinbase Pro</h1>
+    <p>Este es un ejemplo de cómo integrar la API de Coinbase Pro en una aplicación web con Python Flask.</p>
+    <p>El precio actual de Bitcoin es: {{ price }}</p>
+    <form action="/buy" method="post">
+        <label for="amount">Cantidad:</label>
+        <input type="number" name="amount" id="amount">
+        <label for="price">Precio:</label>
+        <input type="number" name="price" id="price">
+        <button type="submit">Comprar</button>
+    </form>
+    <form action="/sell" method="post">
+        <label for="amount">Cantidad:</label>
+        <input type="number" name="amount" id="amount">
+        <label for="price">Precio:</label>
+        <input type="number" name="price" id="price">
+        <button type="submit">Vender</button>
+    </form>
+</body>
+</html>

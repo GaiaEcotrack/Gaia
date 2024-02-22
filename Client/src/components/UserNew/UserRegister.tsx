@@ -417,6 +417,7 @@ const [formData, setFormData] = useState({
 
       if (response.data.success) {
         console.log('OTP sent successfully');
+        setShowSmsVerify(true)
       } else {
         console.error('Error sending OTP');
       }
@@ -810,7 +811,6 @@ const [formData, setFormData] = useState({
 
               <div className="flex justify-start w-full">
                 <button
-                  onClick={() => {setShowSmsVerify(true)}}
                   type="submit"
                   className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-28 mt-4"
                 >

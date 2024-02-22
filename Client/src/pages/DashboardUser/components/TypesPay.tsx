@@ -6,12 +6,12 @@ import PaypalButton from './PaypalButton'
 const TypesPay = () => {
   return (
     <div>
-      <div>
+      <div className='flex flex-col items-center justify-center'>
         <h1>Selecciona Tu Metodo de pago</h1>
-        <div>
+        <div className='grid grid-cols-2 grid-rows-2 gap-4'>
           <MercadoPago/>
           <CoinbaseButton/>
-          <PaypalButton totalValue="4.99" invoice="Kws"/>
+          <PaypalButton totalValue="60" invoice="Kws"/>
         </div>
       </div>
     </div>
