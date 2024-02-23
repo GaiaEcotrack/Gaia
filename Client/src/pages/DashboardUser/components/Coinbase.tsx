@@ -18,7 +18,7 @@ const CoinbaseButton = () => {
       <a 
         href="https://commerce.coinbase.com/checkout/5745368b-a198-4a09-87a9-3e1e38ff2fce"
       >
-        Buy with Crypto
+        Pay with Crypto
       </a>
     </div>
   );

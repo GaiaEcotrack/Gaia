@@ -16,6 +16,7 @@ import { Notifications } from '@/components/UserNew/Notifications';
 import { IdVerification } from '@/components/UserNew/IdVerification';
 import { PlantsDashboard } from '@/components/DashBoard/PlantsDashboard';
 import AuthRoute from '@/components/AuthRoute';
+import PaymentModalMp from '@/components/PaymentConfirmedModal/PaymentModalMp';
 
 const routes = [{ path: '/main', Page: Main },
 { path: '/labs', Page: Labs },
@@ -31,6 +32,7 @@ const routes = [{ path: '/main', Page: Main },
 { path: '/notifications', Page: Notifications },
 { path: '/idVerification', Page: IdVerification },
 { path: 'dashboard/plants', Page: PlantsDashboard },
+{ path: '/payment', Page: PaymentModalMp },
 
 ];
 

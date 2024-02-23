@@ -12,9 +12,10 @@ import {
   LinearScale,
 } from "chart.js";
 // Gráficos de React
-import { Pie, Bar, Doughnut } from "react-chartjs-2";
 // React Hooks
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoggedInUser } from "@/store";
 // React Router
 import { Link, NavLink } from "react-router-dom";
 // Funciones de formato de fecha
@@ -29,9 +30,6 @@ import { ModalMintGaia } from "../../components/ModalMintGaia/ModalMintGaia";
 
 import { PopUpALert } from "../../components/PopUpALert/PopUpAlert";
 // Imágenes
-import PolygonDown from "../../assets/PolygonDown.svg";
-import { WeatherNavbar } from "../../components/WeatherNavbar/WeatherNavbar";
-import { WeatherPanel } from "../../components/WeatherNavbar/WeatherPanel";
 import EnergyMonitor from "@/components/EnergyComponentNew/EnergyMonitor";
 import EnergyDeviceStatus from "@/components/EnergyComponentNew/EnergyDeviceStatus";
 import { AlertModal } from "@/components/AlertModal/AlertModal";
@@ -41,7 +39,7 @@ import { getAuth } from "firebase/auth";
 import axios from "axios";
 import { getTokenFromFirebase, sendTokenToBackend } from "../../TokenFirebaseToBackend"
 import Swal from "sweetalert2";
-import { log } from "console";
+import { RootState } from '../../store/index';
 
 // Nuevo grafico
 import ReactECharts from 'echarts-for-react';
@@ -114,8 +112,10 @@ const getConfig = (): SomeConfig => {
 };
 
 const GraficoEnergia = () => {
+  const dispatch = useDispatch()
 
   const [token, setToken] = useState('');
+  const userRedux = useSelector((state:RootState) => state.app.loggedInUser)
 
 
   // estas dos funciones la movi arriba para usarlas en el scop
@@ -125,6 +125,8 @@ const GraficoEnergia = () => {
 
   //mensaje de conectar waller
   const [walletMessage, setWalletMessage] = useState("");
+
+  const [userLog, setUserLog] = useState("")
 
   const [componenteMontado, setComponenteMontado] = useState(true);
   const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
@@ -169,7 +171,7 @@ const GraficoEnergia = () => {
 
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
-          `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
+          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
           {
             headers: {
               "Authorization": `Bearer ${idToken}`,
@@ -719,6 +721,30 @@ const GraficoEnergia = () => {
   const lastValue = lastDataset.data[lastDataset.data.length - 1];
 
   const percentage = lastValue / 18000;
+  
+  useEffect(() => {
+    const url = import.meta.env.VITE_APP_API_URL
+    const auth = getAuth()
+    const user = auth.currentUser?.email
+    const fetchDataUser = async ()=>{
+      try {
+        const request = await axios.get(`${url}/users/`)
+        const response = request.data.users
+        const filter = response.filter((userLog:any) => userLog.email === user)
+        setUserLog(filter)
+        dispatch({ type: 'SET_LOGGED_IN_USER', payload: filter })
+        
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchDataUser()
+
+    
+  }, [])
+
+  console.log(userRedux);
+  
 
 
     return {
@@ -915,7 +941,7 @@ const GraficoEnergia = () => {
       </div>
       {/*  NUEVO DISENO DE LA PAGINA  */}
 
-      <div className="flex flex-col m-16">
+      <div className="flex flex-col ml-16">
       {/* Header del Dashboard */}
       <div className="flex justify-around bg-blue-950 bg-opacity-90 text-white p-4">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
