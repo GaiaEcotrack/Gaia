@@ -252,9 +252,8 @@ const [formData, setFormData] = useState({
         const formData = new FormData();
         formData.append('file', file);
   
-        const uploadUrl = "http://127.0.0.1:5000/upload_image";
+        const uploadUrl = `${URL}/upload_image`;
 
-  
         try {
           const uploadResponse = await fetch(uploadUrl, {
             method: 'POST',
@@ -272,7 +271,7 @@ const [formData, setFormData] = useState({
           // Envío la URL del archivo subido al backend para guardarla
           const tipoArchivo = inputName; 
           try {
-            const saveUrlResponse = await fetch("http://127.0.0.1:5000/users/save_url", {
+            const saveUrlResponse = await fetch(`${URL}/users/save_url`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -305,7 +304,10 @@ const [formData, setFormData] = useState({
     }
   
     if (allFilesUploaded) {
-      alert('Todos los archivos y sus URLs se han guardado exitosamente.');
+      Toast.fire({
+        icon: "success",
+        title: "Files saved successfully"
+      });
     }
   }
   
@@ -377,7 +379,6 @@ const [formData, setFormData] = useState({
       localStorage.setItem("completeCredent", `${completeCredent}`);
     }
   }, [foundUserId, pendingDocuments, pendingCredentials, completeCredent]);
-
 
   return (
     <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black bg-white">
@@ -636,7 +637,7 @@ const [formData, setFormData] = useState({
                     >
                     Upload a file of your identity document<span className="text-red-600">*</span>                  
                   </label>
-                  {formData.other_financial_documents && (
+                  {formData.identity_document && (
                     <h1 className="text-green-600 text-xs font-normal mb-2">Uploaded file</h1>
                   )}
                 </div>
@@ -660,7 +661,7 @@ const [formData, setFormData] = useState({
                     >
                     Upload a file of your bank account status<span className="text-red-600">*</span>                   
                   </label>
-                  {formData.other_financial_documents && (
+                  {formData.bank_account_status && (
                     <h1 className="text-green-600 text-xs font-normal mb-2">Uploaded file</h1>
                   )}
                 </div>
@@ -684,7 +685,7 @@ const [formData, setFormData] = useState({
                     >
                     Upload a file of your tax return<span className="text-red-600">*</span>                   
                   </label>
-                  {formData.other_financial_documents && (
+                  {formData.tax_declarations && (
                     <h1 className="text-green-600 text-xs font-normal mb-2">Uploaded file</h1>
                   )}
                 </div>

@@ -1,5 +1,5 @@
 import { Link, useNavigate} from "react-router-dom";
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { SignUp } from "../../components/LoginSignUp/SignUp";
 import '../../global.css'
@@ -36,35 +36,51 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       setError("");
       setLoadingE(true);
   
-      // Crear el objeto de usuario con solo el correo electrónico
-      const userData = {
-        email: emailRef.current.value,
-      };
+      // Verificar si el usuario ya existe
+      const checkUserResponse = await fetch(`${URL}/users/search?email=${emailRef.current.value}`);
+      
+      if (checkUserResponse.status === 200) {
+        await login(emailRef.current.value, passwordRef.current.value);
   
-      // Realizar la solicitud al servidor
-      const response = await fetch(`${URL}/users/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
+        const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
+        navigate(redirectPath);
   
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
+        auth.onAuthStateChanged((userCred: any) => {
+          const Verified = userCred.emailVerified;
+          localStorage.setItem("verified", String(Verified));
+        });
+      } else if (checkUserResponse.status === 404) {
+        // El usuario no existe, proceder con la creación y login
+        const userData = {
+          email: emailRef.current.value,
+        };
+  
+        const response = await fetch(`${URL}/users/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+        });
+  
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+  
+        await login(emailRef.current.value, passwordRef.current.value);
+  
+        const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
+        navigate(redirectPath);
+  
+        auth.onAuthStateChanged((userCred: any) => {
+          const Verified = userCred.emailVerified;
+          localStorage.setItem("verified", String(Verified));
+        });
+      } else {
+        throw new Error(`Unexpected response: ${checkUserResponse.status}`);
       }
-  
-      await login(emailRef.current.value, passwordRef.current.value);
-  
-      const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
-      navigate(redirectPath);
-  
-      auth.onAuthStateChanged((userCred: any) => {
-        const Verified = userCred.emailVerified
-        localStorage.setItem("verified", Verified);       
-      });
     } catch (error) {
-      setError("Incorrect username or password");
+      setError("Error creating user");
       console.error(error);
     } finally {
       setLoadingE(false);
@@ -80,15 +96,26 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   // Function to log in with GOOGLE  
   const signInWithGoogle = async () => {
     setAuthing(true);    
-    localStorage.clear()
-
+    localStorage.clear();
+  
     try {
       const response = await signInWithPopup(auth, new GoogleAuthProvider());
-            
+              
       const name = response.user.displayName || "Nombre";
       const email = response.user.email || "default@example.com";
       const profilePic = response.user.photoURL || "Photo Profile";
       
+      // Verificar si el usuario ya existe
+      const checkUserResponse = await fetch(`${URL}/users/search?email=${email}`);
+      
+      if (checkUserResponse.status === 200) {
+        navigate('/home');
+        localStorage.setItem("name", name);
+        localStorage.setItem("profilePic", profilePic);  
+        return;
+      }
+  
+      // El usuario no existe, proceder con la creación
       const createUserResponse = await fetch(`${URL}/users/`, {
         method: 'POST',
         headers: {
@@ -100,18 +127,16 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       if (!createUserResponse.ok) {
         throw new Error(`Error creating user: ${createUserResponse.statusText}`);
       }
-
-      localStorage.setItem("name", name);
+  
       localStorage.setItem("email", email);
-      localStorage.setItem("profilePic", profilePic);  
-
+      
       navigate('/home');
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setAuthing(false);
     }
   };
-
+  
     const imageUrl = 'https://images.unsplash.com/photo-1467533003447-e295ff1b0435?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
 
   return (
