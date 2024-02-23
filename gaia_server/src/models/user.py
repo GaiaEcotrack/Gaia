@@ -1,8 +1,11 @@
-from marshmallow import Schema, fields, validates, ValidationError
+from marshmallow import Schema, fields, validates, ValidationError, EXCLUDE
 from src.models.devices import DeviceSchema
 
 
 class UserSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+        
     full_name = fields.String(required=False)
     identification_number = fields.String(required=False)  
     address = fields.String(required=False) 

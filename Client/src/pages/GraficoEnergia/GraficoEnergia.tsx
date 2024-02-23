@@ -171,7 +171,7 @@ const GraficoEnergia = () => {
 
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
-          `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
+          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
           {
             headers: {
               "Authorization": `Bearer ${idToken}`,
@@ -941,7 +941,7 @@ const GraficoEnergia = () => {
       </div>
       {/*  NUEVO DISENO DE LA PAGINA  */}
 
-      <div className="flex flex-col m-16">
+      <div className="flex flex-col ml-16">
       {/* Header del Dashboard */}
       <div className="flex justify-around bg-blue-950 bg-opacity-90 text-white p-4">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
