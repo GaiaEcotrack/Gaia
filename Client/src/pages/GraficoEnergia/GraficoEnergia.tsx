@@ -770,9 +770,9 @@ const GraficoEnergia = () => {
   };
   return (
     <div className="mb-12">
-      <div className=" text-white md:pl-24 2xl:pl-32 md:pr-10 md:pb-0">
+      <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
         <div className="flex flex-col lg:flex-row  p-2 justify-center graficos items-center">
-          <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px]   rounded overflow-hidden shadow-lg m-4 mt-6">
+          <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg m-4">
             <div className=" flex justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center mt-4">
                 {totalGenerado.toFixed(3)} Kw
@@ -932,7 +932,7 @@ const GraficoEnergia = () => {
       </div>
 
       {/* Main content del Dashboard */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8">
         {/* Cost Predicted */}
         <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
           <h2 className="text-xl mb-2 text-white">Energy type</h2>
