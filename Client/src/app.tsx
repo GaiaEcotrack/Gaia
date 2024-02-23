@@ -20,6 +20,7 @@ import { Footer } from './pages/Footer/Footer';
 import Logo from "./pages/Logo/Logo";
 import TermsAndPolicy from "./pages/terms&policies/Terms&policy";
 import Face from "./components/Face/Face";
+import PaymentModalMp from "./components/PaymentConfirmedModal/PaymentModalMp";
 
 initializeApp(config.firebaseConfig);
 
@@ -40,6 +41,7 @@ function Component() {
         location.pathname !== '/assets/logo' &&
         location.pathname !== '/serviceTerms' &&
         location.pathname !== '/dataPrivacy' &&
+        location.pathname !== '/payment' &&
         location.pathname !== '/' && <SideBar />}    
 
       <main>
@@ -61,12 +63,14 @@ function Component() {
           <Route path='/userReg' element={<UserRegister/>} />
           <Route path='/face' element={<Face/>}/>
           <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="/payment" element={<PaymentModalMp/>} />
         </Routes>
 
       {shouldShowFooter && 
         location.pathname !== '/assets/logo' &&
         location.pathname !== '/serviceTerms' &&
         location.pathname !== '/dataPrivacy' &&
+        location.pathname !== '/payment' &&
         location.pathname !== '/' && <Footer />} 
 
     </div>

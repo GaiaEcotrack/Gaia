@@ -8,15 +8,16 @@ class UserSchema(Schema):
     address = fields.String(required=False) 
     phone = fields.String(required=False)  
     email = fields.Email(required=False)
-
+    
     identity_document = fields.String(required=False)
-
     bank_account_status = fields.String(allow_none=False)  
     tax_declarations = fields.String(allow_none=False)
     other_financial_documents = fields.String(allow_none=False)  
     
     credentials = fields.String(required=False)
     secret_key = fields.String(required=False) 
+    
+    membership = fields.Boolean(required=False)
     
     identity_document_url = fields.String(required=False)
     bank_account_status_url = fields.String(required=False)

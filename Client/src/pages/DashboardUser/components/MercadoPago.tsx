@@ -6,11 +6,12 @@ initMercadoPago('TEST-37c724d2-e7c4-43a2-9ae5-93e83eff22fd');
 
 
 const MercadoPago = () => {
+  const url = import.meta.env.VITE_APP_API_URL
   const [prefrenceId, setPreferenceId] = useState('')
     const createPreference = async () => {
         try {
           const response = await axios.post(
-            `http://127.0.0.1:5000/mercadopago/crearpago`,
+            `${url}/mercadopago/crearpago`,
             {
               "title": "suscripcion",
               "quantity": 1,
