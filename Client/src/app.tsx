@@ -63,7 +63,6 @@ function Component() {
           <Route path='/userReg' element={<UserRegister/>} />
           <Route path='/face' element={<Face/>}/>
           <Route path="/dashboard" element={<DashBoard />} />
-          <Route path="/payment" element={<PaymentModalMp/>} />
         </Routes>
 
       {shouldShowFooter && 

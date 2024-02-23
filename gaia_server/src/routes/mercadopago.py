@@ -27,9 +27,9 @@ def crear_pago():
             }
         ],
         "back_urls": {
-			"success": "https://www.gaiaecotrack.com",
-			"failure": "https://www.gaiaecotrack.com",
-			"pending": "https://www.gaiaecotrack.com"
+			"success": "http://localhost:3000/payment",
+			"failure": "http://localhost:3000/payment",
+			"pending": "http://localhost:3000/payment"
 		},
 		"auto_return": "approved",
     }
