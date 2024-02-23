@@ -58,53 +58,43 @@ const PanelUsuarioFinal = () => {
   });
 
   useEffect(() => {
-    const fetchDevices = async () => {
-      setIsLoading(true);
-      try {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        if (!user) {
-          throw new Error('User is not authenticated');
-        }
-        const idToken = await user.getIdToken();
-        console.log(idToken);
+    const auth = getAuth();
+    // Escucha los cambios en el estado de autenticación
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setIsLoading(true);
+        try {
+          const idToken = await user.getIdToken();
+          const apiUrl = import.meta.env.VITE_APP_API_URL;
+          const url = `${apiUrl}/devices/plant-devices?plantId=13`;
   
-        const apiUrl = import.meta.env.VITE_APP_API_URL;
-        // Cambia esta URL a la variable apiUrl si lo necesitas
-        const url = `${apiUrl}/devices/plant-devices?plantId=13`;
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              "Authorization": `Bearer ${idToken}`,
+              "Content-Type": "application/json"
+            },
+          });
   
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            "Authorization": `Bearer ${idToken}`,
-            "Content-Type": "application/json"
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
           }
-        });
   
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+          const data = await response.json();
+          setDevices(data.devices);
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setIsLoading(false);
         }
-  
-        const data = await response.json();
-        setDevices(data.devices);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
       }
-    };
+    });
   
-    fetchDevices();
+    // Limpieza al desmontar el componente
+    return () => unsubscribe();
   }, []);
 
-  // useEffect(() => {
-  //   if (menuAbierto !== null) {
-  //     setScrollPosition(window.scrollY);
-  //     window.scrollTo(0, 0);
-  //   } else {
-  //     window.scrollTo(0, scrollPosition);
-  //   }
-  // }, [menuAbierto, scrollPosition]);
+
 
   const handleUpdate = async () => {
     try {
@@ -118,9 +108,10 @@ const PanelUsuarioFinal = () => {
         
       setIsLoading(true);
       setTimeout(async () => {
-        // const apiUrl = import.meta.env.VITE_APP_API_URL;
+        const apiUrl = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
-          `http://127.0.0.1:5000/devices/plant-devices?plantId=35`,
+          `${apiUrl}/devices/plant-devices?plantId=35`,
+          // "http://127.0.0.1:5000/devices/plant-devices?plantId=35",
           {
             method: 'GET',
             headers: {

@@ -43,6 +43,12 @@ import { getTokenFromFirebase, sendTokenToBackend } from "../../TokenFirebaseToB
 import Swal from "sweetalert2";
 import { log } from "console";
 
+// Nuevo grafico
+import ReactECharts from 'echarts-for-react';
+import moment from 'moment';
+
+
+
 ChartJS.register(
   ArcElement,
   Tooltip,
@@ -569,11 +575,204 @@ const GraficoEnergia = () => {
 
   //------------------------------VARA INTEGRATION-----------------------------------------------------------------------
 
+  // ! NUEVO GRAFICO, las siguienes funciones le dan los estilos a cada card.
+
+  const getOption = () => {
+    return {
+      tooltip: {
+        trigger: 'item',
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'left',
+        textStyle: {
+          color: '#ffffff'
+        }
+      },
+      series: [
+        {
+          name: 'Access Source',
+          type: 'pie',
+          radius: ['50%', '70%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 5,
+            borderColor: '#1D1B41',
+            borderWidth: 2
+          },
+          label: {
+            show: false,
+            position: 'center'
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: '20',
+              fontWeight: 'bold'
+            }
+          },
+          labelLine: {
+            show: false
+          },
+          data: [
+            { value: 3000, name: 'Wind Energy' },
+            { value: 7000, name: 'Thermal Energy' },
+            { value: 10000, name: 'Solar Energy' }
+          ]
+        }
+      ]
+    };
+  };
+
+  // ! grafico de barras NOTA: traer los datos reales
+
+  const getBarOption = () => {
+    // Extraer los datos y labels de barData
+    const { labels, datasets } = barData; // Asumiendo que barData es tu estado con los datos
+    const dataset = datasets[0];
+  
+    // Mapear los datos a los valores para el gráfico
+    // Asumiendo que el orden de los datos en barData corresponde a los días de previousDay5 a currentDay
+    const seriesData = dataset.data.map((value, index) => ({
+      value, // El valor de cada barra
+      // Aplicar el color de la barra basado en el color definido en barData, o un color por defecto si no se especifica
+      itemStyle: { color: index % 2 === 0 ? '#58E2C2' : '#F7E53B' }
+    }));
+  
+    return {
+      color: ['#58E2C2'],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [
+        {
+          type: 'category',
+          data: [
+            moment().subtract(5, 'days').format('MMM D'),
+            moment().subtract(4, 'days').format('MMM D'),
+            moment().subtract(3, 'days').format('MMM D'),
+            moment().subtract(2, 'days').format('MMM D'),
+            moment().subtract(1, 'days').format('MMM D'),
+            moment().format('MMM D')
+          ],
+          axisTick: {
+            alignWithLabel: true
+          },
+          axisLine: {
+            lineStyle: {
+              color: '#FDFDFD'
+            }
+          },
+          axisLabel: {
+            color: '#FDFDFD'
+          }
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          axisLine: {
+            lineStyle: {
+              color: '#FDFDFD'
+            }
+          },
+          splitLine: {
+            lineStyle: {
+              color: '#484E69'
+            }
+          },
+          axisLabel: {
+            color: '#FDFDFD'
+          }
+        }
+      ],
+      series: [
+        {
+          name: 'Cost',
+          type: 'bar',
+          barWidth: '40%',
+          data: [
+            { value: 203, itemStyle: { color: '#58E2C2' } }, // Primer color para la primera barra
+            { value: 214, itemStyle: { color: '#F7E53B' } } , // Segundo color para la segunda barra
+            
+          ],
+          data: seriesData // Usando la data mapeada desde barData
+        }
+      ]
+    };
+  };
+  
+  //! Medidor de intensidad de enrgia
+  const getGaugeOption = () => {
+    // Obtener el último dataset del gráfico de barras
+  const lastDataset = barData.datasets[barData.datasets.length - 1];
+  // Obtener el último valor de este dataset
+  const lastValue = lastDataset.data[lastDataset.data.length - 1];
+
+  const percentage = lastValue / 18000;
+
+
+    return {
+      tooltip: {
+        formatter: "{a} <br/>{b} : {c}%",
+        
+      },
+      series: [
+        {
+          name: 'Usage',
+          type: 'gauge',
+          detail: {
+            color: '#FFFFFF',
+            formatter: (value:number) => `${value.toFixed(0)}kWh`,
+            offsetCenter: [0, '80%'], 
+          fontSize: 14,
+          },
+          data: [{value: lastValue}],
+          min: 0,
+          max: 18000,
+          splitNumber: 6,
+          axisLine: {
+            lineStyle: {
+              color: [[percentage, '#58E2C2'], [1, '#48506E']],
+              width: 30
+            }
+          },
+          axisTick: { // Puntos de referencia (ticks)
+            show: true,
+            lineStyle: {
+              color: '#FFFFFF', // Color de los ticks
+              width: 1, // Grosor de los ticks
+            },
+            length: -5, // Longitud de los ticks
+          },
+          axisLabel: { // Etiquetas de los números alrededor del gauge
+            color: '#FFFFFF', 
+            distance: 25, 
+            fontSize: 11
+          },
+          pointer: {
+            itemStyle: {
+              color: 'auto'
+            }
+          }
+        }
+      ]
+    };
+  };
   return (
     <div className="mb-12">
-      <div className=" text-white md:pl-24 2xl:pl-32 md:pr-10 md:pb-0">
+      <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
         <div className="flex flex-col lg:flex-row  p-2 justify-center graficos items-center">
-          <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px]   rounded overflow-hidden shadow-lg m-4 mt-6">
+          <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg m-4">
             <div className=" flex justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center mt-4">
                 {totalGenerado.toFixed(3)} Kw
@@ -625,42 +824,42 @@ const GraficoEnergia = () => {
         <div className="flex justify-center text-center text-emerald-500  ">
           {walletMessage && <p className="text-xl">{walletMessage}</p>}
         </div>
-        <div className="flex flex-col p-2 mb-6 md:ml-10 justify-center items-center md:items-start">
-          <button
+        <div className="flex flex-col p-2  md:ml-10 justify-center items-center md:items-start">
+          {/* <button
             type="button"
-            className="cursor-not-allowed pointer-events-none  text-[18px] mt-4 md:mt-0 text-center md:text-left"
+            className="cursor-not-allowed pointer-events-none  text-[14px] mt-4 md:mt-0 text-center md:text-left"
           >
             Generation Panel
           </button>
           <NavLink to="/panelUsuarioFinal">
             <button
               type="button"
-              className=" text-[18px] underline mt-4 md:mt-0 text-center md:text-left"
+              className=" text-[14px] underline mt-4 md:mt-0 text-center md:text-left"
             >
               Device Manage
             </button>
           </NavLink>
           <button
             type="button"
-            className=" text-[18px] underline mt-4 md:mt-0 text-center md:text-left"
+            className=" text-[14px] underline mt-4 md:mt-0 text-center md:text-left"
             onClick={openPopup}
           >
             Create Alerts
-          </button>
+          </button> */}
           {popupOpen && <PopUpALert onClose={closePopup} />}
         </div>
 
-        <div className="justify-center mb-10">
+        {/* <div className="justify-center mb-10">
           <Doughnut
             className="h-[300px] 2xl:h-[400px] justify-center "
             data={dataPie}
             options={optionsPie}
           />
-        </div>
+        </div> */}
 
         <div className="flex flex-col items-center sm:flex-row sm:justify-center">
           <div className="relative inline-block">
-            <select
+            {/* <select
               className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] text-white m-1 pl-2"
               defaultValue="Energia Solar"
               onChange={(e) => console.log(e.target.value)} // Puedes manejar la selección aquí
@@ -668,25 +867,25 @@ const GraficoEnergia = () => {
               <option value="Energia Solar">Solar Energy</option>
               <option value="Energia Termica">Thermal Energy</option>
               <option value="Energia Eolica">Wind Energy</option>
-            </select>
+            </select> */}
             {/* <img src={PolygonDown} alt="" className="ml-2" /> */}
           </div>
-          <button
+          {/* <button
             type="button"
             className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] m-1"
           >
             Generated
             <img src={PolygonDown} alt="" className="ml-2" />
-          </button>
-          <button
+          </button> */}
+          {/* <button
             type="button"
             className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] m-1"
           >
             Real Time
             <img src={PolygonDown} alt="" className="ml-2" />
-          </button>
+          </button> */}
 
-          <div className="mt-4 sm:mt-0 sm:ml-4 flex flex-col items-center sm:flex-row">
+          {/* <div className="mt-4 sm:mt-0 sm:ml-4 flex flex-col items-center sm:flex-row">
             <div className="flex flex-col items-center mb-2 sm:mb-0">
               <span className=" text-[16px] font-[700]">0 Kws</span>
               <h3 className=" ml-2 p-2">Current</h3>
@@ -699,21 +898,80 @@ const GraficoEnergia = () => {
               <span className=" text-[16px] font-[700]">0 Kws</span>
               <h3 className=" ml-2 p-2">Total</h3>
             </div>
-          </div>
+          </div> */}
         </div>
 
-        <div className="lg:absolute lef-[50%] lg:top-[15%] 2xl:top-[20%] lg:left-[76%] 2xl:left-[78%] laptop mt-12">
+        {/* <div className="lg:absolute lef-[50%] lg:top-[15%] 2xl:top-[20%] lg:left-[76%] 2xl:left-[78%] laptop mt-12">
           <WeatherNavbar />
           <WeatherPanel />
-        </div>
+        </div> */}
 
-        <div className="flex mx-auto max-w-screen-md h-[200px] mt-8">
+        {/* <div className="flex mx-auto max-w-screen-md h-[200px] mt-8">
           <Bar data={barData} options={optionsBar} />
           <div className="border-4 mt-10 xl:ml-32 bg-gray-100 h-32 rounded-full hidden lg:flex items-center justify-center border-gray-400">
             <p className="text-[#1d335b] text-xl m-2 text-center">{showDate}</p>
           </div>
+        </div> */}
+      </div>
+      {/*  NUEVO DISENO DE LA PAGINA  */}
+
+      <div className="flex flex-col m-16">
+      {/* Header del Dashboard */}
+      <div className="flex justify-around bg-blue-950 bg-opacity-90 text-white p-4">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Generation panel
+        </button>
+        <NavLink to="/panelUsuarioFinal">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Device manage
+        </button>
+        </NavLink>
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={openPopup}>
+          Alerts
+        </button>
+      </div>
+
+      {/* Main content del Dashboard */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8">
+        {/* Cost Predicted */}
+        <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+          <h2 className="text-xl mb-2 text-white">Energy type</h2>
+          <ReactECharts option={getOption()} className="w-full" style={{ height: '300px' }} />
+        </div>
+
+        {/* Change in Cost */}
+        <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+          <h2 className="text-xl mb-2 text-white">Consume per day</h2>
+          <ReactECharts option={getBarOption()} className="w-full" style={{ height: '300px' }} />
+        </div>
+
+        {/* Usage Estimate */}
+        <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+          <h2 className="text-xl mb-2 text-white">Energy Intensity</h2>
+          <ReactECharts option={getGaugeOption()} style={{ height: '300px' }} className="w-full" />
+        </div>
+
+        {/* Active Appliances */}
+        <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+          <h2 className="text-xl mb-2 text-white">Active Appliances</h2>
+          {/* Inserta aquí tu lista o gráfico */}
+        </div>
+
+        {/* Energy Intensity */}
+        <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+          <h2 className="text-xl mb-2 text-white">Usage Estimate</h2>
+          {/* Inserta aquí tu componente de gráfico Gauge */}
+        </div>
+
+        {/* Carbon Footprint */}
+        <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+          <h2 className="text-xl mb-2 text-white">Carbon Footprint</h2>
+          {/* Inserta aquí tu componente de gráfico */}
         </div>
       </div>
+    </div>
+
+      {/*   FIN NUEVO GRAFICO */}
       <div className="flex items-center flex-col gap-10 justify-center">
         <h1 className="text-6xl font-bold text-white">
           Status of your devices
