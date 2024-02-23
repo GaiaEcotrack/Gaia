@@ -168,7 +168,7 @@ def get_user_by_email():
     for device in user.get('devices', []):
         device['_id'] = str(device['_id'])
     
-    return jsonify(user)
+    return jsonify(user), 200
 
 ## verificar si llega el token fb del frontend 
 @users_route.route('/tokenfb', methods=['POST'])
@@ -182,7 +182,8 @@ def endpoint():
     else:
         
         return jsonify({'error': 'Token no encontrado en el encabezado de la solicitud'}), 400
-    
+ 
+ 
 # guardamos la url del archivo subido al bucket
 @users_route.route('/save_url', methods=['POST'])
 def guardar_url():
@@ -201,8 +202,7 @@ def guardar_url():
     if result.modified_count > 0:
         return jsonify({'message': 'URL del archivo guardada con éxito', 'url': archivo_url}), 200
     else:
-        return jsonify({'message': 'Error al guardar la URL del archivo o usuario no encontrado'}), 400
+        return jsonify({'message': 'Error al guardar la URL del archivo o usuario no encontrado'}), 400   
     
-    
-# if __name__ == '__main__':
-#      application.run(debug=True)
+if __name__ == '__main__':
+     application.run(debug=True)
