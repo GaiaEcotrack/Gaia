@@ -74,7 +74,7 @@ function DashboardCard02({image,quantity,name,onClick,metric}) {
           <button type="button" onClick={onClick} className="hover:brightness-110 hover:animate-pulse font-bold py-3 px-6 rounded-full bg-gradient-to-r from-blue-500 to-pink-500 text-white">Send</button>
         </header>
         <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-2">{name}</h2>
-        <h1 className='text-lg font-semibold text-slate-800 dark:text-slate-100 mb-2'>Tokens</h1>
+        <h1 className='text-lg font-semibold text-slate-800 dark:text-slate-100 mb-2'>Profit in VARAS</h1>
         <VarasBalance/>
         <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase mb-1">Balance</div>
         <div className="flex items-start">

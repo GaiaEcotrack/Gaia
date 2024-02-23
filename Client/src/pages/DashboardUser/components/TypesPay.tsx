@@ -1,9 +1,21 @@
-import React from 'react'
+import React , {useEffect} from 'react'
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+
 import MercadoPago from './MercadoPago'
 import CoinbaseButton from './Coinbase'
 import PaypalButton from './PaypalButton'
 
 const TypesPay = () => {
+  const userRedux = useSelector((state:RootState) => state.app.loggedInUser)
+  const userId = userRedux![0]._id
+  useEffect(() => {
+    localStorage.setItem('idUserRedux', userId);
+  }, [userId])
+
+  console.log(localStorage.getItem('idUserRedux'))
+  
+  
   return (
     <div>
       <div className='flex flex-col items-center justify-center'>

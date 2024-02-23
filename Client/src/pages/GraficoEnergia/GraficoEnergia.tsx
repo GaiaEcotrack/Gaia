@@ -742,6 +742,8 @@ const GraficoEnergia = () => {
 
     
   }, [])
+
+  console.log(userRedux);
   
 
 
