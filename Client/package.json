@@ -41,6 +41,8 @@
     "clsx": "1.2.1",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
+    "echarts": "^5.5.0",
+    "echarts-for-react": "^3.0.2",
     "face-api.js": "^0.22.2",
     "firebase": "^10.7.2",
     "framer-motion": "10.12.17",
