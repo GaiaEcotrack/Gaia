@@ -169,7 +169,7 @@ const GraficoEnergia = () => {
 
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
-          `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
+          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
           {
             headers: {
               "Authorization": `Bearer ${idToken}`,
