@@ -939,7 +939,7 @@ const GraficoEnergia = () => {
       </div>
       {/*  NUEVO DISENO DE LA PAGINA  */}
 
-      <div className="flex flex-col m-16">
+      <div className="flex flex-col ml-16">
       {/* Header del Dashboard */}
       <div className="flex justify-around bg-blue-950 bg-opacity-90 text-white p-4">
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
