@@ -30,7 +30,8 @@ qrcode.make(uri).save("totp.png")
 
 #-------------------------------------------
 
+# Verificar codigo generado en la App Google Authenticator
 totp = pyotp.TOTP(key)
 
 while True:
-  print(totp.verify(input("enter code:")))
+  totp.verify(input("enter code:"))

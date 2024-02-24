@@ -21,6 +21,7 @@ class UserSchema(Schema):
     secret_key = fields.String(required=False) 
     
     membership = fields.Boolean(required=False)
+    key_auth = fields.String(required=False)
     
     identity_document_url = fields.String(required=False)
     bank_account_status_url = fields.String(required=False)

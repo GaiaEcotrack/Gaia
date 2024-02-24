@@ -96,6 +96,7 @@ def add_user():
     secret_key = data.get('secret_key')
     devices = data.get('devices', [])
     membresia = data.get('membresia', False)
+    key_auth = data.get('key_Auth')
 
     # Insertar el nuevo usuario en la colección
     new_user = {
@@ -112,6 +113,7 @@ def add_user():
         'secret_key': secret_key,
         'devices': devices,
         'membresia': membresia,
+        'key_auth': key_auth        
     }
 
     result = collection.insert_one(new_user)

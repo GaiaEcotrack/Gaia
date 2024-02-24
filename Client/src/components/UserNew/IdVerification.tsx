@@ -14,40 +14,46 @@ function IdVerification() {
       {/* Aside */}
       <aside className="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
         <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
-          <h2 className="pl-3 mb-4 text-2xl font-semibold">Register</h2>
+          <h2 className="pl-3 mb-4 text-2xl font-semibold">Profile</h2>
 
           <Link to="/userReg">
-            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
-              User Register
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            User Account
+            </h1>
+          </Link>
+
+          <Link to="/credentialsReg">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+              Credentials
             </h1>
           </Link>
 
           <Link to="/idVerification">
             <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#212056] border rounded-full">
-              Identity Verification
+              Identification
+            </h1>
+          </Link>
+
+          <Link to="/security">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+              Security Settings
             </h1>
           </Link>
 
           <Link to="/deviceReg">
-            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Device Register
             </h1>
           </Link>
 
-          <Link to="/credentialsReg">
-            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
-              Credentials
-            </h1>
-          </Link>
-
           <Link to="/notifications">
-            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Notifications
             </h1>
           </Link>
 
           {/* <Link to="/account"> */}
-            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               PRO Account
             </h1>
           {/* </Link> */}
@@ -58,14 +64,14 @@ function IdVerification() {
       <main className="flex justify-start items-start min-h-screen py-1 w-[100%] p-2 md:p-4">
         <div className="px-6 pb-8 mt-8 sm:rounded-lg w-full">
 
-          <h2 className="flex justify-center text-black md:justify-start text-2xl font-bold sm:text-xl pt-4 mb-8">
+          <h2 className="flex justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4 mb-8">
             IDENTITY VERIFICATION
           </h2>
 
           <div className="flex justify-center items-center p-6 px-8 mb-8 border rounded-lg  border-indigo-200 ">
             <FcSelfie className="text-9xl w-[20%] "/> 
 
-            <h1 className="flex justify-center items-center text-black font-normal md:justify-start text-2xl sm:text-xl mx-8 w-[60%]">
+            <h1 className="flex justify-center items-center font-normal md:justify-start text-2xl sm:text-xl mx-8 w-[60%]">
               Requirements: Basic information, identification document, facial recognition.
             </h1> 
 
@@ -74,46 +80,9 @@ function IdVerification() {
             </button>
           </div>
 
-          {/* Formulario de perfil público */}
-
-          <div className="">
-           
-          </div>
         </div>
       </main>
 
-      <div className="md:hidden sticky flex flex-col gap-2 p-4 text-sm top-10 mb-8">
-        <h2 className="pl-3 mb-4 text-2xl font-semibold">Settings</h2>
-        <Link to="/userReg">
-          <h1 className="flex items-center px-3 py-2.5 font-bold bg-white text-black border rounded-full">
-            User Register
-          </h1>
-        </Link>
-
-        <Link to="/deviceReg">
-          <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
-            Device Register
-          </h1>
-        </Link>
-
-        <Link to="/CredentialsReg">
-          <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
-            Credentials
-          </h1>
-        </Link>
-
-        <Link to="/NotificacionesConfig">
-          <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
-            Notifications
-          </h1>
-        </Link>
-
-        <Link to="/account">
-          <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
-            PRO Account
-          </h1>
-        </Link>
-      </div>
       <ModalIdVerify showIdVerify={showIdVerify} setShowIdVerify={setShowIdVerify}/>
     </div>
   );

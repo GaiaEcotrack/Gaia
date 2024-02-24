@@ -33,17 +33,6 @@ def verify_otp(phone_number, otp_code):
     except Exception as e:
         print(f"Error verifying OTP: {str(e)}")
         return False
-    
-def check_verification_status(phone_number):
-    try:
-        verification_check = client.verify.v2.services(verify_sid) \
-            .verification_checks \
-            .create(to=phone_number)
-        print(verification_check.status)
-        return verification_check.status == 'approved'
-    except Exception as e:
-        print(f"Error checking verification status: {str(e)}")
-        return False
 
 @sms_route.route('/send-otp', methods=['POST'])
 def handle_send_otp():
@@ -74,23 +63,6 @@ def handle_verify_otp():
             return jsonify({'success': True}), 200
         else:
             return jsonify({'error': 'Código OTP incorrecto'}), 401
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-    
-@sms_route.route('/check', methods=['POST'])
-def handle_check_verification():
-    try:
-        data = request.json
-        phone_number = data.get('phone_number')
-
-        if not phone_number:
-            return jsonify({'error': 'Número de teléfono no proporcionado'}), 400
-
-        if check_verification_status(phone_number):
-            return jsonify({'success': True}), 200
-        else:
-            return jsonify({'error': 'Número de teléfono no verificado'}), 401
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

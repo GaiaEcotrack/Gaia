@@ -553,7 +553,7 @@ const GraficoEnergia = () => {
 
   useEffect(() => {
     const timerId = setTimeout(() => {
-      if (!(localStorage.getItem("id"))) {
+      if (!(localStorage.getItem("name"))) {
         Swal.fire({
           title: "Don't forget to complete your registration",         
           icon: "warning",
