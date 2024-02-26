@@ -80,7 +80,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
         throw new Error(`Unexpected response: ${checkUserResponse.status}`);
       }
     } catch (error) {
-      setError("Error creating user");
+      setError("User not found, are you registered?");
       console.error(error);
     } finally {
       setLoadingE(false);
@@ -112,6 +112,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
         navigate('/home');
         localStorage.setItem("name", name);
         localStorage.setItem("profilePic", profilePic);  
+        localStorage.setItem("email", email);
         return;
       }
   
@@ -128,8 +129,6 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
         throw new Error(`Error creating user: ${createUserResponse.statusText}`);
       }
   
-      localStorage.setItem("email", email);
-      
       navigate('/home');
     } catch (error) {
       console.error(error);
@@ -167,7 +166,6 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
                 name="email"
                 placeholder="Enter Email Address"
                 className="w-full px-4 py-3 rounded-lg text-black bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-                autoComplete="on"
                 required
               />
             </div>

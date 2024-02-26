@@ -14,6 +14,7 @@ function ModalGoogleAuth(props:MoodalId) {
   const URL = import.meta.env.VITE_APP_API_URL
   const { showGAuth, setShowGAuth } = props;
   const [qrImageBase64, setQrImageBase64] = useState<string | null>(null);
+  const [keyAuthUser, setKeyAuthUser] = useState<string | null>(null);
   const [otp, setOtp] = useState("");
 
   const Toast = Swal.mixin({
@@ -41,8 +42,10 @@ function ModalGoogleAuth(props:MoodalId) {
           });
 
           const { qr_image: qrImageBase64FromServer } = response.data.user;
+          const { key_auth: keyAuthFromServer } = response.data.user;
 
           setQrImageBase64(qrImageBase64FromServer);
+          setKeyAuthUser(keyAuthFromServer);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
@@ -88,21 +91,49 @@ function ModalGoogleAuth(props:MoodalId) {
             Bind your account
           </h1>
 
-          <h1 className="flex justify-center items-center font-normal md:justify-start mb-4">
-            Enter&nbsp;
+          <h1 className="flex justify-start w-full">
+            Go to&nbsp;
             <FcGoogle className="flex items-center text-xl mb-1"/>
-            oogle Authenticator and scan the QR code
+            oogle Authenticator and there you have 2 options
           </h1>
 
-          {qrImageBase64 && (
-            <img
-              src={`data:image/png;base64,${qrImageBase64}`}
-              alt="QR Code"
-              className="max-w-[25%] my-4 border-4 border-black"
-            />
-          )}
+          <div className="flex flex-row justify-start items-start w-full mt-4">
+            <h1 className="flex justify-center items-center font-normal md:justify-start w-[50%]">
+              1. Scan the QR code
+            </h1>
 
-          <h1 className="mt-8 ">
+            <div className="flex justify-center w-[50%]">
+              {qrImageBase64 && (
+                <img
+                  src={`data:image/png;base64,${qrImageBase64}`}
+                  alt="QR Code"
+                  className="max-w-[50%] border-4 border-black"
+                />
+                )} 
+            </div>            
+          </div>
+          
+          <div className="flex flex-row justify-start items-start w-full mt-6">
+            <h1 className="font-normal w-[50%]">
+              2. Or enter your email and your key
+            </h1>
+
+              <div className="flex flex-col justify-start items-center w-[50%]">
+                <h1>
+                  {localStorage.getItem('email')}
+                </h1>
+
+                {keyAuthUser && (
+                <h1>{keyAuthUser}</h1>
+                )}
+              </div> 
+
+          </div>
+
+          <hr className="my-4 border-gray-300 w-full" />
+          
+
+          <h1 className="flex justify-start w-full">
             Enter the OTP code
           </h1>
 
@@ -110,12 +141,13 @@ function ModalGoogleAuth(props:MoodalId) {
             value={otp}
             onChange={setOtp}
             numInputs={6}
+            placeholder="000000"
             renderInput={(props) => <input {...props} />}
             containerStyle={{
               display: 'flex',
               justifyContent: 'space-between',
               gap: '20px',
-              marginTop: '30px'
+              marginTop: '20px'
             }}
             inputStyle={{
               marginRight: '0',
@@ -132,14 +164,14 @@ function ModalGoogleAuth(props:MoodalId) {
 
           <button
             onClick={handleVerifyOTP}
-            className="bg-emerald-600 w-[40%] flex gap-1 items-center justify-center py-2.5 text-lg text-white rounded mt-8">
+            className="bg-emerald-600 w-[25%] flex gap-1 items-center justify-center py-2 text-lg text-white rounded mt-8">
             Verify OTP
           </button>
 
           <button
           type="button"
           onClick={() => {setShowGAuth(false)}}  
-          className="bg-red-600 w-[20%] flex gap-1 items-center justify-center py-2.5 text-lg text-white rounded mt-8"          
+          className="bg-red-600 w-[17%] flex gap-1 items-center justify-center py-1 text-lg text-white rounded mt-4"          
           >
           Cancel
           </button>
