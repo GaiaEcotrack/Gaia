@@ -167,7 +167,6 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
                 name="email"
                 placeholder="Enter Email Address"
                 className="w-full px-4 py-3 rounded-lg text-black bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-                autoComplete="on"
                 required
               />
             </div>

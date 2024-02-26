@@ -122,48 +122,48 @@ def add_user():
     return jsonify({'message': 'Usuario agregado con éxito', 'user_id': str(inserted_id)})
 
 
-# @users_route.route('/<id>', methods=['PUT'])
-# def update_user(id):
-    
-#     try:
-#         # Convertir el id a un ObjectId de MongoDB
-#         object_id = ObjectId(id)
-#     except:
-#         return jsonify({'message': 'ID inválido'}), 400
-
-#     data = request.json
-
-#     result = collection.update_one({'_id': object_id}, {'$set': data})
-
-#     if result.matched_count == 0:
-#         return jsonify({'message': 'Usuario no encontrado'}), 404
-
-#     return jsonify({'message': 'Usuario actualizado con éxito'})
-
 @users_route.route('/<id>', methods=['PUT'])
 def update_user(id):
+    
     try:
         # Convertir el id a un ObjectId de MongoDB
         object_id = ObjectId(id)
     except:
         return jsonify({'message': 'ID inválido'}), 400
 
-    # Obtener los datos del cuerpo de la petición
     data = request.json
 
-    # Validar los datos con el esquema UserSchema
-    try:
-        valid_data = UserSchema().load(data)
-    except ValidationError as err:
-        return jsonify(err.messages), 400
-
-    # Si la validación es exitosa, proceder con la actualización
-    result = collection.update_one({'_id': object_id}, {'$set': valid_data})
+    result = collection.update_one({'_id': object_id}, {'$set': data})
 
     if result.matched_count == 0:
         return jsonify({'message': 'Usuario no encontrado'}), 404
 
-    return jsonify({'message': 'Usuario actualizado con éxito'}), 200
+    return jsonify({'message': 'Usuario actualizado con éxito'})
+
+# @users_route.route('/<id>', methods=['PUT'])
+# def update_user(id):
+#     try:
+#         # Convertir el id a un ObjectId de MongoDB
+#         object_id = ObjectId(id)
+#     except:
+#         return jsonify({'message': 'ID inválido'}), 400
+
+#     # Obtener los datos del cuerpo de la petición
+#     data = request.json
+
+#     # Validar los datos con el esquema UserSchema
+#     try:
+#         valid_data = UserSchema().load(data)
+#     except ValidationError as err:
+#         return jsonify(err.messages), 400
+
+#     # Si la validación es exitosa, proceder con la actualización
+#     result = collection.update_one({'_id': object_id}, {'$set': valid_data})
+
+#     if result.matched_count == 0:
+#         return jsonify({'message': 'Usuario no encontrado'}), 404
+
+#     return jsonify({'message': 'Usuario actualizado con éxito'}), 200
 
 @users_route.route('/<id>', methods=['DELETE'])
 def delete_user(id):

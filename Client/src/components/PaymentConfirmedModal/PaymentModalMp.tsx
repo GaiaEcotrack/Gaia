@@ -18,9 +18,19 @@ const PaymentModalMp = () => {
             if (currentUrl.includes('approved&payment_id')) {
                 setStatus("Aproved")
                 setMensagge('Your payment was confirmed, thank you for your purchase 😎')
-                axios.put(`http://127.0.0.1:5000/users/${idUser}`, {
-                    membresia: true
+                const putData = async ()=>{
+                  try {
+                  await axios.put(`http://127.0.0.1:5000/users/${idUser}`, {
+                    "membresia": true
                   })
+                  console.log("se actualizo con exito");
+                  
+                  } catch (error) {
+                    console.log(error);
+                    
+                  }
+                }
+                putData()
                 // Hacer algo si la palabra está presente en la URL
             } else {
                 // Hacer algo si la palabra no está presente en la URL
@@ -31,6 +41,8 @@ const PaymentModalMp = () => {
         // Guardar la URL en el localStorage
         localStorage.setItem('paymentUrl', currentUrl);
       }, [idUser]);
+      console.log(idUser);
+      
     
   return (
     <div className='w-screen h-screen flex justify-center items-center'>
