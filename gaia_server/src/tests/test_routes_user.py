@@ -21,7 +21,7 @@ def test_get_users(client):
 
 # test GET by Id
 def test_get_user_by_id(client):
-    valid_id = '65cf7e65bea773af146543f2'
+    valid_id = '65d9020319641afbb70eaf7b'
     response = client.get(f'/users/{valid_id}')
     assert response.status_code == 200
     json_data = response.get_json()
@@ -56,7 +56,13 @@ def test_add_user(mock_insert, mock_find_one, client):
         "other_financial_documents": "PYTEST",
         "credentials": "PYTEST",
         "secret_key": "PYTEST",
-        "devices": []
+        "devices": [],
+        "identity_document_url": "fijuenvfe33",
+        "bank_account_status_url": "fjnj",
+        "tax_declarations_url": "ewrfgrg",
+        "other_financial_documents_url": "dsfgdf",
+        "membership": False,
+        "key_auth": None
     }
     
     response = client.post('/users/', data=json.dumps(user_data), content_type='application/json')
