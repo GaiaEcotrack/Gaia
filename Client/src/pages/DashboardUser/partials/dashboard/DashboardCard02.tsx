@@ -1,11 +1,34 @@
-import React from 'react';
+import React , {useEffect , useState} from 'react';
 import LineChart from '../../charts/LineChart01';
 import { VarasBalance } from '@/pages/home/VarasBalance';
+import { useSelector } from "react-redux";
+import { RootState } from '../../../../store/index';
+import axios from 'axios'
 
 // Import utilities
 import { tailwindConfig, hexToRGB } from '../../utils/Utils';
 
 function DashboardCard02({image,quantity,name,onClick,metric}) {
+   
+  const [claim, setClaim] = useState(false)
+  const userRedux = useSelector((state:RootState) => state.app.loggedInUser)
+  const membresia = userRedux?.[0].membresia
+  
+  useEffect(() => {
+    if (membresia === true) {
+      setClaim(true)
+      
+    }
+  else{
+    setClaim(false)
+  }
+
+  }, [membresia])
+  
+
+
+  console.log(membresia);
+  
 
   const chartData = {
     labels: [
@@ -75,7 +98,11 @@ function DashboardCard02({image,quantity,name,onClick,metric}) {
         </header>
         <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-2">{name}</h2>
         <h1 className='text-lg font-semibold text-slate-800 dark:text-slate-100 mb-2'>Profit in VARAS</h1>
-        <VarasBalance/>
+        {claim && (
+                  <button  aria-describedby="tier-starter" className="items-center justify-center w-full px-6 py-2.5 text-center text-white duration-200 bg-black border-2 border-white rounded-full nline-flex hover:bg-transparent hover:border-white hover:text-white focus:outline-none focus-visible:outline-white text-sm focus-visible:ring-white">
+                  Claim Varas
+                </button>
+        )}
         <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase mb-1">Balance</div>
         <div className="flex items-start">
           <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mr-2">${quantity}</div>
