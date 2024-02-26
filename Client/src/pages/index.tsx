@@ -15,8 +15,8 @@ import { CredentialsReg } from '@/components/UserNew/CredentialsReg';
 import { Notifications } from '@/components/UserNew/Notifications';
 import { IdVerification } from '@/components/UserNew/IdVerification';
 import { PlantsDashboard } from '@/components/DashBoard/PlantsDashboard';
-import AuthRoute from '@/components/AuthRoute';
 import PaymentModalMp from '@/components/PaymentConfirmedModal/PaymentModalMp';
+import { SecurityVerify } from '@/components/UserNew/SecurityVerify';
 
 const routes = [{ path: '/main', Page: Main },
 { path: '/labs', Page: Labs },
@@ -33,13 +33,14 @@ const routes = [{ path: '/main', Page: Main },
 { path: '/idVerification', Page: IdVerification },
 { path: 'dashboard/plants', Page: PlantsDashboard },
 { path: '/payment', Page: PaymentModalMp },
+{ path: '/security', Page: SecurityVerify },
 
 ];
 
 function Routing() {
   const getRoutes = () => routes.map(({ path, Page }) => <Route key={path} path={path} element={<Page />} />);
 
-  return <AuthProvider><AuthRoute><Routes>{getRoutes()}</Routes></AuthRoute></AuthProvider>;
+  return <AuthProvider><Routes>{getRoutes()}</Routes></AuthProvider>;
 }
 
 export { Routing };

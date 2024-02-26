@@ -16,6 +16,8 @@ from src.routes.face import face_route
 from src.routes.coinbase import coinbase_route
 from src.routes.sms import sms_route
 from src.routes.paypal import paypal_route
+from src.routes.authenticator import auth_route
+
 
 
 load_dotenv()
@@ -47,6 +49,7 @@ application.register_blueprint(face_route, url_prefix='/face')
 application.register_blueprint(coinbase_route, url_prefix='/coinbase')
 application.register_blueprint(sms_route, url_prefix='/sms')
 application.register_blueprint(paypal_route, url_prefix='/paypal')
+application.register_blueprint(auth_route, url_prefix='/auth')
 
 mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri, tlsAllowInvalidCertificates=True)

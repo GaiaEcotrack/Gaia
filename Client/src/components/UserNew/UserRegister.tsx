@@ -385,11 +385,11 @@ const [formData, setFormData] = useState({
       {/* Aside */}
       <aside className="hidden py-4 md:w-1/3 lg:w-1/4 md:block">
         <div className="sticky flex flex-col gap-2 p-4 text-sm border-r border-indigo-100 top-12">
-          <h2 className="pl-3 mb-4 text-2xl font-semibold">Register</h2>
+          <h2 className="pl-3 mb-4 text-2xl font-semibold">Profile</h2>
 
           <Link to="/userReg">
             <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#212056] border rounded-full">
-              User Register {loading ? (
+              User Account {loading ? (
                 <div className="" role="status"></div>
               ) : (
                 verifiedDoc ? <FcApproval className="text-xl"/> 
@@ -397,19 +397,7 @@ const [formData, setFormData] = useState({
               )}              
             </h1>
           </Link>
-
-          <Link to="/idVerification">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
-              Identity Verification
-            </h1>
-          </Link>
-
-          <Link to="/deviceReg">
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
-              Device Register
-            </h1>
-          </Link>
-
+          
           <Link to="/credentialsReg">
             <h1 className="flex items-center justify-between px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Credentials {loading ? (
@@ -417,6 +405,24 @@ const [formData, setFormData] = useState({
               ) : (
                 completeCredent ? <FcOk className="text-xl" /> : <FcHighPriority className="text-xl" />
               )}
+            </h1>
+          </Link>
+
+          <Link to="/idVerification">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+              Identification
+            </h1>
+          </Link>
+
+          <Link to="/security">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+              Security Settings
+            </h1>
+          </Link>
+
+          <Link to="/deviceReg">
+            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+              Device Register
             </h1>
           </Link>
 
