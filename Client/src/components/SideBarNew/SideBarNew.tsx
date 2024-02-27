@@ -11,7 +11,13 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
   const auth = getAuth();
   const signOutWithoutAuth = async () => {
     await signOut(auth);
-    localStorage.clear()
+    // localStorage.clear()
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
+    localStorage.removeItem("profilePic");
+    localStorage.removeItem('id');
+    localStorage.removeItem('completeCredent');
+    localStorage.removeItem('verified');
   };
 
   const [open, setOpen] = useState(false);

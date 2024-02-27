@@ -512,45 +512,78 @@ const GraficoEnergia = () => {
   };
 
 
-// Validacion de email en DB (alerta de registro)
+// Creacion de usuario en la DB
   const URL = import.meta.env.VITE_APP_API_URL
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
-
-  useEffect(() => {
-    const auth = getAuth();
-    const user = auth.currentUser;
-    // console.log(user?.email);
-    const storedEmail = localStorage.getItem("email") ?? '';
-    if(!storedEmail && user?.email){
-      localStorage.setItem("email", user.email);
-    }
-    setEmail(storedEmail || '');    
-    handleSearch();
-  }, [email]);
-
+  
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`${URL}/users/search`, {
-        params: {
-          email: email,
-        },
-      });  
-      if (response.status === 200) {
-        setFoundUserId(response.data._id);
-      } else if (response.status === 404) {
-        setFoundUserId('');
-        console.log('Usuario no encontrado');
-      } else {
-        console.error('Error al buscar usuario:', response.status);
+      if (!localStorage.getItem('id')) {
+        const response = await axios.get(`${URL}/users/search`, {
+          params: {
+            email: email,
+          },
+        });  
+        if (response.status === 200) {
+          setFoundUserId(response.data._id);
+        } else {
+          setFoundUserId('');
+          // console.error('Error al buscar usuario:', response.status);
+        }
       }
     } catch (error) {
-      // console.error('Error de red:');
+      // console.error('Error de red:', error);
     }  
   };
+  if (foundUserId) {
+    localStorage.setItem("id", foundUserId);
+  }
 
-  localStorage.setItem("id", foundUserId);  
+  const addNewUser = async () => {
+    try {
+      if (!localStorage.getItem('id')) {
+        const response = await axios.post(`${URL}/users/`, {
+          email: email,
+        });  
+        if (response.status === 200) {
+          console.log('Usuario creado con éxito');
+          setFoundUserId(response.data.user_id);
+          localStorage.setItem('id', response.data.user_id);
+        }
+      }
+    } catch (error) {
+      // console.error('Error de red al crear usuario:', error);
+    }
+  };  
+  const [searchCompleted, setSearchCompleted] = useState(false);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;  
+      const storedEmail = localStorage.getItem("email") ?? '';
+  
+      if (!storedEmail && user?.email) {
+        localStorage.setItem("email", user.email);
+      }
+      setEmail(storedEmail || '');
+  
+      try {
+        await handleSearch();  
+        setSearchCompleted(true);
+  
+        if (searchCompleted) {
+          addNewUser();
+        }
+      } catch (error) {
+        console.error("Error during handleSearch:", error);
+      }
+    };  
+    fetchData();  
+  }, [email, handleSearch]);
+
+// PopUp completar registro 
   useEffect(() => {
     const timerId = setTimeout(() => {
       if (!(localStorage.getItem("name"))) {

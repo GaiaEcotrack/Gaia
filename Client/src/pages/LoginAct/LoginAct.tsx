@@ -35,53 +35,15 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
     try {
       setError("");
       setLoadingE(true);
-  
-      // Verificar si el usuario ya existe
-      const checkUserResponse = await fetch(`${URL}/users/search?email=${emailRef.current.value}`);
-      
-      if (checkUserResponse.status === 200) {
-        await login(emailRef.current.value, passwordRef.current.value);
-  
-        const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
-        navigate(redirectPath);
-  
-        auth.onAuthStateChanged((userCred: any) => {
-          const Verified = userCred.emailVerified;
-          localStorage.setItem("verified", String(Verified));
-        });
-      } else if (checkUserResponse.status === 404) {
-        // El usuario no existe, proceder con la creación y login
-        const userData = {
-          email: emailRef.current.value,
-        };
-  
-        const response = await fetch(`${URL}/users/`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(userData),
-        });
-  
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
-  
-        await login(emailRef.current.value, passwordRef.current.value);
-  
-        const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
-        navigate(redirectPath);
-  
-        auth.onAuthStateChanged((userCred: any) => {
-          const Verified = userCred.emailVerified;
-          localStorage.setItem("verified", String(Verified));
-        });
-      } else {
-        throw new Error(`Unexpected response: ${checkUserResponse.status}`);
-      }
-    } catch (error) {
-      setError("User not found, are you registered?");
-      console.error(error);
+      await login(emailRef.current.value, passwordRef.current.value);
+      const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
+      navigate(redirectPath);
+      auth.onAuthStateChanged((userCred: any) => {
+        const Verified = userCred.emailVerified
+        localStorage.setItem("verified", Verified);       
+      })
+    } catch {
+      setError("Incorrect username or password");
     } finally {
       setLoadingE(false);
     }
@@ -96,7 +58,13 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   // Function to log in with GOOGLE  
   const signInWithGoogle = async () => {
     setAuthing(true);    
-    localStorage.clear();
+    // localStorage.clear();
+    localStorage.removeItem("name");
+    localStorage.removeItem("email");
+    localStorage.removeItem("profilePic");
+    localStorage.removeItem('id');
+    localStorage.removeItem('completeCredent');
+    localStorage.removeItem('verified');
   
     try {
       const response = await signInWithPopup(auth, new GoogleAuthProvider());
@@ -104,30 +72,15 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       const name = response.user.displayName || "Nombre";
       const email = response.user.email || "default@example.com";
       const profilePic = response.user.photoURL || "Photo Profile";
-      
-      // Verificar si el usuario ya existe
-      const checkUserResponse = await fetch(`${URL}/users/search?email=${email}`);
-      
-      if (checkUserResponse.status === 200) {
-        navigate('/home');
-        localStorage.setItem("name", name);
-        localStorage.setItem("profilePic", profilePic);  
-        localStorage.setItem("email", email);
-        return;
-      }
-  
-      // El usuario no existe, proceder con la creación
-      const createUserResponse = await fetch(`${URL}/users/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-      
-      if (!createUserResponse.ok) {
-        throw new Error(`Error creating user: ${createUserResponse.statusText}`);
-      }
+ 
+      localStorage.setItem("name", name);
+      localStorage.setItem("profilePic", profilePic);  
+      localStorage.setItem("email", email); 
+
+      auth.onAuthStateChanged((userCred: any) => {
+        const Verified = userCred.emailVerified
+        localStorage.setItem("verified", Verified);       
+      })
   
       navigate('/home');
     } catch (error) {
