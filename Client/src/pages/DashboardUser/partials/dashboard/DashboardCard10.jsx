@@ -15,7 +15,7 @@ function DashboardCard10() {
       name: 'Marta Rodriguez',
       email: 'Solar',
       location: 'COL',
-      spent: '$2,890.66',
+      spent: '250,000 K/w',
     },
     {
       id: '1',
@@ -23,7 +23,7 @@ function DashboardCard10() {
       name: 'Jorge Ruiz',
       email: 'Eolica',
       location: 'CHL',
-      spent: '$2,767.04',
+      spent: '230,000 K/w',
     },
     {
       id: '2',
@@ -31,7 +31,7 @@ function DashboardCard10() {
       name: 'Bautista Villanueva',
       email: 'Solar',
       location: 'VEN',
-      spent: '$2,996.00',
+      spent: '210,000 K/w',
     },
     {
       id: '3',
@@ -39,7 +39,7 @@ function DashboardCard10() {
       name: 'Alexandra Suarez',
       email: 'Solar',
       location: 'COL',
-      spent: '$1,220.66',
+      spent: '200,000 K/w',
     },
     {
       id: '4',
@@ -47,7 +47,7 @@ function DashboardCard10() {
       name: 'Esteban Villa',
       email: 'Solar',
       location: 'COL',
-      spent: '$1,890.66',
+      spent: '180,000 K/w',
     },
   ];
 
@@ -71,7 +71,7 @@ function DashboardCard10() {
                   <div className="font-semibold text-left">Type Energy</div>
                 </th>
                 <th className="p-2 whitespace-nowrap">
-                  <div className="font-semibold text-left">Earnings</div>
+                  <div className="font-semibold text-left">Generated</div>
                 </th>
                 <th className="p-2 whitespace-nowrap">
                   <div className="font-semibold text-center">Country</div>
