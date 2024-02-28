@@ -85,7 +85,7 @@ function ModalGoogleAuth(props:MoodalId) {
     return showGAuth ? (
       <div className="bg-[#0000003d] fixed top-0 left-0 h-full w-full flex justify-center items-center">
         
-        <div className="flex flex-col justify-center items-center bg-white h-[100%] 2xl:h-[85%] w-[60%] 2xl:w-[60%] p-4 md:p-6 mt-40 md:mt-0">
+        <div className="flex flex-col justify-center items-center bg-white h-[100%] 2xl:h-[85%] w-[60%] 2xl:w-[60%] p-6 mt-40 md:mt-0 pl-8">
         
           <h1 className="text-[#000000] text-xl md:text-2xl md:mb-6">
             Bind your account
@@ -130,7 +130,7 @@ function ModalGoogleAuth(props:MoodalId) {
 
           </div>
 
-          <hr className="my-4 border-gray-300 w-full" />
+          <hr className="my-4 ml-6 mr-10  border-gray-300 w-full" />
           
 
           <h1 className="flex justify-start w-full">
