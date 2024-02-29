@@ -1,6 +1,5 @@
-import sys
-# utilizacion de sys.path para aseguirarnos q el test lee el archjivo application
-sys.path.insert(0, "/Users/agustinnazer/Desktop/vara-energy/Gaia/gaia_server")
+# import sys
+# sys.path.insert(0, "/Users/agustinnazer/Desktop/vara-energy/Gaia/gaia_server")
 
 import pytest
 
