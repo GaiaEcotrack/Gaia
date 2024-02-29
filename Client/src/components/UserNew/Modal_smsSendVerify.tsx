@@ -1,4 +1,3 @@
-import { BsFillShieldLockFill } from "react-icons/bs"; 
 import { FcSms } from "react-icons/fc"; 
 import { useState } from "react";
 import OtpInput from 'react-otp-input';
@@ -15,8 +14,9 @@ interface MoodalSms {
 function SmsSendVerify(props:MoodalSms) {
 
   const URL = import.meta.env.VITE_APP_API_URL
-  const { showSmsSendVerify, setShowSmsSendVerify, telephone } = props;
+  const { showSmsSendVerify, setShowSmsSendVerify } = props;
   const [otp, setOtp] = useState("");
+  const [cellPhone, setCellPhone] = useState("");
 
   const Toast = Swal.mixin({
     toast: true,
@@ -30,18 +30,58 @@ function SmsSendVerify(props:MoodalSms) {
     }
   }); 
 
-  const formatPhone = "+" + telephone;
+  const [formData, setFormData] = useState({
+    phone: cellPhone || null
+  });
+
+  const handlePhoneChange = (formattedValue: string) => {
+    setCellPhone(formattedValue); // Actualiza el estado de cellPhone
+    setFormData({
+      ...formData,
+      phone: formattedValue, // Actualiza el estado de formData.phone
+    });
+  };
+  const handleSms = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+
+    const formatPhone = "+" + cellPhone;
+
+    try {
+      const response = await axios.post(`${URL}/sms/send-otp`, {
+        phone_number: formatPhone,
+      });
+
+      if (response.data.success) {
+        Toast.fire({
+          icon: "success",
+          title: "SMS sent successfully"
+        }); 
+        setShowSmsSendVerify(true)
+      } else {
+        console.error('Error sending OTP');
+      }
+    } catch (error) {
+      console.error('Network or server error:', error);
+    }
+  };
+
+  const formatPhone = "+" + cellPhone;
   const id = localStorage.getItem("id")
   
   const handleVerifyPhoneNumber = async () => {
     try {
       const response = await axios.post(`${URL}/sms/verify-otp`, {
-        phone_number:  formatPhone,
+        phone_number: formatPhone,
         otp_code: otp,
         id: id
       });
       
       if (response.status === 200) {
+        const userId = localStorage.getItem('id'); // Obtener el ID del localStorage
+        await axios.put(`${URL}/users/${userId}`, {
+          phone: cellPhone  // Reemplaza 'formatPhone' con el nuevo número de teléfono
+        });
+
         Toast.fire({
           icon: "success",
           title: "OTP verified successfully"
@@ -75,12 +115,11 @@ function SmsSendVerify(props:MoodalSms) {
             <FcSms className="text-5xl ml-4 mb-6"/>         
         </div>
 
-
           <div className="text-black mb-6">
             <PhoneInput
-              // onChange={handlePhoneChange}
+              onChange={handlePhoneChange}
               country={"co"}
-              value={telephone || ''}
+              value={formData.phone}
               inputStyle={{
                 background: '#eef2ff',
                 border: '1px solid #a5b4fc',
@@ -95,7 +134,7 @@ function SmsSendVerify(props:MoodalSms) {
           </div>   
 
           <button
-            // onClick=
+            onClick={handleSms}
             className="bg-[#4caf4f] hover:bg-[#3ea442] w-[30%] flex gap-1 items-center justify-center py-2.5 text-lg text-white rounded mb-12"
           >
             Step 1. Send SMS
@@ -104,8 +143,6 @@ function SmsSendVerify(props:MoodalSms) {
           <h1 className="font- text-2xl mb-6">
             Enter the code received by SMS in the number
           </h1>
-
-          {/* <BsFillShieldLockFill className="text-6xl mb-8"/> */}
 
           <OtpInput
             value={otp}
@@ -127,6 +164,7 @@ function SmsSendVerify(props:MoodalSms) {
               width: '35px',
               height: '35px',
               fontSize: '16px',
+              borderRadius: '5px',
             }}
           />
 

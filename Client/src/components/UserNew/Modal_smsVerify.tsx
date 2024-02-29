@@ -106,6 +106,7 @@ function SmsVerify(props:MoodalSms) {
               width: '35px',
               height: '35px',
               fontSize: '16px',
+              borderRadius: '5px',
             }}
           />
 

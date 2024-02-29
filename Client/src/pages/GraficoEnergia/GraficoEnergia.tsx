@@ -44,6 +44,9 @@ import { RootState } from '../../store/index';
 // Nuevo grafico
 import ReactECharts from 'echarts-for-react';
 import moment from 'moment';
+import CardEnergy from "@/components/CardsEnergy/CardEnergy";
+import CardConsume from "@/components/CardsEnergy/CardConsume";
+import CardGenerated from "@/components/CardsEnergy/CardGenerated";
 
 
 
@@ -161,7 +164,7 @@ const GraficoEnergia = () => {
         const auth = getAuth();
         const user = auth.currentUser;
         console.log(user);
-        
+
 
         if (!user) {
           throw new Error('User is not authenticated');
@@ -196,7 +199,7 @@ const GraficoEnergia = () => {
         const data = response.data.set;
         const pvGeneration = data[0].pvGeneration;
         console.log(pvGeneration);
-        
+
         setTotalGenerado(pvGeneration);
       } catch (error) {
         console.log(error);
@@ -204,7 +207,7 @@ const GraficoEnergia = () => {
     };
     fetchEnergyTwo()
     fetchEnergy();
-  
+
 
     // Simula la actualización en tiempo real de los datos de energía
     const interval = setInterval(() => {
@@ -270,9 +273,9 @@ const GraficoEnergia = () => {
       clearInterval(intervalId);
     };
   }, [energyBatery]);
-  
 
-  
+
+
   const currentDate = new Date();
 
   const showDate = format(currentDate, "dd/MM/yyyy HH:mm");
@@ -332,7 +335,7 @@ const GraficoEnergia = () => {
   // useEffect(() => {
   //   const auth = getAuth();
   //   const user = auth.currentUser;
-  
+
   //   if (user) {
   //     user.getIdToken().then((idToken) => {
   //       console.log('Token de Firebase:', idToken); // Esta línea imprime el token en la consola
@@ -378,7 +381,7 @@ const GraficoEnergia = () => {
   //       // O enviar el token en el cuerpo de la solicitud, según prefieras
   //       body: JSON.stringify({ token }),
   //     });
-  
+
   //     const data = await response.json();
   //     console.log("Respuesta del backend:", data);
   //   } catch (error) {
@@ -516,7 +519,8 @@ const GraficoEnergia = () => {
   const URL = import.meta.env.VITE_APP_API_URL
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
-  
+  const [foundUserName, setFoundUserName] = useState('');
+
   const handleSearch = async () => {
     try {
       if (!localStorage.getItem('id')) {
@@ -524,9 +528,10 @@ const GraficoEnergia = () => {
           params: {
             email: email,
           },
-        });  
+        });
         if (response.status === 200) {
           setFoundUserId(response.data._id);
+          setFoundUserName(response.data.full_name)
         } else {
           setFoundUserId('');
           // console.error('Error al buscar usuario:', response.status);
@@ -534,10 +539,14 @@ const GraficoEnergia = () => {
       }
     } catch (error) {
       // console.error('Error de red:', error);
-    }  
+    }
   };
   if (foundUserId) {
     localStorage.setItem("id", foundUserId);
+  }
+  const name = localStorage.getItem('name') || foundUserName
+  if (name) {
+    localStorage.setItem("name", name);
   }
 
   const addNewUser = async () => {
@@ -545,7 +554,7 @@ const GraficoEnergia = () => {
       if (!localStorage.getItem('id')) {
         const response = await axios.post(`${URL}/users/`, {
           email: email,
-        });  
+        });
         if (response.status === 200) {
           console.log('Usuario creado con éxito');
           setFoundUserId(response.data.user_id);
@@ -555,40 +564,40 @@ const GraficoEnergia = () => {
     } catch (error) {
       // console.error('Error de red al crear usuario:', error);
     }
-  };  
+  };
   const [searchCompleted, setSearchCompleted] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       const auth = getAuth();
-      const user = auth.currentUser;  
+      const user = auth.currentUser;
       const storedEmail = localStorage.getItem("email") ?? '';
-  
+
       if (!storedEmail && user?.email) {
         localStorage.setItem("email", user.email);
       }
       setEmail(storedEmail || '');
-  
+
       try {
-        await handleSearch();  
+        await handleSearch();
         setSearchCompleted(true);
-  
+
         if (searchCompleted) {
           addNewUser();
         }
       } catch (error) {
         console.error("Error during handleSearch:", error);
       }
-    };  
-    fetchData();  
+    };
+    fetchData();
   }, [email, handleSearch]);
 
-// PopUp completar registro 
+// PopUp completar registro
   useEffect(() => {
     const timerId = setTimeout(() => {
       if (!(localStorage.getItem("name"))) {
         Swal.fire({
-          title: "Don't forget to complete your registration",         
+          title: "Don't forget to complete your registration",
           icon: "warning",
           iconColor: "#3085d6",
           showCancelButton: true,
@@ -598,14 +607,14 @@ const GraficoEnergia = () => {
           cancelButtonColor: "#b82828cd",
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.href = "/userReg";             
+            window.location.href = "/userReg";
           }
         });
       }
     }, 10000);
     return () => clearTimeout(timerId);
   }, []);
-  
+
 
 
   //------------------------------VARA INTEGRATION-----------------------------------------------------------------------
@@ -665,7 +674,7 @@ const GraficoEnergia = () => {
     // Extraer los datos y labels de barData
     const { labels, datasets } = barData; // Asumiendo que barData es tu estado con los datos
     const dataset = datasets[0];
-  
+
     // Mapear los datos a los valores para el gráfico
     // Asumiendo que el orden de los datos en barData corresponde a los días de previousDay5 a currentDay
     const seriesData = dataset.data.map((value, index) => ({
@@ -673,7 +682,7 @@ const GraficoEnergia = () => {
       // Aplicar el color de la barra basado en el color definido en barData, o un color por defecto si no se especifica
       itemStyle: { color: index % 2 === 0 ? '#58E2C2' : '#F7E53B' }
     }));
-  
+
     return {
       color: ['#58E2C2'],
       tooltip: {
@@ -738,14 +747,14 @@ const GraficoEnergia = () => {
           data: [
             { value: 203, itemStyle: { color: '#58E2C2' } }, // Primer color para la primera barra
             { value: 214, itemStyle: { color: '#F7E53B' } } , // Segundo color para la segunda barra
-            
+
           ],
           data: seriesData // Usando la data mapeada desde barData
         }
       ]
     };
   };
-  
+
   //! Medidor de intensidad de enrgia
   const getGaugeOption = () => {
     // Obtener el último dataset del gráfico de barras
@@ -754,7 +763,7 @@ const GraficoEnergia = () => {
   const lastValue = lastDataset.data[lastDataset.data.length - 1];
 
   const percentage = lastValue / 18000;
-  
+
   useEffect(() => {
     const url = import.meta.env.VITE_APP_API_URL
     const auth = getAuth()
@@ -766,23 +775,23 @@ const GraficoEnergia = () => {
         const filter = response.filter((userLog:any) => userLog.email === user)
         setUserLog(filter)
         dispatch({ type: 'SET_LOGGED_IN_USER', payload: filter })
-        
+
       } catch (error) {
         console.log(error);
       }
     }
     fetchDataUser()
 
-    
+
   }, [])
 
-  
+
 
 
     return {
       tooltip: {
         formatter: "{a} <br/>{b} : {c}%",
-        
+
       },
       series: [
         {
@@ -791,7 +800,7 @@ const GraficoEnergia = () => {
           detail: {
             color: '#FFFFFF',
             formatter: (value:number) => `${value.toFixed(0)}kWh`,
-            offsetCenter: [0, '80%'], 
+            offsetCenter: [0, '80%'],
           fontSize: 14,
           },
           data: [{value: lastValue}],
@@ -813,8 +822,8 @@ const GraficoEnergia = () => {
             length: -5, // Longitud de los ticks
           },
           axisLabel: { // Etiquetas de los números alrededor del gauge
-            color: '#FFFFFF', 
-            distance: 25, 
+            color: '#FFFFFF',
+            distance: 25,
             fontSize: 11
           },
           pointer: {
@@ -829,8 +838,8 @@ const GraficoEnergia = () => {
   return (
     <div className="mb-12">
       <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
-        <div className="flex flex-col lg:flex-row  p-2 justify-center graficos items-center">
-          <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg m-4">
+        <div className="flex flex-col lg:flex-row gap-5  p-2 justify-center graficos items-center">
+          {/* <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg m-4">
             <div className=" flex justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center mt-4">
                 {totalGenerado.toFixed(3)} Kw
@@ -839,8 +848,8 @@ const GraficoEnergia = () => {
             <div className="flex justify-end items-end h-20">
               <span className=" mb-4 mr-4">Total generated</span>
             </div>
-          </div>
-          <div className="flex flex-col bg-[#1d335b] md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg  m-4">
+          </div> */}
+          {/* <div className="flex flex-col bg-[#1d335b] md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg  m-4">
             <div className="flex justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center mt-4">
                 {totalConsumido.toFixed(3)} Kw
@@ -849,8 +858,11 @@ const GraficoEnergia = () => {
             <div className="flex justify-end items-end h-20">
               <span className=" mb-4 mr-4">Total consumed</span>
             </div>
-          </div>
-          <div className="flex flex-col bg-[#1d335b] md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg  m-4">
+          </div> */}
+          <CardGenerated supply={totalGenerado.toFixed(3)}/>
+          <CardConsume supply={totalConsumido.toFixed(3)}/>
+          <CardEnergy supply={excedenteCapturado} reward={claimReward}/>
+          {/* <div className="flex flex-col bg-[#1d335b] md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg  m-4">
             <div className="flex flex-col justify-center items-center h-full">
               <span className="font-[600] text-[40px] text-center mt-8">
                 {totalExcedente.toFixed(3)} Kw
@@ -877,7 +889,7 @@ const GraficoEnergia = () => {
                 Reward
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="flex justify-center text-center text-emerald-500  ">
           {walletMessage && <p className="text-xl">{walletMessage}</p>}

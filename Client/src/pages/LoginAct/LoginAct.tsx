@@ -5,6 +5,8 @@ import { SignUp } from "../../components/LoginSignUp/SignUp";
 import '../../global.css'
 import { AuthProvider } from "@/contexts/AuthContext";
 import { useAuth } from "../../contexts/AuthContext"
+import { TwoFactorAuth } from "./TwoFactorAuth";
+import axios from "axios";
 
 /* eslint-disable */
 export interface ILoginPageProps {}
@@ -21,6 +23,8 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const { login } = useAuth()
   const [error, setError] = useState("")
   const [loadingE, setLoadingE] = useState(false)
+  const [showTwoFA, setShowTwoFA] = useState(false)
+  const [foundUserId, setFoundUserId] = useState('');
 
   // Funtion to log in with registered email 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -41,17 +45,40 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
     }
   
     localStorage.clear();
-  
+
     try {
       setError("");
       setLoadingE(true);
       await login(emailRef.current.value, passwordRef.current.value);
       const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
-      navigate(redirectPath);
-      auth.onAuthStateChanged((userCred: any) => {
-        const Verified = userCred.emailVerified
-        localStorage.setItem("verified", Verified);       
-      })
+      auth.onAuthStateChanged(async (userCred: any) => {
+        const Verified = userCred.emailVerified;
+        localStorage.setItem("verified", Verified);
+    
+        // Consultar la base de datos para obtener verified_2fa
+        try {
+          const response = await axios.get(`${URL}/users/search`, {
+            params: {
+              email: emailRef.current?.value,
+            },
+          });
+    
+          if (response.status === 200) {
+            const verified2fa = response.data.verified_2fa;
+            setFoundUserId(response.data._id); 
+
+            if (verified2fa) {
+              setShowTwoFA(true);
+            } else {
+              navigate(redirectPath);
+            }
+          } else {
+            console.error('Error al buscar usuario:', response.status);
+          }
+        } catch (error) {
+          console.error('Error de red:', error);
+        }
+      });
     } catch {
       setError("Incorrect username or password");
     } finally {
@@ -241,7 +268,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       <AuthProvider>
         <SignUp showSignUp={showSignUp} setShowSignUp={setShowSignUp}/>
       </AuthProvider>
-      
+      <TwoFactorAuth showTwoFA={showTwoFA} setShowTwoFA={setShowTwoFA} foundUserId={foundUserId}/>
     </section>
   );
 };

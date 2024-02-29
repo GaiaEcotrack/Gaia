@@ -157,7 +157,7 @@ function ModalGoogleAuth(props:MoodalId) {
               width: '35px',
               height: '35px',
               fontSize: '16px',
-              border: '1px solid black'
+              borderRadius: '5px',
             }}
           />
 
