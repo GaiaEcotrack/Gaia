@@ -88,23 +88,24 @@ function TwoFactorAuth(props:MoodalId) {
               outline: 'none',
               color: 'black',
               fontWeight: 'bold',
-              width: '35px',
-              height: '35px',
+              width: '37px',
+              height: '37px',
               fontSize: '16px',
-              border: '1px solid black'
+              border: '1px solid black',
+              borderRadius: '5px',
             }}
           />
 
           <button
             onClick={handleVerifyOTP}
-            className="bg-[#1d4ed8] hover:bg-[#51c355] w-[40%] flex gap-1 items-center justify-center py-2 text-lg text-white  mt-8">
+            className="bg-[#1d4ed8] hover:bg-[#51c355] w-[40%] flex gap-1 items-center justify-center py-2 text-lg text-white rounded mt-8">
             Verify OTP
           </button>
 
           <button
           type="button"
           onClick={() => {setShowTwoFA(false)}}  
-          className="bg-[#1d4ed8] hover:bg-[#e54646df] w-[20%] flex gap-1 items-center justify-center py-1 text-lg text-white mt-4"          
+          className="bg-[#1d4ed8] hover:bg-[#e54646df] w-[20%] flex gap-1 items-center justify-center py-1 text-lg text-white rounded mt-4"          
           >
           Cancel
           </button>
