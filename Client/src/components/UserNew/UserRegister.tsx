@@ -8,7 +8,7 @@ import { SetStateAction, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { getAuth } from "@firebase/auth";
-import { ModalSMSVerify } from "./Modal_smsVerify";
+import { SmsVerify } from "./Modal_smsVerify";
 
 function UserRegister() {
 
@@ -779,7 +779,7 @@ const [formData, setFormData] = useState({
           </h1>
         </Link>
       </div>
-      <ModalSMSVerify showSmsVerify={showSmsVerify} setShowSmsVerify={setShowSmsVerify} telephone={telephone}/>
+      <SmsVerify showSmsVerify={showSmsVerify} setShowSmsVerify={setShowSmsVerify} telephone={telephone}/>
     </div>
   );
 }
