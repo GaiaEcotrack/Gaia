@@ -516,6 +516,7 @@ const GraficoEnergia = () => {
   const URL = import.meta.env.VITE_APP_API_URL
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
+  const [foundUserName, setFoundUserName] = useState('');
   
   const handleSearch = async () => {
     try {
@@ -527,6 +528,7 @@ const GraficoEnergia = () => {
         });  
         if (response.status === 200) {
           setFoundUserId(response.data._id);
+          setFoundUserName(response.data.full_name)
         } else {
           setFoundUserId('');
           // console.error('Error al buscar usuario:', response.status);
@@ -538,6 +540,10 @@ const GraficoEnergia = () => {
   };
   if (foundUserId) {
     localStorage.setItem("id", foundUserId);
+  }
+  const name = localStorage.getItem('name') || foundUserName
+  if (name) {
+    localStorage.setItem("name", name);
   }
 
   const addNewUser = async () => {
