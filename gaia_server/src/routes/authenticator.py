@@ -27,24 +27,17 @@ def generate_key_and_qr():
         existing_user = collection.find_one({"_id": ObjectId(user_id)})
 
         if existing_user:
-            # Verifica si el usuario ya tiene un valor en la propiedad "key_auth"
-            if 'key_auth' in existing_user and existing_user['key_auth']:
-                key_auth_value = existing_user['key_auth']
-            else:
-                # Genera un nuevo valor si no hay uno existente
-                key_auth_value = pyotp.random_base32()
-            # Actualiza la propiedad key_auth del usuario con el valor existente o nuevo
-            existing_user['key_auth'] = key_auth_value
+            # Actualiza la propiedad key_auth del usuario con el nuevo valor
+            existing_user['key_auth'] = pyotp.random_base32()
             
             # Guarda los cambios en la base de datos
-            collection.update_one({"_id": ObjectId(user_id)}, {"$set": {"key_auth": key_auth_value}})
+            collection.update_one({"_id": ObjectId(user_id)}, {"$set": {"key_auth": existing_user['key_auth']}})
             
             # Convierte el ObjectId a cadena antes de incluirlo en el objeto JSON
             user_id_str = str(existing_user['_id'])
             
             # Genera el URI con el email actual del usuario (o con el que prefieras)
-            uri = pyotp.totp.TOTP(key_auth_value).provisioning_uri(name=existing_user.get('email', 'default_email'), issuer_name="Gaia EcoTrack")
-
+            uri = pyotp.totp.TOTP(existing_user['key_auth']).provisioning_uri(name=existing_user.get('email', 'default_email'), issuer_name="GaiaEcoTrack App")
 
             # Genera el código QR y convierte la imagen a Base64
             qr_image = qrcode.make(uri)
@@ -93,4 +86,3 @@ def verify_otp():
       
 if __name__ == '__main__':
     application.run(debug=True)
-    

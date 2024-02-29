@@ -2,8 +2,9 @@
 import {useState} from 'react'
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
-import { ProgramMetadata, decodeAddress, GearKeyring } from "@gear-js/api";
+import { ProgramMetadata, decodeAddress, GearKeyring , } from "@gear-js/api";
 import { Button } from "@gear-js/ui";
+import { VoucherIssued } from '@gear-js/api';
 
 
 function Mint() {
@@ -12,6 +13,7 @@ function Mint() {
   const { api } = useApi();
 
   const [error, setError] = useState(null);
+  
 
   const programIDFT = "0x56691cac78ad46d1454e7c0ca23a168933dfe154810641a0ef5eeeec1856ae2e"
 
@@ -151,13 +153,32 @@ function Mint() {
       alert.error("Account not available to sign");
     }
   };
-
+  console.log(decodeAddress('5HTJkawMqHSvVRi2XrE7vdTU4t5Vq1EDv2ZDeWSwNxmmQKEK'));
+  
+  async function voucher() {
+    const programs = '0x633d0f014702f15973932d129e12f5c144124de630125239c764694a143c6a28';
+    const spenderAddress = '0xee6a089b4593be0a920762d7c7cee81cd09d37bc1fbce136cecce80f9d90466a';
+    const validForOneHour = (60 * 60) / 3; // number of blocks in one hour
+    
+    const { extrinsic } = await api.voucher.issue(spenderAddress, 100 * 10 ** 12, validForOneHour, programs, true);
+    
+    // To allow the voucher to be used for code uploading, set the last argument of the `.issue` method to true
+    
+    extrinsic.signAndSend(account, ({ events }) => {
+      const voucherIssuedEvent = events.find(({event: { method }}) => method === 'VoucherIssued')?.event as VoucherIssued;
+    
+      if (voucherIssuedEvent) {
+        console.log(voucherIssuedEvent.toJSON());
+      }
+    })}
   return(
     <div>
       <Button text="Sin Firma" className="bg-black" onClick={()=>{signer()}} />;
       <Button text="Con Firma" className="bg-black" onClick={()=>{signerTwo()}} />;
       {error && <div>Error: {error.toString()}</div>} {/* Muestra el error en el componente */}
       <Button text="Agregar liquidez" className="bg-black" onClick={()=>{signerThree()}} />;
+      <Button text="Crear Voucher" className="bg-black" onClick={()=>{voucher()}} />;
+
 
     </div>
   )

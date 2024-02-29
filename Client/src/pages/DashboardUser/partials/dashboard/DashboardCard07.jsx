@@ -7,7 +7,8 @@ function DashboardCard07() {
   useEffect(() => {
     const fetchData = async ()=>{
       try {
-        const request = await axios.get('http://127.0.0.1:5000/coinbase')
+        const URL = import.meta.env.VITE_APP_API_URL
+        const request = await axios.get(`${URL}/coinbase`)
         const response = request.data
         setCryptoPrice(response)
       } catch (error) {
