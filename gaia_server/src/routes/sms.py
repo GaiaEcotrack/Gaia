@@ -1,6 +1,8 @@
 import os
 from twilio.rest import Client
 from flask import Flask, request, jsonify, Blueprint
+from src.routes.users import collection
+from bson import ObjectId
 
 application = Flask(__name__)
 sms_route = Blueprint('sms', __name__)
@@ -56,13 +58,24 @@ def handle_verify_otp():
         data = request.json
         phone_number = data.get('phone_number')
         otp_code = data.get('otp_code')
-
-        if not phone_number or not otp_code:
-            return jsonify({'error': 'Número de teléfono o código OTP no proporcionado'}), 400
-        if verify_otp(phone_number, otp_code):
-            return jsonify({'success': True}), 200
+        user_id = data.get('id')
+        
+        existing_user = collection.find_one({"_id": ObjectId(user_id)})
+        
+        if existing_user:            
+            if not phone_number or not otp_code:
+                return jsonify({'error': 'Número de teléfono o código OTP no proporcionado'}), 400
+            if verify_otp(phone_number, otp_code):
+                # Actualiza la propiedad 'verified_sms' en la base de datos
+                collection.update_one(
+                    {"_id": ObjectId(user_id)},
+                    {"$set": {"verified_sms": True}}
+                )
+                return jsonify({'success': True}), 200
+            else:
+                return jsonify({'error': 'Código OTP incorrecto'}), 401
         else:
-            return jsonify({'error': 'Código OTP incorrecto'}), 401
+            return jsonify({"error": "User not found"}), 404
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

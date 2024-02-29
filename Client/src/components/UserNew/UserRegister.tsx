@@ -8,7 +8,7 @@ import { SetStateAction, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { getAuth } from "@firebase/auth";
-import { ModalSMSVerify } from "./Modal_smsVerify";
+import { SmsVerify } from "./Modal_smsVerify";
 
 function UserRegister() {
 
@@ -641,7 +641,7 @@ const [formData, setFormData] = useState({
                     htmlFor="filefin1"
                     className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                     >
-                    Upload a file of your identity document<span className="text-red-600">*</span>                  
+                    Upload a file of your identity document                  
                   </label>
                   {formData.identity_document && (
                     <h1 className="text-green-600 text-xs font-normal mb-2">Uploaded file</h1>
@@ -665,7 +665,7 @@ const [formData, setFormData] = useState({
                     htmlFor="filefin1"
                     className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                     >
-                    Upload a file of your bank account status<span className="text-red-600">*</span>                   
+                    Upload a file of your bank account status                   
                   </label>
                   {formData.bank_account_status && (
                     <h1 className="text-green-600 text-xs font-normal mb-2">Uploaded file</h1>
@@ -689,7 +689,7 @@ const [formData, setFormData] = useState({
                     htmlFor="filefin1"
                     className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                     >
-                    Upload a file of your tax return<span className="text-red-600">*</span>                   
+                    Upload a file of your tax return                   
                   </label>
                   {formData.tax_declarations && (
                     <h1 className="text-green-600 text-xs font-normal mb-2">Uploaded file</h1>
@@ -747,39 +747,7 @@ const [formData, setFormData] = useState({
         </div>
       </main>
 
-      <div className="md:hidden sticky flex flex-col gap-2 p-4 text-sm top-10 mb-8">
-        <h2 className="pl-3 mb-4 text-2xl font-semibold">Settings</h2>
-        <Link to="/userReg">
-          <h1 className="flex items-center px-3 py-2.5 font-bold bg-white text-black border rounded-full">
-            User Register
-          </h1>
-        </Link>
-
-        <Link to="/deviceReg">
-          <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
-            Device Register
-          </h1>
-        </Link>
-
-        <Link to="/CredentialsReg">
-          <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
-            Credentials
-          </h1>
-        </Link>
-
-        <Link to="/NotificacionesConfig">
-          <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
-            Notifications
-          </h1>
-        </Link>
-
-        <Link to="/account">
-          <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-white hover:border hover:rounded-full">
-            PRO Account
-          </h1>
-        </Link>
-      </div>
-      <ModalSMSVerify showSmsVerify={showSmsVerify} setShowSmsVerify={setShowSmsVerify} telephone={telephone}/>
+      <SmsVerify showSmsVerify={showSmsVerify} setShowSmsVerify={setShowSmsVerify} telephone={telephone}/>
     </div>
   );
 }
