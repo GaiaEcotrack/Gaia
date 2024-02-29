@@ -4,7 +4,6 @@ import qrcode
 from flask import Flask, request, jsonify, Blueprint
 from marshmallow import ValidationError
 from pymongo import MongoClient
-from src.models.user import UserSchema
 from bson import ObjectId
 from io import BytesIO
 import base64
@@ -78,6 +77,11 @@ def verify_otp():
 
             # Verifica el código OTP ingresado
             if totp.verify(user_otp):
+                # Actualiza la propiedad 'verified_2fa' en la base de datos
+                collection.update_one(
+                    {"_id": ObjectId(user_id)},
+                    {"$set": {"verified_2fa": True}}
+                )
                 return jsonify({"message": "OTP verification successful"}), 200
             else:
                 return jsonify({"error": "Invalid OTP"}), 400

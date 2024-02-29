@@ -83,11 +83,11 @@ function ModalGoogleAuth(props:MoodalId) {
   };
 
     return showGAuth ? (
-      <div className="bg-[#0000003d] fixed top-0 left-0 h-full w-full flex justify-center items-center">
+      <div className="bg-[#00000054] fixed top-0 left-0 h-full w-full flex justify-center items-center">
         
-        <div className="flex flex-col justify-center items-center bg-white h-[100%] 2xl:h-[85%] w-[60%] 2xl:w-[60%] p-6 mt-40 md:mt-0 pl-8">
+        <div className="flex flex-col justify-center items-center text-white rounded-3xl bg-[#233e6f] h-[95%] 2xl:h-[85%] w-[50%] 2xl:w-[55%] p-6 mt-40 md:mt-0 pl-8 2xl:pl-12">
         
-          <h1 className="text-[#000000] text-xl md:text-2xl md:mb-6">
+          <h1 className="text-xl md:text-2xl md:mb-6">
             Bind your account
           </h1>
 
@@ -102,7 +102,7 @@ function ModalGoogleAuth(props:MoodalId) {
               1. Scan the QR code
             </h1>
 
-            <div className="flex justify-center w-[50%]">
+            <div className="flex justify-center w-[50%] 2xl:w-[60%]">
               {qrImageBase64 && (
                 <img
                   src={`data:image/png;base64,${qrImageBase64}`}
@@ -141,7 +141,6 @@ function ModalGoogleAuth(props:MoodalId) {
             value={otp}
             onChange={setOtp}
             numInputs={6}
-            placeholder="000000"
             renderInput={(props) => <input {...props} />}
             containerStyle={{
               display: 'flex',
@@ -164,14 +163,14 @@ function ModalGoogleAuth(props:MoodalId) {
 
           <button
             onClick={handleVerifyOTP}
-            className="bg-emerald-600 w-[25%] flex gap-1 items-center justify-center py-2 text-lg text-white rounded mt-8">
+            className="bg-[#4caf4f] hover:bg-[#3ea442] w-[30%] flex gap-1 items-center justify-center py-2 text-lg text-white rounded mt-8">
             Verify OTP
           </button>
 
           <button
           type="button"
           onClick={() => {setShowGAuth(false)}}  
-          className="bg-red-600 w-[17%] flex gap-1 items-center justify-center py-1 text-lg text-white rounded mt-4"          
+          className="bg-blue-500 hover:bg-[#ef4444db] w-[17%] flex gap-1 items-center justify-center py-1 text-lg text-white rounded mt-4"          
           >
           Cancel
           </button>
