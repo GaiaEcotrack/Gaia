@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='chatbox.css') }}">
+
+</head>
+<body>
+  
+     <div id="chatbot-container"> 
+        <div id="chatbot-header" onclick="toggleChatbot()">Chatbot</div> 
+        <div id="chatbot-body" style="display: none">
+      <div id="chat-messages">
+        <input type="text" id="chat-input" placeholder="Write your message here">
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+    <script>
+        function toggleChatbot(){
+            var chatBody = document.getElementById("chatbot-body");
+            chatBody.style.display = 
+              chatBody.style.display === "none" ? "block" : "none";
+        }
+        function sendMessage(){
+            var input = document.getElementById("chat-input");
+            var message = input.value;
+            input.value = "";
+            fetch("/chatbox", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/x-www-form-urlencoded",
+                },
+                body: `message="${encodeURIComponent(message)}"`,
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    var chatbotMessages = document.getElementById("chat-messages");
+                    chatbotMessages.innerHTML += ` <div class="message-user"> You: ${message}</div>`;
+                    chatbotMessages.innerHTML += ` <div class="message-bot"> Bot: ${data.response}</div>`;
+                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                    
+                })
+                .catch((error) =>  console.error("Error: ", error))
+            
+        }
+        // funcion para manjear el vento de teclado
+        function handleEnter(event){
+            if(event.key === "Enter"){
+                event.preventDefault();
+                sendMessage();
+            }
+            //agregar el controlador de ventos al cargar la pagina
+            window.onload = function () {
+                var chatInput = document.getElementById("chat-input"); 
+                chatInput.addEventListener("keypress", handleEnter)
+            };
+        }
+    </script>
+</body>
+</html>
+
