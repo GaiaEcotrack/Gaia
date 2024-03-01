@@ -113,8 +113,6 @@ def welcome():
 
 if __name__ == '__main__':
     try:
-        application.run(debug=True)
+        application.run(debug=False)
     finally:
-        # No es necesario cerrar explícitamente el cliente de MongoDB aquí
-        # client.close()
-        pass
+        client.close()
