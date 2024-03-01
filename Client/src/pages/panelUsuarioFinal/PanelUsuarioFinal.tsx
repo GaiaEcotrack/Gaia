@@ -107,7 +107,7 @@ const PanelUsuarioFinal = () => {
        
         
       setIsLoading(true);
-      setTimeout(async () => {
+
         const apiUrl = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
           `${apiUrl}/devices/plant-devices?plantId=35`,
@@ -122,7 +122,7 @@ const PanelUsuarioFinal = () => {
     
         setDevices(response.data.devices);
         setIsLoading(false);
-      }, 2000);
+
     } catch (error) {
       console.error("Error fetching data:", error);
       setIsLoading(false);
