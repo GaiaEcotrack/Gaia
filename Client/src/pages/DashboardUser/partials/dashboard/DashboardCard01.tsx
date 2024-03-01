@@ -165,7 +165,7 @@ function DashboardCard01({onClick}) {
         <LocalBalanceToken/>
         <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase mb-1">Balance</div>
         <div className="flex items-start">
-          <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mr-2">{totalGaia.toFixed(2)}</div>
+          <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mr-2">${totalGaia.toFixed(2)}</div>
           <div className="text-sm font-semibold text-white px-1.5 bg-emerald-500 rounded-full">{porcentajesCambio.gaia.toFixed(2)}%</div>
         </div>
       </div>

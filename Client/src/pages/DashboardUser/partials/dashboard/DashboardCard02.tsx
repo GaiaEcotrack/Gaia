@@ -1,15 +1,15 @@
 import React , {useEffect , useState} from 'react';
 import LineChart from '../../charts/LineChart01';
-import { VarasBalance } from '@/pages/home/VarasBalance';
 import { useSelector } from "react-redux";
 import { RootState } from '../../../../store/index';
-import axios from 'axios'
+
 
 // Import utilities
 import { tailwindConfig, hexToRGB } from '../../utils/Utils';
+import SendVaras from '../../components/SendVaras';
 
 function DashboardCard02({image,quantity,name,onClick,metric}) {
-   
+  const [card, setCard] = useState(false)
   const [claim, setClaim] = useState(false)
   const userRedux = useSelector((state:RootState) => state.app.loggedInUser)
   const membresia = userRedux?.[0].membresia
@@ -24,10 +24,13 @@ function DashboardCard02({image,quantity,name,onClick,metric}) {
   }
 
   }, [membresia])
-  
 
-
-  console.log(membresia);
+  const openCard = ()=>{
+    setCard(true)
+  }
+  const close = ()=>{
+    setCard(false)
+  }
   
 
   const chartData = {
@@ -94,12 +97,11 @@ function DashboardCard02({image,quantity,name,onClick,metric}) {
           {/* Icon */}
           <img src={image} width="42" height="42" alt="Icon 02" />
           {/* Menu button */}
-          <button type="button" onClick={onClick} className="hover:brightness-110 hover:animate-pulse font-bold py-3 px-6 rounded-full bg-gradient-to-r from-blue-500 to-pink-500 text-white">Send</button>
         </header>
         <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-2">{name}</h2>
         <h1 className='text-lg font-semibold text-slate-800 dark:text-slate-100 mb-2'>Profit in VARAS</h1>
         {claim && (
-                  <button  aria-describedby="tier-starter" className="items-center justify-center w-full px-6 py-2.5 text-center text-white duration-200 bg-black border-2 border-white rounded-full nline-flex hover:bg-transparent hover:border-white hover:text-white focus:outline-none focus-visible:outline-white text-sm focus-visible:ring-white">
+                  <button onClick={openCard} aria-describedby="tier-starter" className="items-center justify-center w-full px-6 py-2.5 text-center text-white duration-200 bg-black border-2 border-white rounded-full nline-flex hover:bg-transparent hover:border-white hover:text-black focus:outline-none focus-visible:outline-white text-sm focus-visible:ring-white">
                   Claim Varas
                 </button>
         )}
@@ -108,6 +110,9 @@ function DashboardCard02({image,quantity,name,onClick,metric}) {
           <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mr-2">${quantity}</div>
           <div className="text-sm font-semibold text-white px-1.5 bg-amber-500 rounded-full">{metric}%</div>
         </div>
+        {card && (
+          <SendVaras close={close}/>
+        )}
       </div>
       {/* Chart built with Chart.js 3 */}
       <div className="grow max-sm:max-h-[128px] max-h-[128px]">

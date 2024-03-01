@@ -29,8 +29,6 @@ function DashboardCard04() {
     }
   }, []); // El segundo parámetro [] asegura que useEffect solo se ejecute una vez al montar el componente
 
-  console.log(name);
-
   const chartData = {
     labels: [
       "12-01-2020",
