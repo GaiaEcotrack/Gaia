@@ -77,3 +77,6 @@ coinbase==2.1.0
 twilio==8.13.0
 pyotp==2.9.0
 qrcode==7.4.2
+spacy==3.7.4
+spacy-legacy==3.0.12
+spacy-loggers==1.0.5
