@@ -593,7 +593,7 @@ const [formData, setFormData] = useState({
 
               <div className="mb-2 sm:mb-6">
                 <label
-                  htmlFor="email"
+                  htmlFor="Address"
                   className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                 >
                   Residence Address<span className="text-red-600">*</span>
@@ -638,7 +638,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <div className="flex justify-between items-center">
                   <label
-                    htmlFor="filefin1"
+                    htmlFor="identity_document"
                     className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                     >
                     Upload a file of your identity document                  
@@ -653,7 +653,7 @@ const [formData, setFormData] = useState({
                   name="identity_document"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
-                  id="fileId"
+                  id="identity_document"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"    
                   // required
                 />
@@ -662,7 +662,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <div className="flex justify-between items-center">
                   <label
-                    htmlFor="filefin1"
+                    htmlFor="bank_account_status"
                     className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                     >
                     Upload a file of your bank account status                   
@@ -677,7 +677,7 @@ const [formData, setFormData] = useState({
                   name="bank_account_status"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
-                  id="fileBank"
+                  id="bank_account_status"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
@@ -686,7 +686,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <div className="flex justify-between items-center">
                   <label
-                    htmlFor="filefin1"
+                    htmlFor="tax_declarations"
                     className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                     >
                     Upload a file of your tax return                   
@@ -701,7 +701,7 @@ const [formData, setFormData] = useState({
                   name="tax_declarations"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
-                  id="fileTax"
+                  id="tax_declarations"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
@@ -710,7 +710,7 @@ const [formData, setFormData] = useState({
               <div className="mb-2 sm:mb-6">
                 <div className="flex justify-between items-center">
                   <label
-                    htmlFor="filefin1"
+                    htmlFor="other_financial_documents"
                     className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
                     >
                     Upload a file of other financial documents                    
@@ -724,7 +724,7 @@ const [formData, setFormData] = useState({
                   name="other_financial_documents"
                   type="file"
                   accept="image/jpeg, image/png, application/pdf"
-                  id="filefin1"
+                  id="other_financial_documents"
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
