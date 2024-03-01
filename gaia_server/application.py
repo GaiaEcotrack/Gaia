@@ -18,6 +18,8 @@ from src.routes.sms import sms_route
 from src.routes.paypal import paypal_route
 from src.routes.authenticator import auth_route
 from src.routes.payments_users import payments_users_route
+from src.routes.chatbox import chatbox_route
+
 
 
 load_dotenv()
@@ -51,6 +53,7 @@ application.register_blueprint(sms_route, url_prefix='/sms')
 application.register_blueprint(paypal_route, url_prefix='/paypal')
 application.register_blueprint(auth_route, url_prefix='/auth')
 application.register_blueprint(payments_users_route, url_prefix='/payments')
+application.register_blueprint(chatbox_route, url_prefix='/chatbox')
 
 mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri, tlsAllowInvalidCertificates=True)
@@ -112,10 +115,12 @@ collection = db['users']
 def welcome():
     return jsonify({'message': 'Welcome to the Gaia Server!'})
 
+# if __name__ == '__main__':
+#     try:
+#         application.run(debug=False)
+#     finally:
+#         client.close()
+        
+#durante desarrollo
 if __name__ == '__main__':
-    try:
-        application.run(debug=True)
-    finally:
-        # No es necesario cerrar explícitamente el cliente de MongoDB aquí
-        # client.close()
-        pass
+    application.run(debug=True)
