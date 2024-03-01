@@ -22,6 +22,7 @@ import TermsAndPolicy from "./pages/terms&policies/Terms&policy";
 import Face from "./components/Face/Face";
 import PaymentModalMp from "./components/PaymentConfirmedModal/PaymentModalMp";
 
+
 initializeApp(config.firebaseConfig);
 
 function Component() {
