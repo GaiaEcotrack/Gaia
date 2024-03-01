@@ -5,15 +5,21 @@ import { RootState } from '@/store';
 import MercadoPago from './MercadoPago'
 import CoinbaseButton from './Coinbase'
 import PaypalButton from './PaypalButton'
+import { getAuth } from 'firebase/auth';
 
 const TypesPay = () => {
   const userRedux = useSelector((state:RootState) => state.app.loggedInUser)
-  const userId = userRedux![0]._id
+  const auth = getAuth();
+  const user = auth.currentUser?.email
+  const userFind = userRedux.find(function(usuario) {
+    return usuario.email === user;
+}) 
   useEffect(() => {
-    localStorage.setItem('idUserRedux', userId);
-  }, [userId])
+    localStorage.setItem('idUserRedux', userFind._id);
+  }, [userFind._id])
 
   console.log(localStorage.getItem('idUserRedux'))
+  
   
   
   return (
