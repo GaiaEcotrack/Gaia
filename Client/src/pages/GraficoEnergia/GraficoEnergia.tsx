@@ -770,7 +770,7 @@ const GraficoEnergia = () => {
     const user = auth.currentUser?.email
     const fetchDataUser = async ()=>{
       try {
-        const request = await axios.get(`http://127.0.0.1:5000/users/`)
+        const request = await axios.get(`${url}/users/`)
         const response = request.data.users
         const filter = response.filter((userLog:any) => userLog.email === user)
         setUserLog(filter)
@@ -839,149 +839,27 @@ const GraficoEnergia = () => {
     <div className="mb-12">
       <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
         <div className="flex flex-col lg:flex-row gap-5  p-2 justify-center graficos items-center">
-          {/* <div className="flex flex-col bg-[#1d335b]  md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg m-4">
-            <div className=" flex justify-center items-center h-full">
-              <span className="font-[600] text-[40px] text-center mt-4">
-                {totalGenerado.toFixed(3)} Kw
-              </span>
-            </div>
-            <div className="flex justify-end items-end h-20">
-              <span className=" mb-4 mr-4">Total generated</span>
-            </div>
-          </div> */}
-          {/* <div className="flex flex-col bg-[#1d335b] md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg  m-4">
-            <div className="flex justify-center items-center h-full">
-              <span className="font-[600] text-[40px] text-center mt-4">
-                {totalConsumido.toFixed(3)} Kw
-              </span>
-            </div>
-            <div className="flex justify-end items-end h-20">
-              <span className=" mb-4 mr-4">Total consumed</span>
-            </div>
-          </div> */}
+
           <CardGenerated supply={totalGenerado.toFixed(3)}/>
           <CardConsume supply={totalConsumido.toFixed(3)}/>
           <CardEnergy supply={excedenteCapturado} reward={claimReward}/>
-          {/* <div className="flex flex-col bg-[#1d335b] md:w-[380px] w-[380px] justify-center h-[170px] rounded overflow-hidden shadow-lg  m-4">
-            <div className="flex flex-col justify-center items-center h-full">
-              <span className="font-[600] text-[40px] text-center mt-8">
-                {totalExcedente.toFixed(3)} Kw
-              </span>
-            </div>
-            <div className="flex justify-end items-end h-20">
-              <img
-                src="./LOGOGAIASOLO.png"
-                className="w-16 h-16 mr-8 mb-2"
-                alt=""
-              />
-              <span className=" mb-4 mr-4 font-bold text-white">
-                Total surplus tokens:
-              </span>
-              <h2 className="mb-4 mr-4 font-bold text-emerald-400">
-                {excedenteCapturado}
-              </h2>
-              <button
-                className="bg-purple-500 p-2.5 text-white mb-2 mr-2 rounded-full transition duration-200 ease-in-out hover:bg-purple-700 active:bg-purple-900 focus:outline-none"
-                onClick={() => {
-                  claimReward();
-                }}
-              >
-                Reward
-              </button>
-            </div>
-          </div> */}
+         
         </div>
         <div className="flex justify-center text-center text-emerald-500  ">
           {walletMessage && <p className="text-xl">{walletMessage}</p>}
         </div>
         <div className="flex flex-col p-2  md:ml-10 justify-center items-center md:items-start">
-          {/* <button
-            type="button"
-            className="cursor-not-allowed pointer-events-none  text-[14px] mt-4 md:mt-0 text-center md:text-left"
-          >
-            Generation Panel
-          </button>
-          <NavLink to="/panelUsuarioFinal">
-            <button
-              type="button"
-              className=" text-[14px] underline mt-4 md:mt-0 text-center md:text-left"
-            >
-              Device Manage
-            </button>
-          </NavLink>
-          <button
-            type="button"
-            className=" text-[14px] underline mt-4 md:mt-0 text-center md:text-left"
-            onClick={openPopup}
-          >
-            Create Alerts
-          </button> */}
+         
           {popupOpen && <PopUpALert onClose={closePopup} />}
         </div>
-
-        {/* <div className="justify-center mb-10">
-          <Doughnut
-            className="h-[300px] 2xl:h-[400px] justify-center "
-            data={dataPie}
-            options={optionsPie}
-          />
-        </div> */}
-
         <div className="flex flex-col items-center sm:flex-row sm:justify-center">
           <div className="relative inline-block">
-            {/* <select
-              className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] text-white m-1 pl-2"
-              defaultValue="Energia Solar"
-              onChange={(e) => console.log(e.target.value)} // Puedes manejar la selección aquí
-            >
-              <option value="Energia Solar">Solar Energy</option>
-              <option value="Energia Termica">Thermal Energy</option>
-              <option value="Energia Eolica">Wind Energy</option>
-            </select> */}
-            {/* <img src={PolygonDown} alt="" className="ml-2" /> */}
-          </div>
-          {/* <button
-            type="button"
-            className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] m-1"
-          >
-            Generated
-            <img src={PolygonDown} alt="" className="ml-2" />
-          </button> */}
-          {/* <button
-            type="button"
-            className="flex items-center justify-center w-[150px] sm:w-[151px] h-[47px] bg-[#1d335b] rounded-[15px] m-1"
-          >
-            Real Time
-            <img src={PolygonDown} alt="" className="ml-2" />
-          </button> */}
 
-          {/* <div className="mt-4 sm:mt-0 sm:ml-4 flex flex-col items-center sm:flex-row">
-            <div className="flex flex-col items-center mb-2 sm:mb-0">
-              <span className=" text-[16px] font-[700]">0 Kws</span>
-              <h3 className=" ml-2 p-2">Current</h3>
-            </div>
-            <div className="flex flex-col items-center mb-2 sm:mb-0 sm:ml-4">
-              <span className="t text-[16px] font-[700]">0 Kws</span>
-              <h3 className="t ml-2 p-2">Basic</h3>
-            </div>
-            <div className="flex flex-col items-center mb-2 sm:mb-0">
-              <span className=" text-[16px] font-[700]">0 Kws</span>
-              <h3 className=" ml-2 p-2">Total</h3>
-            </div>
-          </div> */}
+          </div>
+          
         </div>
 
-        {/* <div className="lg:absolute lef-[50%] lg:top-[15%] 2xl:top-[20%] lg:left-[76%] 2xl:left-[78%] laptop mt-12">
-          <WeatherNavbar />
-          <WeatherPanel />
-        </div> */}
 
-        {/* <div className="flex mx-auto max-w-screen-md h-[200px] mt-8">
-          <Bar data={barData} options={optionsBar} />
-          <div className="border-4 mt-10 xl:ml-32 bg-gray-100 h-32 rounded-full hidden lg:flex items-center justify-center border-gray-400">
-            <p className="text-[#1d335b] text-xl m-2 text-center">{showDate}</p>
-          </div>
-        </div> */}
       </div>
       {/*  NUEVO DISENO DE LA PAGINA  */}
 
