@@ -15,6 +15,7 @@ function UserRegister() {
   const URL = import.meta.env.VITE_APP_API_URL
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
+  const [foundUserName, setFoundUserName] = useState('');
   const [verifiedDoc, setVerifiedDoc] = useState(false); // manejar el cambio desde el Back
   const [completed, setCompleted] = useState(false);
   const [completeCredent, setCompletedCredent] = useState(false);
@@ -67,7 +68,8 @@ function UserRegister() {
         },
       });      
       if (response.status === 200) {
-        setFoundUserId(response.data._id);        
+        setFoundUserId(response.data._id);      
+        setFoundUserName(response.data.full_name);      
       } else if (response.status === 404) {
         setFoundUserId('');
         console.log('Usuario no encontrado');
@@ -81,6 +83,8 @@ function UserRegister() {
 
   localStorage.setItem("id", foundUserId);  
 
+  var alertHome = completed ? 'complete' : 'pending';
+  localStorage.setItem("pendingDocs", alertHome);
 
 // **********************************************************
 
