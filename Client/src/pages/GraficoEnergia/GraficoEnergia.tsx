@@ -558,7 +558,9 @@ const GraficoEnergia = () => {
         if (response.status === 200) {
           console.log('Usuario creado con éxito');
           setFoundUserId(response.data.user_id);
-          localStorage.setItem('id', response.data.user_id);
+          setFoundUserName(response.data.full_name)
+          localStorage.setItem('id', foundUserId);
+          localStorage.setItem('name', foundUserName);
         }
       }
     } catch (error) {
@@ -595,7 +597,7 @@ const GraficoEnergia = () => {
 // PopUp completar registro
   useEffect(() => {
     const timerId = setTimeout(() => {
-      if (!(localStorage.getItem("name"))) {
+      if (localStorage.getItem("pendingDoc") === "pending") {
         Swal.fire({
           title: "Don't forget to complete your registration",
           icon: "warning",

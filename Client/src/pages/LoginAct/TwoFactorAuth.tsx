@@ -59,7 +59,7 @@ function TwoFactorAuth(props:MoodalId) {
     return showTwoFA ? (
       <div className="bg-[#00000054] fixed top-0 left-0 h-full w-full flex justify-center items-center">
         
-        <div className="flex flex-col justify-center items-center text-black rounded-3xl bg-[#ffffff] h-[50%] 2xl:h-[45%] w-[36%] 2xl:w-[36%] p-6 mt-40 md:mt-0 ">
+        <div className="flex flex-col justify-center items-center text-black rounded-3xl bg-[#ffffff] h-[21rem] w-[30rem] p-6 mt-40 md:mt-0 ">
         
           <h1 className="text-3xl mb-4">
             Two Factor Authentication

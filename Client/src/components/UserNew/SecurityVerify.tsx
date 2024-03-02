@@ -7,12 +7,14 @@ import { Link } from "react-router-dom";
 // import Swal from "sweetalert2";
 import { ModalGoogleAuth } from "./Modal_GoogleAuth";
 import { SmsSendVerify } from "./Modal_smsSendVerify";
+import { EmailVerify } from "./Modal_emailVerify";
 
 
 function SecurityVerify() {
 
   const [showGAuth, setShowGAuth] = useState(false)
   const [showSmsSendVerify, setShowSmsSendVerify] = useState(false)
+  const [showEmailVerify, setShowEmailVerify] = useState(false)
 
   return (
     <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black">
@@ -104,7 +106,7 @@ function SecurityVerify() {
               </h1>
             </div>
 
-            <button className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%] mt-4">
+            <button onClick={() => {setShowEmailVerify(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%] mt-4">
               Verify Now
             </button>
           </div>
@@ -131,6 +133,7 @@ function SecurityVerify() {
 
       <ModalGoogleAuth showGAuth={showGAuth} setShowGAuth={setShowGAuth}/>
       <SmsSendVerify showSmsSendVerify={showSmsSendVerify} setShowSmsSendVerify={setShowSmsSendVerify} telephone={telephone}/>
+      <EmailVerify showEmailVerify={showEmailVerify} setShowEmailVerify={setShowEmailVerify}/>
     </div>
   );
 }

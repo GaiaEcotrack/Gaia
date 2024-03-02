@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
@@ -8,7 +8,9 @@ import { Button } from "@gear-js/ui";
 
 function DeviceRegister() {
 
-
+  const URL = import.meta.env.VITE_APP_API_URL
+  const [foundUserId, setFoundUserId] = useState('');
+  const [isLoadingUser, setIsLoadingUser] = useState(true)
 
   const Toast = Swal.mixin({
     toast: true,
@@ -22,7 +24,6 @@ function DeviceRegister() {
     }
   });
 
-  const URL = import.meta.env.VITE_APP_API_URL
 
   const [formData, setFormData] = useState({
     user_id: localStorage.getItem("id"),
@@ -55,9 +56,6 @@ function DeviceRegister() {
   };
   
 
-
-
-  
 //VARA////////
 const alert = useAlert();
 const { accounts, account } = useAccount();
@@ -114,10 +112,6 @@ async function signerTwo(){
 };
 
 
-
-
-
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
@@ -151,6 +145,13 @@ async function signerTwo(){
             title: "Something went wrong"
           });
         }
+
+        const hasFileInputs = Object.keys(selectedFiles).length > 0;
+
+        if (hasFileInputs) {
+          await handleSubmitBucket(e);
+        } 
+
       } else {
         Toast.fire({
           icon: "error",
@@ -162,9 +163,126 @@ async function signerTwo(){
     }
   };
 
+   //* codigo para subir archivos al bucket
+
+   const [selectedFiles, setSelectedFiles] = useState({});
+
+   //* nueva funcion
+   const handleInputChangeBucket = (event: React.ChangeEvent<HTMLInputElement>) => {
+     const { name, value, type, files } = event.target;
+   
+     if (type === 'file') {
+     // Actualiza el estado con el archivo seleccionado, usando el nombre del input como clave
+       setSelectedFiles(prevFiles => ({
+         ...prevFiles,
+         [name]: files && files.length > 0 ? files[0] : null, // Asume que solo se selecciona un archivo por input
+       }));
+     } else {
+       // Para otros tipos de inputs, actualiza el estado formData
+       setFormData(prevFormData => ({
+         ...prevFormData,
+         [name]: value,
+       }));
+     }
+   };
+   
+   // obtener le id del usiario del lcoalstorage luego de cargar
+   useEffect(() => {
+     const userId = localStorage.getItem('id');
+     
+     if (userId) {
+       setFoundUserId(userId);
+     }
+     setIsLoadingUser(false);
+   }, []);
+   async function handleSubmitBucket(e:any) {
+     e.preventDefault();
+ 
+     if (isLoadingUser) {
+       console.error('El ID del usuario aún se está cargando');
+       (window as any).alert('Por favor, espera a que se cargue el ID del usuario.');
+       return;
+     }
+ 
+     if (!foundUserId) {
+       console.error('No se encontró el ID del usuario');
+       (window as any).alert('No se encontró el ID del usuario. Por favor, inténtalo de nuevo.');
+       return;
+     }
+   
+     let allFilesUploaded = true;
+   
+     // Itera sobre cada archivo seleccionado y envíalo
+     for (const [inputName, file] of Object.entries(selectedFiles)) {
+       if (file) {
+         if (!(file instanceof Blob)) {
+           console.error(`El archivo de ${inputName} no es un Blob válido.`);
+           continue;
+         }
+         const formData = new FormData();
+         formData.append('file', file);
+   
+         const uploadUrl = `${URL}/upload_image`;
+ 
+         try {
+           const uploadResponse = await fetch(uploadUrl, {
+             method: 'POST',
+             body: formData,
+           });
+   
+           if (!uploadResponse.ok) {
+             throw new Error(`No se pudo cargar el archivo de ${inputName}`);
+           }
+   
+           const uploadData = await uploadResponse.json();
+           console.log("URL a enviar:", uploadData.url);
+           console.log(`Archivo de ${inputName} cargado con éxito:`, uploadData);
+   
+           // Envío la URL del archivo subido al backend para guardarla
+           const tipoArchivo = inputName; 
+           try {
+             const saveUrlResponse = await fetch(`${URL}/users/save_url`, {
+               method: 'POST',
+               headers: {
+                 'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({
+                 user_id: foundUserId,
+                 url: uploadData.url, 
+                 tipo_archivo: tipoArchivo, 
+               }),
+             });
+   
+             if (!saveUrlResponse.ok) {
+               throw new Error(`Error al guardar la URL del archivo ${tipoArchivo} en la base de datos`);
+             }
+   
+             console.log(`URL del archivo ${tipoArchivo} guardada con éxito en la base de datos`);
+           } catch (error) {
+             console.error(`Error al guardar la URL del archivo ${tipoArchivo} en la base de datos:`, error);
+             (window as any).alert(`Error al guardar la URL del archivo ${tipoArchivo}. Por favor, inténtalo de nuevo.`);
+             allFilesUploaded = false;
+             break; 
+           }
+         } catch (error) {
+           console.error(`Error al cargar el archivo de ${inputName}:`, error);
+           (window as any).alert(`Error al cargar el archivo de ${inputName}. Por favor, inténtalo de nuevo.`);
+           allFilesUploaded = false;
+           break; 
+         }
+       }
+     }
+   
+     if (allFilesUploaded) {
+       Toast.fire({
+         icon: "success",
+         title: "Files saved successfully"
+       });
+     }
+   }
+   // fin codigo del bucket
+
   
-
-
   return (
     <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black">
       {/* Aside */}
@@ -285,17 +403,17 @@ async function signerTwo(){
 
               <div className="mb-2 sm:mb-6">
                 <label
-                  htmlFor="filefin2"
+                  htmlFor="image"
                   className="block mb-2 text-sm font-bold dark:text-black"
                 >
                   Upload an image of the device
                 </label>
                 <input
-                  onChange={handleInputChange}
+                  onChange={handleInputChangeBucket}
                   name="image"
                   type="file"
                   accept="image/jpeg, image/png"
-                  id="filefin2"
+                  id="image"
                   className="bg-indigo-50 border border-indigo-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />

@@ -75,8 +75,12 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
           } else {
             console.error('Error al buscar usuario:', response.status);
           }
-        } catch (error) {
-          console.error('Error de red:', error);
+        } catch (error: any) {
+          if(error.message === "Request failed with status code 404"){
+            navigate(redirectPath);
+          } else{
+            console.error('Error de red:', error);
+          }
         }
       });
     } catch {
