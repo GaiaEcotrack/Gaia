@@ -14,9 +14,16 @@ def chatbox():
 
 @chatbox_route.route('/', methods = ['POST'])
 def chatbot():
-    user_message = request.form['message']
-    bot_response = process_text(user_message)
-    return jsonify({"response": bot_response})
+    if request.is_json:
+        data = request.json
+        if 'message' in data:
+            user_message = data['message']
+            bot_response = process_text(user_message)
+            return jsonify({"response": bot_response})
+        else:
+            return jsonify({"error": "Message not found in request body"}), 400
+    else:
+        return jsonify({"error": "Request content type must be application/json"}), 400
 # Intenciones y respuestas
 RESPONSE = {
     "greeting": "Hello, how can I assist you today?",

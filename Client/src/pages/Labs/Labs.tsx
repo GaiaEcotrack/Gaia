@@ -5,8 +5,22 @@ import { Mint } from '../../pages/home/MintButton';
 import { Burn } from '../../pages/home/Burn';
 import { ReadState } from '../../components/TokensComponents/ReadState';
 import PaypalButton from './PaypalButton';
+import Chatbox from '@/components/Chatbox/Chatbox';
+import axios from 'axios';
 
 function Labs () {
+    const fetch = async ()=>{
+        try {
+           const request = await axios.post('http://127.0.0.1:5000/chatbox/',{"message":"hello"})
+           const data = request.data
+           console.log(data);
+           
+
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
     return (
         <div className="flex flex-col justify-center items-center">
             <h1 className='text-3xl text-white'>LABS</h1>
@@ -19,7 +33,9 @@ function Labs () {
                 <Mint/>
                 <Burn/>
                 <ReadState/>
+                <Chatbox/>
                 <PaypalButton totalValue="60.00" invoice="Subscripcion" />
+                <button onClick={fetch}>data</button>
             </div>
         </div>
     );

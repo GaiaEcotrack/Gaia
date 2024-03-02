@@ -1,11 +1,13 @@
 import React,{useState} from 'react'
-
+import axios
+ from 'axios';
 const SendVaras = ({close}:any) => {
     const [datos, setDatos] = useState({
         nombre: '',
         email: '',
         direccionDeposito: '',
         tipoPago: '',
+        id:localStorage.getItem('idUserRedux')
       });
     
       const handleChange = (e:any) => {
@@ -15,11 +17,27 @@ const SendVaras = ({close}:any) => {
         });
       };
     
-      const handleSubmit = (e:any) => {
+      const handleSubmit = async (e:any) => {
         e.preventDefault();
+        try {
+          const url = import.meta.env.VITE_APP_API_URL
+        await axios.post(`${url}/payments/payment_users`,{
+          "address": datos.direccionDeposito,
+          "email": datos.email,
+          "name": datos.nombre,
+          "payment_type": datos.tipoPago,
+          "user_id": datos.id
+        })
         close()
-        console.log(datos); // Aquí puedes hacer lo que quieras con los datos, como enviarlos a un servidor, etc.
+        console.log(datos)
+        } catch (error) {
+          console.log(error);
+          
+        }
+        close() // Aquí puedes hacer lo que quieras con los datos, como enviarlos a un servidor, etc.
       };
+      console.log(datos);
+      
   return (
     <div className='fixed bg-black/60 top-0 left-0 w-full h-full flex items-center justify-center z-10'>
         <div className="w-full flex flex-col items-center justify-center max-w-md bg-gray-800 rounded-lg shadow-md p-6">
@@ -58,6 +76,7 @@ const SendVaras = ({close}:any) => {
           </select>
         </div>
         <button type="submit" className="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-green-600 hover:to-blue-600 transition ease-in-out duration-150">Enviar</button>
+        <button onClick={close} type="button" className="bg-red-600 text-white font-bold py-2 px-4 rounded-md mt-4  transition ease-in-out duration-150">Cancelar</button>
       </form>
     </div>
     </div>
