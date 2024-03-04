@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import { ModalGoogleAuth } from "./Modal_GoogleAuth";
 import { SmsSendVerify } from "./Modal_smsSendVerify";
 import { EmailVerify } from "./Modal_emailVerify";
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 
 function SecurityVerify() {
@@ -15,6 +17,9 @@ function SecurityVerify() {
   const [showGAuth, setShowGAuth] = useState(false)
   const [showSmsSendVerify, setShowSmsSendVerify] = useState(false)
   const [showEmailVerify, setShowEmailVerify] = useState(false)
+  const userRedux = useSelector((state:RootState) => state.app.loggedInUser)
+  console.log(userRedux[0].verified_sms);
+  
 
   return (
     <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black">
