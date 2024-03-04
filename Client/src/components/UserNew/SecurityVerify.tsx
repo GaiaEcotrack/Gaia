@@ -1,3 +1,6 @@
+import { FcOk } from "react-icons/fc"; 
+import { FcHighPriority } from "react-icons/fc"; 
+import { FcCheckmark } from "react-icons/fc"; 
 import { FcFeedback } from "react-icons/fc"; 
 import { FcGoogle } from "react-icons/fc"; 
 import { FcSms } from "react-icons/fc"; 
@@ -89,7 +92,12 @@ function SecurityVerify() {
               </h1>
             </div>
 
-            <button onClick={() => {setShowGAuth(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%] mt-4">
+            {/* <div>
+              <FcOk className="text-4xl text-red-600 mr-6"/>
+              <FcHighPriority className="text-4xl text-red-600 mr-6"/>
+            </div> */}
+
+            <button onClick={() => {setShowGAuth(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%]">
               Bind
             </button>
           </div>
@@ -106,7 +114,12 @@ function SecurityVerify() {
               </h1>
             </div>
 
-            <button onClick={() => {setShowEmailVerify(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%] mt-4">
+            {/* <div>
+              <FcOk className="text-4xl text-red-600 mr-6"/>
+              <FcHighPriority className="text-4xl text-red-600 mr-6"/>
+            </div> */}
+
+            <button onClick={() => {setShowEmailVerify(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%]">
               Verify Now
             </button>
           </div>
@@ -123,9 +136,15 @@ function SecurityVerify() {
               </h1>
             </div>
 
-            <button onClick={() => {setShowSmsSendVerify(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%] mt-4">
+            {/* <div>
+              <FcOk className="text-4xl text-red-600 mr-6"/>
+              <FcHighPriority className="text-4xl text-red-600 mr-6"/>
+            </div> */}
+
+            <button onClick={() => {setShowSmsSendVerify(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%]">
               Verify Now
             </button>
+
           </div>
 
         </div>

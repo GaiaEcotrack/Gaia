@@ -367,6 +367,9 @@ const [formData, setFormData] = useState({
       if (pendingDocuments.includes("devices")) {
         setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "devices"));
       }
+      if (pendingDocuments.includes("key_auth")) {
+        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "key_auth"));
+      }
 
       if (pendingDocuments.length > 0) {
         setCompleted(false);
