@@ -257,14 +257,14 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
               </div>
             </button>
 
-            <Link className="w-full" to="/home">
+            {/* <Link className="w-full" to="/home">
               <button
                 type="button"
                 className="w-full block bg-white hover:bg-blue-50 focus:bg-blue-50 text-gray-800 font-semibold rounded-lg px-4 py-3 border border-gray-300 mt-6"
               >
                 Enter as a guest
               </button>
-            </Link>
+            </Link> */}
           </form>         
 
   
