@@ -37,18 +37,20 @@ import EnergyDeviceList from "@/components/EnergyComponentNew/EnergyDeviceList";
 // import { SideBarNew } from "components/SideBarNew/SideBarNew";
 import { getAuth } from "firebase/auth";
 import axios from "axios";
-import { getTokenFromFirebase, sendTokenToBackend } from "../../TokenFirebaseToBackend"
+import {
+  getTokenFromFirebase,
+  sendTokenToBackend,
+} from "../../TokenFirebaseToBackend";
 import Swal from "sweetalert2";
-import { RootState } from '../../store/index';
+import { RootState } from "../../store/index";
 
 // Nuevo grafico
-import ReactECharts from 'echarts-for-react';
-import moment from 'moment';
+import ReactECharts from "echarts-for-react";
+import moment from "moment";
 import CardEnergy from "@/components/CardsEnergy/CardEnergy";
 import CardConsume from "@/components/CardsEnergy/CardConsume";
 import CardGenerated from "@/components/CardsEnergy/CardGenerated";
-
-
+import { log } from "console";
 
 ChartJS.register(
   ArcElement,
@@ -115,11 +117,10 @@ const getConfig = (): SomeConfig => {
 };
 
 const GraficoEnergia = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const [token, setToken] = useState('');
-  const userRedux = useSelector((state:RootState) => state.app.loggedInUser)
-
+  const [token, setToken] = useState("");
+  const userRedux = useSelector((state: RootState) => state.app.loggedInUser);
 
   // estas dos funciones la movi arriba para usarlas en el scop
   const { accounts, account } = useAccount();
@@ -129,7 +130,7 @@ const GraficoEnergia = () => {
   //mensaje de conectar waller
   const [walletMessage, setWalletMessage] = useState("");
 
-  const [userLog, setUserLog] = useState("")
+  const [userLog, setUserLog] = useState("");
 
   const [componenteMontado, setComponenteMontado] = useState(true);
   const [excedenteCapturado, setExcedenteCapturado] = useState<number | null>(
@@ -141,8 +142,10 @@ const GraficoEnergia = () => {
   const [totalConsumido, setTotalConsumido] = useState<number>(0);
   const [totalExcedente, setTotalExcedente] = useState<number>(0);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [plantData, setPlantData] = useState<number[][]>([]);
+  const [deviceData, setDeviceData] = useState([]);
   const [energy, setEnergy] = useState(null);
-  const [energyBatery , setEnergyBatery] = useState()
+  const [energyBatery, setEnergyBatery] = useState();
   const [barData, setBarData] = useState<ChartData<"bar", number[], string>>({
     labels: ["", "", "", "", "", "", "", "", ""],
     datasets: [
@@ -165,9 +168,8 @@ const GraficoEnergia = () => {
         const user = auth.currentUser;
         console.log(user);
 
-
         if (!user) {
-          throw new Error('User is not authenticated');
+          throw new Error("User is not authenticated");
         }
 
         const idToken = await user.getIdToken();
@@ -177,16 +179,16 @@ const GraficoEnergia = () => {
           `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
           {
             headers: {
-              "Authorization": `Bearer ${idToken}`,
-              "Content-Type": "application/json"
-            }
+              Authorization: `Bearer ${idToken}`,
+              "Content-Type": "application/json",
+            },
           }
         );
         const data = response.data.set;
-        const energy = data.map(energ => energ.pvGeneration);
+        const energy = data.map((energ) => energ.pvGeneration);
         setEnergyBatery(energy);
       } catch (error) {
-        console.error('Error fetching energy data:', error);
+        console.error("Error fetching energy data:", error);
       }
     };
 
@@ -205,9 +207,8 @@ const GraficoEnergia = () => {
         console.log(error);
       }
     };
-    fetchEnergyTwo()
+    fetchEnergyTwo();
     fetchEnergy();
-
 
     // Simula la actualización en tiempo real de los datos de energía
     const interval = setInterval(() => {
@@ -274,8 +275,6 @@ const GraficoEnergia = () => {
     };
   }, [energyBatery]);
 
-
-
   const currentDate = new Date();
 
   const showDate = format(currentDate, "dd/MM/yyyy HH:mm");
@@ -326,7 +325,6 @@ const GraficoEnergia = () => {
   //   );
   //   setExcedenteCapturado(excedente);
   // };
-
 
   //* token firabse to backend
 
@@ -514,16 +512,15 @@ const GraficoEnergia = () => {
     }
   };
 
-
-// Creacion de usuario en la DB
-  const URL = import.meta.env.VITE_APP_API_URL
-  const [email, setEmail] = useState('');
-  const [foundUserId, setFoundUserId] = useState('');
-  const [foundUserName, setFoundUserName] = useState('');
+  // Creacion de usuario en la DB
+  const URL = import.meta.env.VITE_APP_API_URL;
+  const [email, setEmail] = useState("");
+  const [foundUserId, setFoundUserId] = useState("");
+  const [foundUserName, setFoundUserName] = useState("");
 
   const handleSearch = async () => {
     try {
-      if (!localStorage.getItem('id')) {
+      if (!localStorage.getItem("id")) {
         const response = await axios.get(`${URL}/users/search`, {
           params: {
             email: email,
@@ -531,9 +528,9 @@ const GraficoEnergia = () => {
         });
         if (response.status === 200) {
           setFoundUserId(response.data._id);
-          setFoundUserName(response.data.full_name)
+          setFoundUserName(response.data.full_name);
         } else {
-          setFoundUserId('');
+          setFoundUserId("");
           // console.error('Error al buscar usuario:', response.status);
         }
       }
@@ -544,23 +541,23 @@ const GraficoEnergia = () => {
   if (foundUserId) {
     localStorage.setItem("id", foundUserId);
   }
-  const name = localStorage.getItem('name') || foundUserName
+  const name = localStorage.getItem("name") || foundUserName;
   if (name) {
     localStorage.setItem("name", name);
   }
 
   const addNewUser = async () => {
     try {
-      if (!localStorage.getItem('id')) {
+      if (!localStorage.getItem("id")) {
         const response = await axios.post(`${URL}/users/`, {
           email: email,
         });
         if (response.status === 200) {
-          console.log('Usuario creado con éxito');
+          console.log("Usuario creado con éxito");
           setFoundUserId(response.data.user_id);
-          setFoundUserName(response.data.full_name)
-          localStorage.setItem('id', foundUserId);
-          localStorage.setItem('name', foundUserName);
+          setFoundUserName(response.data.full_name);
+          localStorage.setItem("id", foundUserId);
+          localStorage.setItem("name", foundUserName);
         }
       }
     } catch (error) {
@@ -573,12 +570,12 @@ const GraficoEnergia = () => {
     const fetchData = async () => {
       const auth = getAuth();
       const user = auth.currentUser;
-      const storedEmail = localStorage.getItem("email") ?? '';
+      const storedEmail = localStorage.getItem("email") ?? "";
 
       if (!storedEmail && user?.email) {
         localStorage.setItem("email", user.email);
       }
-      setEmail(storedEmail || '');
+      setEmail(storedEmail || "");
 
       try {
         await handleSearch();
@@ -594,7 +591,7 @@ const GraficoEnergia = () => {
     fetchData();
   }, [email, handleSearch]);
 
-// PopUp completar registro
+  // PopUp completar registro
   useEffect(() => {
     const timerId = setTimeout(() => {
       if (localStorage.getItem("pendingDocs") === "pending") {
@@ -617,8 +614,6 @@ const GraficoEnergia = () => {
     return () => clearTimeout(timerId);
   }, []);
 
-
-
   //------------------------------VARA INTEGRATION-----------------------------------------------------------------------
 
   // ! NUEVO GRAFICO, las siguienes funciones le dan los estilos a cada card.
@@ -626,47 +621,47 @@ const GraficoEnergia = () => {
   const getOption = () => {
     return {
       tooltip: {
-        trigger: 'item',
+        trigger: "item",
       },
       legend: {
-        orient: 'vertical',
-        left: 'left',
+        orient: "vertical",
+        left: "left",
         textStyle: {
-          color: '#ffffff'
-        }
+          color: "#ffffff",
+        },
       },
       series: [
         {
-          name: 'Access Source',
-          type: 'pie',
-          radius: ['50%', '70%'],
+          name: "Access Source",
+          type: "pie",
+          radius: ["50%", "70%"],
           avoidLabelOverlap: false,
           itemStyle: {
             borderRadius: 5,
-            borderColor: '#1D1B41',
-            borderWidth: 2
+            borderColor: "#1D1B41",
+            borderWidth: 2,
           },
           label: {
             show: false,
-            position: 'center'
+            position: "center",
           },
           emphasis: {
             label: {
               show: true,
-              fontSize: '20',
-              fontWeight: 'bold'
-            }
+              fontSize: "20",
+              fontWeight: "bold",
+            },
           },
           labelLine: {
-            show: false
+            show: false,
           },
           data: [
-            { value: 3000, name: 'Wind Energy' },
-            { value: 7000, name: 'Thermal Energy' },
-            { value: 10000, name: 'Solar Energy' }
-          ]
-        }
-      ]
+            { value: 3000, name: "Wind Energy" },
+            { value: 7000, name: "Thermal Energy" },
+            { value: 10000, name: "Solar Energy" },
+          ],
+        },
+      ],
     };
   };
 
@@ -682,244 +677,424 @@ const GraficoEnergia = () => {
     const seriesData = dataset.data.map((value, index) => ({
       value, // El valor de cada barra
       // Aplicar el color de la barra basado en el color definido en barData, o un color por defecto si no se especifica
-      itemStyle: { color: index % 2 === 0 ? '#58E2C2' : '#F7E53B' }
+      itemStyle: { color: index % 2 === 0 ? "#58E2C2" : "#F7E53B" },
     }));
 
     return {
-      color: ['#58E2C2'],
+      color: ["#58E2C2"],
       tooltip: {
-        trigger: 'axis',
+        trigger: "axis",
         axisPointer: {
-          type: 'shadow'
-        }
+          type: "shadow",
+        },
       },
       grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
+        left: "3%",
+        right: "4%",
+        bottom: "3%",
+        containLabel: true,
       },
       xAxis: [
         {
-          type: 'category',
+          type: "category",
           data: [
-            moment().subtract(5, 'days').format('MMM D'),
-            moment().subtract(4, 'days').format('MMM D'),
-            moment().subtract(3, 'days').format('MMM D'),
-            moment().subtract(2, 'days').format('MMM D'),
-            moment().subtract(1, 'days').format('MMM D'),
-            moment().format('MMM D')
+            moment().subtract(5, "days").format("MMM D"),
+            moment().subtract(4, "days").format("MMM D"),
+            moment().subtract(3, "days").format("MMM D"),
+            moment().subtract(2, "days").format("MMM D"),
+            moment().subtract(1, "days").format("MMM D"),
+            moment().format("MMM D"),
           ],
           axisTick: {
-            alignWithLabel: true
+            alignWithLabel: true,
           },
           axisLine: {
             lineStyle: {
-              color: '#FDFDFD'
-            }
+              color: "#FDFDFD",
+            },
           },
           axisLabel: {
-            color: '#FDFDFD'
-          }
-        }
+            color: "#FDFDFD",
+          },
+        },
       ],
       yAxis: [
         {
-          type: 'value',
+          type: "value",
           axisLine: {
             lineStyle: {
-              color: '#FDFDFD'
-            }
+              color: "#FDFDFD",
+            },
           },
           splitLine: {
             lineStyle: {
-              color: '#484E69'
-            }
+              color: "#484E69",
+            },
           },
           axisLabel: {
-            color: '#FDFDFD'
-          }
-        }
+            color: "#FDFDFD",
+          },
+        },
       ],
       series: [
         {
-          name: 'Cost',
-          type: 'bar',
-          barWidth: '40%',
+          name: "Kw",
+          type: "bar",
+          barWidth: "40%",
           data: [
-            { value: 203, itemStyle: { color: '#58E2C2' } }, // Primer color para la primera barra
-            { value: 214, itemStyle: { color: '#F7E53B' } } , // Segundo color para la segunda barra
-
+            { value: 203, itemStyle: { color: "#58E2C2" } }, // Primer color para la primera barra
+            { value: 214, itemStyle: { color: "#F7E53B" } }, // Segundo color para la segunda barra
           ],
-          data: seriesData // Usando la data mapeada desde barData
-        }
-      ]
+          data: seriesData, // Usando la data mapeada desde barData
+        },
+      ],
     };
   };
 
   //! Medidor de intensidad de enrgia
   const getGaugeOption = () => {
     // Obtener el último dataset del gráfico de barras
-  const lastDataset = barData.datasets[barData.datasets.length - 1];
-  // Obtener el último valor de este dataset
-  const lastValue = lastDataset.data[lastDataset.data.length - 1];
+    const lastDataset = barData.datasets[barData.datasets.length - 1];
+    // Obtener el último valor de este dataset
+    const lastValue = lastDataset.data[lastDataset.data.length - 1];
 
-  const percentage = lastValue / 18000;
+    const percentage = lastValue / 18000;
 
-  useEffect(() => {
-    const url = import.meta.env.VITE_APP_API_URL
-    const auth = getAuth()
-    const user = auth.currentUser?.email
-    const fetchDataUser = async ()=>{
-      try {
-        const request = await axios.get(`${url}/users/`)
-        const response = request.data.users
-        const filter = response.filter((userLog:any) => userLog.email === user)
-        setUserLog(filter)
-        dispatch({ type: 'SET_LOGGED_IN_USER', payload: filter })
-
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchDataUser()
-
-
-  }, [])
-
-
-
+    useEffect(() => {
+      const url = import.meta.env.VITE_APP_API_URL;
+      const auth = getAuth();
+      const user = auth.currentUser?.email;
+      const fetchDataUser = async () => {
+        try {
+          const request = await axios.get(`${url}/users/`);
+          const response = request.data.users;
+          const filter = response.filter(
+            (userLog: any) => userLog.email === user
+          );
+          setUserLog(filter);
+          dispatch({ type: "SET_LOGGED_IN_USER", payload: filter });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchDataUser();
+    }, []);
 
     return {
       tooltip: {
-        formatter: "{a} <br/>{b} : {c}%",
-
+        formatter: "{a} <br/>{b}: {c}%",
       },
       series: [
         {
-          name: 'Usage',
-          type: 'gauge',
+          name: "Usage",
+          type: "gauge",
           detail: {
-            color: '#FFFFFF',
-            formatter: (value:number) => `${value.toFixed(0)}kWh`,
-            offsetCenter: [0, '80%'],
-          fontSize: 14,
+            color: "#FFFFFF",
+            formatter: (value: number) => `${value.toFixed(0)}kWh`,
+            offsetCenter: [0, "80%"],
+            fontSize: 14,
           },
-          data: [{value: lastValue}],
+          data: [{ value: lastValue }],
           min: 0,
           max: 18000,
           splitNumber: 6,
           axisLine: {
             lineStyle: {
-              color: [[percentage, '#58E2C2'], [1, '#48506E']],
-              width: 30
-            }
+              color: [
+                [percentage, "#58E2C2"],
+                [1, "#48506E"],
+              ],
+              width: 30,
+            },
           },
-          axisTick: { // Puntos de referencia (ticks)
+          axisTick: {
+            // Puntos de referencia (ticks)
             show: true,
             lineStyle: {
-              color: '#FFFFFF', // Color de los ticks
+              color: "#FFFFFF", // Color de los ticks
               width: 1, // Grosor de los ticks
             },
             length: -5, // Longitud de los ticks
           },
-          axisLabel: { // Etiquetas de los números alrededor del gauge
-            color: '#FFFFFF',
+          axisLabel: {
+            // Etiquetas de los números alrededor del gauge
+            color: "#FFFFFF",
             distance: 25,
-            fontSize: 11
+            fontSize: 11,
           },
           pointer: {
             itemStyle: {
-              color: 'auto'
-            }
-          }
-        }
-      ]
+              color: "auto",
+            },
+          },
+        },
+      ],
     };
   };
+
+  // interfaz para los datos de las plantas
+interface PlantData {
+  plantId: number;
+  name: string;
+}
+
+  // ! Grafico para mostrar las plantas.
+  useEffect(() => {
+    const fetchData = async () => {
+      const url = import.meta.env.VITE_APP_API_URL; // Reemplaza con la URL correcta.
+      try {
+        const response = await axios.get(`${url}/plants/`);
+
+        if (response.data && response.data.plants) {
+          const transformedData = response.data.plants.map(
+            (plant: any, index: any) => {
+              // Asume que quieres usar el plantId como el eje X y un valor aleatorio para el eje Y
+              return [plant.plantId, Math.random() * 100, plant.name]; // Incluye el nombre de la planta para mostrarlo en el tooltip
+            }
+          );
+          setPlantData(transformedData);
+          console.log(transformedData);
+        } else {
+          console.error("La respuesta no tiene el formato esperado:", response);
+        }
+      } catch (error) {
+        console.error("Error al cargar los datos de las plantas:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const getBarChartOption = (plantData: number[][]): EC => {
+    // Generando colores aleatorios para cada barra
+    const colors = plantData.map(() => '#' + Math.floor(Math.random()*16777215).toString(16));
+  
+    return {
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "line" // Cambia el tipo de puntero en el tooltip para gráficos de línea
+        },
+        formatter: function (params) {
+          const dataIndex = params[0].dataIndex;
+          const plantNumber = plantData[dataIndex][0];
+          const metric = params[0].value.toFixed(2);
+          return `${params[0].name}<br/> Plant Number: ${plantNumber}<br/>Metric: ${metric}`;
+        },
+      },
+      xAxis: {
+        type: "category",
+        data: plantData.map((item) => item[2]), // Usar nombres de planta para etiquetas
+        axisLabel: {
+          interval: 0,
+          rotate: 45, 
+          color: '#fff'
+        },
+      },
+      yAxis: {
+        type: "value",
+      },
+      series: [
+        {
+          name: "Metric",
+          type: "line",
+          data: plantData.map((item, index) => ({
+            value: item[1],
+            itemStyle: {
+              color: colors[index], // Asignando un color aleatorio a cada punto de la línea
+            },
+            symbolSize: 10, // Tamaño de los puntos en la línea
+            showSymbol: true, // Muestra los símbolos en la línea
+          })),
+          lineStyle: {
+            color: '#5470C6', // Color de la línea
+          },
+          smooth: true, // Suaviza la línea para una mejor visualización
+        },
+      ],
+    };
+  };
+
+    // ! Grafico para mostrar el device id conectado.
+    useEffect(() => {
+      const fetchData = async () => {
+        const deviceId = '65ce665af275d06e62e8680b'; // ID del dispositivo
+        const url = `${import.meta.env.VITE_APP_API_URL}/devices/${deviceId}`; // Actualiza la URL para incluir el ID del dispositivo
+    
+        try {
+          const response = await axios.get(url);
+    
+          // Asumiendo que deseas usar el objeto "device" de la respuesta
+          if (response.data && response.data.device) {
+            const deviceData = response.data.device;
+            // Transformar los datos para tu uso, por ejemplo:
+            const transformedData = [[
+              deviceData.deviceId, // Usar deviceId como un identificador único
+              Math.random() * 100, // Valor aleatorio, asumiendo que quieres generar un valor para el gráfico
+              deviceData.name // Usar el nombre del dispositivo como etiqueta
+            ]];
+            setDeviceData(transformedData); // Asumiendo que setDeviceData actualiza el estado con estos datos
+            console.log(transformedData);
+          } else {
+            console.error("La respuesta no tiene el formato esperado:", response);
+          }
+        } catch (error) {
+          console.error("Error al cargar los datos del dispositivo:", error);
+        }
+      };
+      fetchData();
+    }, []);
+
+    const getBarChartOption2 = (deviceData) => {
+      // Generando colores aleatorios para cada barra
+      // const colors = deviceData.map((item, index) => index % 2 === 0 ? '#708090' : '#0000FF');
+      const colors = deviceData.map(() => '#58E2C2');
+
+      
+      return {
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow" // Más adecuado para gráficos de barras
+          },
+          formatter: function (params) {
+            const dataIndex = params[0].dataIndex;
+            const dataId = deviceData[dataIndex][0]; // Suponiendo que el primer elemento es un identificador único
+            const value = params[0].value.toFixed(2); // Valor numérico, asegurándose de que esté formateado correctamente
+            const timestamp = deviceData[dataIndex][2]; // Suponiendo que el tercer elemento es un timestamp o etiqueta de tiempo
+            return `${timestamp}<br/> Data ID: ${dataId}<br/>Value: ${value}`;
+          },
+        },
+        xAxis: {
+          type: "value",
+        },
+        yAxis: {
+          type: "category",
+          data: deviceData.map((item) => item[2]), // Usando el timestamp o etiqueta de tiempo como etiqueta de categoría
+          axisLabel: {
+            interval: 0,
+            rotate: 45, // Puedes ajustar esto según sea necesario
+            margin: 50,
+            color: '#fff' // Aumenta el margen para mover las etiquetas más abajo si es necesario
+          },
+        },
+        series: [
+          {
+            name: "Value",
+            type: "bar", // Cambio de 'line' a 'bar' para crear un gráfico de barras
+            data: deviceData.map((item, index) => ({
+              value: item[1], // Asegurándose de que el valor esté mapeado correctamente
+              itemStyle: {
+                color: colors[index], // Asignando un color aleatorio a cada barra
+              },
+            })),
+            barWidth: '30%', // Controla el ancho de las barras
+          },
+        ],
+      };
+    };
+
   return (
     <div className="mb-12">
       <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
         <div className="flex flex-col lg:flex-row gap-5  p-2 justify-center graficos items-center">
-
-          <CardGenerated supply={totalGenerado.toFixed(3)}/>
-          <CardConsume supply={totalConsumido.toFixed(3)}/>
-          <CardEnergy supply={excedenteCapturado} reward={claimReward}/>
-         
+          <CardGenerated supply={totalGenerado.toFixed(3)} />
+          <CardConsume supply={totalConsumido.toFixed(3)} />
+          <CardEnergy supply={excedenteCapturado} reward={claimReward} />
         </div>
         <div className="flex justify-center text-center text-emerald-500  ">
           {walletMessage && <p className="text-xl">{walletMessage}</p>}
         </div>
         <div className="flex flex-col p-2  md:ml-10 justify-center items-center md:items-start">
-         
           {popupOpen && <PopUpALert onClose={closePopup} />}
         </div>
         <div className="flex flex-col items-center sm:flex-row sm:justify-center">
-          <div className="relative inline-block">
-
-          </div>
-          
+          <div className="relative inline-block"></div>
         </div>
-
-
       </div>
       {/*  NUEVO DISENO DE LA PAGINA  */}
 
       <div className="flex flex-col m-16">
-      {/* Header del Dashboard */}
-      <div className="flex justify-around bg-blue-950 bg-opacity-90 text-white p-4">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Generation panel
-        </button>
-        <NavLink to="/panelUsuarioFinal">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Device manage
-        </button>
-        </NavLink>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={openPopup}>
-          Alerts
-        </button>
+        {/* Header del Dashboard */}
+        <div className="flex justify-around bg-blue-950 bg-opacity-90 text-white p-4 rounded-full">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Generation panel
+          </button>
+          <NavLink to="/panelUsuarioFinal">
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Device manage
+            </button>
+          </NavLink>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={openPopup}
+          >
+            Alerts
+          </button>
+        </div>
+
+        {/* Main content del Dashboard */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8">
+          {/* Cost Predicted */}
+          <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+            <h2 className="text-xl mb-2 text-white">Energy type</h2>
+            <ReactECharts
+              option={getOption()}
+              className="w-full"
+              style={{ height: "300px" }}
+            />
+          </div>
+
+          {/* Change in Cost */}
+          <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+            <h2 className="text-xl mb-2 text-white">Consume per day</h2>
+            <ReactECharts
+              option={getBarOption()}
+              className="w-full"
+              style={{ height: "300px" }}
+            />
+          </div>
+
+          {/* Usage Estimate */}
+          <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+            <h2 className="text-xl mb-2 text-white">Energy Intensity</h2>
+            <ReactECharts
+              option={getGaugeOption()}
+              style={{ height: "300px" }}
+              className="w-full"
+            />
+          </div>
+
+          {/* Active Appliances */}
+          <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+            <h2 className="text-xl mb-2 text-white">Active plants</h2>
+            <ReactECharts
+              option={getBarChartOption(plantData)}
+              className="w-full"
+              style={{ height: "300px" }}
+            />
+          </div>
+
+          {/* Energy Intensity */}
+          <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+            <h2 className="text-xl mb-2 text-white">Device usage Estimate</h2>
+            <ReactECharts
+              option={getBarChartOption2(deviceData)}
+              className="w-full"
+              style={{ height: "300px" }}
+            />
+          </div>
+
+          {/* Carbon Footprint */}
+          <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+            <h2 className="text-xl mb-2 text-white">Carbon Footprint</h2>
+            <ReactECharts
+              option={getBarOption()}
+              className="w-full"
+              style={{ height: "300px" }}
+            />
+          </div>
+        </div>
       </div>
-
-      {/* Main content del Dashboard */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8">
-        {/* Cost Predicted */}
-        <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
-          <h2 className="text-xl mb-2 text-white">Energy type</h2>
-          <ReactECharts option={getOption()} className="w-full" style={{ height: '300px' }} />
-        </div>
-
-        {/* Change in Cost */}
-        <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
-          <h2 className="text-xl mb-2 text-white">Consume per day</h2>
-          <ReactECharts option={getBarOption()} className="w-full" style={{ height: '300px' }} />
-        </div>
-
-        {/* Usage Estimate */}
-        <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
-          <h2 className="text-xl mb-2 text-white">Energy Intensity</h2>
-          <ReactECharts option={getGaugeOption()} style={{ height: '300px' }} className="w-full" />
-        </div>
-
-        {/* Active Appliances */}
-        <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
-          <h2 className="text-xl mb-2 text-white">Active Appliances</h2>
-          {/* Inserta aquí tu lista o gráfico */}
-        </div>
-
-        {/* Energy Intensity */}
-        <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
-          <h2 className="text-xl mb-2 text-white">Usage Estimate</h2>
-          {/* Inserta aquí tu componente de gráfico Gauge */}
-        </div>
-
-        {/* Carbon Footprint */}
-        <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
-          <h2 className="text-xl mb-2 text-white">Carbon Footprint</h2>
-          {/* Inserta aquí tu componente de gráfico */}
-        </div>
-      </div>
-    </div>
 
       {/*   FIN NUEVO GRAFICO */}
       <div className="flex items-center flex-col gap-10 justify-center">
