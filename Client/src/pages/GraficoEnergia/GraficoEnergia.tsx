@@ -594,7 +594,7 @@ const GraficoEnergia = () => {
   // PopUp completar registro
   useEffect(() => {
     const timerId = setTimeout(() => {
-      if (localStorage.getItem("pendingDoc") === "pending") {
+      if (localStorage.getItem("pendingDocs") === "pending") {
         Swal.fire({
           title: "Don't forget to complete your registration",
           icon: "warning",

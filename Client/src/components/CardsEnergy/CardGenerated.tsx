@@ -14,7 +14,7 @@ const CardGenerated = ({supply}:any) => {
         <h5 className="block mb-4 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-white">
         Total Generated
         </h5>
-                <h5 className="block mb-4 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-white">
+                <h5 className="block mb-4 font-sans text-3xl antialiased font-semibold leading-snug tracking-normal text-white">
         {supply} K/w
         </h5>
         <img

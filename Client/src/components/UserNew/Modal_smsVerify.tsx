@@ -43,7 +43,7 @@ function SmsVerify(props:MoodalSms) {
       if (response.status === 200) {
         Toast.fire({
           icon: "success",
-          title: "OTP verified successfully"
+          title: "OTP successfully verified"
         }); 
       } else {
         Toast.fire({

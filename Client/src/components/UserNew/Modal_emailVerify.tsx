@@ -1,10 +1,8 @@
 import { MdOutlineMarkEmailUnread } from "react-icons/md"; 
-import { FcFeedback, FcSms } from "react-icons/fc"; 
-import { useState } from "react";
-import OtpInput from 'react-otp-input';
-import axios from "axios";
 import Swal from "sweetalert2";
-import PhoneInput from "react-phone-input-2";
+import { sendEmailVerification } from "firebase/auth";
+import { getAuth } from "firebase/auth";
+import axios from "axios";
 
 interface MoodalSms {
   showEmailVerify: boolean;
@@ -15,8 +13,8 @@ function EmailVerify(props:MoodalSms) {
 
   const URL = import.meta.env.VITE_APP_API_URL
   const { showEmailVerify, setShowEmailVerify } = props;
-  const [otp, setOtp] = useState("");
-  const [cellPhone, setCellPhone] = useState("");
+  const auth = getAuth();
+  const user = auth.currentUser;
 
   const Toast = Swal.mixin({
     toast: true,
@@ -30,77 +28,54 @@ function EmailVerify(props:MoodalSms) {
     }
   }); 
 
-  const [formData, setFormData] = useState({
-    phone: cellPhone || null
-  });
-
-  const handlePhoneChange = (formattedValue: string) => {
-    setCellPhone(formattedValue); // Actualiza el estado de cellPhone
-    setFormData({
-      ...formData,
-      phone: formattedValue, // Actualiza el estado de formData.phone
-    });
-  };
-  const handleSms = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-
-    const formatPhone = "+" + cellPhone;
-
+  const handleSendEmail = async () => {
     try {
-      const response = await axios.post(`${URL}/sms/send-otp`, {
-        phone_number: formatPhone,
-      });
-
-      if (response.data.success) {
+      if (user) { 
+        await sendEmailVerification(user);
         Toast.fire({
-          icon: "success",
-          title: "SMS sent successfully"
-        }); 
-        setShowEmailVerify(true)
-      } else {
-        console.error('Error sending OTP');
-      }
-    } catch (error) {
-      console.error('Network or server error:', error);
-    }
-  };
-
-  const formatPhone = "+" + cellPhone;
-  const id = localStorage.getItem("id")
-  
-  const handleVerifyPhoneNumber = async () => {
-    try {
-      const response = await axios.post(`${URL}/sms/verify-otp`, {
-        phone_number: formatPhone,
-        otp_code: otp,
-        id: id
-      });
-      
-      if (response.status === 200) {
-        const userId = localStorage.getItem('id'); // Obtener el ID del localStorage
-        await axios.put(`${URL}/users/${userId}`, {
-          phone: cellPhone  // Reemplaza 'formatPhone' con el nuevo número de teléfono
+          icon: 'success',
+          title: 'Email sent'
         });
-
-        Toast.fire({
-          icon: "success",
-          title: "OTP verified successfully"
-        }); 
       } else {
         Toast.fire({
-          icon: "error",
-          title: "Something went wrong"
+          icon: 'error',
+          title: 'Email is null'
         });
-        console.error("Verification failed:", response.data.error);
       }
     } catch (error) {
       Toast.fire({
-        icon: "error",
-        title: "Something went wrong"
+        icon: 'error',
+        title: 'Error sending the email'
       });
-      console.error("Error during verification:", error);
     }
   };
+
+  const handleVerifiedOk = async() => {    
+    try {
+      if(user && user.emailVerified){
+        const userId = localStorage.getItem('id')
+        await axios.put(`${URL}/users/${userId}`, {
+          verified_email: true  
+        });  
+        Toast.fire({
+          icon: "success",
+          title: "Email verified"
+        }); 
+      }else{
+        Toast.fire({
+          icon: "error",
+          title: "Unverified email"
+        });
+      }    
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: "Error during the update"
+      });
+      console.error("Error during the update:", error);
+    }
+    setShowEmailVerify(false)
+  }
   
   return showEmailVerify ? (
     <div className="bg-[#00000054] fixed top-0 left-0 h-full w-full flex justify-center items-center text-white">
@@ -114,25 +89,19 @@ function EmailVerify(props:MoodalSms) {
             <MdOutlineMarkEmailUnread className="text-5xl ml-4"/>           
         </div>
 
-          <div className="flex justify-center gap-6 text-black mb-10 w-full">
-            <input
-              // onChange={handleInputChange}
-              name="address"
-              type="text"
-              id="Address"
-              className="bg-indigo-50 border text-center outline-none border-indigo-300 text-black rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block h-10 w-72 p-2.5"
-              placeholder="Email"
-              // value={formData.address || ''}
-              required
-            />
+          <div className="flex justify-center items-center gap-6 mb-10 w-full">
+            <div className="border-b pb-1 px-4">
+              <h1 className="text-xl">
+              {user?.email}
+              </h1>
+            </div>
 
             <button
-              // onClick={handleSms}
+              onClick={handleSendEmail}
               className="bg-[#4caf4f] hover:bg-[#3ea442] w-[30%] h-10 flex gap-1 items-center justify-center py-2.5 text-lg text-white rounded"
               >
               Send
-            </button> 
-
+            </button>
           </div> 
 
           <div>
@@ -142,7 +111,7 @@ function EmailVerify(props:MoodalSms) {
           </div>
 
           <button
-            onClick={() => {setShowEmailVerify(false)}}
+            onClick={handleVerifiedOk}
             className="bg-[#4caf4f] hover:bg-[#3ea442] w-[30%] flex gap-1 items-center justify-center py-2.5 text-lg text-white rounded mb-4"
           >
             ¡Ok!

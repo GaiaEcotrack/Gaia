@@ -14,7 +14,7 @@ const CardEnergy = ({supply ,reward}:any) => {
           <h5 className="block mb-4 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-white">
           Total tokens
           </h5>
-          <h5 className="block mb-4 font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-white">
+          <h5 className="block mb-4 font-sans text-3xl antialiased font-semibold leading-snug tracking-normal text-white">
           {supply} Gaia's
           </h5>
           <img
