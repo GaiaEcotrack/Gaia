@@ -1,28 +1,58 @@
 import { FcOk } from "react-icons/fc"; 
 import { FcHighPriority } from "react-icons/fc"; 
-import { FcCheckmark } from "react-icons/fc"; 
 import { FcFeedback } from "react-icons/fc"; 
 import { FcGoogle } from "react-icons/fc"; 
 import { FcSms } from "react-icons/fc"; 
 import { FcPhoneAndroid } from "react-icons/fc"; 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// import Swal from "sweetalert2";
 import { ModalGoogleAuth } from "./Modal_GoogleAuth";
 import { SmsSendVerify } from "./Modal_smsSendVerify";
 import { EmailVerify } from "./Modal_emailVerify";
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
-
+import axios from "axios";
+import { getAuth } from "firebase/auth";
 
 function SecurityVerify() {
 
+  const URL = import.meta.env.VITE_APP_API_URL
   const [showGAuth, setShowGAuth] = useState(false)
   const [showSmsSendVerify, setShowSmsSendVerify] = useState(false)
   const [showEmailVerify, setShowEmailVerify] = useState(false)
-  const userRedux = useSelector((state:RootState) => state.app.loggedInUser)
-  console.log(userRedux[0].verified_sms);
-  
+  const [verified_2fa, setVerified_2fa] = useState('')
+  const [verified_email, setVerified_email] = useState('')
+  const [verified_sms, setVerified_sms] = useState('')
+  const [loading, setLoading] = useState(true);
+
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    const handleSearch = async () => {
+      try {        
+        if(user && user.emailVerified){
+          const userId = localStorage.getItem('id')
+          await axios.put(`${URL}/users/${userId}`, {
+            verified_email: true  
+          }); 
+        } 
+        const email = localStorage.getItem("email");        
+        const response = await axios.get(`${URL}/users/search`, {
+          params: {
+            email: email,
+          },
+        });
+        if (response.status === 200) {
+          setVerified_2fa(response.data.verified_2fa);
+          setVerified_email(response.data.verified_email);
+          setVerified_sms(response.data.verified_sms);
+        } 
+        setLoading(false) 
+      } catch (error) {
+        console.log("Error de red: ", error ) 
+      }
+    };
+    handleSearch();
+  }, []);
 
   return (
     <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black">
@@ -97,10 +127,13 @@ function SecurityVerify() {
               </h1>
             </div>
 
-            {/* <div>
-              <FcOk className="text-4xl text-red-600 mr-6"/>
-              <FcHighPriority className="text-4xl text-red-600 mr-6"/>
-            </div> */}
+            <div>
+            {loading ? (
+                <div className="inline-block text-black h-7 w-7 mr-7 ml-1 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status"></div>
+              ) : (
+                verified_2fa ? <FcOk className="text-4xl mr-6" /> : <FcHighPriority className="text-4xl mr-6" />
+              )}
+            </div>
 
             <button onClick={() => {setShowGAuth(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%]">
               Bind
@@ -119,10 +152,13 @@ function SecurityVerify() {
               </h1>
             </div>
 
-            {/* <div>
-              <FcOk className="text-4xl text-red-600 mr-6"/>
-              <FcHighPriority className="text-4xl text-red-600 mr-6"/>
-            </div> */}
+            <div>
+            {loading ? (
+                <div className="inline-block text-black h-7 w-7 mr-7 ml-1 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status"></div>
+              ) : (
+                verified_email ? <FcOk className="text-4xl mr-6" /> : <FcHighPriority className="text-4xl mr-6" />
+              )}
+            </div>
 
             <button onClick={() => {setShowEmailVerify(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%]">
               Verify Now
@@ -141,10 +177,13 @@ function SecurityVerify() {
               </h1>
             </div>
 
-            {/* <div>
-              <FcOk className="text-4xl text-red-600 mr-6"/>
-              <FcHighPriority className="text-4xl text-red-600 mr-6"/>
-            </div> */}
+            <div>
+            {loading ? (
+                <div className="inline-block text-black h-7 w-7 mr-7 ml-1 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status"></div>
+              ) : (
+                verified_sms ? <FcOk className="text-4xl mr-6" /> : <FcHighPriority className="text-4xl mr-6" />
+              )}
+            </div>
 
             <button onClick={() => {setShowSmsSendVerify(true)}} className="text-white bg-[#2f5190] hover:bg-[#5173b2] focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 text-center w-[20%]">
               Verify Now

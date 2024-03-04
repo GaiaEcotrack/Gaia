@@ -17,7 +17,6 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
     localStorage.removeItem("profilePic");
     localStorage.removeItem('id');
     localStorage.removeItem('completeCredent');
-    localStorage.removeItem('verified');
     localStorage.removeItem('pendingDocs');
   };
 

@@ -51,10 +51,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       setLoadingE(true);
       await login(emailRef.current.value, passwordRef.current.value);
       const redirectPath = new URLSearchParams(window.location.search).get("redirect") || "/home";
-      auth.onAuthStateChanged(async (userCred: any) => {
-        const Verified = userCred.emailVerified;
-        localStorage.setItem("verified", Verified);
-    
+      auth.onAuthStateChanged(async () => {    
         // Consultar la base de datos para obtener verified_2fa
         try {
           const response = await axios.get(`${URL}/users/search`, {
@@ -105,7 +102,6 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
     localStorage.removeItem("profilePic");
     localStorage.removeItem('id');
     localStorage.removeItem('completeCredent');
-    localStorage.removeItem('verified');
   
     try {
       const response = await signInWithPopup(auth, new GoogleAuthProvider());
@@ -117,11 +113,6 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       localStorage.setItem("name", name);
       localStorage.setItem("profilePic", profilePic);  
       localStorage.setItem("email", email); 
-
-      auth.onAuthStateChanged((userCred: any) => {
-        const Verified = userCred.emailVerified
-        localStorage.setItem("verified", Verified);       
-      })
   
       navigate('/home');
     } catch (error) {
