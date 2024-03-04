@@ -594,7 +594,7 @@ const GraficoEnergia = () => {
   // PopUp completar registro
   useEffect(() => {
     const timerId = setTimeout(() => {
-      if (localStorage.getItem("pendingDocs") === "pending") {
+      if (localStorage.getItem("pendingDoc") === "pending") {
         Swal.fire({
           title: "Don't forget to complete your registration",
           icon: "warning",
@@ -837,6 +837,7 @@ interface PlantData {
   plantId: number;
   name: string;
 }
+
 
   // ! Grafico para mostrar las plantas.
   useEffect(() => {
