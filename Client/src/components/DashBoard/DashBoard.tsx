@@ -10,8 +10,10 @@ import Users from "./component/Tables/Users"
 
 const Dashboard: React.FC = () => {
   return (
+    <div className='bg-white'  style={{ backgroundColor: `rgba(244, 245, 249, var(--tw-bg-opacity))` }}>
+
     <DefaultLayout>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5 text-black">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5 text-black ml-10">
         <CardDataStats title="Total views"  total="$3.456K" rate="0.43%" levelUp>
           <div className=' rounded-full w-[4vh] h-[4vh]'>
           <svg
@@ -103,14 +105,16 @@ const Dashboard: React.FC = () => {
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         <ChartOne />
         <ChartTwo />
-
-        <div className="col-span-12 xl:col-span-8">
+]
+        <div className="col-span-12 xl:col-span-8 ml-[8vh]">
           <Users />
         </div>
-        <Plants />
-       
+
+     
       </div>
+        <Plants />
     </DefaultLayout>
+    </div>
   );
 };
 
