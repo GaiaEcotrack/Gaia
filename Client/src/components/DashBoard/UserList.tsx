@@ -6,11 +6,12 @@ interface User {
   email: string;
   role: string;
   id: any;
+  full_name: string;
   onDelete?: () => void;
   onEdit?: () => void;
 }
 
-const UserList: React.FC<User> = ({ image, name, email, role, id, onDelete, onEdit }) => {
+const UserList: React.FC<User> = ({ image, name, email, role, id, full_name, onDelete, onEdit }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedEmail, setEditedEmail] = useState(email);
 
@@ -44,7 +45,10 @@ const UserList: React.FC<User> = ({ image, name, email, role, id, onDelete, onEd
                 className="mt-1 px-2 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500"
               />
             ) : (
-              <p className="mt-1 truncate text-xs leading-5 text-black">{email}</p>
+              <div>
+                <p className="mt-1 truncate text-xs leading-5 text-black">{email}</p>
+                <p>{full_name}</p>
+              </div>
             )}
           </div>
         </div>
