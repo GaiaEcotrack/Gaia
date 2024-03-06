@@ -141,6 +141,7 @@ const GraficoEnergia = () => {
   const [totalGenerado, setTotalGenerado] = useState<number>(0);
   const [totalConsumido, setTotalConsumido] = useState<number>(0);
   const [totalExcedente, setTotalExcedente] = useState<number>(0);
+  const [generacionActiva, setGeneracionActiva] = useState<boolean>(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [plantData, setPlantData] = useState<number[][]>([]);
   const [deviceData, setDeviceData] = useState([]);
@@ -203,6 +204,8 @@ const GraficoEnergia = () => {
         console.log(pvGeneration);
 
         setTotalGenerado(pvGeneration);
+        // Determina si la generación está activa basada en el umbral de 0.2
+        setGeneracionActiva(pvGeneration > 0.2);
       } catch (error) {
         console.log(error);
       }
@@ -297,38 +300,48 @@ const GraficoEnergia = () => {
   //   return () => clearInterval(intervalId);
   // }, []);
   //! pausar el cotnador de energya cuando no se genera energia
+  // Incrementa totalGenerado cada segundo, solo si generacionActiva es true
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-    // Cambia la condición para verificar si totalGenerado es mayor que 0.2
-    if (totalGenerado > 0.2) {
-      intervalId = setInterval(() => {
-        setTotalGenerado((prevTotalGenerado) => prevTotalGenerado + 0.01);
-      }, 1000);
+    if (generacionActiva) {
+      const intervalId = setInterval(
+        () => setTotalGenerado((prev) => prev + 0.01),
+        1000
+      );
+      return () => clearInterval(intervalId);
     }
+  }, [generacionActiva]);
 
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
-  }, [totalGenerado]); // Dependencia de totalGenerado para reevaluar si se debe iniciar el intervalo.
-
+  // Incrementa totalConsumido cada 7 segundos, sin detenerse, pero inicia solo si generacionActiva es true
   useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-    // Cambia la condición para verificar si totalGenerado es mayor que 0.2
-    if (totalGenerado > 0.2) {
+    let intervalId: NodeJS.Timeout | undefined = undefined;
+    if (generacionActiva) {
       intervalId = setInterval(() => {
-        setTotalConsumido((prevTotalConsumido) => prevTotalConsumido + 0.005);
+        setTotalConsumido((prev) => prev + 0.005);
       }, 7000);
+    } else if (!generacionActiva && intervalId) {
+      clearInterval(intervalId);
     }
 
     return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
+      if (intervalId) clearInterval(intervalId);
     };
-  }, [totalGenerado]); // Dependencia de totalGenerado para reevaluar si se debe iniciar el intervalo.
+  }, [generacionActiva]);
 
+  // Incrementa totalConsumido cada 7 segundos si totalGenerado es mayor a 0.2
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined = undefined;
+    if (totalGenerado > 0.2) {
+      intervalId = setInterval(
+        () => setTotalConsumido((prev) => prev + 0.005),
+        7000
+      );
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [totalGenerado]);
+//////////////////////
   const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
     Math.max(totalGenerado - totalConsumido, 0);
 
