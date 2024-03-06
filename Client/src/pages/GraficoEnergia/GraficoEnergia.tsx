@@ -279,28 +279,61 @@ const GraficoEnergia = () => {
 
   const showDate = format(currentDate, "dd/MM/yyyy HH:mm");
 
+  //! codigo viejo del contador sin pausa
+  // useEffect(() => {
+  //   const intervalId = setInterval(
+  //     () => setTotalGenerado((prevTotalGenerado) => prevTotalGenerado + 0.01),
+  //     1000
+  //   );
+
+  //   return () => clearInterval(intervalId);
+  // }, []);
+
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     setTotalConsumido((prevTotalConsumido) => prevTotalConsumido + 0.005);
+  //   }, 7000);
+
+  //   return () => clearInterval(intervalId);
+  // }, []);
+  //! pausar el cotnador de energya cuando no se genera energia
   useEffect(() => {
-    const intervalId = setInterval(
-      () => setTotalGenerado((prevTotalGenerado) => prevTotalGenerado + 0.01),
-      1000
-    );
+    let intervalId: NodeJS.Timeout;
+    // Cambia la condición para verificar si totalGenerado es mayor que 0.2
+    if (totalGenerado > 0.2) {
+      intervalId = setInterval(() => {
+        setTotalGenerado((prevTotalGenerado) => prevTotalGenerado + 0.01);
+      }, 1000);
+    }
 
-    return () => clearInterval(intervalId);
-  }, []);
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [totalGenerado]); // Dependencia de totalGenerado para reevaluar si se debe iniciar el intervalo.
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setTotalConsumido((prevTotalConsumido) => prevTotalConsumido + 0.005);
-    }, 7000);
+    let intervalId: NodeJS.Timeout;
+    // Cambia la condición para verificar si totalGenerado es mayor que 0.2
+    if (totalGenerado > 0.2) {
+      intervalId = setInterval(() => {
+        setTotalConsumido((prevTotalConsumido) => prevTotalConsumido + 0.005);
+      }, 7000);
+    }
 
-    return () => clearInterval(intervalId);
-  }, []);
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [totalGenerado]); // Dependencia de totalGenerado para reevaluar si se debe iniciar el intervalo.
 
   const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
     Math.max(totalGenerado - totalConsumido, 0);
 
   useEffect(() => {
-    // ... (your existing code)
+
     const handleCaptureExcedente = () => {
       if (totalConsumido < totalGenerado) {
         setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
@@ -594,7 +627,7 @@ const GraficoEnergia = () => {
   // PopUp completar registro
   useEffect(() => {
     const timerId = setTimeout(() => {
-      if (localStorage.getItem("pendingDocs") === "pending") {
+      if (localStorage.getItem("pendingDoc") === "pending") {
         Swal.fire({
           title: "Don't forget to complete your registration",
           icon: "warning",
@@ -751,34 +784,10 @@ const GraficoEnergia = () => {
     };
   };
 
-  //! Medidor de intensidad de enrgia
+  //! Medidor de intensidad de enrgia: esta tomando la data de la engeriga generada 
   const getGaugeOption = () => {
-    // Obtener el último dataset del gráfico de barras
-    const lastDataset = barData.datasets[barData.datasets.length - 1];
-    // Obtener el último valor de este dataset
-    const lastValue = lastDataset.data[lastDataset.data.length - 1];
-
+    const lastValue = totalGenerado; // Usa el estado totalGenerado como último valor
     const percentage = lastValue / 18000;
-
-    useEffect(() => {
-      const url = import.meta.env.VITE_APP_API_URL;
-      const auth = getAuth();
-      const user = auth.currentUser?.email;
-      const fetchDataUser = async () => {
-        try {
-          const request = await axios.get(`${url}/users/`);
-          const response = request.data.users;
-          const filter = response.filter(
-            (userLog: any) => userLog.email === user
-          );
-          setUserLog(filter);
-          dispatch({ type: "SET_LOGGED_IN_USER", payload: filter });
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchDataUser();
-    }, []);
 
     return {
       tooltip: {
@@ -837,6 +846,7 @@ interface PlantData {
   plantId: number;
   name: string;
 }
+
 
   // ! Grafico para mostrar las plantas.
   useEffect(() => {

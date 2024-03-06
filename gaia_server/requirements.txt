@@ -79,8 +79,4 @@ pyotp==2.9.0
 qrcode==7.4.2
 spacy==3.7.4
 spacy-legacy==3.0.12
-<<<<<<< HEAD
 spacy-loggers==1.0.5
-=======
-spacy-loggers==1.0.5
->>>>>>> 853fac88d0494e14dcd0f33bc0676129cf4955c6
