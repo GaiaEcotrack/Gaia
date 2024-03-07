@@ -1,7 +1,6 @@
 import { Wallet } from './wallet';
 import { AccountsModal } from './accounts-modal';
 import { useApi, useAccount, useBalance, useBalanceFormat } from '@gear-js/react-hooks';
-import { Button } from '@gear-js/ui';
 import { useState } from 'react';
 import { TbWalletOff } from "react-icons/tb";
 

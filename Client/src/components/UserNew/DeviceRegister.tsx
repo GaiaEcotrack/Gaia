@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
-import { ProgramMetadata, decodeAddress, GearKeyring } from "@gear-js/api";
-import { Button } from "@gear-js/ui";
+import { ProgramMetadata } from "@gear-js/api";
 
 function DeviceRegister() {
 
@@ -132,7 +131,6 @@ async function signerTwo(){
       });
   
       if (response.ok) {
-        const data = await response.json();
         Toast.fire({
           icon: "success",
           title: "Device added successfully"

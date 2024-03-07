@@ -43,6 +43,7 @@ function Component() {
         location.pathname !== '/serviceTerms' &&
         location.pathname !== '/dataPrivacy' &&
         location.pathname !== '/payment' &&
+        location.pathname !== '/dashAdmin' &&
         location.pathname !== '/' && <SideBar />}    
 
       <main>
@@ -71,6 +72,7 @@ function Component() {
         location.pathname !== '/serviceTerms' &&
         location.pathname !== '/dataPrivacy' &&
         location.pathname !== '/payment' &&
+        location.pathname !== '/dashAdmin' &&
         location.pathname !== '/' && <Footer />} 
 
     </div>

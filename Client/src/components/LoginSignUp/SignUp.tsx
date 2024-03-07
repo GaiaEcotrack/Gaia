@@ -9,6 +9,7 @@ interface SignUp {
   setShowSignUp(showSignUp: boolean): void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 function SignUp(props:SignUp) {
   
   const emailRef = useRef<HTMLInputElement>(null);

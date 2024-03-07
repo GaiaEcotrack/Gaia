@@ -196,12 +196,18 @@ const GraficoEnergia = () => {
     const fetchEnergyTwo = async () => {
       try {
         const url = import.meta.env.VITE_APP_API_URL;
-        const response = await axios.get(
-          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`
-        );
-        const data = response.data.set;
-        const pvGeneration = data[0].pvGeneration;
-        console.log(pvGeneration);
+        // const response = await axios.get(
+        //   `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`
+        // );
+        // const data = response.data.set;
+        // const pvGeneration = data[0].pvGeneration;
+        // console.log(pvGeneration);
+                            // const response = await axios.get(`${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`)
+                            const response = await axios.get(`${url}/devices/device-data?deviceId=18`)
+                            // const data = response.data.set
+                            const data = response.data.details
+                            // const pvGeneration = data[0].pvGeneration;
+                            const pvGeneration = data.generatorPower
 
         setTotalGenerado(pvGeneration);
         // Determina si la generación está activa basada en el umbral de 0.2

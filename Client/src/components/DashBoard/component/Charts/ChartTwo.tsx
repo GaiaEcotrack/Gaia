@@ -70,6 +70,7 @@ interface ChartTwoState {
 }
 
 const ChartTwo: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [state, setState] = useState<ChartTwoState>({
     series: [
       {

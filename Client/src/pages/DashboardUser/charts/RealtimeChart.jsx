@@ -25,6 +25,7 @@ function RealtimeChart({
   const { currentTheme } = useThemeProvider();
   const darkMode = currentTheme === 'dark';  
   const { textColor, gridColor, tooltipTitleColor, tooltipBodyColor, tooltipBgColor, tooltipBorderColor } = chartColors;
+  // eslint-disable-next-line no-unused-vars
   const [totalGenerado, setTotalGenerado] = useState()
 
 
@@ -162,6 +163,7 @@ function RealtimeChart({
       chart.options.plugins.tooltip.borderColor = tooltipBorderColor.light; 
     }
     chart.update('none')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTheme])    
 
 

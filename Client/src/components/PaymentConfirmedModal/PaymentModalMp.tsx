@@ -4,6 +4,7 @@ import axios from 'axios';
 
 
 const PaymentModalMp = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [status, setStatus] = useState("")
     const [mensagge, setMensagge] = useState("")
     const idUser =localStorage.getItem('idUserRedux');
