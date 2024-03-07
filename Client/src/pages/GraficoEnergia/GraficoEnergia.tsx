@@ -141,6 +141,7 @@ const GraficoEnergia = () => {
   const [totalGenerado, setTotalGenerado] = useState<number>(0);
   const [totalConsumido, setTotalConsumido] = useState<number>(0);
   const [totalExcedente, setTotalExcedente] = useState<number>(0);
+  const [generacionActiva, setGeneracionActiva] = useState<boolean>(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [plantData, setPlantData] = useState<number[][]>([]);
   const [deviceData, setDeviceData] = useState([]);
@@ -203,6 +204,8 @@ const GraficoEnergia = () => {
         console.log(pvGeneration);
 
         setTotalGenerado(pvGeneration);
+        // Determina si la generación está activa basada en el umbral de 0.2
+        setGeneracionActiva(pvGeneration > 0.2);
       } catch (error) {
         console.log(error);
       }
@@ -279,28 +282,71 @@ const GraficoEnergia = () => {
 
   const showDate = format(currentDate, "dd/MM/yyyy HH:mm");
 
+  //! codigo viejo del contador sin pausa
+  // useEffect(() => {
+  //   const intervalId = setInterval(
+  //     () => setTotalGenerado((prevTotalGenerado) => prevTotalGenerado + 0.01),
+  //     1000
+  //   );
+
+  //   return () => clearInterval(intervalId);
+  // }, []);
+
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     setTotalConsumido((prevTotalConsumido) => prevTotalConsumido + 0.005);
+  //   }, 7000);
+
+  //   return () => clearInterval(intervalId);
+  // }, []);
+  //! pausar el cotnador de energya cuando no se genera energia
+  // Incrementa totalGenerado cada segundo, solo si generacionActiva es true
   useEffect(() => {
-    const intervalId = setInterval(
-      () => setTotalGenerado((prevTotalGenerado) => prevTotalGenerado + 0.01),
-      1000
-    );
+    if (generacionActiva) {
+      const intervalId = setInterval(
+        () => setTotalGenerado((prev) => prev + 0.01),
+        1000
+      );
+      return () => clearInterval(intervalId);
+    }
+  }, [generacionActiva]);
 
-    return () => clearInterval(intervalId);
-  }, []);
-
+  // Incrementa totalConsumido cada 7 segundos, sin detenerse, pero inicia solo si generacionActiva es true
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setTotalConsumido((prevTotalConsumido) => prevTotalConsumido + 0.005);
-    }, 7000);
+    let intervalId: NodeJS.Timeout | undefined = undefined;
+    if (generacionActiva) {
+      intervalId = setInterval(() => {
+        setTotalConsumido((prev) => prev + 0.005);
+      }, 7000);
+    } else if (!generacionActiva && intervalId) {
+      clearInterval(intervalId);
+    }
 
-    return () => clearInterval(intervalId);
-  }, []);
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [generacionActiva]);
 
+  // Incrementa totalConsumido cada 7 segundos si totalGenerado es mayor a 0.2
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined = undefined;
+    if (totalGenerado > 0.2) {
+      intervalId = setInterval(
+        () => setTotalConsumido((prev) => prev + 0.005),
+        7000
+      );
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [totalGenerado]);
+//////////////////////
   const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
     Math.max(totalGenerado - totalConsumido, 0);
 
   useEffect(() => {
-    // ... (your existing code)
+
     const handleCaptureExcedente = () => {
       if (totalConsumido < totalGenerado) {
         setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
@@ -594,7 +640,7 @@ const GraficoEnergia = () => {
   // PopUp completar registro
   useEffect(() => {
     const timerId = setTimeout(() => {
-      if (localStorage.getItem("pendingDocs") === "pending") {
+      if (localStorage.getItem("pendingDoc") === "pending") {
         Swal.fire({
           title: "Don't forget to complete your registration",
           icon: "warning",
@@ -751,34 +797,10 @@ const GraficoEnergia = () => {
     };
   };
 
-  //! Medidor de intensidad de enrgia
+  //! Medidor de intensidad de enrgia: esta tomando la data de la engeriga generada 
   const getGaugeOption = () => {
-    // Obtener el último dataset del gráfico de barras
-    const lastDataset = barData.datasets[barData.datasets.length - 1];
-    // Obtener el último valor de este dataset
-    const lastValue = lastDataset.data[lastDataset.data.length - 1];
-
+    const lastValue = totalGenerado; // Usa el estado totalGenerado como último valor
     const percentage = lastValue / 18000;
-
-    useEffect(() => {
-      const url = import.meta.env.VITE_APP_API_URL;
-      const auth = getAuth();
-      const user = auth.currentUser?.email;
-      const fetchDataUser = async () => {
-        try {
-          const request = await axios.get(`${url}/users/`);
-          const response = request.data.users;
-          const filter = response.filter(
-            (userLog: any) => userLog.email === user
-          );
-          setUserLog(filter);
-          dispatch({ type: "SET_LOGGED_IN_USER", payload: filter });
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchDataUser();
-    }, []);
 
     return {
       tooltip: {
@@ -837,6 +859,7 @@ interface PlantData {
   plantId: number;
   name: string;
 }
+
 
   // ! Grafico para mostrar las plantas.
   useEffect(() => {
