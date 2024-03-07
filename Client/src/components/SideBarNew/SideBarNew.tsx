@@ -3,12 +3,16 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { AccountInfo } from "../layout/header/account-info";
+import axios from "axios";
 
 /* eslint-disable */
 export interface IHomePageProps {}
 
 function SideBarNew(props: IHomePageProps): JSX.Element {
+
+  const URL = import.meta.env.VITE_APP_API_URL
   const auth = getAuth();
+
   const signOutWithoutAuth = async () => {
     await signOut(auth);
     // localStorage.clear()
@@ -34,13 +38,41 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
   };
 
   const [photo, setPhoto] = useState<string | null>(null);
+  const [photoDB, setPhotoDB] = useState<string | null>(null);
+
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
-    if(user){
-      setPhoto(user.photoURL)
-    }
-  }, []);
+  
+    const actualizarFotoDePerfil = async () => {
+      if (user) {
+        setPhoto(user.photoURL);
+        try {
+          const userId = localStorage.getItem('id');
+          const response = await axios.get(`${URL}/users/${userId}`);
+          const userPhoto = response.data.user.photo_profile;
+  
+          if (userPhoto === null) {
+            // Realizar el PUT solo si el valor de photo_profile es null
+            await axios.put(`${URL}/users/${userId}`, {
+              photo_profile: photo,
+            });
+          } else {
+            // Almacenar el valor de photo_profile en setPhoto si no es null
+            setPhotoDB(userPhoto)
+          }
+        } catch (error) {
+          console.error('Error al actualizar la foto:', error);
+        }
+      }
+    };  
+    // Retrasar la ejecución después de 6 segundos
+    const timeoutId = setTimeout(() => {
+      actualizarFotoDePerfil();
+    }, 6000);  
+    // Limpieza del timeout si el componente se desmonta antes de que se cumplan los 10 segundos
+    return () => clearTimeout(timeoutId);
+  }, [photo]);
 
   return (
     <div className="text-white">
@@ -85,7 +117,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
             <img
               onClick={handleMenuClick}
               src={
-                photo || localStorage.getItem("profilePic") ||
+                photo || localStorage.getItem("profilePic") || photoDB || 
                 "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               }
               alt="Profile"

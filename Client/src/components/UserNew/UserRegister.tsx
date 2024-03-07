@@ -4,7 +4,7 @@ import { FcApproval } from "react-icons/fc";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import axios from "axios";
-import { SetStateAction, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { getAuth } from "@firebase/auth";
@@ -15,7 +15,7 @@ function UserRegister() {
   const URL = import.meta.env.VITE_APP_API_URL
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
-  const [foundUserName, setFoundUserName] = useState('');
+  const [foundUserPhoto, setFoundUserPhoto] = useState('');
   const [verifiedDoc, setVerifiedDoc] = useState(false); // manejar el cambio desde el Back
   const [completed, setCompleted] = useState(false);
   const [completeCredent, setCompletedCredent] = useState(false);
@@ -24,7 +24,6 @@ function UserRegister() {
   const [loading, setLoading] = useState(true);
   const [isLoadingUser, setIsLoadingUser] = useState(true)
   const [photo, setPhoto] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [cellPhone, setCellPhone] = useState("");
   const [showSmsVerify, setShowSmsVerify] = useState(false)
   
@@ -68,8 +67,8 @@ function UserRegister() {
         },
       });      
       if (response.status === 200) {
-        setFoundUserId(response.data._id);      
-        setFoundUserName(response.data.full_name);      
+        setFoundUserId(response.data._id);        
+        setFoundUserPhoto(response.data.photo_profile)
       } else if (response.status === 404) {
         setFoundUserId('');
         console.log('Usuario no encontrado');
@@ -98,6 +97,7 @@ const [formData, setFormData] = useState({
   bank_account_status: null,
   tax_declarations: null,
   other_financial_documents: null,
+  status_documents: localStorage.getItem("pendingDocs")
 });
 
   useEffect(() => {
@@ -115,6 +115,7 @@ const [formData, setFormData] = useState({
             bank_account_status: userData.bank_account_status || null,
             tax_declarations: userData.tax_declarations || null,
             other_financial_documents: userData.other_financial_documents || null,
+            status_documents: localStorage.getItem("pendingDocs")
           });
 
           const pendingDocs = Object.entries(userData)
@@ -367,10 +368,8 @@ const [formData, setFormData] = useState({
       if (pendingDocuments.includes("devices")) {
         setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "devices"));
       }
-      if (pendingDocuments.includes("key_auth")) {
-        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "key_auth"));
-      }
 
+      
       if (pendingDocuments.length > 0) {
         setCompleted(false);
       } else {
@@ -478,7 +477,7 @@ const [formData, setFormData] = useState({
               <img
                 className="object-cover w-36 h-36 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-300"
                 src={
-                  photo || localStorage.getItem("profilePic") ||
+                  photo || foundUserPhoto || localStorage.getItem("profilePic") ||
                   "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 }
                 alt="Bordered avatar"

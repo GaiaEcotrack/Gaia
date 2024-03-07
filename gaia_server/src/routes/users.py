@@ -96,10 +96,12 @@ def add_user():
     secret_key = data.get('secret_key')
     devices = data.get('devices', [])
     membresia = data.get('membresia', False)
-    key_auth = data.get('key_Auth')
+    key_auth = ""
     verified_email = data.get('verified_email', False)
     verified_sms = data.get('verified_sms', False)
     verified_2fa = data.get('verified_2fa', False)
+    status_documents = "pending"
+    photo_profile = ""
 
     # Insertar el nuevo usuario en la colección
     new_user = {
@@ -119,7 +121,9 @@ def add_user():
         'key_auth': key_auth,
         'verified_email': verified_email,
         'verified_sms': verified_sms,
-        'verified_2fa': verified_2fa
+        'verified_2fa': verified_2fa,
+        'status_documents': status_documents,
+        'photo_profile': photo_profile        
     }
 
     result = collection.insert_one(new_user)
