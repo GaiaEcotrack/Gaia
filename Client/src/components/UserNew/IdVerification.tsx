@@ -68,7 +68,7 @@ function IdVerification() {
             IDENTITY VERIFICATION
           </h2>
 
-          <div className="flex justify-center items-center p-6 px-8 mb-8 border rounded-lg  border-indigo-200 ">
+          <div className="flex justify-center items-center p-6 px-8 mb-8 border rounded-lg bg-indigo-50 border-indigo-300 ">
             <FcSelfie className="text-9xl w-[20%] "/> 
 
             <h1 className="flex justify-center items-center font-normal md:justify-start text-2xl sm:text-xl mx-8 w-[60%]">

@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { getAuth } from "@firebase/auth";
 import { SmsVerify } from "./Modal_smsVerify";
+import Profile from "@/components/UserNew/photo_profile";
 
 function UserRegister() {
 
@@ -472,18 +473,10 @@ const [formData, setFormData] = useState({
             </div>
           </div>
           
-
-          <div className="flex flex-row justify-start items-center space-y-5 sm:flex-row sm:space-y-0 w-full my-8">
+          <div className="flex flex-row justify-start items-center bg-indigo-50 border border-indigo-300 rounded-lg p-4 pb-2 space-y-5 sm:flex-row sm:space-y-0 w-full my-8">
             {/* Imagen del perfil */}
-            <div className="w-[40%]">
-              <img
-                className="object-cover w-36 h-36 p-1 rounded-full ring-2 ring-indigo-300 dark:ring-indigo-300"
-                src={
-                  photo || foundUserPhoto || localStorage.getItem("profilePic") ||
-                  "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                }
-                alt="Bordered avatar"
-                />
+            <div className="w-[23%]">
+                <Profile />
             </div>
 
             {/* Botones para cambiar y eliminar la imagen */}

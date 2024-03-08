@@ -21,6 +21,7 @@ import Logo from "./pages/Logo/Logo";
 import TermsAndPolicy from "./pages/terms&policies/Terms&policy";
 import Face from "./components/Face/Face";
 import PaymentModalMp from "./components/PaymentConfirmedModal/PaymentModalMp";
+import { AuthProvider } from '@/contexts/AuthContext';
 
 
 initializeApp(config.firebaseConfig);
@@ -61,7 +62,7 @@ function Component() {
           <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
           <Route path="/superUser" element={<SuperUser />} />
           <Route path='/lab' element={<Labs />} />
-          <Route path='/userReg' element={<UserRegister/>} />
+          <Route path='/userReg' element={<AuthProvider><UserRegister/></AuthProvider>} />
           <Route path='/face' element={<Face/>}/>
           <Route path="/dashboard" element={<DashBoard />} />
         </Routes>
