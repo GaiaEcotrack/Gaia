@@ -131,6 +131,7 @@ const GraficoEnergia = () => {
   //mensaje de conectar waller
   const [walletMessage, setWalletMessage] = useState("");
 
+  const [walletMessaget, setWalletMessaget] = useState("");
   const [userLog, setUserLog] = useState("");
 
   const [componenteMontado, setComponenteMontado] = useState(true);
