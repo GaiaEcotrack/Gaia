@@ -2,8 +2,9 @@
 import {useState} from 'react'
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
-import { ProgramMetadata, decodeAddress, GearKeyring , } from "@gear-js/api";
+import { ProgramMetadata, decodeAddress, GearKeyring , encodeAddress} from "@gear-js/api";
 import { Button } from "@gear-js/ui";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { VoucherIssued } from '@gear-js/api';
 
 
@@ -13,9 +14,11 @@ function Mint() {
   const { api } = useApi();
 
   const [error, setError] = useState(null);
+
+  
   
 
-  const programIDFT = "0x56691cac78ad46d1454e7c0ca23a168933dfe154810641a0ef5eeeec1856ae2e"
+  const programIDFT = "0x633d0f014702f15973932d129e12f5c144124de630125239c764694a143c6a28"
 
 
   // Add your metadata.txt
@@ -25,8 +28,8 @@ function Mint() {
   
   
 
-  const adress = account!.address;
-  console.log(decodeAddress(adress));
+
+  console.log(encodeAddress('0xee6a089b4593be0a920762d7c7cee81cd09d37bc1fbce136cecce80f9d90466a'));
   const message: any = {
     destination: programIDFT, // programId
     payload: { newDevice:["5HjNGPcdpphBeLq6ffechssztTar6e2xXuavMAdeo3JHGcdR",{"id": 1, "name":"sma-nico", "typeEnergy":"solar","serial":"248-SMA"},{"id": 2, "name":"sma-nico", "typeEnergy":"solar","serial":"248-SMA"}]},
@@ -45,8 +48,8 @@ function Mint() {
     destination: programIDFT, // programId
     payload: {
       transferred: [
-        decodeAddress("5HjNGPcdpphBeLq6ffechssztTar6e2xXuavMAdeo3JHGcdR"),
-        decodeAddress("5GsNufPvdgNwvt3SvdmqsHEXDNwViytiJpXggWBoErSFUEaJ"),
+        decodeAddress("5HTJkawMqHSvVRi2XrE7vdTU4t5Vq1EDv2ZDeWSwNxmmQKEK"),
+        decodeAddress("5G8mzxiCCW4VALGRGdaqGPfrMLp7CeaVfk5XwPhDDaDyGEgE"),
         10,
       ],
     },
@@ -56,7 +59,7 @@ function Mint() {
 
 
 
-
+  
 
 
  async function signer(){
@@ -68,11 +71,18 @@ function Mint() {
   if (isVisibleAccount) {
     // Create a message extrinsic
     const transferExtrinsic = await api!.message.send(messageThree, metadata);
-    // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
-    const keyring = await GearKeyring.fromSuri('//Alice');
+    const keyring = await GearKeyring.fromSuri('//Bob');
 
     await transferExtrinsic.signAndSend(keyring,(event:any)=>{
-        console.log("transferencia a la cuenta local hecha");
+      console.log(event);
+      
+        try {
+          alert.success('Successful transaction')
+          
+        } catch (error) {
+          alert.error('Error')
+          
+        }
         
         
         
@@ -156,21 +166,22 @@ function Mint() {
   console.log(decodeAddress('5HTJkawMqHSvVRi2XrE7vdTU4t5Vq1EDv2ZDeWSwNxmmQKEK'));
   
   async function voucher() {
-    const programs = '0x633d0f014702f15973932d129e12f5c144124de630125239c764694a143c6a28';
-    const spenderAddress = '0xee6a089b4593be0a920762d7c7cee81cd09d37bc1fbce136cecce80f9d90466a';
-    const validForOneHour = (60 * 60) / 3; // number of blocks in one hour
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const programId = '0x633d0f014702f15973932d129e12f5c144124de630125239c764694a143c6a28';
+    const account = decodeAddress('5G8mzxiCCW4VALGRGdaqGPfrMLp7CeaVfk5XwPhDDaDyGEgE');
+    const messageTx = api?.message.send({
+      destination: programIDFT,
+      payload: { newDevice:["5HjNGPcdpphBeLq6ffechssztTar6e2xXuavMAdeo3JHGcdR",{"id": 1, "name":"sma-nico", "typeEnergy":"solar","serial":"248-SMA"},{"id": 2, "name":"sma-nico", "typeEnergy":"solar","serial":"248-SMA"}]},
+      gasLimit: 10000000,
+      value: 0
+    }, metadata);
+  
+    const voucherTx = api?.voucher.call({SendMessage: messageTx });
+    await voucherTx?.signAndSend(account, (events) => {
+      console.log(events.toHuman());
+    });
     
-    const { extrinsic } = await api.voucher.issue(spenderAddress, 100 * 10 ** 12, validForOneHour, programs, true);
-    
-    // To allow the voucher to be used for code uploading, set the last argument of the `.issue` method to true
-    
-    extrinsic.signAndSend(account, ({ events }) => {
-      const voucherIssuedEvent = events.find(({event: { method }}) => method === 'VoucherIssued')?.event as VoucherIssued;
-    
-      if (voucherIssuedEvent) {
-        console.log(voucherIssuedEvent.toJSON());
-      }
-    })}
+    ;}
   return(
     <div>
       <Button text="Sin Firma" className="bg-black" onClick={()=>{signer()}} />;

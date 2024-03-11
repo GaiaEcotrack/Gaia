@@ -17,6 +17,7 @@ function UserRegister() {
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
   const [foundUserPhoto, setFoundUserPhoto] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [verifiedDoc, setVerifiedDoc] = useState(false); // manejar el cambio desde el Back
   const [completed, setCompleted] = useState(false);
   const [completeCredent, setCompletedCredent] = useState(false);
@@ -58,6 +59,7 @@ function UserRegister() {
       const storedEmail = localStorage.getItem("email");
       setEmail(storedEmail || '');    
       handleSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [email]);
 
   const handleSearch = async () => {
@@ -132,6 +134,7 @@ const [formData, setFormData] = useState({
           console.error('Error fetching user data:', error);
         });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [foundUserId]);
 
 

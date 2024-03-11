@@ -1,12 +1,8 @@
 import React , {useState,useEffect} from 'react';
-import { useAccount} from "@gear-js/react-hooks";
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../../store/index';
-import { Link } from 'react-router-dom';
 import { LocalBalanceToken } from '@/pages/home/MyBalanceToken';
 import LineChart from '../../charts/LineChart01';
-import Icon from '../../images/icon-01.svg';
-import EditMenu from '../../components/DropdownEditMenu';
 
 // Import utilities
 import { tailwindConfig, hexToRGB } from '../../utils/Utils';
@@ -118,6 +114,7 @@ function DashboardCard01({onClick}) {
         vara: 0,
       }
     );
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const totalTokens = totalGaia + totalVara
   
     useEffect(() => {

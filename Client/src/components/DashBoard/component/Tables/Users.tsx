@@ -49,7 +49,7 @@ const Users = () => {
       }
     };
     callUsers();
-  }, []);
+  }, [url]);
 
   const handleDeleteUser = async (id: string) => {
     try {

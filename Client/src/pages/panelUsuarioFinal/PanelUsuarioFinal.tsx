@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 // import { MdExpandLess, MdExpandMore } from "react-icons/md";
-import { useTypewriter, Cursor } from "react-simple-typewriter";
+import { useTypewriter} from "react-simple-typewriter";
 
 // import Update from "../../assets/Update.svg";
 // import back from "../../assets/back.svg";

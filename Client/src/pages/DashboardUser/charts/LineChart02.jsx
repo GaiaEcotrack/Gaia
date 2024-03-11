@@ -167,6 +167,7 @@ function LineChart02({
       chart.options.plugins.tooltip.borderColor = tooltipBorderColor.light;
     }
     chart.update('none');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentTheme]);
 
   return (

@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState,useEffect } from 'react';
 import { useAccount} from "@gear-js/react-hooks";
 import { RootState } from '../../store/index';
 import { useSelector } from 'react-redux';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Header from './partials/Header';
 import WelcomeBanner from './partials/dashboard/WelcomeBanner';
 import DashboardAvatars from './partials/dashboard/DashboardAvatars';

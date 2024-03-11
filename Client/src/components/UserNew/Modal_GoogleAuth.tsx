@@ -53,6 +53,7 @@ function ModalGoogleAuth(props:MoodalId) {
 
       fetchData();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showGAuth]);
 
   const handleVerifyOTP = async () => {

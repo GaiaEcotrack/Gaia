@@ -17,6 +17,7 @@ import { IdVerification } from '@/components/UserNew/IdVerification';
 import { PlantsDashboard } from '@/components/DashBoard/PlantsDashboard';
 import PaymentModalMp from '@/components/PaymentConfirmedModal/PaymentModalMp';
 import { SecurityVerify } from '@/components/UserNew/SecurityVerify';
+import DashboardAdmin from './DashboardAdmin/DashboardAdmin';
 
 const routes = [{ path: '/main', Page: Main },
 { path: '/labs', Page: Labs },
@@ -34,6 +35,7 @@ const routes = [{ path: '/main', Page: Main },
 { path: 'dashboard/plants', Page: PlantsDashboard },
 { path: '/payment', Page: PaymentModalMp },
 { path: '/security', Page: SecurityVerify },
+{ path: '/dashAdmin', Page: DashboardAdmin },
 
 ];
 
