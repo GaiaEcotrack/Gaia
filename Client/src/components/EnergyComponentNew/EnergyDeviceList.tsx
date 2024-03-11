@@ -4,6 +4,7 @@ import { SlEnergy } from "react-icons/sl";
 import { Link } from "react-router-dom";
 
 const EnergyDeviceList = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Devices {
         name:string;
 
@@ -20,7 +21,7 @@ const EnergyDeviceList = () => {
             setDevices(divicesGenerators)
         }
         fetchData()
-    }, [])
+    }, [url])
 
 
 

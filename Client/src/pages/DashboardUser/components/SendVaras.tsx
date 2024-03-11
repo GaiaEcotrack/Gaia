@@ -39,7 +39,7 @@ const SendVaras = ({close}:any) => {
       console.log(datos);
       
   return (
-    <div className='fixed bg-black/60 top-0 left-0 w-full h-full flex items-center justify-center z-10'>
+    <div className='fixed bg-black/60 top-0 left-0 w-full h-full flex items-center justify-center z-50'>
         <div className="w-full flex flex-col items-center justify-center max-w-md bg-gray-800 rounded-lg shadow-md p-6">
       <h2 className="text-2xl font-bold text-gray-200 mb-4">Claim your Vara's</h2>
       <form className='flex flex-col' onSubmit={handleSubmit}>

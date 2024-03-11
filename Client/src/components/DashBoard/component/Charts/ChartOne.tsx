@@ -123,6 +123,7 @@ interface ChartOneState {
 }
 
 const ChartOne: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [state, setState] = useState<ChartOneState>({
     series: [
       {

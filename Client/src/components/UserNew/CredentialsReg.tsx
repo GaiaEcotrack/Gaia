@@ -49,6 +49,7 @@ function CredentialsReg () {
     const storedEmail = localStorage.getItem("email");
     setEmail(storedEmail || '');    
     handleSearch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [email]);
 
   const handleSearch = async () => {
@@ -87,6 +88,7 @@ function CredentialsReg () {
           console.error('Error fetching user data:', error);
         });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [foundUserId]);
 
 
@@ -119,7 +121,6 @@ const handleSubmit = async (e: React.FormEvent) => {
     });
 
     if (response.ok) {
-      const data = await response.json();
       Toast.fire({
         icon: "success",
         title: "User updated successfully"

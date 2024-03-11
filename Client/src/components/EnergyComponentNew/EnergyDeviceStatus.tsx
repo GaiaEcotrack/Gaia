@@ -82,6 +82,7 @@ const EnergyDeviceStatus = () => {
 
         }
         fetchEnergy()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedOption])
     
     

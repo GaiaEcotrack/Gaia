@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-redundant-roles */
 import React, { useState } from 'react';
 
 interface User {
@@ -12,23 +13,11 @@ interface User {
 }
 
 const UserList: React.FC<User> = ({ image, name, email, role, id, full_name, onDelete, onEdit }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isEditing, setIsEditing] = useState(false);
   const [editedEmail, setEditedEmail] = useState(email);
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    setEditedEmail(email);
-  };
-
-  const handleSaveEdit = () => {
-    // Aquí puedes implementar la lógica para guardar el correo electrónico editado
-    console.log('Correo electrónico editado:', editedEmail);
-    setIsEditing(false);
-  };
 
   return (
     <ul role="list" className="divide-y divide-gray-100 text-black">
