@@ -121,6 +121,7 @@ const GraficoEnergia = () => {
 
   const [token, setToken] = useState("");
   const userRedux = useSelector((state: RootState) => state.app.loggedInUser);
+  
 
   // estas dos funciones la movi arriba para usarlas en el scop
   const { accounts, account } = useAccount();
@@ -196,19 +197,12 @@ const GraficoEnergia = () => {
     const fetchEnergyTwo = async () => {
       try {
         const url = import.meta.env.VITE_APP_API_URL;
-        // const response = await axios.get(
-        //   `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`
-        // );
-        // const data = response.data.set;
-        // const pvGeneration = data[0].pvGeneration;
-        // console.log(pvGeneration);
-                            // const response = await axios.get(`${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`)
-                            const response = await axios.get(`${url}/devices/device-data?deviceId=18`)
-                            // const data = response.data.set
-                            const data = response.data.details
-                            // const pvGeneration = data[0].pvGeneration;
-                            const pvGeneration = data.generatorPower
-
+        const response = await axios.get(
+          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`
+        );
+        const data = response.data.set;
+        const pvGeneration = data[0].pvGeneration;
+        console.log(pvGeneration);
         setTotalGenerado(pvGeneration);
         // Determina si la generación está activa basada en el umbral de 0.2
         setGeneracionActiva(pvGeneration > 0.2);
@@ -361,6 +355,7 @@ const GraficoEnergia = () => {
         setTotalExcedente(0);
       }
       const excedente = Math.floor(
+        //CALCULO DE TOKENS
         calcularExcedente(totalGenerado, totalConsumido) * 10
       );
       setExcedenteCapturado(excedente);
@@ -719,6 +714,89 @@ const GraficoEnergia = () => {
 
   // ! grafico de barras NOTA: traer los datos reales
 
+  // const getBarOption = () => {
+  //   // Extraer los datos y labels de barData
+  //   const { labels, datasets } = barData; // Asumiendo que barData es tu estado con los datos
+  //   const dataset = datasets[0];
+
+  //   // Mapear los datos a los valores para el gráfico
+  //   // Asumiendo que el orden de los datos en barData corresponde a los días de previousDay5 a currentDay
+  //   const seriesData = dataset.data.map((value, index) => ({
+  //     value, // El valor de cada barra
+  //     // Aplicar el color de la barra basado en el color definido en barData, o un color por defecto si no se especifica
+  //     itemStyle: { color: index % 2 === 0 ? "#58E2C2" : "#F7E53B" },
+  //   }));
+
+  //   return {
+  //     color: ["#58E2C2"],
+  //     tooltip: {
+  //       trigger: "axis",
+  //       axisPointer: {
+  //         type: "shadow",
+  //       },
+  //     },
+  //     grid: {
+  //       left: "3%",
+  //       right: "4%",
+  //       bottom: "3%",
+  //       containLabel: true,
+  //     },
+  //     xAxis: [
+  //       {
+  //         type: "category",
+  //         data: [
+  //           moment().subtract(5, "days").format("MMM D"),
+  //           moment().subtract(4, "days").format("MMM D"),
+  //           moment().subtract(3, "days").format("MMM D"),
+  //           moment().subtract(2, "days").format("MMM D"),
+  //           moment().subtract(1, "days").format("MMM D"),
+  //           moment().format("MMM D"),
+  //         ],
+  //         axisTick: {
+  //           alignWithLabel: true,
+  //         },
+  //         axisLine: {
+  //           lineStyle: {
+  //             color: "#FDFDFD",
+  //           },
+  //         },
+  //         axisLabel: {
+  //           color: "#FDFDFD",
+  //         },
+  //       },
+  //     ],
+  //     yAxis: [
+  //       {
+  //         type: "value",
+  //         axisLine: {
+  //           lineStyle: {
+  //             color: "#FDFDFD",
+  //           },
+  //         },
+  //         splitLine: {
+  //           lineStyle: {
+  //             color: "#484E69",
+  //           },
+  //         },
+  //         axisLabel: {
+  //           color: "#FDFDFD",
+  //         },
+  //       },
+  //     ],
+  //     series: [
+  //       {
+  //         name: "Kw",
+  //         type: "bar",
+  //         barWidth: "40%",
+  //         data: [
+  //           { value: 203, itemStyle: { color: "#58E2C2" } }, // Primer color para la primera barra
+  //           { value: 214, itemStyle: { color: "#F7E53B" } }, // Segundo color para la segunda barra
+  //         ],
+  //         data: seriesData, // Usando la data mapeada desde barData
+  //       },
+  //     ],
+  //   };
+  // };
   const getBarOption = () => {
     // Extraer los datos y labels de barData
     const { labels, datasets } = barData; // Asumiendo que barData es tu estado con los datos
@@ -731,6 +809,8 @@ const GraficoEnergia = () => {
       // Aplicar el color de la barra basado en el color definido en barData, o un color por defecto si no se especifica
       itemStyle: { color: index % 2 === 0 ? "#58E2C2" : "#F7E53B" },
     }));
+
+// Datos fijos para cada fecha
 
     return {
       color: ["#58E2C2"],
@@ -1022,6 +1102,30 @@ interface PlantData {
       };
     };
 
+
+    // NO BORRAR REDUX
+
+    useEffect(() => {
+      const url = import.meta.env.VITE_APP_API_URL;
+      const auth = getAuth();
+      const user = auth.currentUser?.email;
+      const fetchDataUser = async () => {
+        try {
+          const request = await axios.get(`${url}/users/`);
+          const response = request.data.users;
+          const filter = response.filter(
+            (userLog: any) => userLog.email === user
+          );
+          setUserLog(filter);
+          dispatch({ type: "SET_LOGGED_IN_USER", payload: filter });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchDataUser();
+    }, []);
+
+    
   return (
     <div className="mb-12">
       <div className=" text-white md:pl-24 md:pr-10 md:pb-0">

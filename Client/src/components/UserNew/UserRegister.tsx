@@ -371,7 +371,9 @@ const [formData, setFormData] = useState({
       if (pendingDocuments.includes("devices")) {
         setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "devices"));
       }
-
+      if (pendingDocuments.includes("photo_profile")) {
+        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "photo_profile"));
+      }
       
       if (pendingDocuments.length > 0) {
         setCompleted(false);

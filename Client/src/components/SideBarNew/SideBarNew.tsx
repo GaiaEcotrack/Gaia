@@ -51,8 +51,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
           const userId = localStorage.getItem('id');
           const response = await axios.get(`${URL}/users/${userId}`);
           const userPhoto = response.data.user.photo_profile;
-  
-          if (userPhoto === null) {
+          if (!userPhoto) {
             // Realizar el PUT solo si el valor de photo_profile es null
             await axios.put(`${URL}/users/${userId}`, {
               photo_profile: photo,
