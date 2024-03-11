@@ -98,6 +98,27 @@ impl GaiaEcotrackMainState {
         .unwrap();
     }
 
+    async fn claimedTokens(&mut self, from: ActorId, to: ActorId, amount_tokens: u128 ) {
+        let address_ft = addresft_state_mut();
+        let kw_generated_calculate = amount_tokens / 10;
+        let payload = FTAction::Transfer {
+            from,
+            to,
+            amount: amount_tokens,
+        };
+        let _ = msg::send(address_ft.ft_program_id, payload, 0);
+        msg::reply(
+            EventsGaiaEcotrack::Claimed {
+                from: from,
+                to: to,
+                amount : amount_tokens,
+                kw : kw_generated_calculate
+            },
+            0,
+        )
+        .unwrap();
+    }
+
     // ...
 
    
@@ -240,6 +261,12 @@ async fn main(){
                 let state = state_mut();
                 state.transfer_tokens_between_actors(from, to, amount).await;
             }
+
+            ActionGaiaEcotrack::Reward(from, to, amount) => {
+                let state = state_mut();
+                state.claimedTokens(from, to, amount).await;
+            }
+
             ActionGaiaEcotrack::NewDevice(idUser,device) =>  {
                 let state = state_mut();
 

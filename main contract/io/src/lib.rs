@@ -11,6 +11,7 @@ pub enum ActionGaiaEcotrack {
     GenerateEnergy(u128),
     GetRewards(u128),
     Transferred(ActorId , ActorId , u128),
+    Reward(ActorId , ActorId , u128),
     NewDevice(String,DevicesInfo)
     
     // Aqui se pueden implementar acciones adicionales en el contrato
@@ -29,7 +30,13 @@ pub enum EventsGaiaEcotrack {
         to: ActorId,
         amount: u128,
     },
-    DeviceRegister(String)
+    Claimed{
+        from: ActorId,
+        to: ActorId,
+        amount: u128,
+        kw:u128,
+    },
+    DeviceRegister(String),
     
     // Aqui pueden ir más eventos de respuesta para las acciones
     
@@ -114,7 +121,7 @@ pub struct IoGaiaEcotrack {
     pub total_users: u128,
     pub total_generators:u128,
     pub generators: Vec<(ActorId, Generator)>,
-    pub devices:Vec<(String, DevicesInfo)>
+    pub devices:Vec<(String, DevicesInfo)>,
   
 }
 
@@ -140,6 +147,7 @@ pub struct DevicesInfo {
     pub serial:String,
    
 }
+
 
 
 pub struct ContractMetadata;
