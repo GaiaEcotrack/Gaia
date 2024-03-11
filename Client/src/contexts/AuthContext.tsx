@@ -57,8 +57,7 @@ export function useAuth() {
 
     updateProfile(currentUser, {photoURL});
     
-    setLoading(false);
-    alert("Uploaded file!");   
+    setLoading(false);   
   }
 
   useEffect(() => {

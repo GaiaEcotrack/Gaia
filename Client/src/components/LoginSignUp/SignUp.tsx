@@ -62,7 +62,7 @@ function SignUp(props:SignUp) {
       });
     } catch (error: any) {
       if (error.code === "auth/email-already-in-use") {
-        setError("Email is already in use");
+        setError("Email is already in use -- Sign in");
       } else {
         setError("Failed to create an account");
       }
