@@ -169,17 +169,19 @@ const GraficoEnergia = () => {
       try {
         const auth = getAuth();
         const user = auth.currentUser;
-        console.log(user);
+        
 
         if (!user) {
           throw new Error("User is not authenticated");
         }
 
         const idToken = await user.getIdToken();
+        console.log(idToken);
 
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
           `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
+          // (`${url}/devices/device-data?deviceId=16`),
           {
             headers: {
               Authorization: `Bearer ${idToken}`,
@@ -188,7 +190,7 @@ const GraficoEnergia = () => {
           }
         );
         const data = response.data.set;
-        const energy = data.map((energ) => energ.pvGeneration);
+        const energy = data.map((energ:any) => energ.pvGeneration);
         setEnergyBatery(energy);
       } catch (error) {
         console.error("Error fetching energy data:", error);
@@ -199,7 +201,8 @@ const GraficoEnergia = () => {
       try {
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
-          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`
+          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`,
+        //  (`${url}/devices/device-data?deviceId=16`),
         );
         const data = response.data.set;
         const pvGeneration = data[0].pvGeneration;
@@ -374,66 +377,8 @@ const GraficoEnergia = () => {
   //   setExcedenteCapturado(excedente);
   // };
 
-  //* token firabse to backend
-
-  // const [token, setToken] = useState('');
-
-  // useEffect(() => {
-  //   const auth = getAuth();
-  //   const user = auth.currentUser;
-
-  //   if (user) {
-  //     user.getIdToken().then((idToken) => {
-  //       console.log('Token de Firebase:', idToken); // Esta línea imprime el token en la consola
-  //       // Aquí puedes enviar el token a tu backend si es necesario
-  //       sendTokenToBackend('http://127.0.0.1:5000/your/endpoint', 'GET', idToken);
-  //     }).catch((error) => {
-  //       console.error('Error al obtener el token:', error);
-  //     });
-  //   }
-  // }, []);
-
-  // const [token, setToken] = useState('');
-  // useEffect(() => {
-  //   const auth = getAuth();
-  //   const user = auth.currentUser;
-
-  //   if (user) {
-  //     user.getIdToken().then((idToken) => {
-  //       setToken(idToken);
-  //       console.log('Token de Firebase:', idToken);
-
-  //       // Aquí puedes enviar el token a tu backend si es necesario
-  //       sendTokenToBackend(idToken);
-  //     }).catch((error) => {
-  //       console.error('Error al obtener el token:', error);
-  //     });
-  //   }
-  // }, []);
-
-  // //////////////
-
-  // const sendTokenToBackend = async (token: string) => {
-  //   try {
-  //     // Asegúrate de reemplazar esta URL con la URL de tu servidor Flask
-  //     const url = "http://127.0.0.1:5000/users";
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         // Opcionalmente, puedes enviar el token en un header Authorization
-  //         "Authorization": `Bearer ${token}`,
-  //       },
-  //       // O enviar el token en el cuerpo de la solicitud, según prefieras
-  //       body: JSON.stringify({ token }),
-  //     });
-
-  //     const data = await response.json();
-  //     console.log("Respuesta del backend:", data);
-  //   } catch (error) {
-  //     console.error("Error al enviar token al backend:", error);
-  //   }
-  // };
+  
+  
   //-------------------------------------------------------------------VARA INTEGRATION
 
   const alerta = useAlert();
@@ -713,91 +658,7 @@ const GraficoEnergia = () => {
     };
   };
 
-  // ! grafico de barras NOTA: traer los datos reales
 
-  // const getBarOption = () => {
-  //   // Extraer los datos y labels de barData
-  //   const { labels, datasets } = barData; // Asumiendo que barData es tu estado con los datos
-  //   const dataset = datasets[0];
-
-  //   // Mapear los datos a los valores para el gráfico
-  //   // Asumiendo que el orden de los datos en barData corresponde a los días de previousDay5 a currentDay
-  //   const seriesData = dataset.data.map((value, index) => ({
-  //     value, // El valor de cada barra
-  //     // Aplicar el color de la barra basado en el color definido en barData, o un color por defecto si no se especifica
-  //     itemStyle: { color: index % 2 === 0 ? "#58E2C2" : "#F7E53B" },
-  //   }));
-
-  //   return {
-  //     color: ["#58E2C2"],
-  //     tooltip: {
-  //       trigger: "axis",
-  //       axisPointer: {
-  //         type: "shadow",
-  //       },
-  //     },
-  //     grid: {
-  //       left: "3%",
-  //       right: "4%",
-  //       bottom: "3%",
-  //       containLabel: true,
-  //     },
-  //     xAxis: [
-  //       {
-  //         type: "category",
-  //         data: [
-  //           moment().subtract(5, "days").format("MMM D"),
-  //           moment().subtract(4, "days").format("MMM D"),
-  //           moment().subtract(3, "days").format("MMM D"),
-  //           moment().subtract(2, "days").format("MMM D"),
-  //           moment().subtract(1, "days").format("MMM D"),
-  //           moment().format("MMM D"),
-  //         ],
-  //         axisTick: {
-  //           alignWithLabel: true,
-  //         },
-  //         axisLine: {
-  //           lineStyle: {
-  //             color: "#FDFDFD",
-  //           },
-  //         },
-  //         axisLabel: {
-  //           color: "#FDFDFD",
-  //         },
-  //       },
-  //     ],
-  //     yAxis: [
-  //       {
-  //         type: "value",
-  //         axisLine: {
-  //           lineStyle: {
-  //             color: "#FDFDFD",
-  //           },
-  //         },
-  //         splitLine: {
-  //           lineStyle: {
-  //             color: "#484E69",
-  //           },
-  //         },
-  //         axisLabel: {
-  //           color: "#FDFDFD",
-  //         },
-  //       },
-  //     ],
-  //     series: [
-  //       {
-  //         name: "Kw",
-  //         type: "bar",
-  //         barWidth: "40%",
-  //         data: [
-  //           { value: 203, itemStyle: { color: "#58E2C2" } }, // Primer color para la primera barra
-  //           { value: 214, itemStyle: { color: "#F7E53B" } }, // Segundo color para la segunda barra
-  //         ],
-  //         data: seriesData, // Usando la data mapeada desde barData
-  //       },
-  //     ],
-  //   };
-  // };
   const getBarOption = () => {
     // Extraer los datos y labels de barData
     const { labels, datasets } = barData; // Asumiendo que barData es tu estado con los datos
@@ -810,6 +671,7 @@ const GraficoEnergia = () => {
       // Aplicar el color de la barra basado en el color definido en barData, o un color por defecto si no se especifica
       itemStyle: { color: index % 2 === 0 ? "#58E2C2" : "#F7E53B" },
     }));
+
 
 // Datos fijos para cada fecha
 
