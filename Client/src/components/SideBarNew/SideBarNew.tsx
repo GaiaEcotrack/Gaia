@@ -36,42 +36,47 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
   const handleMenuClick = () => {
     setOpen(false);
   };
-
-  const [photo, setPhoto] = useState<string | null>(null);
   const [photoDB, setPhotoDB] = useState<string | null>(null);
+  const [photoURL, setPhotoURL] = useState('');
 
   useEffect(() => {
     const auth = getAuth();
-    const user = auth.currentUser;
-  
+    const user = auth.currentUser;  
+
     const actualizarFotoDePerfil = async () => {
-      if (user) {
-        setPhoto(user.photoURL);
-        try {
-          const userId = localStorage.getItem('id');
-          const response = await axios.get(`${URL}/users/${userId}`);
-          const userPhoto = response.data.user.photo_profile;
-          if (!userPhoto) {
-            // Realizar el PUT solo si el valor de photo_profile es null
-            await axios.put(`${URL}/users/${userId}`, {
-              photo_profile: photo,
-            });
-          } else {
-            // Almacenar el valor de photo_profile en setPhoto si no es null
-            setPhotoDB(userPhoto)
-          }
-        } catch (error) {
-          console.error('Error al actualizar la foto:', error);
+      try {
+        const userId = localStorage.getItem('id');
+  
+        // Verificar si hay una imagen en user.photoURL, si no, usar la URL predeterminada
+        const photoURL = user?.photoURL || `https://api.multiavatar.com/c6c7f124c574a60dd2.png?apikey=CRrgM6wP8NoyEx`;
+  
+        setPhotoURL(photoURL);
+  
+        const response = await axios.get(`${URL}/users/${userId}`);
+        const userPhoto = response.data.user.photo_profile;
+  
+        if (!userPhoto || userPhoto !== user?.photoURL) {
+          // Realizar el PUT solo si el valor de photo_profile es null
+          await axios.put(`${URL}/users/${userId}`, {
+            photo_profile: photoURL,
+          });
+        } else {
+          // Almacenar el valor de photo_profile en setPhotoDB si no es null
+          setPhotoDB(userPhoto);
         }
+      } catch (error) {
+        console.error('Error al actualizar la foto:', error);
       }
-    };  
-    // Retrasar la ejecución después de 6 segundos
+    };
+  
+    // Esperar 2 segundos antes de llamar a actualizarFotoDePerfil
     const timeoutId = setTimeout(() => {
       actualizarFotoDePerfil();
-    }, 6000);  
-    // Limpieza del timeout si el componente se desmonta antes de que se cumplan los 10 segundos
+    }, 2000);
+  
+    // Limpiar el timeout si el componente se desmonta antes de que se cumplan los 2 segundos
     return () => clearTimeout(timeoutId);
-  }, [photo]);
+  }, [photoURL]);
 
   return (
     <div className="text-white">
@@ -116,12 +121,11 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
             <img
               onClick={handleMenuClick}
               src={
-                photo || localStorage.getItem("profilePic") || photoDB || 
-                "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                photoURL || photoDB || ''
               }
               alt="Profile"
-              className={`h-10 rounded-full cursor-pointer duration-500 ${
-                open && "rotate-[360deg] h-16"
+              className={`h-10 w-10 rounded-full cursor-pointer duration-500 ${
+                open && "rotate-[360deg] h-16 w-16"
               } ${!open ? "hidden sm:block" : ""}`}
             />
           </Link>

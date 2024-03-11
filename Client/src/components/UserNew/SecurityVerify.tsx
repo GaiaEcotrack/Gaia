@@ -115,7 +115,7 @@ function SecurityVerify() {
             SECURITY VERIFICATION
           </h2>
 
-          <div className="flex justify-center items-center p-6 px-8 mb-8 border rounded-lg border-indigo-200 ">
+          <div className="flex justify-center items-center p-6 px-8 mb-8 border rounded-lg bg-indigo-50 border-indigo-300 ">
             <FcPhoneAndroid className="text-7xl w-[20%] "/> 
             
             <div className="flex flex-col justify-start items-start font-normal md:justify-start text-2xl sm:text-xl mx-8 w-[60%]">
@@ -141,7 +141,7 @@ function SecurityVerify() {
             </button>
           </div>
 
-          <div className="flex justify-center items-center p-6 px-8 mb-8 border rounded-lg  border-indigo-200 ">
+          <div className="flex justify-center items-center p-6 px-8 mb-8 border rounded-lg bg-indigo-50 border-indigo-300 ">
             <FcFeedback className="text-7xl w-[20%] "/> 
 
             <div className="flex flex-col justify-start items-start font-normal md:justify-start text-2xl sm:text-xl mx-8 w-[60%]">
@@ -166,7 +166,7 @@ function SecurityVerify() {
             </button>
           </div>
 
-          <div className="flex justify-center items-center p-6 px-8 mb-8 border rounded-lg  border-indigo-200 ">
+          <div className="flex justify-center items-center p-6 px-8 mb-8 border rounded-lg bg-indigo-50 border-indigo-300 ">
             <FcSms className="text-7xl w-[20%] "/> 
 
             <div className="flex flex-col justify-start items-start font-normal md:justify-start text-2xl sm:text-xl mx-8 w-[60%]">
