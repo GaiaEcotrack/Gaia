@@ -658,122 +658,20 @@ const GraficoEnergia = () => {
     };
   };
 
-  // ! grafico de barras NOTA: traer los datos reales
 
-  // const getBarOption = () => {
-  //   // Extraer los datos y labels de barData
-  //   const { labels, datasets } = barData; // Asumiendo que barData es tu estado con los datos
-  //   const dataset = datasets[0];
-
-  //   // Mapear los datos a los valores para el gráfico
-  //   // Asumiendo que el orden de los datos en barData corresponde a los días de previousDay5 a currentDay
-  //   const seriesData = dataset.data.map((value, index) => ({
-  //     value, // El valor de cada barra
-  //     // Aplicar el color de la barra basado en el color definido en barData, o un color por defecto si no se especifica
-  //     itemStyle: { color: index % 2 === 0 ? "#58E2C2" : "#F7E53B" },
-  //   }));
-
-  //   return {
-  //     color: ["#58E2C2"],
-  //     tooltip: {
-  //       trigger: "axis",
-  //       axisPointer: {
-  //         type: "shadow",
-  //       },
-  //     },
-  //     grid: {
-  //       left: "3%",
-  //       right: "4%",
-  //       bottom: "3%",
-  //       containLabel: true,
-  //     },
-  //     xAxis: [
-  //       {
-  //         type: "category",
-  //         data: [
-  //           moment().subtract(5, "days").format("MMM D"),
-  //           moment().subtract(4, "days").format("MMM D"),
-  //           moment().subtract(3, "days").format("MMM D"),
-  //           moment().subtract(2, "days").format("MMM D"),
-  //           moment().subtract(1, "days").format("MMM D"),
-  //           moment().format("MMM D"),
-  //         ],
-  //         axisTick: {
-  //           alignWithLabel: true,
-  //         },
-  //         axisLine: {
-  //           lineStyle: {
-  //             color: "#FDFDFD",
-  //           },
-  //         },
-  //         axisLabel: {
-  //           color: "#FDFDFD",
-  //         },
-  //       },
-  //     ],
-  //     yAxis: [
-  //       {
-  //         type: "value",
-  //         axisLine: {
-  //           lineStyle: {
-  //             color: "#FDFDFD",
-  //           },
-  //         },
-  //         splitLine: {
-  //           lineStyle: {
-  //             color: "#484E69",
-  //           },
-  //         },
-  //         axisLabel: {
-  //           color: "#FDFDFD",
-  //         },
-  //       },
-  //     ],
-  //     series: [
-  //       {
-  //         name: "Kw",
-  //         type: "bar",
-  //         barWidth: "40%",
-  //         data: [
-  //           { value: 203, itemStyle: { color: "#58E2C2" } }, // Primer color para la primera barra
-  //           { value: 214, itemStyle: { color: "#F7E53B" } }, // Segundo color para la segunda barra
-  //         ],
-  //         data: seriesData, // Usando la data mapeada desde barData
-  //       },
-  //     ],
-  //   };
-  // };
   const getBarOption = () => {
     // Extraer los datos y labels de barData
-    // const { labels, datasets } = barData; // Asumiendo que barData es tu estado con los datos
-    // const dataset = datasets[0];
+    const { labels, datasets } = barData; // Asumiendo que barData es tu estado con los datos
+    const dataset = datasets[0];
 
-    // // Mapear los datos a los valores para el gráfico
-    // // Asumiendo que el orden de los datos en barData corresponde a los días de previousDay5 a currentDay
-    // const seriesData = dataset.data.map((value, index) => ({
-    //   value, // El valor de cada barra
-    //   // Aplicar el color de la barra basado en el color definido en barData, o un color por defecto si no se especifica
-    //   itemStyle: { color: index % 2 === 0 ? "#58E2C2" : "#F7E53B" },
-    // }));
-//! funcion provisoria por api caida
-const dates = [
-  moment().subtract(5, 'days').format('MMM D'),
-  moment().subtract(4, 'days').format('MMM D'),
-  moment().subtract(3, 'days').format('MMM D'),
-  moment().subtract(2, 'days').format('MMM D'),
-  moment().subtract(1, 'days').format('MMM D'),
-  moment().format('MMM D'),
-];
+    // Mapear los datos a los valores para el gráfico
+    // Asumiendo que el orden de los datos en barData corresponde a los días de previousDay5 a currentDay
+    const seriesData = dataset.data.map((value, index) => ({
+      value, // El valor de cada barra
+      // Aplicar el color de la barra basado en el color definido en barData, o un color por defecto si no se especifica
+      itemStyle: { color: index % 2 === 0 ? "#58E2C2" : "#F7E53B" },
+    }));
 
-// Datos fijos para cada fecha
-const seriesData = [
-  { value: 2030, itemStyle: { color: "#58E2C2" } },
-  { value: 1840, itemStyle: { color: "#F7E53B" } },
-  { value: 2210, itemStyle: { color: "#58E2C2" } },
-  { value: 1920, itemStyle: { color: "#F7E53B" } },
-  { value: 2130, itemStyle: { color: "#58E2C2" } },
-  { value: 2045, itemStyle: { color: "#F7E53B" } },
-];
 
 // Datos fijos para cada fecha
 
