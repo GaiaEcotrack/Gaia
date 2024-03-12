@@ -32,8 +32,8 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const [password, setPassword] = useState("")
   const [visible, setVisible] = useState(false)
 
-  const eye = <BsEye className="text-xl text-black"/>
-  const eyeSlash = <BsEyeSlash className="text-xl text-black"/>
+  const eye = <BsEye className="text-xl text-gray-800"/>
+  const eyeSlash = <BsEyeSlash className="text-xl text-gray-800"/>
 
   // Funtion to log in with registered email 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {

@@ -26,8 +26,8 @@ function SignUp(props:SignUp) {
   const [passwordConf, setPasswordConf] = useState("")
   const [visibleConf, setVisibleConf] = useState(false)
 
-  const eye = <BsEye className="text-xl text-black"/>
-  const eyeSlash = <BsEyeSlash className="text-xl text-black"/>
+  const eye = <BsEye className="text-xl text-gray-800"/>
+  const eyeSlash = <BsEyeSlash className="text-xl text-gray-800"/>
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()

@@ -9,7 +9,8 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { getAuth } from "@firebase/auth";
 import { SmsVerify } from "./Modal_smsVerify";
-import Profile from "@/components/UserNew/photo_profile";
+import Profile from "@/components/UserNew/UserAcount/photo_profile";
+import { UpdateEmail } from "./UpdateEmail";
 
 function UserRegister() {
 
@@ -28,6 +29,7 @@ function UserRegister() {
   const [photo, setPhoto] = useState<string | null>(null);
   const [cellPhone, setCellPhone] = useState("");
   const [showSmsVerify, setShowSmsVerify] = useState(false)
+  const [showUpdEmail, setShowUpdEmail] = useState(false)
   
   const Toast = Swal.mixin({
     toast: true,
@@ -485,14 +487,15 @@ const [formData, setFormData] = useState({
             {/* Botones para cambiar y eliminar la imagen */}
             <div className="flex flex-col space-y-5 sm:ml-8">
               <button
+                onClick={() => {setShowUpdEmail(true)}}
                 type="button"
-                className="py-3 px-7 w-52 text-base font-bold text-black focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142] focus:z-10 focus:ring-4 focus:ring-indigo-200"
+                className="py-3 px-7 w-52 text-base font-bold text-black focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142]"
               >
                 Change Email
               </button>
               <button
                 type="button"
-                className="py-3.5 px-7 w-52 text-base font-bold text-black focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142] focus:z-10 focus:ring-4 focus:ring-indigo-200 "
+                className="py-3.5 px-7 w-52 text-base font-bold text-black focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142] "
               >
                 Change Password
               </button>
@@ -752,6 +755,7 @@ const [formData, setFormData] = useState({
       </main>
 
       <SmsVerify showSmsVerify={showSmsVerify} setShowSmsVerify={setShowSmsVerify} telephone={telephone}/>
+      <UpdateEmail showUpdEmail={showUpdEmail} setShowUpdEmail={setShowUpdEmail}/>
     </div>
   );
 }
