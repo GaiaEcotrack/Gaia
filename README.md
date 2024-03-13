@@ -1,4 +1,6 @@
-
+<div>
+<img width="503" alt="gaiaa" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/e33ae44b-617c-4366-a5e9-8c6aa82100f4">
+</div>
 
 # GAIA ECO-TRACK 
 
@@ -51,7 +53,7 @@ cargo build --release
 <img width="1395" alt="transaction" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/ab7b0001-7e41-40dd-ae21-c3f4310aa416">
 </div>
 <div>
-<img width="1490" alt="gear" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/78fc2377-400c-4546-ae01-9d9badc5d9bc">
+<img width="1500" alt="gear" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/7eb88f9b-442a-4d3b-be83-6ccc65315e5b">
 </div>
 ## Our developer team
 
