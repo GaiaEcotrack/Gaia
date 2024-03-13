@@ -10,7 +10,7 @@ Gaia Ecotrack seeks to integrate decentralized electricity generation systems, s
 
 **Command:**
 ```bash
-git clone https://github.com//GaiaEcotrack/Gaia.git
+git clone https://github.com/GaiaEcotrack/Gaia.git
 ```
 
 ##  To run the Frontend, positioned in the directory /Client
