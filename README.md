@@ -35,6 +35,9 @@ cargo build --release
 ```
 
 ### PASO 2, Deploy the contract on the IDEA platform and interact with your contract.
+
+#Some Gaia plaftorm captures:
+<hr/>
 <div>
 <img width="1508" alt="login" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/fb889317-c404-4020-b9fa-329e376519b2">
 </div>
@@ -46,6 +49,9 @@ cargo build --release
 </div>
 <div>
 <img width="1395" alt="transaction" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/ab7b0001-7e41-40dd-ae21-c3f4310aa416">
+</div>
+<div>
+<img width="1490" alt="gear" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/78fc2377-400c-4546-ae01-9d9badc5d9bc">
 </div>
 ## Our developer team
 
