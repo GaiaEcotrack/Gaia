@@ -1,5 +1,5 @@
 <div>
-  <img src="../client/public/LOGOGAIASOLO.png" width="100%">
+![LOGOGAIASOLO](https://github.com/GaiaEcotrack/Gaia/assets/106754820/e67dbda3-00cc-4646-be31-ce1ce378d1cc)
 </div>
 
 
@@ -8,7 +8,7 @@
 Gaia Ecotrack seeks to integrate decentralized electricity generation systems, such as rooftop solar, domestic wind turbines and small-scale hydroelectric systems. The platform allows users to generate and sell their own energy through tokens on the blockchain. It uses optimization algorithms to coordinate the consumption and production of renewable energy in real time, adjusting demand based on solar production predictions. Mass adoption is encouraged through smart contracts developed with the GEAR protocol technology that facilitate the direct marketing of renewable energy between producers and consumers, eliminating intermediaries and reducing costs
 
 <div>
-  <img src="./client/public/login.png" width="100%">
+ <img width="1508" alt="login" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/e16ea86b-7239-4f01-aeb2-7574de891b91">
 </div>
 
 
