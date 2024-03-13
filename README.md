@@ -37,7 +37,7 @@ cargo build --release
 
 ### PASO 2, Deploy the contract on the IDEA platform and interact with your contract.
 
-#Some Gaia plaftorm captures:
+### Some Gaia plaftorm captures:
 <hr/>
 <div>
 <img width="1508" alt="login" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/fb889317-c404-4020-b9fa-329e376519b2">
@@ -54,7 +54,8 @@ cargo build --release
 <div>
 <img width="1473" alt="gear" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/39b21edb-3108-4b5d-81b0-bbe9b3e3dbd8">
 </div>
-## Our developer team
+<hr/>
+### Our developer team
 
 - [Agustin Nazer](https://github.com/AgusNazer)
 - [Diego Rosas](https://github.com/diego34346)
