@@ -1,3 +1,5 @@
+import { BsEye } from "react-icons/bs"; 
+import { BsEyeSlash } from "react-icons/bs";
 import { useRef, useState } from "react"
 import { useAuth } from "../../contexts/AuthContext"
 import { useNavigate } from "react-router-dom";
@@ -19,6 +21,13 @@ function SignUp(props:SignUp) {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
+  const [password, setPassword] = useState("")
+  const [visible, setVisible] = useState(false)
+  const [passwordConf, setPasswordConf] = useState("")
+  const [visibleConf, setVisibleConf] = useState(false)
+
+  const eye = <BsEye className="text-xl text-gray-800"/>
+  const eyeSlash = <BsEyeSlash className="text-xl text-gray-800"/>
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -63,7 +72,7 @@ function SignUp(props:SignUp) {
       });
     } catch (error: any) {
       if (error.code === "auth/email-already-in-use") {
-        setError("Email is already in use");
+        setError("Email is already in use -- Sign in");
       } else {
         setError("Failed to create an account");
       }
@@ -76,7 +85,7 @@ function SignUp(props:SignUp) {
     return showSignUp ? (
       <div className="bg-[#00000084] fixed top-0 left-0 h-full w-full flex justify-center items-center">
         
-        <div className="flex flex-col justify-start items-center bg-white rounded-3xl h-[100%] md:h-[85%] w-full md:w-[50%] lg:w-[30%] 2xl:h-[90%] 2xl:w-[40%] p-4 md:p-6 mt-40 md:mt-0">
+        <div className="flex flex-col justify-start items-center bg-white rounded-3xl 2xl:pt-10 lg:h-[32rem] 2xl:h-[43rem] w-full lg:w-[23rem] 2xl:w-[32rem] md:py-6 md:mt-0">
 
           <div className="flex flex-col text-center item-center justify-center h-[20%] 2xl:h-[23%] laptop">
             <img className="w-32 h-32 mx-auto laptop" src="/LOGOGAIASOLO.png" alt="" />
@@ -102,35 +111,48 @@ function SignUp(props:SignUp) {
               />
             </div>
 
-            <div className="mt-4">
+            <div className="mt-4 relative">
               <label htmlFor="password" className="block text-gray-800">
                 Password
               </label>
-              <input
-                ref={passwordRef}
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter Password"
-                minLength={6}
-                className="w-full px-4 py-3 text-black rounded-lg bg-gray-100 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-                required
-              />
+              <div className="relative">
+                <input
+                  ref={passwordRef}
+                  type={visible ? 'text' : 'password'}
+                  id="password"
+                  name="password"
+                  placeholder="Enter Password"
+                  minLength={6}
+                  className="w-full px-4 py-3 rounded-lg text-black bg-gray-100 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none pr-10"
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <div className="absolute inset-y-4 right-0 p-2" onClick={() => setVisible(!visible)}>
+                  {visible ? eye : eyeSlash}
+                </div>
+              </div>                
             </div>
-            <div className="mt-4">
-              <label htmlFor="password" className="block text-gray-700">
-                Password Confirmation
+
+            <div className="mt-4 relative">
+              <label htmlFor="password-confirm" className="block text-gray-800">
+                Confirm Password
               </label>
-              <input
-                ref={passwordConfirmRef}
-                type="password"
-                id="password-confirm"
-                name="password"
-                placeholder="Enter Password"
-                minLength={6}
-                className="w-full px-4 py-3 text-black rounded-lg bg-gray-100 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-                required
-              />
+              <div className="relative">
+                <input
+                  ref={passwordConfirmRef}
+                  type={visibleConf ? 'text' : 'password'}
+                  id="password-confirm"
+                  name="password-confirm"
+                  placeholder="Confirm Password"
+                  minLength={6}
+                  className="w-full px-4 py-3 rounded-lg text-black bg-gray-100 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none pr-10"
+                  onChange={(e) => setPasswordConf(e.target.value)}
+                  required
+                />
+                <div className="absolute inset-y-4 right-0 p-2" onClick={() => setVisibleConf(!visibleConf)}>
+                  {visibleConf ? eye : eyeSlash}
+                </div>
+              </div>                
             </div>
 
             {error && <div className="text-sm text-red-500 w-full mt-2">{error}</div>}
@@ -143,7 +165,7 @@ function SignUp(props:SignUp) {
               Sign Up
             </button>
 
-            <button className="text-black hover:text-indigo-900 flex justify-center w-full mt-4" onClick={() => {setShowSignUp(false)}}>Already have an account?  <strong> &nbsp; Log in</strong></button>
+            <button className="text-black hover:text-indigo-900 flex justify-center w-full mt-4" onClick={() => {setShowSignUp(false); setError("")}}>Already have an account?  <strong> &nbsp; Log in</strong></button>
           
           </form>
 

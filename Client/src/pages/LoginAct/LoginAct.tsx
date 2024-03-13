@@ -1,12 +1,15 @@
-import { Link, useNavigate} from "react-router-dom";
+import { BsEye } from "react-icons/bs"; 
+import { BsEyeSlash } from "react-icons/bs"; 
+import { useNavigate} from "react-router-dom";
 import { useRef, useState } from 'react';
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { SignUp } from "../../components/LoginSignUp/SignUp";
+import { SignUp } from "../../components/Login/SignUp";
 import '../../global.css'
 import { AuthProvider } from "@/contexts/AuthContext";
 import { useAuth } from "../../contexts/AuthContext"
-import { TwoFactorAuth } from "./TwoFactorAuth";
+import { TwoFactorAuth } from "@/components/Login/TwoFactorAuth";
 import axios from "axios";
+import { ResetPassword } from "@/components/Login/ResetPassword";
 
 /* eslint-disable */
 export interface ILoginPageProps {}
@@ -18,6 +21,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const navigate = useNavigate();
   const [authing, setAuthing] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false)
+  const [showResetPass, setShowResetPass] = useState(false)
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const { login } = useAuth()
@@ -25,6 +29,11 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const [loadingE, setLoadingE] = useState(false)
   const [showTwoFA, setShowTwoFA] = useState(false)
   const [foundUserId, setFoundUserId] = useState('');
+  const [password, setPassword] = useState("")
+  const [visible, setVisible] = useState(false)
+
+  const eye = <BsEye className="text-xl text-gray-800"/>
+  const eyeSlash = <BsEyeSlash className="text-xl text-gray-800"/>
 
   // Funtion to log in with registered email 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -156,29 +165,35 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
               />
             </div>
 
-            <div className="mt-4">
+            <div className="mt-4 relative">
               <label htmlFor="password" className="block text-gray-800">
                 Password
               </label>
-              <input
-                ref={passwordRef}
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter Password"
-                minLength={6}
-                className="w-full px-4 py-3 rounded-lg text-black bg-gray-100 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-                required
-              />
-            </div>
+              <div className="relative">
+                <input
+                  ref={passwordRef}
+                  type={visible ? 'text' : 'password'}
+                  id="password"
+                  name="password"
+                  placeholder="Enter Password"
+                  minLength={6}
+                  className="w-full px-4 py-3 rounded-lg text-black bg-gray-100 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none pr-10"
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <div className="absolute inset-y-4 right-0 p-2" onClick={() => setVisible(!visible)}>
+                  {visible ? eye : eyeSlash}
+                </div>
+              </div>                
+            </div>            
 
-            <div className="text-right gap-5 mt-2">
-              <Link
-                to="/Forget"
-                className="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700"
-              >
+            <div className="text-right gap-5 mt-2 text-black">
+              <button
+                type="button"
+                className="text-sm"
+                onClick={() => {setShowResetPass(true)}}>
                 Forgot Password?
-              </Link>
+              </button>
             </div>
 
             {error && <div className="text-base text-red-500 w-full mt-2">{error}</div>}
@@ -262,6 +277,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       </div>
       <AuthProvider>
         <SignUp showSignUp={showSignUp} setShowSignUp={setShowSignUp}/>
+        <ResetPassword showResetPass={showResetPass} setShowResetPass={setShowResetPass}/>
       </AuthProvider>
       <TwoFactorAuth showTwoFA={showTwoFA} setShowTwoFA={setShowTwoFA} foundUserId={foundUserId}/>
     </section>

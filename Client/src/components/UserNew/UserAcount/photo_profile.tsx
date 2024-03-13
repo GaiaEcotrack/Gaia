@@ -2,6 +2,7 @@ import { FcEditImage } from "react-icons/fc";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { getAuth } from "firebase/auth";
+import Swal from "sweetalert2";
 
 export default function Profile() {
  
@@ -9,6 +10,18 @@ export default function Profile() {
   const [photo, setPhoto] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [photoURL, setPhotoURL] = useState('');
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    }
+  })
   
   useEffect(() => {
     const auth = getAuth();
@@ -31,7 +44,11 @@ export default function Profile() {
     const user = auth.currentUser;   
     if (photo && user) {
       await upload(photo, setLoading);  
-      setPhoto(null)    
+      setPhoto(null)  
+      Toast.fire({
+        icon: "success",
+        title: "Updated image\nReload"
+      });
     }
   }
 

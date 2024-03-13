@@ -569,6 +569,23 @@ const GraficoEnergia = () => {
           setFoundUserName(response.data.full_name);
           localStorage.setItem("id", foundUserId);
           localStorage.setItem("name", foundUserName);
+          const timerId = setTimeout(() => {
+            Swal.fire({
+              title: "Don't forget to complete your registration",
+              icon: "warning",
+              iconColor: "#3085d6",
+              showCancelButton: true,
+              confirmButtonText: "Go register !",
+              confirmButtonColor: "#1f69b4de",
+              cancelButtonText: "Later",
+              cancelButtonColor: "#b82828cd",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "/userReg";
+              }
+            });      
+          }, 10000);
+          return () => clearTimeout(timerId);
         }
       }
     } catch (error) {
@@ -605,7 +622,7 @@ const GraficoEnergia = () => {
   // PopUp completar registro
   useEffect(() => {
     const timerId = setTimeout(() => {
-      if (localStorage.getItem("pendingDoc") === "pending") {
+      if (localStorage.getItem("pendingDocs") === "pending") {
         Swal.fire({
           title: "Don't forget to complete your registration",
           icon: "warning",

@@ -67,13 +67,11 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
       } catch (error) {
         console.error('Error al actualizar la foto:', error);
       }
-    };
-  
+    };  
     // Esperar 2 segundos antes de llamar a actualizarFotoDePerfil
     const timeoutId = setTimeout(() => {
       actualizarFotoDePerfil();
-    }, 2000);
-  
+    }, 1000);  
     // Limpiar el timeout si el componente se desmonta antes de que se cumplan los 2 segundos
     return () => clearTimeout(timeoutId);
   }, [photoURL]);
