@@ -55,6 +55,7 @@ cargo build --release
 <img width="1473" alt="gear" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/39b21edb-3108-4b5d-81b0-bbe9b3e3dbd8">
 </div>
 <hr/>
+
 ### Our developer team
 
 - [Agustin Nazer](https://github.com/AgusNazer)
