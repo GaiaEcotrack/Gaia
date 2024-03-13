@@ -3,7 +3,10 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
-  sendPasswordResetEmail  } from "firebase/auth";
+  updateEmail,
+  updatePassword,
+  sendPasswordResetEmail,
+  User} from "firebase/auth";
 import { auth, storage }  from "../firebase";
 import 'firebase/auth';
 import 'firebase/storage';
@@ -39,12 +42,12 @@ export function useAuth() {
     return sendPasswordResetEmail(auth, email);    
   }
 
-  function updateEmail(email: string) {
-    return currentUser.updateEmail(email)
+  function updEmail(user: User, email: string) {
+    return updateEmail(user, email);
   }
 
-  function updatePassword(password: string) {
-    return currentUser.updatePassword(password)
+  function updPassword(user: User, password: string) {
+    return updatePassword(user, password)
   }
 
   async function upload(file: File, setLoading: (loading: boolean) => void) {
@@ -57,8 +60,7 @@ export function useAuth() {
 
     updateProfile(currentUser, {photoURL});
     
-    setLoading(false);
-    alert("Uploaded file!");   
+    setLoading(false);   
   }
 
   useEffect(() => {
@@ -76,8 +78,8 @@ export function useAuth() {
     signup,
     logout,
     resetPassword,
-    updateEmail,
-    updatePassword,
+    updEmail,
+    updPassword,
     upload
   }
 

@@ -10,13 +10,13 @@ import GraficoEnergia from './GraficoEnergia/GraficoEnergia';
 import { AuthForm } from './LoginAct/LoginAct';
 import Dashboard from './DashboardUser/Dashboard';
 import { AuthProvider } from '@/contexts/AuthContext';
-import { DeviceRegister } from '@/components/UserNew/DeviceRegister';
-import { CredentialsReg } from '@/components/UserNew/CredentialsReg';
-import { Notifications } from '@/components/UserNew/Notifications';
-import { IdVerification } from '@/components/UserNew/IdVerification';
+import { DeviceRegister } from '@/components/UserNew/DeviceRegister/DeviceRegister';
+import { CredentialsReg } from '@/components/UserNew/Credentials/CredentialsReg';
+import { Notifications } from '@/components/UserNew/Notifications/Notifications';
+import { IdVerification } from '@/components/UserNew/Identification/IdVerification';
 import { PlantsDashboard } from '@/components/DashBoard/PlantsDashboard';
 import PaymentModalMp from '@/components/PaymentConfirmedModal/PaymentModalMp';
-import { SecurityVerify } from '@/components/UserNew/SecurityVerify';
+import { SecurityVerify } from '@/components/UserNew/SecuritySettings/SecurityVerify';
 import DashboardAdmin from './DashboardAdmin/DashboardAdmin';
 
 const routes = [{ path: '/main', Page: Main },
