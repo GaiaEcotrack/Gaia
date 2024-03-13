@@ -34,12 +34,12 @@ function UpdateEmail(props:SignUp) {
     e.preventDefault();
   
     if (!emailRef.current || !currentUser) {
-      return setError("El correo electrónico no existe");
+      return setError("Email does not exist");
     }
   
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
     if (!emailRegex.test(emailRef.current.value)) {
-      return setError("Formato de correo electrónico inválido");
+      return setError("Invalid email format");
     }
   
     setLoading(true);
@@ -78,9 +78,9 @@ function UpdateEmail(props:SignUp) {
 
   const { showUpdEmail, setShowUpdEmail } = props;
     return showUpdEmail ? (
-      <div className="bg-[#00000084] fixed top-0 left-0 h-full w-full flex justify-center items-center">
+      <div className="bg-[#00000084] backdrop-blur-sm fixed top-0 left-0 h-full w-full flex justify-center items-center">
         
-        <div className="flex flex-col justify-start items-center bg-white rounded-3xl 2xl:pt-10 lg:h-[16rem] 2xl:h-[22rem] w-full lg:w-[23rem] 2xl:w-[32rem] py-6 md:mt-0">
+        <div className="flex flex-col justify-start items-center bg-white rounded-3xl 2xl:pt-10 lg:h-[16rem] 2xl:h-[21rem] w-full lg:w-[23rem] 2xl:w-[32rem] py-6 md:mt-0">
 
         <h1 className="text-gray-800 pb-4 2xl:pb-6 text-xl 2xl:text-2xl font-bold">Update Email</h1>
 

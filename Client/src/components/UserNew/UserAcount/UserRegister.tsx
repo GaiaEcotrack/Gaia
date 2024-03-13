@@ -11,6 +11,7 @@ import { getAuth } from "@firebase/auth";
 import { SmsVerify } from "./Modal_smsVerify";
 import Profile from "@/components/UserNew/UserAcount/photo_profile";
 import { UpdateEmail } from "./UpdateEmail";
+import { UpdatePassword } from "./UpdatePassword";
 
 function UserRegister() {
 
@@ -32,6 +33,7 @@ function UserRegister() {
   const [cellPhone, setCellPhone] = useState("");
   const [showSmsVerify, setShowSmsVerify] = useState(false)
   const [showUpdEmail, setShowUpdEmail] = useState(false)
+  const [showUpdPassw, setShowUpdPassw] = useState(false)
   const [foundStatus, setFoundStatus] = useState("pending")
   
   const Toast = Swal.mixin({
@@ -515,6 +517,7 @@ const [formData, setFormData] = useState({
                 Change Email
               </button>
               <button
+                onClick={() => {setShowUpdPassw(true)}}
                 type="button"
                 className="py-3.5 px-7 w-52 text-base font-bold text-black focus:outline-none bg-white rounded-lg border border-indigo-200 hover:bg-indigo-100 hover:text-[#202142] "
               >
@@ -777,6 +780,7 @@ const [formData, setFormData] = useState({
 
       <SmsVerify showSmsVerify={showSmsVerify} setShowSmsVerify={setShowSmsVerify} telephone={telephone}/>
       <UpdateEmail showUpdEmail={showUpdEmail} setShowUpdEmail={setShowUpdEmail}/>
+      <UpdatePassword showUpdPassw={showUpdPassw} setShowUpdPassw={setShowUpdPassw}/>
     </div>
   );
 }
