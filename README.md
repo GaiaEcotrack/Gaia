@@ -10,18 +10,18 @@ Gaia Ecotrack seeks to integrate decentralized electricity generation systems, s
 
 **Command:**
 ```bash
-git clone https://github.com//GaiaEcotrack/Gaia.git
+git clone https://github.com/GaiaEcotrack/Gaia.git
 ```
 
 ##  To run the Frontend, positioned in the directory /Client
 
-### STEP 1, Install dependencies:
+### Step 1, Install dependencies:
 **Command:**
 ```bash
 npm install --force
 ```
 
-### STEP 2, Run the project:
+### Step 2, Run the project:
 **Command:**
 ```bash
 npm start
@@ -29,18 +29,21 @@ npm start
 
 ##  To run the Smart Contract, positioned in the directory /Contracts
 
-### PASO 1, Compile
+### Step 1, Compile
 **Command:**
 ```bash
 cargo build --release
 ```
 
-### PASO 2, Deploy the contract on the IDEA platform and interact with your contract.
+### Step 2, Deploy the contract on the IDEA platform and interact with your contract.
 
 ### Some Gaia plaftorm captures:
 <hr/>
 <div>
 <img width="1508" alt="login" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/fb889317-c404-4020-b9fa-329e376519b2">
+</div>
+<div>
+<img width="1493" alt="home" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/5ae128aa-6dac-4e3a-8015-6e63b67d9de9">
 </div>
 <div>
 <img width="1500" alt="profileReadme" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/c1b5677d-e548-4cde-893d-bcdbb501f2e2">
