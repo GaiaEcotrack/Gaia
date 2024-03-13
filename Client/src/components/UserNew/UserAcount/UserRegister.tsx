@@ -17,6 +17,7 @@ function UserRegister() {
   const URL = import.meta.env.VITE_APP_API_URL
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [foundUserPhoto, setFoundUserPhoto] = useState('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [verifiedDoc, setVerifiedDoc] = useState(false); // manejar el cambio desde el Back
@@ -26,10 +27,12 @@ function UserRegister() {
   const [pendingCredentials, setPendingCredentials] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLoadingUser, setIsLoadingUser] = useState(true)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [photo, setPhoto] = useState<string | null>(null);
   const [cellPhone, setCellPhone] = useState("");
   const [showSmsVerify, setShowSmsVerify] = useState(false)
   const [showUpdEmail, setShowUpdEmail] = useState(false)
+  const [foundStatus, setFoundStatus] = useState("pending")
   
   const Toast = Swal.mixin({
     toast: true,
@@ -74,6 +77,7 @@ function UserRegister() {
       if (response.status === 200) {
         setFoundUserId(response.data._id);        
         setFoundUserPhoto(response.data.photo_profile)
+        setFoundStatus(response.data.status_documents)
       } else if (response.status === 404) {
         setFoundUserId('');
         console.log('Usuario no encontrado');
@@ -85,10 +89,29 @@ function UserRegister() {
     }
   };
 
-  localStorage.setItem("id", foundUserId);  
+  localStorage.setItem("id", foundUserId);
 
-  var alertHome = completed ? 'complete' : 'pending';
-  localStorage.setItem("pendingDocs", alertHome);
+  useEffect(() => {
+    let timeoutId: any;
+  
+    if (foundStatus === "pending" && completed) {
+      timeoutId = setTimeout(() => {
+        axios.put(`${URL}/users/${foundUserId}`, {
+          status_documents: "completed"
+        })
+        .then(response => {
+          if (response.status === 200) {            
+          }
+        })
+        .catch(error => {
+          console.error('Network error:', error);
+        });
+      }, 1000);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [foundStatus, completed, URL, foundUserId]);
+
+  localStorage.setItem("pendingDocs", foundStatus);
 
 // **********************************************************
 
@@ -102,7 +125,6 @@ const [formData, setFormData] = useState({
   bank_account_status: null,
   tax_declarations: null,
   other_financial_documents: null,
-  status_documents: localStorage.getItem("pendingDocs")
 });
 
   useEffect(() => {
@@ -120,7 +142,6 @@ const [formData, setFormData] = useState({
             bank_account_status: userData.bank_account_status || null,
             tax_declarations: userData.tax_declarations || null,
             other_financial_documents: userData.other_financial_documents || null,
-            status_documents: localStorage.getItem("pendingDocs")
           });
 
           const pendingDocs = Object.entries(userData)
