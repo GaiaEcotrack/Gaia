@@ -52,7 +52,7 @@ cargo build --release
 <img width="1395" alt="transaction" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/ab7b0001-7e41-40dd-ae21-c3f4310aa416">
 </div>
 <div>
-<img width="1500" alt="gear" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/7eb88f9b-442a-4d3b-be83-6ccc65315e5b">
+<img width="1473" alt="gear" src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/39b21edb-3108-4b5d-81b0-bbe9b3e3dbd8">
 </div>
 ## Our developer team
 
