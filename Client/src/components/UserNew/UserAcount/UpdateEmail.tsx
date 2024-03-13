@@ -58,7 +58,7 @@ function UpdateEmail(props:SignUp) {
         })
         .then(() => {
           Toast.fire({
-            icon: 'success',
+            icon: 'info',
             title: 'log in with your new email'
           });
           navigate("/");
@@ -112,8 +112,8 @@ function UpdateEmail(props:SignUp) {
             </button>
 
             <button 
-              className="text-black hover:text-red-600 flex justify-center w-full mt-4" 
-              onClick={() => {setShowUpdEmail(false); setError("")}}><strong>Cancel</strong>
+              className="flex justify-center w-full mt-4 cursor-auto" 
+              onClick={() => {setShowUpdEmail(false); setError("")}}><strong className="text-black hover:text-red-600 cursor-pointer">Cancel</strong>
             </button>
           
           </form>

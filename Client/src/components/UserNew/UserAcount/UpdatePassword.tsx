@@ -44,51 +44,49 @@ function UpdatePassword(props:SignUp) {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (passwordRef.current?.value !== passwordConfirmRef.current?.value) {
+    if (!passwordRef.current || !passwordConfirmRef.current) {
+      return setError("Password reference not available");
+    }
+  
+    const newPassword = passwordRef.current.value;
+    const confirmNewPassword = passwordConfirmRef.current.value;
+  
+    if (newPassword !== confirmNewPassword) {
       return setError("Passwords do not match");
     }
-
+  
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,15}$/;
-    if (!passwordRegex.test(passwordRef.current.value)) {
-      return setError("Passwords must be at least 6 characters with at least one letter and one number.");
+    if (!passwordRegex.test(newPassword)) {
+      return setError("Password must be at least 6 characters with at least one letter and one number.");
     }
   
     setLoading(true);
     setError("");
   
-    const currentEmail = currentUser.email;
-    const newPassword = passwordRef.current?.value;
-    // const confNewPassword = passwordConfirmRef.current.value;
-  
-    if (newPassword !== currentEmail) {
-      updPassword(currentUser, newPassword)
-        .then(() => {
-          Toast.fire({
-            icon: 'success',
-            title: 'log in with your new email'
-          });
-          setShowUpdPassw(false)
-        })
-        .catch((error: any) => {
-          console.error("Error updating email:", error);
-          setError("Error updating account");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
-      setError("Mail already exists");
+    updPassword(currentUser, newPassword)
+    .then(() => {
+      Toast.fire({
+        icon: 'info',
+        title: 'log in with your new password.'
+      });
+      navigate("/");
+    })
+    .catch((error: any) => {
+      console.error("Error updating password:", error);
+      setError("Error updating password");
+    })
+    .finally(() => {
       setLoading(false);
-    }
+    });
   }
 
   const { showUpdPassw, setShowUpdPassw } = props;
     return showUpdPassw ? (
       <div className="bg-[#00000084] backdrop-blur-sm fixed top-0 left-0 h-full w-full flex justify-center items-center">
         
-        <div className="flex flex-col justify-start items-center bg-white rounded-3xl 2xl:pt-10 lg:h-[22rem] 2xl:h-[28rem] w-full lg:w-[23rem] 2xl:w-[32rem] py-6 md:mt-0">
+        <div className="flex flex-col justify-start items-center bg-white rounded-3xl 2xl:pt-10 lg:h-[22rem] 2xl:h-[29rem] w-full lg:w-[23rem] 2xl:w-[32rem] py-6 md:mt-0">
 
-        <h1 className="text-gray-800 pb-4 2xl:pb-6 text-xl 2xl:text-2xl font-bold">Update Password</h1>
+        <h1 className="text-gray-800 2xl:pb-6 text-xl 2xl:text-2xl font-bold">Update Password</h1>
 
           <form className="h-[35%] 2xl:h-[50%] w-[90%] 2xl:w-[70%] laptop" action="#" method="POST" onSubmit={handleSubmit}>
           <div className="mt-4 relative">
@@ -135,19 +133,19 @@ function UpdatePassword(props:SignUp) {
               </div>                
             </div>
 
-            {error && <div className="text-sm text-red-500 w-full mt-2 absolute">{error}</div>}
+            {error && <div className="text-sm text-red-500 2xl:w-[22rem] mt-2 absolute">{error}</div>}
 
             <button         
               disabled={loading}
               type="submit"
-              className="w-full block bg-indigo-500 hover:bg-indigo-600 focus:bg-indigo-600 text-white font-semibold rounded-lg px-4 py-3 mt-8"
+              className="w-full block bg-indigo-500 hover:bg-indigo-600 focus:bg-indigo-600 text-white font-semibold rounded-lg px-4 py-3 mt-14"
             >
               Update Password
             </button>
 
             <button 
-              className="text-black hover:text-red-600 flex justify-center w-full mt-4" 
-              onClick={() => {setShowUpdPassw(false); setError("")}}><strong>Cancel</strong>
+              className="flex justify-center w-full mt-4 cursor-auto" 
+              onClick={() => {setShowUpdPassw(false); setError("")}}><strong className="text-black hover:text-red-600 cursor-pointer">Cancel</strong>
             </button>
           
           </form>

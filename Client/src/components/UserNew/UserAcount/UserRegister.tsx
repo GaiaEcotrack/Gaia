@@ -595,7 +595,7 @@ const [formData, setFormData] = useState({
                   name="email"
                   type="email"
                   id="email"
-                  className="bg-indigo-50 border outline-none border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                  className="bg-indigo-50 border outline-none border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 cursor-not-allowed"
                   placeholder="example@email.com"
                   value={formData.email || ''}
                   required
