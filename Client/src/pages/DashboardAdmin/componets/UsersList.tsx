@@ -7,10 +7,14 @@ const UsersList = () => {
     const url = import.meta.env.VITE_APP_API_URL
     useEffect(() => {
         const fetchUsers = async ()=>{
-            const request = await axios.get(`${url}/users`)
+          try {
+            const request = await axios.get(`${url}/users/`)
             const data = request.data.users
-            setUsers(data)
+            setUsers(data) 
+          } catch (error) {
+            console.log(error);
             
+          } 
 
         }
         fetchUsers()
