@@ -1,5 +1,5 @@
 <div>
-  <img src="./client/public/LOGOGAIASOLO.png" width="100%">
+  <img src="../client/public/LOGOGAIASOLO.png" width="100%">
 </div>
 
 
@@ -16,7 +16,7 @@ Gaia Ecotrack seeks to integrate decentralized electricity generation systems, s
 
 **Command:**
 ```bash
-git clone https://github.com/ilichb/VaraEnergy.git
+git clone https://github.com//GaiaEcotrack/Gaia.git
 ```
 
 ##  To run the Frontend, positioned in the directory /Client
