@@ -1,5 +1,5 @@
 <div style="text-align: left;">
-  <img src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/e33ae44b-617c-4366-a5e9-8c6aa82100f4" width="503" alt="gaiaa">
+  <img src="https://github.com/GaiaEcotrack/Gaia/assets/106754820/e33ae44b-617c-4366-a5e9-8c6aa82100f4" width="full" alt="gaiaa">
 </div>
 
 
