@@ -83,7 +83,7 @@ function SignUp(props:SignUp) {
 
   const { showSignUp, setShowSignUp } = props;
     return showSignUp ? (
-      <div className="bg-[#00000084] fixed top-0 left-0 h-full w-full flex justify-center items-center">
+      <div className="bg-[#00000084] backdrop-blur-sm fixed top-0 left-0 h-full w-full flex justify-center items-center">
         
         <div className="flex flex-col justify-start items-center bg-white rounded-3xl 2xl:pt-10 lg:h-[32rem] 2xl:h-[43rem] w-full lg:w-[23rem] 2xl:w-[32rem] md:py-6 md:mt-0">
 
