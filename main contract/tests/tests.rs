@@ -198,12 +198,12 @@ async fn approve_and_transfer() {
 const USER: u64 = 3;
 #[test]
 async fn generate_energy_and_verify_event() {
-    // Configuración del sistema y del contrato
+    // System and contract setup
     let sys = System::new();
     init_with_mint(&sys);
     let gaia_contract = sys.get_program(1);
 
-    // Ejecutar la acción NewGenerator para registrar un generador
+    // Execute NewGenerator action to register a generator
     let generator_actor_id = ActorId::from(2);
     let generator = Generator {
         id: 1,
@@ -218,12 +218,12 @@ async fn generate_energy_and_verify_event() {
     );
     assert!(res.contains(&(USER, EventsGaiaEcotrack::Registered.encode())));
 
-    // Ejecutar la acción GenerateEnergy para generar energía
+    // Execute GenerateEnergy action to generate energy
     let energy_amount = 100;
     let res = gaia_contract.send(USER, ActionGaiaEcotrack::GenerateEnergy(energy_amount));
     assert!(res.contains(&(USER, EventsGaiaEcotrack::Generated.encode())));
 
-    // Verificar que el estado del generador se actualizó correctamente
+    // Verify that the state of the generator was updated correctly
     let res = gaia_contract.send(USER, ActionGaiaEcotrack::GetRewards(1));
     assert!(res.contains(&(USER, EventsGaiaEcotrack::RewardsGenerated.encode())));
 }
@@ -231,20 +231,20 @@ async fn generate_energy_and_verify_event() {
 
 #[tokio::test]
 async fn test_transfer_tokens_between_actors() {
-    // Configura el sistema y el contrato
+    // Set up the system and the contract
     let sys = gtest::System::new();
     init_with_mint(&sys);
     let gaia_contract = sys.get_program(1);
 
-    // Actores de origen y destino
+    // Source and destination actors
     let from_actor_id = ActorId::from(2);
     let to_actor_id = ActorId::from(3);
 
-    // Agrega algo de liquidez al contrato principal
+    // Add some liquidity to the main contract
     let liquidity_amount = 1000;
     gaia_contract.send(3, FTAction::Mint(liquidity_amount));
 
-    // Configura el estado inicial del generador de origen
+    // Set up the initial state of the source generator
     let from_generator = Generator {
         id: 1,
         wallet: from_actor_id,
@@ -255,20 +255,70 @@ async fn test_transfer_tokens_between_actors() {
     gaia_contract
         .send(3, ActionGaiaEcotrack::NewGenerator(from_actor_id, from_generator.clone()));
 
-    // Ejecuta la transferencia de tokens entre actores (asíncrono)
     let transfer_amount = 500;
     gaia_contract
         .send(
             3,
             ActionGaiaEcotrack::Transferred(from_actor_id, to_actor_id, transfer_amount),
         );
-        // .await;
 
-    // Verifica que el estado del generador de origen se actualizó correctamente
+    // Verify that the state of the source generator was updated correctly
     let res = gaia_contract.send(3, ActionGaiaEcotrack::GetRewards(1));
     assert!(res.contains(&(3, EventsGaiaEcotrack::RewardsGenerated.encode())));
 
-    // Verifica que el balance del actor de destino se actualizó correctamente
+    // Verify that the balance of the destination actor was updated correctly
     let res = gaia_contract.send(3, FTAction::BalanceOf(to_actor_id));
     assert!(res.contains(&(3, FTEvent::Balance(transfer_amount).encode())));
+}
+
+
+#[tokio::test]
+async fn test_claimed_tokens() {
+    // Set up the system and the contract
+    let sys = gtest::System::new();
+    init_with_mint(&sys);
+    let gaia_contract = sys.get_program(1);
+
+    // Source and destination actors
+    let from_actor_id = ActorId::from(2);
+    let to_actor_id = ActorId::from(3);
+
+    // Add some liquidity to the main contract
+    let liquidity_amount = 1000;
+    gaia_contract.send(3, FTAction::Mint(liquidity_amount));
+
+    // Set up the initial state of the source generator
+    let from_generator = Generator {
+        id: 1,
+        wallet: from_actor_id,
+        total_generated: 0,
+        average_energy: 0,
+        rewards: 0,
+    };
+    gaia_contract
+        .send(3, ActionGaiaEcotrack::NewGenerator(from_actor_id, from_generator.clone()));
+
+    let transfer_amount = 500;
+    gaia_contract
+        .send(
+            3,
+            ActionGaiaEcotrack::Reward(from_actor_id, to_actor_id, transfer_amount),
+        );
+
+    // Verify that the correct amount of tokens has been sent
+    let res = gaia_contract.send(3, FTAction::BalanceOf(to_actor_id));
+    assert!(res.contains(&(3, FTEvent::Balance(transfer_amount).encode())));
+
+    // Create a copy of expected_event
+    let expected_event = EventsGaiaEcotrack::Claimed {
+        from: from_actor_id,
+        to: to_actor_id,
+        amount: transfer_amount,
+        kw: transfer_amount / 10, // kw_generated_calculate
+    };
+    let expected_event_copy = expected_event.clone();
+
+    // Send the copy to gaia_contract.send
+    let res = gaia_contract.send(3, expected_event);
+    assert!(res.contains(&(3, expected_event_copy.encode())));
 }
