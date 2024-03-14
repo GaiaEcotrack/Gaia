@@ -22,6 +22,7 @@ import TermsAndPolicy from "./pages/terms&policies/Terms&policy";
 import Face from "./components/Face/Face";
 import PaymentModalMp from "./components/PaymentConfirmedModal/PaymentModalMp";
 import { AuthProvider } from '@/contexts/AuthContext';
+import P2PPage from "./pages/p2p/P2PPage";
 
 
 initializeApp(config.firebaseConfig);
@@ -66,6 +67,7 @@ function Component() {
           <Route path='/userReg' element={<AuthProvider><UserRegister/></AuthProvider>} />
           <Route path='/face' element={<Face/>}/>
           <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="/P2PPage" element={<P2PPage />} />
         </Routes>
 
       {shouldShowFooter && 
