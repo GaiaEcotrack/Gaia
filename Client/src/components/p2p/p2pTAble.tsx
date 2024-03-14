@@ -11,7 +11,10 @@ interface RowData {
   paymentMethods: PaymentMethod[];
 }
 
-const P2PTable: React.FC<{ mode: "Buy" | "Sell" }> = ({ mode }) => {
+interface P2PTableProps {
+  mode: "Buy" | "Sell";
+}
+const P2PTable: React.FC<P2PTableProps> = ({ mode }) => {
   const rows: RowData[] = [
     {
       id: "User1",
@@ -66,56 +69,79 @@ const P2PTable: React.FC<{ mode: "Buy" | "Sell" }> = ({ mode }) => {
   ];
 
   return (
-    <div className="overflow-x-auto p-24">
-      <table className="min-w-full bg-white">
-        <thead className="bg-gray-800 text-white">
-          <tr>
-            <th className="py-3 px-6 text-left">User</th>
-            <th className="py-3 px-6 text-left">Orders / Completed</th>
-            <th className="py-3 px-6 text-left">Success orders</th>
-            <th className="py-3 px-6 text-left">Price</th>
-            <th className="py-3 px-6 text-center">Available / Limit</th>
-            <th className="py-3 px-6 text-center">Payments type</th>
-            <th className="py-3 px-6 text-center">Operation</th>
-          </tr>
-        </thead>
-        <tbody className="text-gray-700">
-          {rows.map((row: RowData, index: number) => (
-            <tr
-              key={index}
-              className="border-b border-gray-200 hover:bg-gray-100"
-            >
-              <td className="py-3 px-6 text-left whitespace-nowrap">
-                <div className="flex items-center">
-                  <span className="font-medium">{row.id}</span>
-                </div>
-              </td>
-              <td className="py-3 px-6 text-left">
-                {row.orders} órdenes / {row.completion}
-              </td>
-              <td className="py-3 px-6 text-left">{row.rate}</td>
-              <td className="py-3 px-6 text-left">{row.price}</td>
-              <td className="py-3 px-6 text-center">
-                {row.available} / {row.limit}
-              </td>
-              <td className="py-3 px-6 text-center">
-                {row.paymentMethods.join(" / ")}
-              </td>
-              <td className="py-3 px-6 text-center">
-                <button
-                  className={`${
-                    mode === "Buy"
-                      ? "bg-emerald-500 hover:bg-emerald-400"
-                      : "bg-red-600 hover:bg-red-500"
-                  } text-white py-2 px-4 rounded focus:outline-none`}
-                >
-                  {mode === "Buy" ? "Comprar Vara" : "Vender Vara"}
-                </button>
-              </td>
+    <div className="p-24">
+      {/* Tabla visible solo en pantallas grandes */}
+      <div className="hidden sm:block">
+        <table className="min-w-full bg-white">
+          <thead className="bg-gray-800 text-white">
+            <tr>
+              <th className="py-3 px-6 text-left">User</th>
+              <th className="py-3 px-6 text-left">Orders / Completed</th>
+              <th className="py-3 px-6 text-left">Success orders</th>
+              <th className="py-3 px-6 text-left">Price</th>
+              <th className="py-3 px-6 text-center">Available / Limit</th>
+              <th className="py-3 px-6 text-center">Payments type</th>
+              <th className="py-3 px-6 text-center">Operation</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="text-gray-700">
+            {rows.map((row, index) => (
+              <tr key={index} className="border-b border-gray-200 hover:bg-gray-100">
+                <td className="py-3 px-6 text-left whitespace-nowrap">
+                  <div className="items-center">
+                    <span className="font-medium">{row.id}</span>
+                  </div>
+                </td>
+                <td className="py-3 px-6 text-left">
+                  {row.orders} órdenes / {row.completion}
+                </td>
+                <td className="py-3 px-6 text-left">{row.rate}</td>
+                <td className="py-3 px-6 text-left">{row.price}</td>
+                <td className="py-3 px-6 text-center">
+                  {row.available} / {row.limit}
+                </td>
+                <td className="py-3 px-6 text-center">
+                  {row.paymentMethods.join(" / ")}
+                </td>
+                <td className="py-3 px-6 text-center">
+                  <button
+                    className={`${
+                      mode === "Buy"
+                        ? "bg-emerald-500 hover:bg-emerald-400"
+                        : "bg-red-600 hover:bg-red-500"
+                    } text-white py-2 px-4 rounded focus:outline-none`}
+                  >
+                    {mode === "Buy" ? "Comprar Vara" : "Vender Vara"}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Tarjetas visibles solo en pantallas pequeñas */}
+      <div className="sm:hidden">
+        {rows.map((row, index) => (
+          <div key={index} className="bg-white mb-4 p-4 rounded shadow">
+            <div className="font-bold">User: {row.id}</div>
+            <div>Orders / Completed: {row.orders} / {row.completion}</div>
+            <div>Success orders: {row.rate}</div>
+            <div>Price: {row.price}</div>
+            <div>Available / Limit: {row.available} / {row.limit}</div>
+            <div>Payments type: {row.paymentMethods.join(" / ")}</div>
+            <button
+              className={`${
+                mode === "Buy"
+                  ? "bg-emerald-500 hover:bg-emerald-400"
+                  : "bg-red-600 hover:bg-red-500"
+              } text-white py-2 px-4 rounded focus:outline-none mt-4`}
+            >
+              {mode === "Buy" ? "Comprar" : "Vender"}
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
