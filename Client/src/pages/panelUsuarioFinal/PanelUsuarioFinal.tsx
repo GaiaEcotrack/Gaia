@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import axios from "axios";
+import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { useTypewriter } from "react-simple-typewriter";
 
@@ -7,8 +7,8 @@ import arrow from "../../assets/arrow.png";
 
 import { ApiLoader } from "../../components/loaders/api-loader/ApiLoader";
 import { IoIosAddCircle } from "react-icons/io";
-// import { getAuth } from "firebase/auth";
-import authback from "@/apiauth/authback";
+import { getAuth } from "firebase/auth";
+// import authback from "@/apiauth/authback";
 
 // Definición de la interfaz Dispositivo
 interface Dispositivo {
@@ -51,41 +51,117 @@ const PanelUsuarioFinal = () => {
     deleteSpeed: 40,
   });
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const apiUrl = import.meta.env.VITE_APP_API_URL;
+  //       const url = `${apiUrl}/devices/plant-devices?plantId=13`;
+  //       const data = await authback(url);
+  //       if (data.devices) {
+  //         setDevices(data.devices);
+  //       } else {
+  //         throw new Error("No user");
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //       setUserError(true);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
+  // const handleUpdate = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const apiUrl = import.meta.env.VITE_APP_API_URL;
+  //     const data = await authback(`${apiUrl}/devices/plant-devices?plantId=35`);
+  //     setDevices(data.devices);
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const apiUrl = import.meta.env.VITE_APP_API_URL;
-        const url = `${apiUrl}/devices/plant-devices?plantId=13`;
-        const data = await authback(url);
-        if (data.devices) {
+    const auth = getAuth();
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setIsLoading(true);
+        try {
+          const idToken = await user.getIdToken();
+          const apiUrl = import.meta.env.VITE_APP_API_URL;
+          const url = `${apiUrl}/devices/plant-devices?plantId=13`;
+  
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              "Authorization": `Bearer ${idToken}`,
+              "Content-Type": "application/json"
+            },
+          });
+  
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+  
+          const data = await response.json();
           setDevices(data.devices);
-        } else {
-          throw new Error("No user");
+        } catch (error) {
+          console.error(error);
+          setUserError(true); 
+        } finally {
+          setIsLoading(false);
         }
-      } catch (error) {
-        console.error(error);
+      } else {
+        // se podria establacer tambien el user error
         setUserError(true);
-      } finally {
-        setIsLoading(false);
       }
-    };
-
-    fetchData();
+    });
+  
+    return () => unsubscribe();
   }, []);
+  
+const handleUpdate = async () => {
+  setIsLoading(true);
+  try {
+    const auth = getAuth();
+    const user = await auth.currentUser;
 
-  const handleUpdate = async () => {
-    setIsLoading(true);
-    try {
+    // Check if user is logged in before proceeding
+    if (user) {
+      const idToken = await user.getIdToken();
       const apiUrl = import.meta.env.VITE_APP_API_URL;
-      const data = await authback(`${apiUrl}/devices/plant-devices?plantId=35`);
+      const url = `${apiUrl}/devices/plant-devices?plantId=35`;
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          "Authorization": `Bearer ${idToken}`,
+          "Content-Type": "application/json"
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
       setDevices(data.devices);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setIsLoading(false);
+    } else {
+      console.error("User is not logged in");
+      // se podria agregar un redirect
     }
-  };
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const openModal = (device: Dispositivo) => {
     setSelectedDevice(device);
@@ -110,7 +186,7 @@ const PanelUsuarioFinal = () => {
           <div className="flex justify-center items-center h-64">
             <ApiLoader />
           </div>
-        ) : userError ? ( // Verifica si hay un error de usuario
+        ) : userError ? ( 
           <div
             className="flex items-center justify-center min-h-screen"
             style={{
@@ -118,13 +194,13 @@ const PanelUsuarioFinal = () => {
                 "url('https://w7.pngwing.com/pngs/702/783/png-transparent-high-voltage-sign-symbol-hazardous-dangerous-electricity-electrical-above-threshold.png')",
               filter: "brightness(1.2)",
               mixBlendMode: "multiply",
-              backgroundSize: "40%",
-              backgroundPosition: "center", // Centra la imagen en el div
-              backgroundRepeat: "no-repeat", // Asegura que la imagen no se repita
+              backgroundSize: "30%",
+              backgroundPosition: "top center", 
+              backgroundRepeat: "no-repeat", 
             }}
           >
             <div className="flex flex-col jsutify-center align-cente text-center m-8">
-              <h2 className="text-lg text-blue-900 bg-white p-4 rounded-md shadow-md">
+              <h2 className="text-lg text-blue-900 bg-white p-4 rounded-md shadow-md mt-36">
                 You have to login to access at this section.
               </h2>
               <NavLink to="/">
