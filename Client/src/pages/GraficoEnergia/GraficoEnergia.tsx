@@ -185,9 +185,21 @@ const GraficoEnergia = () => {
             },
           }
         );
+<<<<<<< HEAD
         const data = response.data.set;
         const energy = data.map((energ) => energ.pvGeneration);
         setEnergyBatery(energy);
+=======
+        const data = await response.json();
+    
+        if (data.set) {
+          const energy = data.set.map((energ) => energ.pvGeneration);
+          setEnergyBatery(energy);
+        } else {
+          // Manejar el caso en que data.set es undefined
+          console.error('data.set is undefined', data);
+        }
+>>>>>>> 093bc9ffa7c1d5de3a0008edd5497bedecc004bc
       } catch (error) {
         console.error("Error fetching energy data:", error);
       }
@@ -207,7 +219,18 @@ const GraficoEnergia = () => {
         console.log(idToken);
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
+<<<<<<< HEAD
           `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`
+=======
+          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`,
+        //  (`${url}/devices/device-data?deviceId=16`),
+        { method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${idToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+>>>>>>> 093bc9ffa7c1d5de3a0008edd5497bedecc004bc
         );
         const data = response.data.set;
         const pvGeneration = data[0].pvGeneration;
@@ -364,8 +387,12 @@ const GraficoEnergia = () => {
         setTotalExcedente(0);
       }
       const excedente = Math.floor(
+<<<<<<< HEAD
         //CALCULO DE TOKENS
         calcularExcedente(totalGenerado, totalConsumido) * 0.2
+=======
+        calcularExcedente(totalGenerado, totalConsumido) * 10
+>>>>>>> 093bc9ffa7c1d5de3a0008edd5497bedecc004bc
       );
       setExcedenteCapturado(excedente);
     };
@@ -836,7 +863,10 @@ const GraficoEnergia = () => {
       itemStyle: { color: index % 2 === 0 ? "#58E2C2" : "#F7E53B" },
     }));
 
+<<<<<<< HEAD
 // Datos fijos para cada fecha
+=======
+>>>>>>> 093bc9ffa7c1d5de3a0008edd5497bedecc004bc
 
     return {
       color: ["#58E2C2"],
@@ -1127,6 +1157,27 @@ interface PlantData {
         ],
       };
     };
+
+    useEffect(() => {
+      const url = import.meta.env.VITE_APP_API_URL;
+      const auth = getAuth();
+      const user = auth.currentUser?.email;
+      const fetchDataUser = async () => {
+        try {
+          const request = await axios.get(`${url}/users/`);
+          const response = request.data.users;
+          const filter = response.filter(
+            (userLog: any) => userLog.email === user
+          );
+          setUserLog(filter);
+          dispatch({ type: "SET_LOGGED_IN_USER", payload: filter });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchDataUser();
+    }, []);
+    
 
   return (
     <div className="mb-12">
