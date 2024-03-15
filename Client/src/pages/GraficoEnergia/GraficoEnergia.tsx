@@ -185,9 +185,15 @@ const GraficoEnergia = () => {
             },
           }
         );
-        const data = response.data.set;
-        const energy = data.map((energ) => energ.pvGeneration);
-        setEnergyBatery(energy);
+        const data = await response.json();
+    
+        if (data.set) {
+          const energy = data.set.map((energ) => energ.pvGeneration);
+          setEnergyBatery(energy);
+        } else {
+          // Manejar el caso en que data.set es undefined
+          console.error('data.set is undefined', data);
+        }
       } catch (error) {
         console.error("Error fetching energy data:", error);
       }
@@ -207,7 +213,14 @@ const GraficoEnergia = () => {
         console.log(idToken);
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
-          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`
+          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`,
+        //  (`${url}/devices/device-data?deviceId=16`),
+        { method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${idToken}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
         const data = response.data.set;
         const pvGeneration = data[0].pvGeneration;
@@ -364,8 +377,7 @@ const GraficoEnergia = () => {
         setTotalExcedente(0);
       }
       const excedente = Math.floor(
-        //CALCULO DE TOKENS
-        calcularExcedente(totalGenerado, totalConsumido) * 0.2
+        calcularExcedente(totalGenerado, totalConsumido) * 10
       );
       setExcedenteCapturado(excedente);
     };
@@ -836,7 +848,6 @@ const GraficoEnergia = () => {
       itemStyle: { color: index % 2 === 0 ? "#58E2C2" : "#F7E53B" },
     }));
 
-// Datos fijos para cada fecha
 
     return {
       color: ["#58E2C2"],
