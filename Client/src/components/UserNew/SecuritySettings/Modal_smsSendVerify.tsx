@@ -103,7 +103,7 @@ function SmsSendVerify(props:MoodalSms) {
   };
   
   return showSmsSendVerify ? (
-    <div className="bg-[#00000054] fixed top-0 left-0 h-full w-full flex justify-center items-center text-white">
+    <div className="bg-[#00000054] backdrop-blur-sm fixed top-0 left-0 h-full w-full flex justify-center items-center text-white">
         
         <div className="flex flex-col justify-center items-center rounded-3xl bg-[#233e6f] h-[50%] xl:h-[32rem] w-full md:w-[50%] xl:w-[41rem] p-4 md:p-6 mt-40 md:mt-0">
           

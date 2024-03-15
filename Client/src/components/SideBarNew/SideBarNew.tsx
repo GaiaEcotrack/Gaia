@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { AccountInfo } from "../layout/header/account-info";
 import axios from "axios";
-
 /* eslint-disable */
 export interface IHomePageProps {}
 
@@ -12,6 +11,8 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
 
   const URL = import.meta.env.VITE_APP_API_URL
   const auth = getAuth();
+
+
 
   const signOutWithoutAuth = async () => {
     await signOut(auth);
@@ -31,6 +32,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
     { id: 3, title: "Devices", src: "Devices", to: "/panelUsuarioFinal" },
     { id: 4, title: "Profile", src: "Profile", to: "/userReg" },
     { id: 5, title: "Information", src: "Info", gap: true, to: "/superUser" },
+    { id: 6, title: "P2P", src: "p2p", to: "/P2PPage" },
   ];
 
   const handleMenuClick = () => {

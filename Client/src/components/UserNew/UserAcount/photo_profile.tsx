@@ -46,7 +46,7 @@ export default function Profile() {
       await upload(photo, setLoading);  
       setPhoto(null)  
       Toast.fire({
-        icon: "success",
+        icon: "info",
         title: "Updated image\nReload"
       });
     }
