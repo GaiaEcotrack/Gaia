@@ -42,7 +42,27 @@ pub enum EventsGaiaEcotrack {
     
 }
 
-
+impl Clone for EventsGaiaEcotrack {
+    fn clone(&self) -> Self {
+        match self {
+            EventsGaiaEcotrack::Registered => EventsGaiaEcotrack::Registered,
+            EventsGaiaEcotrack::Generated => EventsGaiaEcotrack::Generated,
+            EventsGaiaEcotrack::RewardsGenerated => EventsGaiaEcotrack::RewardsGenerated,
+            EventsGaiaEcotrack::TokensTransferred { from, to, amount } => EventsGaiaEcotrack::TokensTransferred {
+                from: from.clone(),
+                to: to.clone(),
+                amount: *amount,
+            },
+            EventsGaiaEcotrack::Claimed { from, to, amount, kw } => EventsGaiaEcotrack::Claimed {
+                from: from.clone(),
+                to: to.clone(),
+                amount: *amount,
+                kw: *kw,
+            },
+            EventsGaiaEcotrack::DeviceRegister(s) => EventsGaiaEcotrack::DeviceRegister(s.clone()),
+        }
+    }
+}
 
 
 // Al agregar un contrato secundario como un token fungible, hay que agregar las acciones y eventos del token fungible.

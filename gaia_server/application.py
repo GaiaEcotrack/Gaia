@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from flask_swagger_ui import get_swaggerui_blueprint
 import os
 from dotenv import load_dotenv
+import secrets
 
 from src.routes.users import users_route
 # from src.routes.api_key import api_key
@@ -60,60 +61,43 @@ client = MongoClient(mongo_uri, tlsAllowInvalidCertificates=True)
 db = client['gaia']
 collection = db['users']
 
-# ## * Validation, each user MUST to have his api_key to access the api endpnts
+# api_keys_collection = db["api_keys"]
 
-# def is_route_without_validation(path):
-#     print(f"Ruta solicitada: {path}")
-#     # Rutas exactas sin validación
-#     routes_without_validation = ['/', '/upload_image', '/docs', '/static/swagger.json', 'api_key/generate']
-#     if path in routes_without_validation or path.startswith('/docs/'):
-#         print("Ruta encontrada en rutas exactas sin validación")
-#         return True
-    
-#     # Descomponer la ruta para manejar parámetros dinámicos
-#     path_parts = path.split('/')
-#     print(f"Partes de la ruta: {path_parts}")
-    
-#     # Verificar ruta de generación de API Key
-#     if len(path_parts) == 4 and path_parts[1] == 'api_key' and path_parts[2] == 'generate':
-#         print("Ruta de generación de API Key detectada")
-#         return True
-    
-#     if path.startswith('/api_key/generate'):
-#         print("Ruta de generación de API Key detectada")
-#         return True
-    
-#      # Excluir la ruta de creación de usuarios del requerimiento de API Key
-#     if request.method == 'POST' and path.startswith('/users'):
-#         print("Ruta de creación de usuarios detectada")
-#         return True
-    
-#     print("Ruta requiere validación de API Key")
-#     return False
+# # Ruta para generar una nueva API key (solo accesible para administradores)
+# @application.route('/generate_api_key', methods=['POST'])
+# def generate_api_key():
+#     # Verificar si la solicitud proviene de un administrador (puedes implementar tu propia lógica de autenticación aquí)
+#     is_admin = request.headers.get('X-Admin-Auth')
+#     if not is_admin:
+#         abort(403, description='Access forbidden.')
 
-# def validate_api_key():
-#     if is_route_without_validation(request.path) or request.method == 'OPTIONS':
-#         print('api key desactivada')
-#         return  # No validar la API Key para estas rutas
-    
-    
-#     api_key = request.headers.get('X-API-KEY')
-#     if not api_key:
-#         abort(401, description='API Key missing.')
-    
-#     user = db.users.find_one({"api_key": api_key})
-#     if not user:
-#         abort(401, description='Invalid API Key.')
+#     # Generar una nueva API key única
+#     new_api_key = secrets.token_urlsafe(16)
+
+#     # Almacenar la nueva API key en MongoDB
+#     api_keys_collection.insert_one({"api_key": new_api_key})
+
+#     # Devolver la nueva API key al administrador
+#     return jsonify({'api_key': new_api_key}), 201
 
 # @application.before_request
-# def before_request_func():
-#     validate_api_key()
+# def validate_api_key():
+#     # Obtener la API key de la cabecera de la solicitud
+#     api_key = request.headers.get('X-API-KEY')
+    
+#     # Si no se proporciona la API key, devolver un error 401
+#     if not api_key:
+#         abort(401, description='API Key missing.')
 
-# ## * End validacion.
+#     # Verificar si la API Key es válida consultando en la base de datos
+#     if not api_keys_collection.find_one({"api_key": api_key}):
+#         abort(401, description='Invalid API Key.')
 
-@application.route('/', methods=['GET'])
-def welcome():
-    return jsonify({'message': 'Welcome to the Gaia Server!'})
+
+
+# @application.route('/', methods=['GET'])
+# def welcome():
+#     return jsonify({'message': 'Welcome to the Gaia Server!'})
 
 # if __name__ == '__main__':
 #     try:

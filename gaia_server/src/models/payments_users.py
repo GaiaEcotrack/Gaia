@@ -6,6 +6,7 @@ class PaymentsUsersSchema(Schema):
     name = fields.String(required=False)
     email = fields.Email(required=False)     
     payment_type = fields.String(required=False)
-    address = fields.String(required=False) 
+    address = fields.String(required=False)
+    status = fields.String(required=False) 
     
     

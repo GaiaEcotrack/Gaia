@@ -2,11 +2,10 @@
 import {useState} from 'react'
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
-import { ProgramMetadata, decodeAddress, GearKeyring , encodeAddress} from "@gear-js/api";
+import { ProgramMetadata, decodeAddress, GearKeyring } from "@gear-js/api";
 import { Button } from "@gear-js/ui";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { VoucherIssued } from '@gear-js/api';
-
 
 function Mint() {
   const alert = useAlert();
@@ -15,6 +14,8 @@ function Mint() {
 
   const [error, setError] = useState(null);
 
+  console.log(account?.decodedAddress);
+  
   
   
 
@@ -29,7 +30,7 @@ function Mint() {
   
 
 
-  console.log(encodeAddress('0xee6a089b4593be0a920762d7c7cee81cd09d37bc1fbce136cecce80f9d90466a'));
+  
   const message: any = {
     destination: programIDFT, // programId
     payload: { newDevice:["5HjNGPcdpphBeLq6ffechssztTar6e2xXuavMAdeo3JHGcdR",{"id": 1, "name":"sma-nico", "typeEnergy":"solar","serial":"248-SMA"},{"id": 2, "name":"sma-nico", "typeEnergy":"solar","serial":"248-SMA"}]},
@@ -163,32 +164,112 @@ function Mint() {
       alert.error("Account not available to sign");
     }
   };
-  console.log(decodeAddress('5HTJkawMqHSvVRi2XrE7vdTU4t5Vq1EDv2ZDeWSwNxmmQKEK'));
+  console.log(decodeAddress('5G8mzxiCCW4VALGRGdaqGPfrMLp7CeaVfk5XwPhDDaDyGEgE'));
   
   async function voucher() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const programId = '0x633d0f014702f15973932d129e12f5c144124de630125239c764694a143c6a28';
-    const account = decodeAddress('5G8mzxiCCW4VALGRGdaqGPfrMLp7CeaVfk5XwPhDDaDyGEgE');
-    const messageTx = api?.message.send({
-      destination: programIDFT,
-      payload: { newDevice:["5HjNGPcdpphBeLq6ffechssztTar6e2xXuavMAdeo3JHGcdR",{"id": 1, "name":"sma-nico", "typeEnergy":"solar","serial":"248-SMA"},{"id": 2, "name":"sma-nico", "typeEnergy":"solar","serial":"248-SMA"}]},
-      gasLimit: 10000000,
-      value: 0
-    }, metadata);
-  
-    const voucherTx = api?.voucher.call({SendMessage: messageTx });
-    await voucherTx?.signAndSend(account, (events) => {
-      console.log(events.toHuman());
-    });
+    const programs = '0xe91a91009fc3a99a05c509feb1614141e898a2c9e7bca9227bc404ff65c047a1';
+    const spenderAddress = '0xb40bdca758d89256b437f48db0900fc3c7408504e621b300de375e8059a27f55';
+    const validForOneHour = (60 * 60) / 3; 
+
+    const mnemonic = 'sun pill sentence spoil ripple october funny ensure illness equal car demise';
+    const { seed } = GearKeyring.generateSeed(mnemonic);
+
+    const keyring = await GearKeyring.fromSeed(seed, 'admin');
     
-    ;}
+    console.log(seed);
+    
+    const { extrinsic } = await api!.voucher.issue(account?.decodedAddress ?? "0x00", 100 * 10 ** 12, validForOneHour, [programs], true);
+
+    try {
+ 
+      
+   await extrinsic.signAndSend(keyring, async ( events ) => {
+    console.log(events.toHuman()); 
+    
+                        const extrinsicJSON: any = events.toHuman();
+                        if (extrinsicJSON && extrinsicJSON.status !== "Ready") {
+                            const objectKey = Object.keys(extrinsicJSON.status)[0];
+                            if (objectKey === "Finalized") {
+                                alert.success("Voucher created");
+                                console.log("Voucher created");
+                            }
+                        }
+
+    })
+
+    } catch (error) {
+      console.log(error);
+      
+    }
+ 
+    
+    
+  }
+
+  const createNewVoucher = (): Promise<string> => {
+    return new Promise(async (resolve, reject) => {
+        if (!api || !account) {
+            console.log("No se inicio la api o account");
+            reject("Error creating voucher");
+            return;
+        }
+
+
+        const creatingVoucherAlertId = alert.loading("Creating voucher");
+
+        const programs = '0xe91a91009fc3a99a05c509feb1614141e898a2c9e7bca9227bc404ff65c047a1';
+        // Se genera el "issue" para crear el voucher para el usuario
+        // En este caso, para el main contract
+        const voucherIssued =  await api.voucher.issue(
+            account?.decodedAddress ?? "0x00",
+            100 * 10 ** 12, 
+            1_200, 
+            [programs]
+        );
+
+        console.log("voucher issued");
+
+        const mnemonic = 'sun pill sentence spoil ripple october funny ensure illness equal car demise';
+    const { seed } = GearKeyring.generateSeed(mnemonic);
+
+    const keyring = await GearKeyring.fromSeed(seed, 'admin');
+
+        // Se firma el voucher con la cuenta del administrador para el main Contract
+
+        try {
+            await voucherIssued.extrinsic.signAndSend(
+                keyring,
+                async (event) => {
+                    console.log(event.toHuman()); 
+                    const extrinsicJSON: any = event.toHuman();
+                    if (extrinsicJSON && extrinsicJSON.status !== "Ready") {
+                        const objectKey = Object.keys(extrinsicJSON.status)[0];
+                        if (objectKey === "Finalized") {
+                            alert.remove(creatingVoucherAlertId);
+                            alert.success("Voucher created");
+                            console.log("Voucher created");
+                            resolve(voucherIssued.voucherId);
+                        }
+                    }
+                }
+            );
+        } catch (error: any) {
+            console.error(`${error.name}: ${error.message}`);
+            alert.remove(creatingVoucherAlertId);
+            alert.error("Error creating voucher");
+            reject("Error creating voucher");
+        }
+    });
+}
+  
   return(
     <div>
       <Button text="Sin Firma" className="bg-black" onClick={()=>{signer()}} />;
       <Button text="Con Firma" className="bg-black" onClick={()=>{signerTwo()}} />;
       {error && <div>Error: {error.toString()}</div>} {/* Muestra el error en el componente */}
       <Button text="Agregar liquidez" className="bg-black" onClick={()=>{signerThree()}} />;
-      <Button text="Crear Voucher" className="bg-black" onClick={()=>{voucher()}} />;
+      <Button text="Crear Voucher" className="bg-black" onClick={()=>{createNewVoucher()}} />;
 
 
     </div>
