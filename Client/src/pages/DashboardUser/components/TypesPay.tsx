@@ -10,9 +10,7 @@ const TypesPay = () => {
   const userRedux = useSelector((state: RootState) => state.app.loggedInUser);
   const auth = getAuth();
   const user = auth.currentUser?.email;
-  const userFind = userRedux.find(function (usuario) {
-    return usuario.email === user;
-  });
+  const userFind = userRedux ? userRedux.find(usuario => usuario.email === user) : null;
 
   useEffect(() => {
     if (userFind) { // Verificar si userFind no es null
@@ -20,7 +18,6 @@ const TypesPay = () => {
     }
   }, [userFind]); // Dependencia del useEffect
 
-  console.log(localStorage.getItem('idUserRedux'));
 
   return (
     <div>
