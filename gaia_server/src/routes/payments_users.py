@@ -23,7 +23,7 @@ payment_users_collection = db['payment_users']
 # Instantiate the schema
 payments_users_schema = PaymentsUsersSchema()
 
-@payments_users_route.route('/payment_users', methods=['POST'])
+@payments_users_route.route('/', methods=['POST'])
 def create_payment_user():
     try:
         # Get JSON data from the request
@@ -44,7 +44,7 @@ def create_payment_user():
     except Exception as e:
         return jsonify({'error': str(e)})
 
-@payments_users_route.route('/payment_users', methods=['GET'])
+@payments_users_route.route('/', methods=['GET'])
 def get_payment_users():
     try:
         # Retrieve all payment users from the collection
