@@ -130,10 +130,6 @@ const GraficoEnergia = () => {
   //mensaje de conectar waller
   const [walletMessage, setWalletMessage] = useState("");
 
-<<<<<<< HEAD
-
-=======
->>>>>>> a73f1ee795992755de1139a1fb4890436e5f0a4c
   const [userLog, setUserLog] = useState("");
 
   const [componenteMontado, setComponenteMontado] = useState(true);
@@ -182,32 +178,16 @@ const GraficoEnergia = () => {
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await fetch(
           `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
-<<<<<<< HEAD
-          {
-=======
           { method: 'GET',
->>>>>>> a73f1ee795992755de1139a1fb4890436e5f0a4c
             headers: {
               "Authorization": `Bearer ${idToken}`,
               "Content-Type": "application/json",
             },
           }
         );
-<<<<<<< HEAD
         const data = response.data.set;
         const energy = data.map((energ) => energ.pvGeneration);
         setEnergyBatery(energy);
-=======
-        const data = await response.json();
-    
-        if (data.set) {
-          const energy = data.set.map((energ) => energ.pvGeneration);
-          setEnergyBatery(energy);
-        } else {
-          // Manejar el caso en que data.set es undefined
-          console.error('data.set is undefined', data);
-        }
->>>>>>> a73f1ee795992755de1139a1fb4890436e5f0a4c
       } catch (error) {
         console.error("Error fetching energy data:", error);
       }
@@ -227,18 +207,7 @@ const GraficoEnergia = () => {
         console.log(idToken);
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
-<<<<<<< HEAD
           `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`
-=======
-          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`,
-        //  (`${url}/devices/device-data?deviceId=16`),
-        { method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${idToken}`,
-              "Content-Type": "application/json",
-            },
-          }
->>>>>>> a73f1ee795992755de1139a1fb4890436e5f0a4c
         );
         const data = response.data.set;
         const pvGeneration = data[0].pvGeneration;
@@ -395,12 +364,8 @@ const GraficoEnergia = () => {
         setTotalExcedente(0);
       }
       const excedente = Math.floor(
-<<<<<<< HEAD
         //CALCULO DE TOKENS
         calcularExcedente(totalGenerado, totalConsumido) * 0.2
-=======
-        calcularExcedente(totalGenerado, totalConsumido) * 10
->>>>>>> a73f1ee795992755de1139a1fb4890436e5f0a4c
       );
       setExcedenteCapturado(excedente);
     };
@@ -871,10 +836,7 @@ const GraficoEnergia = () => {
       itemStyle: { color: index % 2 === 0 ? "#58E2C2" : "#F7E53B" },
     }));
 
-<<<<<<< HEAD
 // Datos fijos para cada fecha
-=======
->>>>>>> a73f1ee795992755de1139a1fb4890436e5f0a4c
 
     return {
       color: ["#58E2C2"],
