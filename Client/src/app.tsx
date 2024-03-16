@@ -23,6 +23,7 @@ import Face from "./components/Face/Face";
 import PaymentModalMp from "./components/PaymentConfirmedModal/PaymentModalMp";
 import { AuthProvider } from '@/contexts/AuthContext';
 import P2PPage from "./pages/p2p/P2PPage";
+import ChatBot from "./pages/ChatBot/ChatBot";
 
 
 initializeApp(config.firebaseConfig);
@@ -77,6 +78,14 @@ function Component() {
         location.pathname !== '/payment' &&
         location.pathname !== '/dashAdmin' &&
         location.pathname !== '/' && <Footer />} 
+
+      {shouldShowSidebar && 
+        location.pathname !== '/assets/logo' &&
+        location.pathname !== '/serviceTerms' &&
+        location.pathname !== '/dataPrivacy' &&
+        location.pathname !== '/payment' &&
+        location.pathname !== '/dashAdmin' &&
+        location.pathname !== '/' && <ChatBot/>}    
 
     </div>
   );
