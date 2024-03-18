@@ -102,6 +102,7 @@ def add_user():
     verified_2fa = data.get('verified_2fa', False)
     status_documents = "pending"
     photo_profile = data.get('photo_profile')
+    wallet = data.get('wallet', {})
 
     # Insertar el nuevo usuario en la colección
     new_user = {
@@ -123,7 +124,8 @@ def add_user():
         'verified_sms': verified_sms,
         'verified_2fa': verified_2fa,
         'status_documents': status_documents,
-        'photo_profile': photo_profile        
+        'photo_profile': photo_profile,
+        'wallet': wallet      
     }
 
     result = collection.insert_one(new_user)

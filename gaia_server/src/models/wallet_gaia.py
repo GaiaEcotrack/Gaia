@@ -4,14 +4,10 @@ class WalletGaiaSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
-    user_id = fields.String(required=True)  # Referencia a UserSchema
-    vara_amount = fields.Float(required=True)
-    gaia_token_amount = fields.Float(required=True)
+    vara_balance = fields.Float(required=False)
+    gaia_token_balance = fields.Float(required=True)
     willing_to_sell_excess = fields.Boolean(required=True) # vender excedente
-    # Campo para el balance actual en USD para llevar un control en USD
-    usd_balance = fields.Float(required=False)
-    # Referencia a las transacciones asociadas a esta wallet
-    transactions = fields.List(fields.Nested('TransactionSchema'), allow_none=True)
+    transactions = fields.List(fields.Nested('TransactionSchema'), allow_none=True)# Referencia a las transacciones asociadas a esta wallet
 
 class TransactionSchema(Schema):
     transaction_id = fields.String(required=True)  # Podría ser un UUID para asegurar unicidad
@@ -21,4 +17,3 @@ class TransactionSchema(Schema):
     transaction_type = fields.String(required=True, validate=lambda x: x in ['buy', 'sell'])  # Solo se aceptan valores válidos
     status = fields.String(required=True, validate=lambda x: x in ['pending', 'completed', 'cancelled'])  # Estado de la transacción
     date = fields.DateTime(required=True)  # Fecha y hora de la transacción
-    wallet_gaia_id = fields.String(required=True)  # ID de la WalletGaia involucrada en la transacción
