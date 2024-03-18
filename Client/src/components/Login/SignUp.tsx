@@ -21,8 +21,10 @@ function SignUp(props:SignUp) {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [password, setPassword] = useState("")
   const [visible, setVisible] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [passwordConf, setPasswordConf] = useState("")
   const [visibleConf, setVisibleConf] = useState(false)
 

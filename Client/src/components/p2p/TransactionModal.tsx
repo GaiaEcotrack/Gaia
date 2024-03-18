@@ -30,7 +30,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
   const [inputValue, setInputValue] = useState("");
   const [kwAmount, setKwAmount] = useState(0);
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
-  const [cryptoPrice, setCryptoPrice] = useState("");
+  // precio de vara al dia
+  // const [cryptoPrice, setCryptoPrice] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,7 +40,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
         const { data } = await axios.get(`${URL}/coinbase`);
         const varaPrice = data.vara.price.data.amount; // Accediendo directamente al precio de Vara
         console.log(varaPrice); // Verificar que tenemos el precio correcto
-        setCryptoPrice(varaPrice); // Almacenando solo el precio de Vara en el estado
+        // setCryptoPrice(varaPrice); // Almacenando solo el precio de Vara en el estado
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -47,21 +48,20 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
     fetchData();
   }, []);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let numericValue = parseFloat(e.target.value); // Convertir el valor a float para la comparación y el cálculo
-
+    let varaQuantity = parseFloat(e.target.value); // La cantidad de varas que el usuario quiere vender o comprar
+  
     // Verificar y corregir el valor si es negativo
-    if (numericValue < 0) {
-      numericValue = 0;
-      setInputValue("0");
+    if (varaQuantity < 0) {
+      varaQuantity = 0;
+      setInputValue("0"); // Establecer el valor de entrada a 0 si la cantidad de varas es negativa
     } else {
       setInputValue(e.target.value); // Usar el valor ingresado si es positivo
     }
-
-    const priceOfVaraInUSD = parseFloat(cryptoPrice) || 0;
-    const usdAmount = numericValue * priceOfVaraInUSD; // Convertir Varas a USD
-    const kwBought = usdAmount / 0.2; // Calcular los KW que se pueden comprar con esos USD
-
-    setKwAmount(kwBought); // setKwAmount ahora tiene el número de KW que el usuario puede comprar
+  
+    // Dado que 1 kW = 2 varas, calculamos la cantidad de kW que se pueden obtener de la cantidad de varas ingresada
+    const kwQuantity = varaQuantity / 2; // Dividir la cantidad de varas por 2 para obtener los kW equivalentes
+  
+    setKwAmount(kwQuantity); // setKwAmount ahora tiene el número de kW que el usuario puede recibir
   };
 
   //usuario desde firebase

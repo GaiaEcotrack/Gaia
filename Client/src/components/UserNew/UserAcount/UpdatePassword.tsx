@@ -3,7 +3,6 @@ import { BsEyeSlash } from "react-icons/bs";
 import { useRef, useState } from "react"
 import { useAuth } from "@/contexts/AuthContext"
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import Swal from 'sweetalert2'
 
 interface SignUp {
@@ -13,16 +12,16 @@ interface SignUp {
 
 function UpdatePassword(props:SignUp) {
 
-  const URL = import.meta.env.VITE_APP_API_URL
-  // const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordConfirmRef = useRef<HTMLInputElement>(null);
   const { updPassword, currentUser } = useAuth()
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [password, setPassword] = useState("")
   const [visible, setVisible] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [passwordConf, setPasswordConf] = useState("")
   const [visibleConf, setVisibleConf] = useState(false)
 
