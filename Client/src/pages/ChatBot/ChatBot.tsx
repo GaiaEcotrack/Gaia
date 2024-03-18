@@ -1,6 +1,6 @@
-import { FcReddit } from "react-icons/fc"; 
 import { AiFillCloseCircle } from "react-icons/ai"; 
 import React, { useState, useRef, useEffect  } from 'react';
+import imagen from '/ChatBot.png'
 
 const ChatBot: React.FC = () => {
 
@@ -70,12 +70,7 @@ const ChatBot: React.FC = () => {
       {!isChatboxOpen && (
         <div className="fixed bottom-4 right-4 inline-flex items-center justify-center text-sm font-medium disabled:pointer-events-none disabled:opacity-50 border rounded-full w-16 h-16 bg-black hover:bg-gray-700 m-0 cursor-pointer border-gray-200 bg-none p-0 normal-case leading-5 hover:text-gray-900">
           <button onClick={toggleChatbox} className=" text-white py-2 px-4 rounded-md flex items-center">
-          <svg xmlns=" http://www.w3.org/2000/svg" width="30" height="40" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-      className="text-white block border-gray-200 align-middle">
-      <path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z" className="border-gray-200">
-      </path>
-    </svg>
+            <img src={imagen} alt="ChatBot" className="h-16"/>
           </button>
         </div>
       )}
@@ -84,7 +79,7 @@ const ChatBot: React.FC = () => {
           <div className="bg-white shadow-md rounded-lg max-w-lg w-full">
             {/* Chatbox content */}
             {/* Use chatMessages state to render chat messages */}
-            <div className="p-4 border-b bg-[#233e6f] text-white rounded-t-lg flex justify-between items-center">
+            <div className="p-4 border-b bg-[#020e42] text-white rounded-t-lg flex justify-between items-center">
               <p className="text-xl font-semibold">ChatBot Gaia</p>
               <button onClick={toggleChatbox} className="text-gray-100 hover:text-gray-300 focus:outline-none focus:text-gray-400">
                 <AiFillCloseCircle className="text-2xl"/>
