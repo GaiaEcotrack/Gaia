@@ -37,10 +37,6 @@ import EnergyDeviceList from "@/components/EnergyComponentNew/EnergyDeviceList";
 // import { SideBarNew } from "components/SideBarNew/SideBarNew";
 import { getAuth } from "firebase/auth";
 import axios from "axios";
-import {
-  getTokenFromFirebase,
-  sendTokenToBackend,
-} from "../../TokenFirebaseToBackend";
 import Swal from "sweetalert2";
 import { RootState } from "../../store/index";
 
@@ -188,7 +184,7 @@ const GraficoEnergia = () => {
         const data = await response.json();
     
         if (data.set) {
-          const energy = data.set.map((energ) => energ.pvGeneration);
+          const energy = data.set.map((energ:any) => energ.pvGeneration);
           setEnergyBatery(energy);
         } else {
           // Manejar el caso en que data.set es undefined
@@ -1010,7 +1006,7 @@ interface PlantData {
     fetchData();
   }, []);
 
-  const getBarChartOption = (plantData: number[][]): EC => {
+  const getBarChartOption = (plantData: number[][]):any => {
     // Generando colores aleatorios para cada barra
     const colors = plantData.map(() => '#' + Math.floor(Math.random()*16777215).toString(16));
   
@@ -1020,7 +1016,7 @@ interface PlantData {
         axisPointer: {
           type: "line" // Cambia el tipo de puntero en el tooltip para gráficos de línea
         },
-        formatter: function (params) {
+        formatter: function (params:any) {
           const dataIndex = params[0].dataIndex;
           const plantNumber = plantData[dataIndex][0];
           const metric = params[0].value.toFixed(2);
@@ -1090,7 +1086,7 @@ interface PlantData {
       fetchData();
     }, []);
 
-    const getBarChartOption2 = (deviceData) => {
+    const getBarChartOption2 = (deviceData:any) => {
       // Generando colores aleatorios para cada barra
       // const colors = deviceData.map((item, index) => index % 2 === 0 ? '#708090' : '#0000FF');
       const colors = deviceData.map(() => '#58E2C2');
@@ -1102,7 +1098,7 @@ interface PlantData {
           axisPointer: {
             type: "shadow" // Más adecuado para gráficos de barras
           },
-          formatter: function (params) {
+          formatter: function (params:any) {
             const dataIndex = params[0].dataIndex;
             const dataId = deviceData[dataIndex][0]; // Suponiendo que el primer elemento es un identificador único
             const value = params[0].value.toFixed(2); // Valor numérico, asegurándose de que esté formateado correctamente
@@ -1115,7 +1111,7 @@ interface PlantData {
         },
         yAxis: {
           type: "category",
-          data: deviceData.map((item) => item[2]), // Usando el timestamp o etiqueta de tiempo como etiqueta de categoría
+          data: deviceData.map((item:any) => item[2]), // Usando el timestamp o etiqueta de tiempo como etiqueta de categoría
           axisLabel: {
             interval: 0,
             rotate: 45, // Puedes ajustar esto según sea necesario
@@ -1127,7 +1123,7 @@ interface PlantData {
           {
             name: "Value",
             type: "bar", // Cambio de 'line' a 'bar' para crear un gráfico de barras
-            data: deviceData.map((item, index) => ({
+            data: deviceData.map((item:any, index:any) => ({
               value: item[1], // Asegurándose de que el valor esté mapeado correctamente
               itemStyle: {
                 color: colors[index], // Asignando un color aleatorio a cada barra
