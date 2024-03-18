@@ -1,6 +1,6 @@
 import { AiFillCloseCircle } from "react-icons/ai"; 
 import React, { useState, useRef, useEffect  } from 'react';
-import imagen from '../../../public/ChatBot.png'
+import imagen from '/ChatBot.png'
 
 const ChatBot: React.FC = () => {
 
