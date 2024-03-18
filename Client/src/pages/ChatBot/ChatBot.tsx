@@ -1,6 +1,6 @@
-import { FcReddit } from "react-icons/fc"; 
 import { AiFillCloseCircle } from "react-icons/ai"; 
 import React, { useState, useRef, useEffect  } from 'react';
+import imagen from '../../../public/ChatBot.png'
 
 const ChatBot: React.FC = () => {
 
@@ -70,7 +70,7 @@ const ChatBot: React.FC = () => {
       {!isChatboxOpen && (
         <div className="fixed bottom-0 right-0 mb-4 mr-4">
           <button onClick={toggleChatbox} className=" text-white py-2 px-4 rounded-md flex items-center">
-            <FcReddit className="text-7xl"/>
+            <img src={imagen} alt="ChatBot" className="h-16"/>
           </button>
         </div>
       )}
@@ -79,7 +79,7 @@ const ChatBot: React.FC = () => {
           <div className="bg-white shadow-md rounded-lg max-w-lg w-full">
             {/* Chatbox content */}
             {/* Use chatMessages state to render chat messages */}
-            <div className="p-4 border-b bg-[#233e6f] text-white rounded-t-lg flex justify-between items-center">
+            <div className="p-4 border-b bg-[#020e42] text-white rounded-t-lg flex justify-between items-center">
               <p className="text-xl font-semibold">ChatBot Gaia</p>
               <button onClick={toggleChatbox} className="text-gray-100 hover:text-gray-300 focus:outline-none focus:text-gray-400">
                 <AiFillCloseCircle className="text-2xl"/>
