@@ -68,7 +68,7 @@ const ChatBot: React.FC = () => {
   return (
     <div className='text-black'>
       {!isChatboxOpen && (
-        <div className="fixed bottom-0 right-0 mb-4 mr-4">
+        <div className="fixed bottom-4 right-4 inline-flex items-center justify-center text-sm font-medium disabled:pointer-events-none disabled:opacity-50 border rounded-full w-16 h-16 bg-black hover:bg-gray-700 m-0 cursor-pointer border-gray-200 bg-none p-0 normal-case leading-5 hover:text-gray-900">
           <button onClick={toggleChatbox} className=" text-white py-2 px-4 rounded-md flex items-center">
             <img src={imagen} alt="ChatBot" className="h-16"/>
           </button>
