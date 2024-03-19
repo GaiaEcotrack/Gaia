@@ -367,6 +367,19 @@ const signerVou = async () => {
   await setMainContractVoucher();
 };
 
+const calculateGas = async ()=>{
+  const gas = await api.program.calculateGas.handle(
+    account?.decodedAddress ?? "0x00",
+    programIDFT,
+    { transferred: null },
+    0,
+    true,
+    metadata
+  );
+  console.log(gas);
+  
+}
+
   return(
     <div>
       <Button text="Sin Firma" className="bg-black" onClick={()=>{signer()}} />;
@@ -375,6 +388,7 @@ const signerVou = async () => {
       <Button text="Agregar liquidez" className="bg-black" onClick={()=>{signerThree()}} />;
       <Button text="Crear Voucher" className="bg-black" onClick={()=>{signerVou()}} />;
       <Button text="existe voucher" className="bg-black" onClick={()=>{voucherExists()}} />;
+      <Button text="calcular gas" className="bg-black" onClick={()=>{calculateGas()}} />;
       
 
 
