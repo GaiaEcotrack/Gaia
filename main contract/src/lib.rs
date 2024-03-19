@@ -19,6 +19,7 @@ struct GaiaEcotrackMainState {
     pub total_generators:u128,
     pub generators: HashMap<ActorId, Generator>,
     pub devices:HashMap<String, Vec<DevicesInfo>>,
+    pub transactions : HashMap<ActorId,Vec<TransactionsInfo>>
     // Aqui se pueden agregar información adicional en el contrato
    
 }
@@ -100,7 +101,7 @@ impl GaiaEcotrackMainState {
 
     async fn claimedTokens(&mut self, from: ActorId, to: ActorId, amount_tokens: u128 ) {
         let address_ft = addresft_state_mut();
-        let kw_generated_calculate = amount_tokens / 10;
+        let kw_generated_calculate = amount_tokens * 10;
         let payload = FTAction::Transfer {
             from,
             to,
@@ -109,7 +110,6 @@ impl GaiaEcotrackMainState {
         let _ = msg::send(address_ft.ft_program_id, payload, 0);
         msg::reply(
             EventsGaiaEcotrack::Claimed {
-                from: from,
                 to: to,
                 amount : amount_tokens,
                 kw : kw_generated_calculate
@@ -262,9 +262,17 @@ async fn main(){
                 state.transfer_tokens_between_actors(from, to, amount).await;
             }
 
-            ActionGaiaEcotrack::Reward(from, to, amount) => {
+            ActionGaiaEcotrack::Reward(from, to, amount , transactions) => {
                 let state = state_mut();
+                let calculate = amount / 10 ;
                 state.claimedTokens(from, to, amount).await;
+
+                let transactions_state = state.transactions.entry(from.clone()).or_insert(vec![]);
+                transactions_state.push(TransactionsInfo {
+                    to : transactions.to,
+                    amount: transactions.amount,
+                    kw: transactions.kw,
+                });
             }
 
             ActionGaiaEcotrack::NewDevice(idUser,device) =>  {
@@ -315,13 +323,19 @@ async fn main(){
             total_users,
             total_generators,
             generators,
-            devices
+            devices,
+            transactions
         } = value;
     
     // Aquí se genera el cambio de HashMap a Vector para evitar problemas de compilación por el tipo HashMap.
     // Nota: Es necesario convertir todos los Hashmaps a vectores
         let generators = generators.iter().map(|(k, v)| (*k, v.clone())).collect();
         let devices = devices
+    .iter()
+    .flat_map(|(k, v)| v.iter().map(move |device| (k.clone(), device.clone())))
+    .collect();
+
+    let transactions = transactions
     .iter()
     .flat_map(|(k, v)| v.iter().map(move |device| (k.clone(), device.clone())))
     .collect();
@@ -334,7 +348,8 @@ async fn main(){
             total_users,
             total_generators,
             generators,
-            devices
+            devices,
+            transactions
         }
     
     }

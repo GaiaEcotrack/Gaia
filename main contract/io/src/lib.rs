@@ -11,7 +11,7 @@ pub enum ActionGaiaEcotrack {
     GenerateEnergy(u128),
     GetRewards(u128),
     Transferred(ActorId , ActorId , u128),
-    Reward(ActorId , ActorId , u128),
+    Reward(ActorId , ActorId , u128,TransactionsInfo),
     NewDevice(String,DevicesInfo)
     
     // Aqui se pueden implementar acciones adicionales en el contrato
@@ -31,7 +31,6 @@ pub enum EventsGaiaEcotrack {
         amount: u128,
     },
     Claimed{
-        from: ActorId,
         to: ActorId,
         amount: u128,
         kw:u128,
@@ -42,27 +41,7 @@ pub enum EventsGaiaEcotrack {
     
 }
 
-impl Clone for EventsGaiaEcotrack {
-    fn clone(&self) -> Self {
-        match self {
-            EventsGaiaEcotrack::Registered => EventsGaiaEcotrack::Registered,
-            EventsGaiaEcotrack::Generated => EventsGaiaEcotrack::Generated,
-            EventsGaiaEcotrack::RewardsGenerated => EventsGaiaEcotrack::RewardsGenerated,
-            EventsGaiaEcotrack::TokensTransferred { from, to, amount } => EventsGaiaEcotrack::TokensTransferred {
-                from: from.clone(),
-                to: to.clone(),
-                amount: *amount,
-            },
-            EventsGaiaEcotrack::Claimed { from, to, amount, kw } => EventsGaiaEcotrack::Claimed {
-                from: from.clone(),
-                to: to.clone(),
-                amount: *amount,
-                kw: *kw,
-            },
-            EventsGaiaEcotrack::DeviceRegister(s) => EventsGaiaEcotrack::DeviceRegister(s.clone()),
-        }
-    }
-}
+
 
 
 // Al agregar un contrato secundario como un token fungible, hay que agregar las acciones y eventos del token fungible.
@@ -142,6 +121,7 @@ pub struct IoGaiaEcotrack {
     pub total_generators:u128,
     pub generators: Vec<(ActorId, Generator)>,
     pub devices:Vec<(String, DevicesInfo)>,
+    pub transactions : Vec<(ActorId,TransactionsInfo)>
   
 }
 
@@ -159,12 +139,21 @@ pub struct Generator {
   
 }
 
+
 #[derive(Default, Clone, Encode, Decode, TypeInfo)]
 pub struct DevicesInfo {
     pub id: u128,
     pub name:String,
     pub type_energy:String,
     pub serial:String,
+   
+}
+
+#[derive(Default, Clone, Encode, Decode, TypeInfo)]
+pub struct TransactionsInfo {
+    pub to:ActorId,
+    pub amount:u128,
+    pub kw:u128,
    
 }
 
