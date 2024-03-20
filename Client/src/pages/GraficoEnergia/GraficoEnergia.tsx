@@ -382,7 +382,7 @@ const GraficoEnergia = () => {
         setTotalExcedente(0);
       }
       const excedente = Math.floor(
-        calcularExcedente(totalGenerado, totalConsumido) * 10
+        calcularExcedente(totalGenerado, totalConsumido) * 0.2
       );
       setExcedenteCapturado(excedente);
     };
@@ -608,11 +608,11 @@ const GraficoEnergia = () => {
             Reward: [
               decodeAddress(MidWallet),
               account.decodedAddress,
-              10,
+              excedenteCapturado,
               {
                 to: account.decodedAddress,
                 amount: excedenteCapturado,
-                kw: totalGenerado.toString().replace(".", ""),
+                kw: totalGenerado.toFixed().toString().replace(".", ""),
               },
             ],
           },
@@ -689,8 +689,6 @@ const GraficoEnergia = () => {
     if (!account || !accounts || !api) return;
     await createVoucher();
   };
-
-
 
 
 
