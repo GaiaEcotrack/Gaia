@@ -22,7 +22,7 @@ import { Link, NavLink } from "react-router-dom";
 import { format } from "date-fns";
 // Vara
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
-import { decodeAddress, ProgramMetadata, GearKeyring } from "@gear-js/api";
+import { decodeAddress, ProgramMetadata, GearKeyring, GasInfo } from "@gear-js/api";
 import { web3FromSource } from "@polkadot/extension-dapp";
 // Componentes personalizados
 import { ModalMintGaia } from "../../components/ModalMintGaia/ModalMintGaia";
@@ -46,7 +46,7 @@ import moment from "moment";
 import CardEnergy from "@/components/CardsEnergy/CardEnergy";
 import CardConsume from "@/components/CardsEnergy/CardConsume";
 import CardGenerated from "@/components/CardsEnergy/CardGenerated";
-import { log } from "console";
+import useVoucherUtils from "../home/VouchersUtils";
 
 ChartJS.register(
   ArcElement,
@@ -56,6 +56,8 @@ ChartJS.register(
   CategoryScale,
   LinearScale
 );
+
+
 
 const dataPie: ChartData<"doughnut", number[], string> = {
   labels: ["Wind Energy", "Thermal Energy", "Solar Energy"],
@@ -113,6 +115,13 @@ const getConfig = (): SomeConfig => {
 };
 
 const GraficoEnergia = () => {
+  const {
+    createNewVoucher,
+    voucherExpired,
+    renewVoucherOneHour,
+    voucherExists,
+    accountVoucherId,
+  } = useVoucherUtils();
   const dispatch = useDispatch();
 
   const [token, setToken] = useState("");
@@ -564,6 +573,132 @@ const GraficoEnergia = () => {
     }
   };
 
+  const gasToSpend = (gasInfo: GasInfo): bigint => {
+    const gasHuman = gasInfo.toHuman();
+    const minLimit = gasHuman.min_limit?.toString() ?? "0";
+    const parsedGas = Number(minLimit.replaceAll(",", ""));
+    const gasPlusTenPorcent = Math.round(parsedGas + parsedGas * 0.1);
+    const gasLimit: bigint = BigInt(gasPlusTenPorcent);
+    return gasLimit;
+  };
+
+  const claimVoucher = async (voucherId: string) => {
+    if (!account || !api || !accounts) return;
+
+    const localaccount = account?.address;
+    const isVisibleAccount = accounts.some(
+      (visibleAccount) => visibleAccount.address === localaccount
+    );
+
+    if (isVisibleAccount) {
+      const { signer } = await web3FromSource(account.meta.source);
+      const gas = await api.program.calculateGas.handle(
+        account?.decodedAddress ?? "0x00",
+        programIDFT,
+        { Reward: null },
+        0,
+        true,
+        metadata
+      );
+      const MidWallet = import.meta.env.VITE_APP_MID_KEY;
+      const transferExtrinsic = api.message.send(
+        {
+          destination: programIDFT, // programId
+          payload: {
+            Reward: [
+              decodeAddress(MidWallet),
+              account.decodedAddress,
+              10,
+              {
+                to: account.decodedAddress,
+                amount: excedenteCapturado,
+                kw: totalGenerado.toString().replace(".", ""),
+              },
+            ],
+          },
+          gasLimit: gasToSpend(gas),
+          value: 0,
+        },
+        metadata
+      );
+      const voucherTx = api.voucher.call(voucherId, {
+        SendMessage: transferExtrinsic,
+      });
+
+
+      try {
+        await voucherTx.signAndSend(
+          account?.decodedAddress,
+          { signer },
+          ({ status, events }) => {
+            if (status.isInBlock) {
+              setExcedenteCapturado(0);
+              setTotalExcedente(0);
+              setTotalGenerado(0);
+              setTotalConsumido(0);
+              console.log(
+                `Completed at block hash #${status.asInBlock.toString()}`
+              );
+              alerta.success(`Block hash #${status.asInBlock.toString()}`);
+            } else {
+              console.log(`Current status: ${status.type}`);
+              if (status.type === "Finalized") {
+                alerta.success(status.type);
+              }
+            }
+          }
+        );
+      } catch (error: any) {
+        console.log(":( transaction failed", error);
+      }
+    } else {
+      alerta.error("Account not available to sign");
+    }
+  };
+
+  const createVoucher = async () => {
+    if (!api || !account) return;
+
+    if (await voucherExists()) {
+      console.log("Voucher already exists");
+
+      const voucherId = await accountVoucherId();
+
+      if (await voucherExpired(voucherId)) {
+        console.log("Voucher expired");
+        await renewVoucherOneHour(voucherId);
+      }
+
+      await claimVoucher(voucherId);
+
+      return;
+    }
+
+    console.log("Voucher does not exists");
+
+    try {
+      const voucherId = await createNewVoucher();
+      await claimVoucher(voucherId);
+    } catch (error) {
+      console.log("Error creating voucher");
+    }
+  };
+
+  const signerVou = async () => {
+    console.log("signer");
+    if (!account || !accounts || !api) return;
+    await createVoucher();
+  };
+
+
+
+
+
+
+
+
+
+
   const onClose = () => {
     setAlertWallet(false);
   };
@@ -572,7 +707,7 @@ const GraficoEnergia = () => {
     if (addresLocal === undefined) {
       setAlertWallet(true);
     } else {
-      signerTwo();
+      signerVou();
     }
   };
 
@@ -746,91 +881,7 @@ const GraficoEnergia = () => {
     };
   };
 
-  // ! grafico de barras NOTA: traer los datos reales
 
-  // const getBarOption = () => {
-  //   // Extraer los datos y labels de barData
-  //   const { labels, datasets } = barData; // Asumiendo que barData es tu estado con los datos
-  //   const dataset = datasets[0];
-
-  //   // Mapear los datos a los valores para el gráfico
-  //   // Asumiendo que el orden de los datos en barData corresponde a los días de previousDay5 a currentDay
-  //   const seriesData = dataset.data.map((value, index) => ({
-  //     value, // El valor de cada barra
-  //     // Aplicar el color de la barra basado en el color definido en barData, o un color por defecto si no se especifica
-  //     itemStyle: { color: index % 2 === 0 ? "#58E2C2" : "#F7E53B" },
-  //   }));
-
-  //   return {
-  //     color: ["#58E2C2"],
-  //     tooltip: {
-  //       trigger: "axis",
-  //       axisPointer: {
-  //         type: "shadow",
-  //       },
-  //     },
-  //     grid: {
-  //       left: "3%",
-  //       right: "4%",
-  //       bottom: "3%",
-  //       containLabel: true,
-  //     },
-  //     xAxis: [
-  //       {
-  //         type: "category",
-  //         data: [
-  //           moment().subtract(5, "days").format("MMM D"),
-  //           moment().subtract(4, "days").format("MMM D"),
-  //           moment().subtract(3, "days").format("MMM D"),
-  //           moment().subtract(2, "days").format("MMM D"),
-  //           moment().subtract(1, "days").format("MMM D"),
-  //           moment().format("MMM D"),
-  //         ],
-  //         axisTick: {
-  //           alignWithLabel: true,
-  //         },
-  //         axisLine: {
-  //           lineStyle: {
-  //             color: "#FDFDFD",
-  //           },
-  //         },
-  //         axisLabel: {
-  //           color: "#FDFDFD",
-  //         },
-  //       },
-  //     ],
-  //     yAxis: [
-  //       {
-  //         type: "value",
-  //         axisLine: {
-  //           lineStyle: {
-  //             color: "#FDFDFD",
-  //           },
-  //         },
-  //         splitLine: {
-  //           lineStyle: {
-  //             color: "#484E69",
-  //           },
-  //         },
-  //         axisLabel: {
-  //           color: "#FDFDFD",
-  //         },
-  //       },
-  //     ],
-  //     series: [
-  //       {
-  //         name: "Kw",
-  //         type: "bar",
-  //         barWidth: "40%",
-  //         data: [
-  //           { value: 203, itemStyle: { color: "#58E2C2" } }, // Primer color para la primera barra
-  //           { value: 214, itemStyle: { color: "#F7E53B" } }, // Segundo color para la segunda barra
-  //         ],
-  //         data: seriesData, // Usando la data mapeada desde barData
-  //       },
-  //     ],
-  //   };
-  // };
   const getBarOption = () => {
     // Extraer los datos y labels de barData
     const { labels, datasets } = barData; // Asumiendo que barData es tu estado con los datos
@@ -1135,6 +1186,7 @@ interface PlantData {
       };
     };
 
+    //REDUX
     useEffect(() => {
       const url = import.meta.env.VITE_APP_API_URL;
       const auth = getAuth();
