@@ -21,6 +21,7 @@ from src.routes.authenticator import auth_route
 from src.routes.payments_users import payments_users_route
 from src.routes.chatbox import chatbox_route
 from src.routes.wallet_gaia import wallet_route
+from src.routes.transaction import transaction_route
 
 
 
@@ -57,6 +58,7 @@ application.register_blueprint(auth_route, url_prefix='/auth')
 application.register_blueprint(payments_users_route, url_prefix='/payments')
 application.register_blueprint(chatbox_route, url_prefix='/chatbox')
 application.register_blueprint(wallet_route, url_prefix='/wallet')
+application.register_blueprint(transaction_route, url_prefix='/transaction')
 
 mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri, tlsAllowInvalidCertificates=True)

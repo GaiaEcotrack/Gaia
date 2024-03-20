@@ -1,0 +1,29 @@
+@keyframes chatboxAnimation {
+  0% {
+    opacity: 0;
+    transform: translateY(50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes chatboxExitAnimation {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(50%);
+  }
+}
+
+.animate-chatboxAnimation {
+  animation: chatboxAnimation 0.3s ease forwards; /* Ajusta la duración y el timing de la animación según tus necesidades */
+}
+
+.animate-chatboxExitAnimation {
+  animation: chatboxExitAnimation 0.3s ease forwards; /* Ajusta la duración y el timing de la animación según tus necesidades */
+}

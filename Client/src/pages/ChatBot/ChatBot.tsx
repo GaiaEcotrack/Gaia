@@ -1,6 +1,7 @@
 import { AiFillCloseCircle } from "react-icons/ai"; 
 import React, { useState, useRef, useEffect  } from 'react';
 import imagen from '/ChatBot.png'
+import './ChatBot.css'
 
 const ChatBot: React.FC = () => {
 
@@ -69,13 +70,15 @@ const ChatBot: React.FC = () => {
     <div className='text-black'>
       {!isChatboxOpen && (
         <div className="fixed bottom-3 right-1">
-          <button onClick={toggleChatbox} className=" text-white py-2 px-4 rounded-md flex items-center transition duration-300 transform hover:scale-110">
+          <button 
+            onClick={toggleChatbox} 
+            className=" text-white py-2 px-4 rounded-md flex items-center transition duration-300 transform hover:scale-110">
             <img src={imagen} alt="ChatBot" className="h-16"/>
           </button>
         </div>
       )}
       {isChatboxOpen && (
-        <div className="fixed bottom-6 right-4 w-[22rem]">
+        <div className={`fixed bottom-4 right-4 w-[22rem] animate-${isChatboxOpen ? 'chatboxAnimation' : 'chatboxExitAnimation'}`}>
           <div className="bg-white shadow-md rounded-lg max-w-lg w-full">
             {/* Chatbox content */}
             {/* Use chatMessages state to render chat messages */}
