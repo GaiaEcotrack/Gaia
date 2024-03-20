@@ -1,17 +1,11 @@
-# from marshmallow import Schema, fields
-# from datetime import datetime
-# from src.models.user import UserSchema
-
-# class TransactionSchema(Schema):
-#     transaction_date = fields.DateTime(required=True, default=datetime.utcnow)
-#     amount_usdt = fields.Float(required=True)
-#     amount_vara = fields.Float(required=True)
-#     was_successful = fields.Boolean(required=True)
-
-#     # Relación con el usuario 
-#     user = fields.Nested(UserSchema, required=True)
+from marshmallow import Schema, fields
 
 
-# transaction_schema = TransactionSchema()
-# transactions_schema = TransactionSchema(many=True)
+class TransactionSchema(Schema):
+    sender_user_id = fields.String(required=True, load_only=True)  # ID del usuario que envía; solo carga, no se devuelve en la serialización
+    receiver_user_id = fields.String(required=True, load_only=True)  # ID del usuario receptor; solo carga, no se devuelve en la serialización
+    vara_amount = fields.Float(required=True)  # La cantidad de varas/tokens transferidos
+    transaction_type = fields.String(required=True, validate=lambda x: x in ['buy', 'sell'])  # Solo se aceptan valores válidos
+    status = fields.String(required=True, validate=lambda x: x in ['pending', 'completed', 'cancelled'])  # Estado de la transacción
+    date = fields.DateTime(required=True)  # Fecha y hora de la transacción
 
