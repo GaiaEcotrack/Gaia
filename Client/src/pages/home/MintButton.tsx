@@ -379,18 +379,18 @@ function Mint() {
     await setMainContractVoucher();
   };
 
-  const calculateGas = async (payload: any) => {
-    const gas = await api.program.calculateGas.handle(
-      account?.decodedAddress ?? "0x00",
-      programIDFT,
-      { payload: null },
-      0,
-      true,
-      metadata
-    );
-    const gasTotal = gasToSpend(gas);
-    return gasTotal;
-  };
+  const create = async () => {
+    const { keyring, json } = await GearKeyring.create('keyringName', 'passphrase');
+    const json2 = GearKeyring.toJson(keyring, 'passphrase');
+    console.log(keyring);
+    console.log(json);
+    console.log(json2);
+    
+        
+  }
+
+  console.log(create());
+  
 
   return (
     <div>
