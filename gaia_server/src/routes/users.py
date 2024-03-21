@@ -125,7 +125,12 @@ def add_user():
         'verified_2fa': verified_2fa,
         'status_documents': status_documents,
         'photo_profile': photo_profile,
-        'wallet': wallet      
+        'wallet': {
+        'gaia_token_balance': 0,
+        'transactions': [],
+        'vara_balance': 0,
+        'willing_to_sell_excess': False
+        }     
     }
 
     result = collection.insert_one(new_user)
