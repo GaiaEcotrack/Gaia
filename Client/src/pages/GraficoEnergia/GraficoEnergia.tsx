@@ -47,6 +47,8 @@ import CardEnergy from "@/components/CardsEnergy/CardEnergy";
 import CardConsume from "@/components/CardsEnergy/CardConsume";
 import CardGenerated from "@/components/CardsEnergy/CardGenerated";
 import useVoucherUtils from "../home/VouchersUtils";
+//api timezone
+import { fetchTimeZoneInfo, TimeZoneApiResponse } from "./FetchTimeZone";
 
 ChartJS.register(
   ArcElement,
@@ -965,62 +967,95 @@ const GraficoEnergia = () => {
     };
   };
 
-  //! Medidor de intensidad de enrgia: esta tomando la data de la engeriga generada 
-  const getGaugeOption = () => {
-    const lastValue = totalGenerado; // Usa el estado totalGenerado como último valor
-    const percentage = lastValue / 18000;
+  const [timeZoneData, setTimeZoneData] = useState<TimeZoneApiResponse | null>(null);
 
+  useEffect(() => {
+    fetchTimeZoneInfo("Europe/Berlin").then((data) => {
+      if (data) {
+        setTimeZoneData(data);
+        // console.log(data);
+      }
+    });
+  }, []);
+  
+  const getCurrentHour = (datetime) => {
+    console.log(datetime);
+    
+    if (!datetime) return 0;
+    const berlinTime = new Date(datetime); // Hora actual en Berlín
+    const hours = berlinTime.getHours(); // Obtenemos la hora local
+    
+    return hours; // Retornamos la hora actual en formato local
+  };
+  
+  const getGaugeOption = () => {
+    const gaugeValue = timeZoneData ? getCurrentHour(timeZoneData.datetime) : 0;
+    let color;
+    let energyStatus;
+  
+    if (gaugeValue >= 6 && gaugeValue < 10) {
+      color = '#FFFF00'; // Amarillo para intensidad media
+      energyStatus = 'Moderate energy generation';
+    } else if (gaugeValue >= 10 && gaugeValue < 16) {
+      color = '#00FF00'; // Verde para intensidad alta
+      energyStatus = 'High intensity energy generation';
+    } else {
+      color = '#FF0000'; // Rojo para intensidad nula
+      energyStatus = 'No energy generation';
+    }
+  
     return {
       tooltip: {
         formatter: "{a} <br/>{b}: {c}%",
       },
       series: [
         {
-          name: "Usage",
+          name: energyStatus, // Cambia el nombre según el estado de energía
           type: "gauge",
-          detail: {
-            color: "#FFFFFF",
-            formatter: (value: number) => `${value.toFixed(0)}kWh`,
-            offsetCenter: [0, "80%"],
-            fontSize: 14,
-          },
-          data: [{ value: lastValue }],
+          startAngle: 180, // Inicia desde la izquierda, creando un semi-círculo hacia la derecha
+          endAngle: 0, // Termina en la derecha
           min: 0,
-          max: 18000,
-          splitNumber: 6,
+          max: 12, // Máximo ajustado a 12 para las horas AM/PM
+          splitNumber: 12, // 12 divisiones principales para las horas
           axisLine: {
             lineStyle: {
               color: [
-                [percentage, "#58E2C2"],
-                [1, "#48506E"],
+                [0.5, "#FF0000"], // Rojo, de 0 a 6 (medianoche a 6 AM)
+                [0.8333, "#FFFF00"], // Amarillo, de 6 a 10 (6 AM a 10 AM)
+                [1, "#00FF00"], // Verde, de 10 a 12 (10 AM a mediodía)
               ],
-              width: 30,
+              // color: [
+              //   [0.33, "#FF0000"], // Rojo, de 0 a 6 (medianoche a 6 AM)
+              //   [0.66, "#FFFF00"], // Amarillo, de 6 a 10 (6 AM a 10 AM)
+              //   [1, "#00FF00"], // Verde, de 10 a 12 (10 AM a mediodía)
+              // ],
+              width: 20,
             },
-          },
-          axisTick: {
-            // Puntos de referencia (ticks)
-            show: true,
-            lineStyle: {
-              color: "#FFFFFF", // Color de los ticks
-              width: 1, // Grosor de los ticks
-            },
-            length: -5, // Longitud de los ticks
-          },
-          axisLabel: {
-            // Etiquetas de los números alrededor del gauge
-            color: "#FFFFFF",
-            distance: 25,
-            fontSize: 11,
           },
           pointer: {
+            show: true, // Asegúrate de que la aguja esté configurada para mostrarse
             itemStyle: {
-              color: "auto",
+              color: color, // Establecemos el color dinámicamente
+            },
+            width: 5,
+            length: "70%", // Longitud de la aguja
+          },
+          detail: {
+            show: true, // Mostrar el detalle
+            formatter: `{value} - ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Berlin' })}`, // Formatear la hora actual de Berlín
+            offsetCenter: [0, '50%'], 
+            color: color,// Colocar el detalle al lado de la aguja
+            textStyle: {
+              fontSize: 14,
             },
           },
+          data: [{ value: gaugeValue }], // Configura este valor dinámicamente según la necesidad
         },
       ],
     };
-  };
+};
+
+  
 
   // interfaz para los datos de las plantas
 interface PlantData {
@@ -1270,6 +1305,16 @@ interface PlantData {
           {/* Usage Estimate */}
           <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
             <h2 className="text-xl mb-2 text-white">Energy Intensity</h2>
+            <div className="text-white mb-4">
+        {timeZoneData ? (
+          <>
+            <p>Time Zone: {timeZoneData.timezone} ({timeZoneData.abbreviation})</p>
+            {/* <p>Current Time: {timeZoneData.datetime}</p> */}
+          </>
+        ) : (
+          <p>Loading timezone data...</p>
+        )}
+      </div>
             <ReactECharts
               option={getGaugeOption()}
               style={{ height: "300px" }}
