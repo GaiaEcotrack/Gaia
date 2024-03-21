@@ -130,7 +130,7 @@ def add_user():
         'transactions': [],
         'vara_balance': 0,
         'willing_to_sell_excess': False
-        }     
+        }
     }
 
     result = collection.insert_one(new_user)
