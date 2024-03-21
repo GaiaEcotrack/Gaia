@@ -3,13 +3,22 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
-import { ProgramMetadata } from "@gear-js/api";
+import { GasInfo, ProgramMetadata } from "@gear-js/api";
+import useVoucherUtils from "@/pages/home/VouchersUtils";
 
 function DeviceRegister() {
+  const {
+    createNewVoucher,
+    voucherExpired,
+    renewVoucherOneHour,
+    voucherExists,
+    accountVoucherId,
+    addTwoTokensToVoucher
+  } = useVoucherUtils();
 
-  const URL = import.meta.env.VITE_APP_API_URL
-  const [foundUserId, setFoundUserId] = useState('');
-  const [isLoadingUser, setIsLoadingUser] = useState(true)
+  const URL = import.meta.env.VITE_APP_API_URL;
+  const [foundUserId, setFoundUserId] = useState("");
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -20,31 +29,30 @@ function DeviceRegister() {
     didOpen: (toast) => {
       toast.onmouseenter = Swal.stopTimer;
       toast.onmouseleave = Swal.resumeTimer;
-    }
+    },
   });
-
 
   const [formData, setFormData] = useState({
     user_id: localStorage.getItem("id"),
     plant: {
-        plantId: "",
-        plantName: "",
-        plantTimezone: "",
-        description: ""
+      plantId: "",
+      plantName: "",
+      plantTimezone: "",
+      description: "",
     },
     device: {
-        deviceId: "",
-        deviceName: "",
-        deviceTimezone: "",
-				serial: "",
-        image: ""
+      deviceId: "",
+      deviceName: "",
+      deviceTimezone: "",
+      serial: "",
+      image: "",
     },
     sets: [""],
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-  
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       device: {
@@ -53,94 +61,166 @@ function DeviceRegister() {
       },
     }));
   };
-  
 
-//VARA////////
-const alert = useAlert();
-const { accounts, account } = useAccount();
-const { api } = useApi();
-const programIDFT = "0x633d0f014702f15973932d129e12f5c144124de630125239c764694a143c6a28"
+  //VARA////////
+  const alert = useAlert();
+  const { accounts, account } = useAccount();
+  const { api } = useApi();
+  const programIDFT = import.meta.env.VITE_APP_MAIN_CONTRACT_ID;
 
-
-// Add your metadata.txt
-const meta = "000200010000000000010400000001090000000000000000010a0000005d0e3c000808696f18496e69744654000004013466745f70726f6772616d5f696404011c4163746f72496400000410106773746418636f6d6d6f6e287072696d6974697665731c4163746f724964000004000801205b75383b2033325d000008000003200000000c000c0000050300100808696f48416374696f6e4761696145636f747261636b000114304e657747656e657261746f72080004011c4163746f724964000014012447656e657261746f720000003847656e6572617465456e6572677904001801107531323800010028476574526577617264730400180110753132380002002c5472616e736665727265640c0004011c4163746f724964000004011c4163746f724964000018011075313238000300244e657744657669636508001c0118537472696e67000020012c44657669636573496e666f00040000140808696f2447656e657261746f72000014010869641801107531323800011877616c6c657404011c4163746f72496400013c746f74616c5f67656e65726174656418011075313238000138617665726167655f656e657267791801107531323800011c726577617264731801107531323800001800000507001c0000050200200808696f2c44657669636573496e666f00001001086964180110753132380001106e616d651c0118537472696e6700012c747970655f656e657267791c0118537472696e6700011873657269616c1c0118537472696e670000240808696f484576656e74734761696145636f747261636b00011428526567697374657265640000002447656e657261746564000100405265776172647347656e65726174656400020044546f6b656e735472616e736665727265640c011066726f6d04011c4163746f724964000108746f04011c4163746f724964000118616d6f756e741801107531323800030038446576696365526567697374657204001c0118537472696e6700040000280808696f38496f4761696145636f747261636b0000140158746f74616c5f656e657267795f67656e6572617465641801107531323800012c746f74616c5f757365727318011075313238000140746f74616c5f67656e657261746f72731801107531323800012867656e657261746f72732c01645665633c284163746f7249642c2047656e657261746f72293e00011c646576696365733401685665633c28537472696e672c2044657669636573496e666f293e00002c0000023000300000040804140034000002380038000004081c2000"
-const metadata = ProgramMetadata.from(meta);
-
-const message: any = {
-  destination: programIDFT, // programId
-  payload: { newDevice:[formData.user_id,{"id":formData.device.deviceId, "name":formData.device.deviceName, "typeEnergy":formData.device.deviceName,"serial":formData.device.serial},]},
-  gasLimit: 9999819245,
-  value: 0,
-};
+  // Add your metadata.txt
+  const meta = import.meta.env.VITE_APP_MAIN_CONTRACT_METADATA;
+  const metadata = ProgramMetadata.from(meta);
 
 
-async function signerTwo(){
-  const localaccount = account?.address;
-  const isVisibleAccount = accounts?.some(
-    (visibleAccount) => visibleAccount.address === localaccount
-  );
 
-  if (isVisibleAccount && api) {
-    // Create a message extrinsic
-    const transferExtrinsic = await api.message.send(message, metadata);
 
-    const injector = await web3FromSource(accounts?.[0]?.meta.source || 'unknown');
+  const gasToSpend = (gasInfo: GasInfo): bigint => {
+    const gasHuman = gasInfo.toHuman();
+    const minLimit = gasHuman.min_limit?.toString() ?? "0";
+    const parsedGas = Number(minLimit.replaceAll(",", ""));
+    const gasPlusTenPorcent = Math.round(parsedGas + parsedGas * 0.1);
+    const gasLimit: bigint = BigInt(gasPlusTenPorcent);
+    return gasLimit;
+  };
 
-    transferExtrinsic
-      .signAndSend(
-        account?.address ?? alert.error("No account"),
-        { signer: injector.signer },
-        ({ status }: { status: any }) => {
-          if (status.isInBlock) {
-            alert.success(status.asInBlock.toString());
-          } else {
-              alert.info("In process")
-            if (status.type === "Finalized") {
-              alert.success(status.type);
+  const claimVoucher = async (voucherId: string) => {
+    if (!account || !api || !accounts) return;
+
+    const localaccount = account?.address;
+    const isVisibleAccount = accounts.some(
+      (visibleAccount) => visibleAccount.address === localaccount
+    );
+
+    if (isVisibleAccount) {
+      const { signer } = await web3FromSource(account.meta.source);
+      const gas = await api.program.calculateGas.handle(
+        account?.decodedAddress ?? "0x00",
+        programIDFT,
+        { newDevice: null },
+        0,
+        true,
+        metadata
+      );
+      const transferExtrinsic = api.message.send(
+        {
+          destination: programIDFT, // programId
+          payload: {
+            newDevice: [
+              formData.user_id,
+              {
+                id: formData.device.deviceId,
+                name: formData.device.deviceName,
+                typeEnergy: formData.device.deviceName,
+                serial: formData.device.serial,
+              },
+            ],
+          },
+          gasLimit: gasToSpend(gas),
+          value: 0,
+        },
+        metadata
+      );
+      const voucherTx = api.voucher.call(voucherId, {
+        SendMessage: transferExtrinsic,
+      });
+
+      try {
+        await voucherTx.signAndSend(
+          account?.decodedAddress,
+          { signer },
+          ({ status, events }) => {
+            if (status.isInBlock) {
+              alert.success(`Transaction completed`);
+            } else {
+              console.log(`status: ${status.type}`);
+              if (status.type === "Finalized") {
+                alert.success(status.type);
+              }
             }
           }
+        );
+      } catch (error: any) {
+        console.log(" transaction failed", error);
+        const errorString = await error.toString()
+        const feesError = await  errorString.includes("Inability to pay some fees , e.g. account balance too low")
+  
+        if(feesError === true){
+            await addTwoTokensToVoucher(voucherId)
+            console.log("actualizado");      
         }
-      )
-      .catch((error: any) => {
-        console.log(error);
         
-      });
-  } else {
-    alert.error("Account not available to sign");
-  }
-};
+        alert.info("Retry your transaction")
+      }
+    } else {
+      alert.error("Account not available to sign");
+    }
+  };
 
+  const createVoucher = async () => {
+    if (!api || !account) return;
+
+    if (await voucherExists()) {
+      console.log("Voucher already exists");
+
+      const voucherId = await accountVoucherId();
+
+      if (await voucherExpired(voucherId)) {
+        console.log("Voucher expired");
+        await renewVoucherOneHour(voucherId);
+      }
+
+      await claimVoucher(voucherId);
+
+      return;
+    }
+
+    console.log("Voucher does not exists");
+
+    try {
+      const voucherId = await createNewVoucher();
+      await claimVoucher(voucherId);
+    } catch (error) {
+      console.log("Error creating voucher");
+    }
+  };
+
+  const signerVou = async () => {
+    console.log("signer");
+    if (!account || !accounts || !api) return;
+    await createVoucher();
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     // console.log('Datos del formulario a enviar:', formData);
-  
+
     try {
-      const userId = localStorage.getItem('id');
-  
+      const userId = localStorage.getItem("id");
+
       let apiUrl = `${URL}/devices/`;
-      let httpMethod = 'POST';
-  
+      let httpMethod = "POST";
+
       const response = await fetch(apiUrl, {
         method: httpMethod,
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
-  
+
       if (response.ok) {
         Toast.fire({
           icon: "success",
-          title: "Device added successfully"
+          title: "Device added successfully",
         });
-        signerTwo()
-  
+        signerVou();
+
         if (!userId) {
           Toast.fire({
             icon: "error",
-            title: "Something went wrong"
+            title: "Something went wrong",
           });
         }
 
@@ -148,139 +228,154 @@ async function signerTwo(){
 
         if (hasFileInputs) {
           await handleSubmitBucket(e);
-        } 
-
+        }
       } else {
         Toast.fire({
           icon: "error",
-          title: "Something went wrong"
+          title: "Something went wrong",
         });
       }
     } catch (error) {
-      console.error('Error de red:', error);
+      console.error("Error de red:", error);
     }
   };
 
-   //* codigo para subir archivos al bucket
+  //* codigo para subir archivos al bucket
 
-   const [selectedFiles, setSelectedFiles] = useState({});
+  const [selectedFiles, setSelectedFiles] = useState({});
 
-   //* nueva funcion
-   const handleInputChangeBucket = (event: React.ChangeEvent<HTMLInputElement>) => {
-     const { name, value, type, files } = event.target;
-   
-     if (type === 'file') {
-     // Actualiza el estado con el archivo seleccionado, usando el nombre del input como clave
-       setSelectedFiles(prevFiles => ({
-         ...prevFiles,
-         [name]: files && files.length > 0 ? files[0] : null, // Asume que solo se selecciona un archivo por input
-       }));
-     } else {
-       // Para otros tipos de inputs, actualiza el estado formData
-       setFormData(prevFormData => ({
-         ...prevFormData,
-         [name]: value,
-       }));
-     }
-   };
-   
-   // obtener le id del usiario del lcoalstorage luego de cargar
-   useEffect(() => {
-     const userId = localStorage.getItem('id');
-     
-     if (userId) {
-       setFoundUserId(userId);
-     }
-     setIsLoadingUser(false);
-   }, []);
-   async function handleSubmitBucket(e:any) {
-     e.preventDefault();
- 
-     if (isLoadingUser) {
-       console.error('El ID del usuario aún se está cargando');
-       (window as any).alert('Por favor, espera a que se cargue el ID del usuario.');
-       return;
-     }
- 
-     if (!foundUserId) {
-       console.error('No se encontró el ID del usuario');
-       (window as any).alert('No se encontró el ID del usuario. Por favor, inténtalo de nuevo.');
-       return;
-     }
-   
-     let allFilesUploaded = true;
-   
-     // Itera sobre cada archivo seleccionado y envíalo
-     for (const [inputName, file] of Object.entries(selectedFiles)) {
-       if (file) {
-         if (!(file instanceof Blob)) {
-           console.error(`El archivo de ${inputName} no es un Blob válido.`);
-           continue;
-         }
-         const formData = new FormData();
-         formData.append('file', file);
-   
-         const uploadUrl = `${URL}/upload_image`;
- 
-         try {
-           const uploadResponse = await fetch(uploadUrl, {
-             method: 'POST',
-             body: formData,
-           });
-   
-           if (!uploadResponse.ok) {
-             throw new Error(`No se pudo cargar el archivo de ${inputName}`);
-           }
-   
-           const uploadData = await uploadResponse.json();
-           console.log("URL a enviar:", uploadData.url);
-           console.log(`Archivo de ${inputName} cargado con éxito:`, uploadData);
-   
-           // Envío la URL del archivo subido al backend para guardarla
-           const tipoArchivo = inputName; 
-           try {
-             const saveUrlResponse = await fetch(`${URL}/users/save_url`, {
-               method: 'POST',
-               headers: {
-                 'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({
-                 user_id: foundUserId,
-                 url: uploadData.url, 
-                 tipo_archivo: tipoArchivo, 
-               }),
-             });
-   
-             if (!saveUrlResponse.ok) {
-               throw new Error(`Error al guardar la URL del archivo ${tipoArchivo} en la base de datos`);
-             }
-   
-             console.log(`URL del archivo ${tipoArchivo} guardada con éxito en la base de datos`);
-           } catch (error) {
-             console.error(`Error al guardar la URL del archivo ${tipoArchivo} en la base de datos:`, error);
-             (window as any).alert(`Error al guardar la URL del archivo ${tipoArchivo}. Por favor, inténtalo de nuevo.`);
-             allFilesUploaded = false;
-             break; 
-           }
-         } catch (error) {
-           console.error(`Error al cargar el archivo de ${inputName}:`, error);
-           (window as any).alert(`Error al cargar el archivo de ${inputName}. Por favor, inténtalo de nuevo.`);
-           allFilesUploaded = false;
-           break; 
-         }
-       }
-     }
-   
-     if (allFilesUploaded) {
-       Toast.fire({
-         icon: "success",
-         title: "Files saved successfully"
-       });
-     }
-   }
-   // fin codigo del bucket
+  //* nueva funcion
+  const handleInputChangeBucket = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value, type, files } = event.target;
 
-  
+    if (type === "file") {
+      // Actualiza el estado con el archivo seleccionado, usando el nombre del input como clave
+      setSelectedFiles((prevFiles) => ({
+        ...prevFiles,
+        [name]: files && files.length > 0 ? files[0] : null, // Asume que solo se selecciona un archivo por input
+      }));
+    } else {
+      // Para otros tipos de inputs, actualiza el estado formData
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
+  };
+
+  // obtener le id del usiario del lcoalstorage luego de cargar
+  useEffect(() => {
+    const userId = localStorage.getItem("id");
+
+    if (userId) {
+      setFoundUserId(userId);
+    }
+    setIsLoadingUser(false);
+  }, []);
+  async function handleSubmitBucket(e: any) {
+    e.preventDefault();
+
+    if (isLoadingUser) {
+      console.error("El ID del usuario aún se está cargando");
+      (window as any).alert(
+        "Por favor, espera a que se cargue el ID del usuario."
+      );
+      return;
+    }
+
+    if (!foundUserId) {
+      console.error("No se encontró el ID del usuario");
+      (window as any).alert(
+        "No se encontró el ID del usuario. Por favor, inténtalo de nuevo."
+      );
+      return;
+    }
+
+    let allFilesUploaded = true;
+
+    // Itera sobre cada archivo seleccionado y envíalo
+    for (const [inputName, file] of Object.entries(selectedFiles)) {
+      if (file) {
+        if (!(file instanceof Blob)) {
+          console.error(`El archivo de ${inputName} no es un Blob válido.`);
+          continue;
+        }
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const uploadUrl = `${URL}/upload_image`;
+
+        try {
+          const uploadResponse = await fetch(uploadUrl, {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!uploadResponse.ok) {
+            throw new Error(`No se pudo cargar el archivo de ${inputName}`);
+          }
+
+          const uploadData = await uploadResponse.json();
+          console.log("URL a enviar:", uploadData.url);
+          console.log(`Archivo de ${inputName} cargado con éxito:`, uploadData);
+
+          // Envío la URL del archivo subido al backend para guardarla
+          const tipoArchivo = inputName;
+          try {
+            const saveUrlResponse = await fetch(`${URL}/users/save_url`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user_id: foundUserId,
+                url: uploadData.url,
+                tipo_archivo: tipoArchivo,
+              }),
+            });
+
+            if (!saveUrlResponse.ok) {
+              throw new Error(
+                `Error al guardar la URL del archivo ${tipoArchivo} en la base de datos`
+              );
+            }
+
+            console.log(
+              `URL del archivo ${tipoArchivo} guardada con éxito en la base de datos`
+            );
+          } catch (error) {
+            console.error(
+              `Error al guardar la URL del archivo ${tipoArchivo} en la base de datos:`,
+              error
+            );
+            (window as any).alert(
+              `Error al guardar la URL del archivo ${tipoArchivo}. Por favor, inténtalo de nuevo.`
+            );
+            allFilesUploaded = false;
+            break;
+          }
+        } catch (error) {
+          console.error(`Error al cargar el archivo de ${inputName}:`, error);
+          (window as any).alert(
+            `Error al cargar el archivo de ${inputName}. Por favor, inténtalo de nuevo.`
+          );
+          allFilesUploaded = false;
+          break;
+        }
+      }
+    }
+
+    if (allFilesUploaded) {
+      Toast.fire({
+        icon: "success",
+        title: "Files saved successfully",
+      });
+    }
+  }
+  // fin codigo del bucket
+
   return (
     <div className=" w-full bg-white flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black">
       {/* Aside */}
@@ -318,7 +413,6 @@ async function signerTwo(){
             </h1>
           </Link>
 
-
           <Link to="/notifications">
             <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Notifications
@@ -326,9 +420,9 @@ async function signerTwo(){
           </Link>
 
           {/* <Link to="/account"> */}
-            <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
-              PRO Account
-            </h1>
+          <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+            PRO Account
+          </h1>
           {/* </Link> */}
         </div>
       </aside>
@@ -336,7 +430,6 @@ async function signerTwo(){
       {/* Main */}
       <main className="flex justify-start items-start min-h-screen py-1 w-[100%] p-2 md:p-4">
         <div className="px-6 pb-8 mt-8 sm:rounded-lg w-full">
-
           <h2 className="flex justify-center md:justify-start text-2xl font-bold sm:text-xl pt-4 mb-8">
             NEW DEVICE
           </h2>
@@ -344,13 +437,17 @@ async function signerTwo(){
           {/* Formulario de perfil público */}
 
           <div className="">
-            <form className="grid sm:grid-cols-2 gap-x-14" action="" onSubmit={handleSubmit}>
+            <form
+              className="grid sm:grid-cols-2 gap-x-14"
+              action=""
+              onSubmit={handleSubmit}
+            >
               <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="deviceId"
                   className="block mb-2 text-sm font-bold dark:text-black"
                 >
-                  Device Id 
+                  Device Id
                 </label>
                 <input
                   onChange={handleInputChange}
@@ -358,7 +455,7 @@ async function signerTwo(){
                   type="number"
                   id="deviceId"
                   className="bg-indigo-50 border outline-none border-indigo-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
-                  placeholder="Device Id"                  
+                  placeholder="Device Id"
                   required
                 />
               </div>
@@ -376,7 +473,7 @@ async function signerTwo(){
                   type="text"
                   id="deviceName"
                   className="bg-indigo-50 border outline-none border-indigo-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
-                  placeholder="Device Name"                  
+                  placeholder="Device Name"
                   required
                 />
               </div>
@@ -397,7 +494,7 @@ async function signerTwo(){
                   placeholder="Serial Number"
                   required
                 />
-              </div>             
+              </div>
 
               <div className="mb-2 sm:mb-6">
                 <label
@@ -412,7 +509,7 @@ async function signerTwo(){
                   type="file"
                   accept="image/jpeg, image/png"
                   id="image"
-                  className="bg-indigo-50 border border-indigo-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
+                  className="bg-indigo-50 border border-indigo-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   // required
                 />
               </div>
@@ -424,12 +521,11 @@ async function signerTwo(){
                 >
                   Save
                 </button>
-              </div> 
+              </div>
             </form>
           </div>
         </div>
       </main>
-
     </div>
   );
 }

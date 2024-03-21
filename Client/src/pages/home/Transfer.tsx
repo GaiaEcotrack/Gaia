@@ -1,8 +1,9 @@
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
-import { decodeAddress, ProgramMetadata} from "@gear-js/api";
+import { decodeAddress, GasInfo, ProgramMetadata} from "@gear-js/api";
 import { web3FromSource } from "@polkadot/extension-dapp";
 import { useState } from "react";
 import { AlertsTransaction } from "../../components/AlertModal/AlertsTransaction";
+import useVoucherUtils from "./VouchersUtils";
 
 interface ModalTypes {
   accountTo: string,
@@ -18,6 +19,14 @@ interface ModalTypes {
  }
 
 function Transfer({accountTo, quantity,state}:ModalTypes) {
+  const {
+    createNewVoucher,
+    voucherExpired,
+    renewVoucherOneHour,
+    voucherExists,
+    accountVoucherId,
+    addTwoTokensToVoucher
+  } = useVoucherUtils();
 
   const [alertTransaction, setAlertTransaction] = useState(false)
 
@@ -52,82 +61,125 @@ function Transfer({accountTo, quantity,state}:ModalTypes) {
 
    const addresLocal = account!.address
 
-  const message: any = {
-    destination: programIdKey, // programId
-    payload: {
-      transferred: [
-        decodeAddress(addresLocal),
-        decodeAddress(accountTo),
-        quantity,
-      ],
-    },
-    gasLimit: 9999819245,
-    value: 0,
-  };
 
-  async function signer(){
-    pushData()
-    const localaccount = account?.address;
-    const isVisibleAccount = accounts?.some(
-      (visibleAccount) => visibleAccount.address === localaccount
-    );
 
-    if (isVisibleAccount && api) {
-      // Create a message extrinsic
-      const transferExtrinsic = await api.message.send(message, metadata);
-
-      const injector = await web3FromSource(accounts?.[0]?.meta.source || 'unknown');
-
-      transferExtrinsic
-        .signAndSend(
-          account?.address ?? alert.error("No account"),
-          { signer: injector.signer },
-          ({ status }: { status: any }) => {
-            if (status.isInBlock) {
-              alert.success(status.asInBlock.toString());
-            } else {
-                alert.info("In process")
-              if (status.type === "Finalized") {
-                alert.success(status.type);
-              }
-            }
-          }
-        )
-        .catch((error: any) => {
-          alert.error(error.toString());
-        });
-    } else {
-      alert.error("Account not available to sign");
-    }
+const gasToSpend = (gasInfo: GasInfo): bigint => {
+  const gasHuman = gasInfo.toHuman();
+  const minLimit = gasHuman.min_limit?.toString() ?? "0";
+  const parsedGas = Number(minLimit.replaceAll(",", ""));
+  const gasPlusTenPorcent = Math.round(parsedGas + parsedGas * 0.1);
+  const gasLimit: bigint = BigInt(gasPlusTenPorcent);
+  return gasLimit;
 };
 
-  // const signer = async () => {
-  //   pushData()
-  //   const localaccount = account?.address;
-  //   const isVisibleAccount = accounts.some(
-  //     (visibleAccount) => visibleAccount.address === localaccount
-  //   );
+const claimVoucher = async (voucherId: string) => {
+  if (!account || !api || !accounts) return;
 
-  //   if (isVisibleAccount) {
-  //     // Create a message extrinsic
-  //     const transferExtrinsic = await api.message.send(message, metadata);
-  //     // const mnemonic = 'hub next valid globe toddler robust click demise silent pottery inside brass';
-  //     const keyring = await GearKeyring.fromSuri('//Alice');
-  
-  //     await transferExtrinsic.signAndSend(keyring,(event:any)=>{
-  //         console.log(event.toHuman());
-  //         setAlertTransaction(true)
-          
-  //     })
-  //   } else {
-  //     alert.error("Account not available to sign");
-  //   }
-  // };
+  const localaccount = account?.address;
+  const isVisibleAccount = accounts.some(
+    (visibleAccount) => visibleAccount.address === localaccount
+  );
+
+  if (isVisibleAccount) {
+    const { signer } = await web3FromSource(account.meta.source);
+    const gas = await api.program.calculateGas.handle(
+      account?.decodedAddress ?? "0x00",
+      programIdKey,
+      { transferred: null },
+      0,
+      true,
+      metadata
+    );
+    const transferExtrinsic = api.message.send(
+      {
+        destination: programIdKey, // programId
+        payload:{
+          transferred: [
+            decodeAddress(addresLocal),
+            decodeAddress(accountTo),
+            quantity,
+          ],
+        },
+        gasLimit: gasToSpend(gas),
+        value: 0,
+      },
+      metadata
+    );
+    const voucherTx = api.voucher.call(voucherId, {
+      SendMessage: transferExtrinsic,
+    });
+
+    try {
+      await voucherTx.signAndSend(
+        account?.decodedAddress,
+        { signer },
+        ({ status, events }) => {
+          if (status.isInBlock) {
+            alert.success(`Transaction completed`);
+          } else {
+            console.log(`status: ${status.type}`);
+            if (status.type === "Finalized") {
+              alert.success(status.type);
+            }
+          }
+        }
+      );
+    } catch (error: any) {
+      console.log(" transaction failed", error);
+      const errorString = await error.toString()
+      const feesError = await  errorString.includes("Inability to pay some fees , e.g. account balance too low")
+
+      if(feesError === true){
+          await addTwoTokensToVoucher(voucherId)
+          console.log("actualizado");      
+      }
+      
+      alert.info("Retry your transaction")
+    }
+  } else {
+    alert.error("Account not available to sign");
+  }
+};
+
+const createVoucher = async () => {
+  if (!api || !account) return;
+
+  if (await voucherExists()) {
+    console.log("Voucher already exists");
+
+    const voucherId = await accountVoucherId();
+
+    if (await voucherExpired(voucherId)) {
+      console.log("Voucher expired");
+      await renewVoucherOneHour(voucherId);
+    }
+
+    await claimVoucher(voucherId);
+
+    return;
+  }
+
+  console.log("Voucher does not exists");
+
+  try {
+    const voucherId = await createNewVoucher();
+    await claimVoucher(voucherId);
+  } catch (error) {
+    console.log("Error creating voucher");
+  }
+};
+
+const signerVou = async () => {
+  console.log("signer");
+  if (!account || !accounts || !api) return;
+  await createVoucher();
+};
+
 
   return (
     <div>
     <button
-    onClick={signer}
+    onClick={signerVou}
     type="submit"
     className="bg-secondary text-white px-4 py-2 rounded-md mb-5"
   >
