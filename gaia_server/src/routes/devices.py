@@ -335,21 +335,13 @@ def get_device_by_id(device_id):
 def add_device_to_user():
     try:
         user_id = request.json['user_id']
-        device_data = request.json['device']
-        plant_data = request.json['plant']        
-        sets_data = request.json['sets']  
+        device_data = request.json['device'] 
         
         device_id = ObjectId()
         
         device_object = {
             '_id': device_id,
             'user_id': user_id,
-            'plant': {
-                'plantId': plant_data.get('plantId'),
-                'plantName': plant_data.get('plantName'),
-                'plantTimezone': plant_data.get('plantTimezone'),
-                'description': plant_data.get('description')
-            },
             'device': {
                 'deviceId': device_data.get('deviceId'),
                 'deviceName': device_data.get('deviceName'),
@@ -357,7 +349,6 @@ def add_device_to_user():
                 'serial': device_data.get('serial'),
                 'image': device_data.get('image')
             },
-            'sets': sets_data
         } 
         
         user_collection = collection
@@ -381,12 +372,6 @@ def add_device_to_user():
       
     # {
     #   "user_id": " ID DEL USUARIO ",
-    #   "plant": {
-    #     "plantId": "plantId_value",
-    #     "plantName": "plantName_value",
-    #     "description": "plantDescription_value",
-    #     "plantTimezone": "plantTimezone_value"
-    #   },
     #   "device": {
     #     "deviceId": "deviceId_value",
     #     "deviceName": "deviceName_value",
@@ -394,7 +379,6 @@ def add_device_to_user():
     #     "serial": "deviceSerial_value",
     #     "image": "deviceImage_value"
     #   },
-    #   "sets": ["set1_value", "set2_value"]
     # }
 #----------------------------------------------------
 
