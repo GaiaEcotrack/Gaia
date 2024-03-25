@@ -6,7 +6,7 @@ export interface TimeZoneApiResponse {
 }
 
 export const fetchTimeZoneInfo = async (timezone:string): Promise<TimeZoneApiResponse | null> => {
-    const url = `http://worldtimeapi.org/api/timezone/${timezone}`;
+    const url = `https://worldtimeapi.org/api/timezone/${timezone}`;
     try {
         const response = await fetch(url);
         const data: TimeZoneApiResponse = await response.json();

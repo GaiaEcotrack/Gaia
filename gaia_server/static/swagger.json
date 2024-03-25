@@ -18,6 +18,9 @@
   "servers": [
     {
       "url": "http://127.0.0.1:5000/"
+    },
+    {
+      "url": "https://server.gaiaecotrack.com/"
     }
   ],
   "components": {
@@ -559,6 +562,81 @@
                     "error": {
                       "type": "string",
                       "example": "Datos del dispositivo no encontrados para el deviceId especificado."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plants/": {
+      "get": {
+        "tags": ["Plants API"],
+        "summary": "Get Plants Data",
+        "description": "Retrieves plant data from the external SMA Monitoring API using an authorization token.",
+        "responses": {
+          "200": {
+            "description": "Plants data retrieved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "plants": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Plants"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized. No se pudo obtener el token de acceso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "No se pudo obtener el token de acceso."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. Problema con la solicitud enviada.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Error en la solicitud."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found. Plant data not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Datos de la planta no encontrados."
                     }
                   }
                 }
