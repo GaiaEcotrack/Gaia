@@ -1,11 +1,5 @@
 from marshmallow import Schema, fields, validate
 
-class PlantSchema(Schema):
-    plantId = fields.String(required=False)
-    plantName = fields.String(required=False)
-    plantTimezone = fields.String(required=False)
-    description = fields.String(required=False)
-
 class DeviceDataSchema(Schema):
     deviceId = fields.String(required=False)
     deviceName = fields.String(required=False)
@@ -14,10 +8,7 @@ class DeviceDataSchema(Schema):
     image = fields.String(allow_none=False)
 
 class DeviceSchema(Schema):
-    user_id = fields.String(required=False, data_key="user_id")
-    plant = fields.Nested(PlantSchema, data_key="plant", required=False)
-    device = fields.Nested(DeviceDataSchema, data_key="device", required=False)
-    sets = fields.List(fields.String(), required=False)
+    device = fields.Nested(DeviceDataSchema, required=False)
 
 
 

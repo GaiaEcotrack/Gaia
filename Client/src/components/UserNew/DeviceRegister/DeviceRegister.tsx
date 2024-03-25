@@ -34,12 +34,6 @@ function DeviceRegister() {
 
   const [formData, setFormData] = useState({
     user_id: localStorage.getItem("id"),
-    plant: {
-      plantId: "",
-      plantName: "",
-      plantTimezone: "",
-      description: "",
-    },
     device: {
       deviceId: "",
       deviceName: "",
@@ -47,7 +41,6 @@ function DeviceRegister() {
       serial: "",
       image: "",
     },
-    sets: [""],
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -324,7 +317,7 @@ function DeviceRegister() {
           // Envío la URL del archivo subido al backend para guardarla
           const tipoArchivo = inputName;
           try {
-            const saveUrlResponse = await fetch(`${URL}/users/save_url`, {
+            const saveUrlResponse = await fetch(`${URL}/users/save_url_device`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
