@@ -125,7 +125,12 @@ def add_user():
         'verified_2fa': verified_2fa,
         'status_documents': status_documents,
         'photo_profile': photo_profile,
-        'wallet': wallet      
+        'wallet': {
+        'gaia_token_balance': 0,
+        'transactions': [],
+        'vara_balance': 0,
+        'willing_to_sell_excess': False
+        }
     }
 
     result = collection.insert_one(new_user)
@@ -246,5 +251,23 @@ def guardar_url():
     else:
         return jsonify({'message': 'Error al guardar la URL del archivo o usuario no encontrado'}), 400   
     
+    
+@users_route.route('/save_url_device', methods=['POST'])
+def guardar_url_device():
+    data = request.json
+    user_id = data.get('user_id')
+    imagen_url = data.get('url')  # Cambia 'url' por el nombre del campo que contiene la URL de la imagen
+    user_id_obj = ObjectId(user_id)
+    result = collection.update_one(
+        {'_id': user_id_obj},
+        {'$set': {'devices.$[element].device.image': imagen_url}},
+        array_filters=[{'element.user_id': user_id}]
+    )
+
+    if result.modified_count > 0:
+        return jsonify({'message': 'URL de la imagen guardada con éxito', 'url': imagen_url}), 200
+    else:
+        return jsonify({'message': 'Error al guardar la URL de la imagen o usuario no encontrado'}), 400  
+
 if __name__ == '__main__':
      application.run(debug=True)

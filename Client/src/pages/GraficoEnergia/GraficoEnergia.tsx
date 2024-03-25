@@ -22,7 +22,12 @@ import { Link, NavLink } from "react-router-dom";
 import { format } from "date-fns";
 // Vara
 import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
-import { decodeAddress, ProgramMetadata, GearKeyring, GasInfo } from "@gear-js/api";
+import {
+  decodeAddress,
+  ProgramMetadata,
+  GearKeyring,
+  GasInfo,
+} from "@gear-js/api";
 import { web3FromSource } from "@polkadot/extension-dapp";
 // Componentes personalizados
 import { ModalMintGaia } from "../../components/ModalMintGaia/ModalMintGaia";
@@ -58,8 +63,6 @@ ChartJS.register(
   CategoryScale,
   LinearScale
 );
-
-
 
 const dataPie: ChartData<"doughnut", number[], string> = {
   labels: ["Wind Energy", "Thermal Energy", "Solar Energy"],
@@ -123,6 +126,7 @@ const GraficoEnergia = () => {
     renewVoucherOneHour,
     voucherExists,
     accountVoucherId,
+    addTwoTokensToVoucher
   } = useVoucherUtils();
   const dispatch = useDispatch();
 
@@ -169,13 +173,12 @@ const GraficoEnergia = () => {
   
 
   const [energyData, setEnergyData] = useState(50);
-//!!!!!!!!!!!!!!!!
+  //!!!!!!!!!!!!!!!!
   useEffect(() => {
     const fetchEnergy = async () => {
       try {
         const auth = getAuth();
         const user = auth.currentUser;
-        console.log(user);
 
         if (!user) {
           throw new Error("User is not authenticated");
@@ -186,21 +189,22 @@ const GraficoEnergia = () => {
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await fetch(
           `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
-          { method: 'GET',
+          {
+            method: "GET",
             headers: {
-              "Authorization": `Bearer ${idToken}`,
+              Authorization: `Bearer ${idToken}`,
               "Content-Type": "application/json",
             },
           }
         );
         const data = await response.json();
-    
+
         if (data.set) {
-          const energy = data.set.map((energ:any) => energ.pvGeneration);
+          const energy = data.set.map((energ: any) => energ.pvGeneration);
           setEnergyBatery(energy);
         } else {
           // Manejar el caso en que data.set es undefined
-          console.error('data.set is undefined', data);
+          console.error("data.set is undefined", data);
         }
       } catch (error) {
         console.error("Error fetching energy data:", error);
@@ -211,28 +215,26 @@ const GraficoEnergia = () => {
       try {
         const auth = getAuth();
         const user = auth.currentUser;
-        
 
         if (!user) {
           throw new Error("User is not authenticated");
         }
 
         const idToken = await user.getIdToken();
-        console.log(idToken);
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
           `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`,
-        //  (`${url}/devices/device-data?deviceId=16`),
-        { method: 'GET',
+          //  (`${url}/devices/device-data?deviceId=16`),
+          {
+            method: "GET",
             headers: {
-              'Authorization': `Bearer ${idToken}`,
+              Authorization: `Bearer ${idToken}`,
               "Content-Type": "application/json",
             },
           }
         );
         const data = response.data.set;
         const pvGeneration = data[0].pvGeneration;
-        console.log(pvGeneration);
         setTotalGenerado(pvGeneration);
         // Determina si la generación está activa basada en el umbral de 0.2
         setGeneracionActiva(pvGeneration > 0.2);
@@ -371,12 +373,11 @@ const GraficoEnergia = () => {
       if (intervalId) clearInterval(intervalId);
     };
   }, [totalGenerado]);
-//////////////////////
+  //////////////////////
   const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
     Math.max(totalGenerado - totalConsumido, 0);
 
   useEffect(() => {
-
     const handleCaptureExcedente = () => {
       if (totalConsumido < totalGenerado) {
         setTotalExcedente(calcularExcedente(totalGenerado, totalConsumido));
@@ -628,7 +629,6 @@ const GraficoEnergia = () => {
         SendMessage: transferExtrinsic,
       });
 
-
       try {
         await voucherTx.signAndSend(
           account?.decodedAddress,
@@ -639,12 +639,10 @@ const GraficoEnergia = () => {
               setTotalExcedente(0);
               setTotalGenerado(0);
               setTotalConsumido(0);
-              console.log(
-                `Completed at block hash #${status.asInBlock.toString()}`
-              );
-              alerta.success(`Block hash #${status.asInBlock.toString()}`);
+
+              alerta.success(`Transaction completed`);
             } else {
-              console.log(`Current status: ${status.type}`);
+              console.log(`status: ${status.type}`);
               if (status.type === "Finalized") {
                 alerta.success(status.type);
               }
@@ -652,7 +650,16 @@ const GraficoEnergia = () => {
           }
         );
       } catch (error: any) {
-        console.log(":( transaction failed", error);
+        console.log(" transaction failed", error);
+        const errorString = await error.toString()
+        const feesError = await  errorString.includes("Inability to pay some fees , e.g. account balance too low")
+  
+        if(feesError === true){
+            await addTwoTokensToVoucher(voucherId)
+            console.log("actualizado");      
+        }
+        
+        alerta.info("Retry your transaction")
       }
     } else {
       alerta.error("Account not available to sign");
@@ -692,13 +699,6 @@ const GraficoEnergia = () => {
     if (!account || !accounts || !api) return;
     await createVoucher();
   };
-
-
-
-
-
-
-
 
   const onClose = () => {
     setAlertWallet(false);
@@ -772,7 +772,7 @@ const GraficoEnergia = () => {
               if (result.isConfirmed) {
                 window.location.href = "/userReg";
               }
-            });      
+            });
           }, 10000);
           return () => clearTimeout(timerId);
         }
@@ -962,6 +962,7 @@ const GraficoEnergia = () => {
 
 
 
+  //! Medidor de intensidad de enrgia: esta tomando la data de la engeriga generada
   const [timeZoneData, setTimeZoneData] = useState<TimeZoneApiResponse | null>(null);
 
   useEffect(() => {
@@ -1061,11 +1062,10 @@ const GraficoEnergia = () => {
   
 
   // interfaz para los datos de las plantas
-interface PlantData {
-  plantId: number;
-  name: string;
-}
-
+  interface PlantData {
+    plantId: number;
+    name: string;
+  }
 
   // ! Grafico para mostrar las plantas.
   useEffect(() => {
@@ -1082,7 +1082,6 @@ interface PlantData {
             }
           );
           setPlantData(transformedData);
-          console.log(transformedData);
         } else {
           console.error("La respuesta no tiene el formato esperado:", response);
         }
@@ -1093,10 +1092,12 @@ interface PlantData {
     fetchData();
   }, []);
 
-  const getBarChartOption = (plantData: number[][]):any => {
+  const getBarChartOption = (plantData: number[][]): any => {
     // Generando colores aleatorios para cada barra
-    const colors = plantData.map(() => '#' + Math.floor(Math.random()*16777215).toString(16));
-  
+    const colors = plantData.map(
+      () => "#" + Math.floor(Math.random() * 16777215).toString(16)
+    );
+
     return {
       tooltip: {
         trigger: "axis",
@@ -1115,8 +1116,8 @@ interface PlantData {
         data: plantData.map((item) => item[2]),
         axisLabel: {
           interval: 0,
-          rotate: 45, 
-          color: '#fff'
+          rotate: 45,
+          color: "#fff",
         },
       },
       yAxis: {
@@ -1148,19 +1149,17 @@ interface PlantData {
       const fetchData = async () => {
         const deviceId = '65fce26c471437c1bf25533c'; // ID del dispositivo
         const url = `${import.meta.env.VITE_APP_API_URL}/devices/${deviceId}`; // Actualiza la URL para incluir el ID del dispositivo
-    
+  
         try {
           const response = await axios.get(url);
-    
+  
           // Asumiendo que deseas usar el objeto "device" de la respuesta
           if (response.data && response.data.device) {
             const deviceData = response.data.device;
             // Transformar los datos para tu uso, por ejemplo:
-            const transformedData = [[
-              deviceData.deviceId, 
-              Math.random() * 100, 
-              deviceData.name 
-            ]];
+            const transformedData = [
+              [deviceData.deviceId, Math.random() * 100, deviceData.name],
+            ];
             setDeviceData(transformedData); // Asumiendo que setDeviceData actualiza el estado con estos datos
             console.log(transformedData);
           } else {
@@ -1170,79 +1169,78 @@ interface PlantData {
           console.error("Error al cargar los datos del dispositivo:", error);
         }
       };
+  
       fetchData();
     }, []);
 
-    const getBarChartOption2 = (deviceData:any) => {
-      // Generando colores aleatorios para cada barra
-      // const colors = deviceData.map((item, index) => index % 2 === 0 ? '#708090' : '#0000FF');
-      const colors = deviceData.map(() => '#58E2C2');
+  const getBarChartOption2 = (deviceData: any) => {
+    // Generando colores aleatorios para cada barra
+    // const colors = deviceData.map((item, index) => index % 2 === 0 ? '#708090' : '#0000FF');
+    const colors = deviceData.map(() => "#58E2C2");
 
-      
-      return {
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "shadow" // Más adecuado para gráficos de barras
-          },
-          formatter: function (params:any) {
-            const dataIndex = params[0].dataIndex;
-            const dataId = deviceData[dataIndex][0]; // Suponiendo que el primer elemento es un identificador único
-            const value = params[0].value.toFixed(2); // Valor numérico, asegurándose de que esté formateado correctamente
-            const timestamp = deviceData[dataIndex][2]; // Suponiendo que el tercer elemento es un timestamp o etiqueta de tiempo
-            return `${timestamp}<br/> Data ID: ${dataId}<br/>Value: ${value}`;
-          },
+    return {
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "shadow", // Más adecuado para gráficos de barras
         },
-        xAxis: {
-          type: "value",
+        formatter: function (params: any) {
+          const dataIndex = params[0].dataIndex;
+          const dataId = deviceData[dataIndex][0]; // Suponiendo que el primer elemento es un identificador único
+          const value = params[0].value.toFixed(2); // Valor numérico, asegurándose de que esté formateado correctamente
+          const timestamp = deviceData[dataIndex][2]; // Suponiendo que el tercer elemento es un timestamp o etiqueta de tiempo
+          return `${timestamp}<br/> Data ID: ${dataId}<br/>Value: ${value}`;
         },
-        yAxis: {
-          type: "category",
-          data: deviceData.map((item:any) => item[2]), // Usando el timestamp o etiqueta de tiempo como etiqueta de categoría
-          axisLabel: {
-            interval: 0,
-            rotate: 45, // Puedes ajustar esto según sea necesario
-            margin: 50,
-            color: '#fff' // Aumenta el margen para mover las etiquetas más abajo si es necesario
-          },
+      },
+      xAxis: {
+        type: "value",
+      },
+      yAxis: {
+        type: "category",
+        data: deviceData.map((item: any) => item[2]), // Usando el timestamp o etiqueta de tiempo como etiqueta de categoría
+        axisLabel: {
+          interval: 0,
+          rotate: 45, // Puedes ajustar esto según sea necesario
+          margin: 50,
+          color: "#fff", // Aumenta el margen para mover las etiquetas más abajo si es necesario
         },
-        series: [
-          {
-            name: "Value",
-            type: "bar", // Cambio de 'line' a 'bar' para crear un gráfico de barras
-            data: deviceData.map((item:any, index:any) => ({
-              value: item[1], // Asegurándose de que el valor esté mapeado correctamente
-              itemStyle: {
-                color: colors[index], // Asignando un color aleatorio a cada barra
-              },
-            })),
-            barWidth: '30%', // Controla el ancho de las barras
-          },
-        ],
-      };
+      },
+      series: [
+        {
+          name: "Value",
+          type: "bar", // Cambio de 'line' a 'bar' para crear un gráfico de barras
+          data: deviceData.map((item: any, index: any) => ({
+            value: item[1], // Asegurándose de que el valor esté mapeado correctamente
+            itemStyle: {
+              color: colors[index], // Asignando un color aleatorio a cada barra
+            },
+          })),
+          barWidth: "30%", // Controla el ancho de las barras
+        },
+      ],
     };
+  };
 
-    //REDUX
-    useEffect(() => {
-      const url = import.meta.env.VITE_APP_API_URL;
-      const auth = getAuth();
-      const user = auth.currentUser?.email;
-      const fetchDataUser = async () => {
-        try {
-          const request = await axios.get(`${url}/users/`);
-          const response = request.data.users;
-          const filter = response.filter(
-            (userLog: any) => userLog.email === user
-          );
-          setUserLog(filter);
-          dispatch({ type: "SET_LOGGED_IN_USER", payload: filter });
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchDataUser();
-    }, []);
-    
+  //REDUX
+  useEffect(() => {
+    const url = import.meta.env.VITE_APP_API_URL;
+    const auth = getAuth();
+    const user = auth.currentUser?.email;
+    const fetchDataUser = async () => {
+      try {
+        const request = await axios.get(`${url}/users/`);
+        const response = request.data.users;
+        const filter = response.filter(
+          (userLog: any) => userLog.email === user
+        );
+        setUserLog(filter);
+        dispatch({ type: "SET_LOGGED_IN_USER", payload: filter });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchDataUser();
+  }, []);
 
   return (
     <div className="mb-12">
