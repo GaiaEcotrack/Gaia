@@ -384,10 +384,11 @@ const GraficoEnergia = () => {
       } else {
         setTotalExcedente(0);
       }
-      const excedente = Math.floor(
-        calcularExcedente(totalGenerado, totalConsumido) * 0.2
-      );
-      setExcedenteCapturado(excedente);
+      const excedente = ()=>{
+        return (totalGenerado * 0.2).toFixed(1)
+      }
+      
+      setExcedenteCapturado((totalGenerado * 0.2).toFixed(1));
     };
 
     handleCaptureExcedente();
@@ -395,73 +396,6 @@ const GraficoEnergia = () => {
     // ... (your existing code)
   }, [totalGenerado, totalConsumido, excedenteCapturado]);
 
-  // const handleCaptureExcedente = () => {
-  //   const excedente = Math.floor(
-  //     calcularExcedente(totalGenerado, totalConsumido) * 10
-  //   );
-  //   setExcedenteCapturado(excedente);
-  // };
-
-  //* token firabse to backend
-
-  // const [token, setToken] = useState('');
-
-  // useEffect(() => {
-  //   const auth = getAuth();
-  //   const user = auth.currentUser;
-
-  //   if (user) {
-  //     user.getIdToken().then((idToken) => {
-  //       console.log('Token de Firebase:', idToken); // Esta línea imprime el token en la consola
-  //       // Aquí puedes enviar el token a tu backend si es necesario
-  //       sendTokenToBackend('http://127.0.0.1:5000/your/endpoint', 'GET', idToken);
-  //     }).catch((error) => {
-  //       console.error('Error al obtener el token:', error);
-  //     });
-  //   }
-  // }, []);
-
-  // const [token, setToken] = useState('');
-  // useEffect(() => {
-  //   const auth = getAuth();
-  //   const user = auth.currentUser;
-
-  //   if (user) {
-  //     user.getIdToken().then((idToken) => {
-  //       setToken(idToken);
-  //       console.log('Token de Firebase:', idToken);
-
-  //       // Aquí puedes enviar el token a tu backend si es necesario
-  //       sendTokenToBackend(idToken);
-  //     }).catch((error) => {
-  //       console.error('Error al obtener el token:', error);
-  //     });
-  //   }
-  // }, []);
-
-  // //////////////
-
-  // const sendTokenToBackend = async (token: string) => {
-  //   try {
-  //     // Asegúrate de reemplazar esta URL con la URL de tu servidor Flask
-  //     const url = "http://127.0.0.1:5000/users";
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         // Opcionalmente, puedes enviar el token en un header Authorization
-  //         "Authorization": `Bearer ${token}`,
-  //       },
-  //       // O enviar el token en el cuerpo de la solicitud, según prefieras
-  //       body: JSON.stringify({ token }),
-  //     });
-
-  //     const data = await response.json();
-  //     console.log("Respuesta del backend:", data);
-  //   } catch (error) {
-  //     console.error("Error al enviar token al backend:", error);
-  //   }
-  // };
   //-------------------------------------------------------------------VARA INTEGRATION
 
   const alerta = useAlert();
@@ -498,25 +432,7 @@ const GraficoEnergia = () => {
       value: 0,
     };
 
-    // useEffect(() => {
-    //   const ejecutarFirmantes = async () => {
-    //     // Verificar si account.address no es undefined
-    //     if (account?.address !== undefined) {
-    //       await signerTwo();
-    //       await new Promise(resolve => setTimeout(resolve, 15000));
-    //     }
-    //   };
 
-    //   // Inicia el bucle cuando el componente se monta y account.address no es undefined
-    //   if (componenteMontado && account?.address !== undefined) {
-    //     ejecutarFirmantes();
-    //   }
-
-    //   // Limpia el bucle cuando el componente se desmonta
-    //   return () => {
-    //     setComponenteMontado(false);
-    //   };
-    // }, [componenteMontado, account?.address]);
   }
   const programIDFT = import.meta.env.VITE_APP_MAIN_CONTRACT_ID;
 
@@ -1238,6 +1154,8 @@ const GraficoEnergia = () => {
     fetchDataUser();
   }, []);
 
+  console.log((totalGenerado * 0.2).toFixed(1));
+  
   return (
     <div className="mb-12">
       <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
