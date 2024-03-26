@@ -1,0 +1,12 @@
+{
+  "name": "gaia-server",
+  "version": "1.0.0",
+  "description": "Gaia Server",
+  "main": "application.py",
+  "scripts": {
+    "start": "py application.py"
+  },
+  "dependencies": {
+    "flask": "^2.2.2"
+  }
+}
