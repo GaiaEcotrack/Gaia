@@ -129,7 +129,8 @@ def add_user():
         'gaia_token_balance': 0,
         'transactions': [],
         'vara_balance': 0,
-        'willing_to_sell_excess': False
+        'willing_to_sell_excess': False,
+        'amount_kwh_to_sell': 0
         }
     }
 
@@ -268,6 +269,18 @@ def guardar_url_device():
         return jsonify({'message': 'URL de la imagen guardada con éxito', 'url': imagen_url}), 200
     else:
         return jsonify({'message': 'Error al guardar la URL de la imagen o usuario no encontrado'}), 400  
+    
+    
+@users_route.route('/willing', methods=['GET'])
+def get_users_willing_to_sell_excess():
+    users = collection.find({'wallet.willing_to_sell_excess': True})
+    user_list = []
+    for user in users:
+        user['_id'] = str(user['_id'])
+        user_list.append(user)
+    return jsonify({'users': user_list})
+
+
 
 if __name__ == '__main__':
      application.run(debug=True)
