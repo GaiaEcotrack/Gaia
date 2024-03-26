@@ -146,7 +146,7 @@ const P2PTable: React.FC<P2PTableProps> = ({ mode }) => {
                 className={`text-white ${
                   mode === "Buy"
                     ? "bg-emerald-500 hover:bg-emerald-400 w-24"
-                    : "bg-red-700 hover:bg-red-600 w-24"
+                    : ""
                 } focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center`}
                 onClick={() => handleButtonModal(row)}
               >
