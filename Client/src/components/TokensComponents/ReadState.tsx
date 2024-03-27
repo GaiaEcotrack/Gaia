@@ -41,14 +41,11 @@ function ReadState() {
 
     }
   
-    console.log(fullState?.transactions);
 
     const transactionId = "0x6486cf58687624dea8be82895cb23190d60d3232805119718642eee3ae3fbc2d";
-    const foundTransaction = fullState?.transactions.find(transaction => {
-      return Array.isArray(transaction) && transaction.length === 2 && transaction[0] === transactionId;
-    });
+
     
-    console.log(foundTransaction);
+
     
     
   

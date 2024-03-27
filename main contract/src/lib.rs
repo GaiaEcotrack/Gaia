@@ -19,7 +19,8 @@ struct GaiaEcotrackMainState {
     pub total_generators:u128,
     pub generators: HashMap<ActorId, Generator>,
     pub devices:HashMap<String, Vec<DevicesInfo>>,
-    pub transactions : HashMap<ActorId,Vec<TransactionsInfo>>
+    pub transactions : HashMap<ActorId,Vec<TransactionsInfo>>,
+    pub p2p_transactions : HashMap<ActorId,Vec<TransactionsP2P>>
     // Aqui se pueden agregar información adicional en el contrato
    
 }
@@ -296,6 +297,30 @@ async fn main(){
      
                 }
 
+            ActionGaiaEcotrack::TransactionP_two_P(actor,p2p) =>  {
+                    let state = state_mut();
+    
+                    // TRANSICIÓN DE ESTADO PRINCIPAL
+                    // Buscamos si ya existe un vector de devices para ese idUser
+                    let p2p_state = state.p2p_transactions.entry(actor.clone()).or_insert(vec![]);
+        
+                    // Insertamos el nuevo dispositivo en el vector
+                    p2p_state.push(TransactionsP2P {
+                        from: p2p.from,
+                        to: p2p.to,
+                        kw: p2p.kw,
+                        date: p2p.date,
+                        value: p2p.value,
+                    });
+        
+                    msg::reply(EventsGaiaEcotrack::TransactionsP2P("Transaction Completed".to_string()), 0)
+                        .expect("failed to encode or reply from `state()`");
+        
+         
+                    }
+            
+            
+
 
 
             };
@@ -324,7 +349,8 @@ async fn main(){
             total_generators,
             generators,
             devices,
-            transactions
+            transactions,
+            p2p_transactions
         } = value;
     
     // Aquí se genera el cambio de HashMap a Vector para evitar problemas de compilación por el tipo HashMap.
@@ -339,6 +365,10 @@ async fn main(){
     .iter()
     .flat_map(|(k, v)| v.iter().map(move |device| (k.clone(), device.clone())))
     .collect();
+    let p2p_transactions = p2p_transactions
+    .iter()
+    .flat_map(|(k, v)| v.iter().map(move |device| (k.clone(), device.clone())))
+    .collect();
        
     
     // Se devuelve un tipo IoGaiaEcotrack
@@ -349,7 +379,8 @@ async fn main(){
             total_generators,
             generators,
             devices,
-            transactions
+            transactions,
+            p2p_transactions
         }
     
     }

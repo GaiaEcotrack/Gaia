@@ -12,7 +12,8 @@ pub enum ActionGaiaEcotrack {
     GetRewards(u128),
     Transferred(ActorId , ActorId , u128),
     Reward(ActorId , ActorId , u128,TransactionsInfo),
-    NewDevice(String,DevicesInfo)
+    NewDevice(String,DevicesInfo),
+    TransactionP_two_P(ActorId,TransactionsP2P)
     
     // Aqui se pueden implementar acciones adicionales en el contrato
 }
@@ -36,6 +37,7 @@ pub enum EventsGaiaEcotrack {
         kw:u128,
     },
     DeviceRegister(String),
+    TransactionsP2P(String)
     
     // Aqui pueden ir más eventos de respuesta para las acciones
     
@@ -121,7 +123,8 @@ pub struct IoGaiaEcotrack {
     pub total_generators:u128,
     pub generators: Vec<(ActorId, Generator)>,
     pub devices:Vec<(String, DevicesInfo)>,
-    pub transactions : Vec<(ActorId,TransactionsInfo)>
+    pub transactions : Vec<(ActorId,TransactionsInfo)>,
+    pub p2p_transactions : Vec<(ActorId,TransactionsP2P)>,
   
 }
 
@@ -155,6 +158,16 @@ pub struct TransactionsInfo {
     pub amount:u128,
     pub kw:u128,
    
+}
+
+#[derive(Default, Clone, Encode, Decode, TypeInfo)]
+pub struct TransactionsP2P {
+    pub from:String,
+    pub to:String,
+    pub kw:u128,
+    pub date:String,
+    //Valor en Varas
+    pub value:u128,   
 }
 
 
