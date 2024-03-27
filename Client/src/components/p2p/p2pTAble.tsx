@@ -26,6 +26,8 @@ const P2PTable: React.FC<P2PTableProps> = ({ mode }) => {
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [cryptoPrice, setCryptoPrice] = useState("")
 
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -111,6 +113,7 @@ const P2PTable: React.FC<P2PTableProps> = ({ mode }) => {
     }
   }, [selectedRow]); // Se ejecuta solo cuando `selectedRow` cambia.
 
+  
   return (
     <div className="flex flex-wrap m-2">
       {rows.map((row: RowData, index) => (
