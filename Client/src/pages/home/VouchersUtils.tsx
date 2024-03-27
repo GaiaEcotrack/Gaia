@@ -4,7 +4,7 @@ import { useAccount, useApi, useAlert, useBalanceFormat } from '@gear-js/react-h
 
 const useVoucherUtils = () => {
     const ONE_TVARA_VALUE = 1_000_000_000_000
-    const program = '0xc86da0e051bcc8b0799e9f72c039f6a87f1105574fff7919a2f02a48124c8f9e'
+    const program = import.meta.env.VITE_APP_MAIN_CONTRACT_ID
     const { getFormattedBalanceValue } = useBalanceFormat();
     const { api } = useApi();
     const { account } = useAccount();

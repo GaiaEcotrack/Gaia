@@ -1157,8 +1157,6 @@ const GraficoEnergia = () => {
     };
     fetchDataUser();
   }, []);
-
-  console.log((totalGenerado * 0.2).toFixed(1));
   
   return (
     <div className="mb-12">
