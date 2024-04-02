@@ -3,6 +3,7 @@ import { auth } from "../../firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import axios from "axios";
 
+
 interface RowData {
   id: string;
   orders: number;
@@ -47,22 +48,22 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
     };
     fetchData();
   }, []);
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let varaQuantity = parseFloat(e.target.value); // La cantidad de varas que el usuario quiere vender o comprar
-  
-    // Verificar y corregir el valor si es negativo
-    if (varaQuantity < 0) {
-      varaQuantity = 0;
-      setInputValue("0"); // Establecer el valor de entrada a 0 si la cantidad de varas es negativa
-    } else {
-      setInputValue(e.target.value); // Usar el valor ingresado si es positivo
-    }
-  
-    // Dado que 1 kW = 2 varas, calculamos la cantidad de kW que se pueden obtener de la cantidad de varas ingresada
-    const kwQuantity = varaQuantity / 2; // Dividir la cantidad de varas por 2 para obtener los kW equivalentes
-  
-    setKwAmount(kwQuantity); // setKwAmount ahora tiene el número de kW que el usuario puede recibir
-  };
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  let varaQuantity = parseFloat(e.target.value); // La cantidad de varas que el usuario quiere vender o comprar
+
+  // Verificar y corregir el valor si es negativo
+  if (varaQuantity < 0) {
+    varaQuantity = 0;
+    setInputValue("0"); // Establecer el valor de entrada a 0 si la cantidad de varas es negativa
+  } else {
+    setInputValue(e.target.value); // Usar el valor ingresado si es positivo
+  }
+
+  // Dado que 1 kW = 2 varas, calculamos la cantidad de kW que se pueden obtener de la cantidad de varas ingresada
+  const kwQuantity = varaQuantity / 2; // Dividir la cantidad de varas por 2 para obtener los kW equivalentes
+
+  setKwAmount(kwQuantity); // setKwAmount ahora tiene el número de kW que el usuario puede recibir
+};
 
   //usuario desde firebase
   useEffect(() => {
@@ -94,7 +95,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
             <p className="text-gray-900 m-2">Available: {rowData?.available}</p>
             <p className="text-gray-900 m-2">Limit: {rowData?.limit}</p>
             <p className="text-gray-900 m-2">
-              Payment type: {rowData?.paymentMethods.join(", ")}
+            Payment type: {rowData?.paymentMethods?.join(", ") || "No payment methods"}
             </p>
           </div>
           <div className="p-4 m-2 border-2">

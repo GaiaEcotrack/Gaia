@@ -1,13 +1,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import SellConfirmModal from "./sellConfirmModal";
-
+import { auth } from "../../firebase";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { isLoggedIn } from "@/utils";
 
 
 const P2PFilterBar: React.FC<{setMode: (mode: 'Buy' | 'Sell') => void}> = ({ setMode }) => {
   const [cryptoPrice, setCryptoPrice] = useState("");
   const [isSellConfirmModalOpen, setIsSellConfirmModalOpen] = useState(false); // Mueve el estado aquí
-
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+  const [totalExcedente, setTotalExcedente] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,7 +18,7 @@ const P2PFilterBar: React.FC<{setMode: (mode: 'Buy' | 'Sell') => void}> = ({ set
         const URL = import.meta.env.VITE_APP_API_URL;
         const { data } = await axios.get(`${URL}/coinbase`);
         const varaPrice = data.vara.price.data.amount;
-        console.log(varaPrice);
+        console.log("vara price", varaPrice);
         setCryptoPrice(varaPrice);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -24,7 +27,23 @@ const P2PFilterBar: React.FC<{setMode: (mode: 'Buy' | 'Sell') => void}> = ({ set
     fetchData();
   },[]);
 
+  //usuario desde firebase
+  useEffect(() => {
 
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setLoggedInUser(currentUser);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+
+  useEffect(() => {
+     //traer los kw del localStorage
+     const storedTotalExcedente = JSON.parse(localStorage.getItem("totalExcedente") || "0")
+     setTotalExcedente(storedTotalExcedente);
+    //  console.log("total excedente", storedTotalExcedente);
+  }, [])
 
   const handleSellClick = () => {
     setIsSellConfirmModalOpen(true); // Abre el modal de confirmación cuando se hace clic en "Sell"
@@ -47,7 +66,10 @@ const P2PFilterBar: React.FC<{setMode: (mode: 'Buy' | 'Sell') => void}> = ({ set
         </button>
         <img className="mt-4" src="/VaraCrypto.png" width="42" height="42" alt="" />
         <span className="text-gray-900 text-sm mr-4 mt-2">Current Price:</span>
-        <span className="text-emerald-400">{cryptoPrice} USDT</span>
+        <span className="text-emerald-400">{cryptoPrice} USDT</span> <br/>
+        <span className="text-gray-900">Hello</span>
+        <span className="text-gray-900"> {loggedInUser?.email} </span>
+        <span className="text-gray-900"> Kw available for sell: {totalExcedente} </span>
       </div>
       {/* Otros elementos del componente */}
 
