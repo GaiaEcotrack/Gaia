@@ -389,7 +389,7 @@ const GraficoEnergia = () => {
         return (totalGenerado * 0.2).toFixed(1)
       }
       
-      setExcedenteCapturado((totalGenerado * 0.2).toFixed(1));
+      setExcedenteCapturado((totalGenerado * 0.2).toFixed());
     };
 
     handleCaptureExcedente();
@@ -627,7 +627,8 @@ const GraficoEnergia = () => {
       signerVou();
     }
   };
-
+  
+  
   // Creacion de usuario en la DB
   const URL = import.meta.env.VITE_APP_API_URL;
   const [email, setEmail] = useState("");
