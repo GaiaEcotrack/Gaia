@@ -27,28 +27,29 @@ const ChatBot: React.FC = () => {
 
   const handleSendMessage = async () => {
     if (userInput.trim() !== '') {
-      const timestamp = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });; 
+      const timestamp = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });;
+      const formattedMessage = userInput.replace(/\s/g, '_'); // Reemplaza espacios por guiones bajos
       setChatMessages(prevMessages => [...prevMessages, { author: 'user', message: userInput, timestamp }]);
-
+      
       try {
         const response = await fetch(`${URL}/chatbox/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message: userInput }),
+          body: JSON.stringify({ message: formattedMessage }), // Usa el mensaje formateado
         });
         if (!response.ok) {
           throw new Error('Failed to send message');
         }
-
+  
         const data = await response.json();
         respondToUser(data.response);
       } catch (error) {
         console.error('Error sending message:', error);
         // Handle error, e.g., display an error message to the user
       }
-      setUserInput('');    
+      setUserInput('');
     }
   };
 
