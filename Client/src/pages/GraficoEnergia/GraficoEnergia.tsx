@@ -126,7 +126,7 @@ const GraficoEnergia = () => {
     renewVoucherOneHour,
     voucherExists,
     accountVoucherId,
-    addTwoTokensToVoucher
+    addTwoTokensToVoucher,
   } = useVoucherUtils();
   const dispatch = useDispatch();
 
@@ -170,7 +170,6 @@ const GraficoEnergia = () => {
       },
     ],
   });
-  
 
   const [energyData, setEnergyData] = useState(50);
   //!!!!!!!!!!!!!!!!
@@ -238,6 +237,26 @@ const GraficoEnergia = () => {
         setTotalGenerado(pvGeneration);
         // Determina si la generación está activa basada en el umbral de 0.2
         setGeneracionActiva(pvGeneration > 0.2);
+
+        // Actualiza totalConsumido y excedenteCapturado aquí 
+        const totalConsumidoCalculado = pvGeneration * 0.5; 
+        const excedenteCapturadoCalculado = Math.max(
+          pvGeneration - totalConsumidoCalculado
+        ); 
+
+        setTotalConsumido(totalConsumidoCalculado);
+        setExcedenteCapturado(excedenteCapturadoCalculado);
+
+        // Actualizar localStorage con los nuevos valores
+        localStorage.setItem("totalGenerado", JSON.stringify(pvGeneration));
+        localStorage.setItem(
+          "totalConsumido",
+          JSON.stringify(totalConsumidoCalculado)
+        );
+        localStorage.setItem(
+          "totalExcedente",
+          JSON.stringify(excedenteCapturadoCalculado)
+        );
       } catch (error) {
         console.log(error);
       }
@@ -260,7 +279,7 @@ const GraficoEnergia = () => {
   const closePopup = () => {
     setPopupOpen(false);
   };
-
+  //!  chequear los valores del local storage
   useEffect(() => {
     // Recuperar valores desde localStorage
     const storedTotalGenerado = JSON.parse(
@@ -277,8 +296,9 @@ const GraficoEnergia = () => {
     setTotalGenerado(storedTotalGenerado);
     setTotalConsumido(storedTotalConsumido);
     setTotalExcedente(storedTotalExcedente);
-  }, []); // Se ejecuta solo al montar el componente
-
+    console.log("grafico energia", setTotalExcedente);
+  }, []);
+  //!  ------------------
   useEffect(() => {
     const updateBarChart = () => {
       const newData = Array.from({ length: 12 }, () =>
@@ -375,7 +395,7 @@ const GraficoEnergia = () => {
   }, [totalGenerado]);
   //////////////////////
   const calcularExcedente = (totalGenerado: number, totalConsumido: number) =>
-    Math.max(totalGenerado - totalConsumido, 0);
+    Math.max(totalGenerado - totalConsumido);
 
   useEffect(() => {
     const handleCaptureExcedente = () => {
@@ -432,8 +452,6 @@ const GraficoEnergia = () => {
       gasLimit: 9899819245,
       value: 0,
     };
-
-
   }
   const programIDFT = import.meta.env.VITE_APP_MAIN_CONTRACT_ID;
 
@@ -567,15 +585,17 @@ const GraficoEnergia = () => {
         );
       } catch (error: any) {
         console.log(" transaction failed", error);
-        const errorString = await error.toString()
-        const feesError = await  errorString.includes("Inability to pay some fees , e.g. account balance too low")
-  
-        if(feesError === true){
-            await addTwoTokensToVoucher(voucherId)
-            console.log("actualizado");      
+        const errorString = await error.toString();
+        const feesError = await errorString.includes(
+          "Inability to pay some fees , e.g. account balance too low"
+        );
+
+        if (feesError === true) {
+          await addTwoTokensToVoucher(voucherId);
+          console.log("actualizado");
         }
-        
-        alerta.info("Retry your transaction")
+
+        alerta.info("Retry your transaction");
       }
     } else {
       alerta.error("Account not available to sign");
@@ -799,88 +819,90 @@ const GraficoEnergia = () => {
     };
   };
 
-
   // para el segundo grafico (barras)
   const [options, setOptions] = useState({});
 
-// Obtener datos de la API y actualizar barData
+  // Obtener datos de la API y actualizar barData
   useEffect(() => {
     const fetchChartData = async () => {
-      const url = `${import.meta.env.VITE_APP_API_URL}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-03`;
+      const url = `${
+        import.meta.env.VITE_APP_API_URL
+      }/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-03`;
       try {
         const response = await fetch(url);
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
 
-        const colors = ['#e74c3c', '#3498db', '#2ecc71'];
+        const colors = ["#e74c3c", "#3498db", "#2ecc71"];
         // Procesa y actualiza las opciones de ECharts
         setOptions({
-          color: ['#74b9ff'],
+          color: ["#74b9ff"],
           title: {
             textStyle: {
-              color: '#FFFFFF'
-            }
+              color: "#FFFFFF",
+            },
           },
           tooltip: {
-            trigger: 'axis',
+            trigger: "axis",
             axisPointer: {
-              type: 'shadow'
-            }
+              type: "shadow",
+            },
           },
           xAxis: {
-            type: 'category',
-            data: data.set.map(item => moment(item.time).format("MMM D")),
+            type: "category",
+            data: data.set.map((item) => moment(item.time).format("MMM D")),
             axisLine: {
               lineStyle: {
-                color: '#FFFFFF' // Cambia el color de la línea del eje X a blanco
-              }
+                color: "#FFFFFF", // Cambia el color de la línea del eje X a blanco
+              },
             },
             axisLabel: {
-              color: '#FFFFFF' // Etiquetas del eje X en blanco
+              color: "#FFFFFF", // Etiquetas del eje X en blanco
             },
             splitLine: {
-              show: false // Opcional: esconde las líneas de división para un diseño más limpio
-            }
+              show: false, // Opcional: esconde las líneas de división para un diseño más limpio
+            },
           },
           yAxis: {
-            type: 'value',
+            type: "value",
             axisLine: {
               lineStyle: {
-                color: '#FFFFFF' // Cambia el color de la línea del eje Y a blanco
-              }
+                color: "#FFFFFF", // Cambia el color de la línea del eje Y a blanco
+              },
             },
             axisLabel: {
-              color: '#FFFFFF' // Etiquetas del eje Y en blanco
+              color: "#FFFFFF", // Etiquetas del eje Y en blanco
             },
             splitLine: {
               lineStyle: {
-                color: '#FFFFFF', // Cambia el color de las líneas de división del eje Y si deseas mantenerlas
-                opacity: 0.1 // Reduce la opacidad para hacerlas menos prominentes
-              }
-            }
+                color: "#FFFFFF", // Cambia el color de las líneas de división del eje Y si deseas mantenerlas
+                opacity: 0.1, // Reduce la opacidad para hacerlas menos prominentes
+              },
+            },
           },
-          series: [{
-            data: data.set.map(item => item.pvGeneration),
-            type: 'bar',
-            barWidth: '60%',
-            itemStyle: {
-              color: '#74b9ff' // O define el color específico de la serie aquí
-            }
-          }]
+          series: [
+            {
+              data: data.set.map((item) => item.pvGeneration),
+              type: "bar",
+              barWidth: "60%",
+              itemStyle: {
+                color: "#74b9ff", // O define el color específico de la serie aquí
+              },
+            },
+          ],
         });
       } catch (error) {
         console.error("Error fetching chart data:", error);
       }
     };
 
-
     fetchChartData();
   }, []);
 
-
-
   //! Medidor de intensidad de enrgia: esta tomando la data de la engeriga generada
-  const [timeZoneData, setTimeZoneData] = useState<TimeZoneApiResponse | null>(null);
+  const [timeZoneData, setTimeZoneData] = useState<TimeZoneApiResponse | null>(
+    null
+  );
 
   useEffect(() => {
     fetchTimeZoneInfo("Europe/Berlin").then((data) => {
@@ -890,24 +912,26 @@ const GraficoEnergia = () => {
       }
     });
   }, []);
-  
+
   const getCurrentHour = (datetime) => {
     // console.log(datetime);
-    
+
     if (!datetime) return 0;
     const berlinTime = new Date(datetime); // Hora actual en Berlín
     const hours = berlinTime.getHours(); // Obtenemos la hora local
-    
+
     return hours; // Retornamos la hora actual en formato local
   };
-  
-  const [gaugeOptions, setGaugeOptions] = useState({}); 
+
+  const [gaugeOptions, setGaugeOptions] = useState({});
   useEffect(() => {
     const fetchEnergyData = async () => {
-      const url = `${import.meta.env.VITE_APP_API_URL}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`;
+      const url = `${
+        import.meta.env.VITE_APP_API_URL
+      }/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`;
       try {
         const response = await fetch(url);
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) throw new Error("Network response was not ok");
         const data = await response.json();
         console.log(data);
 
@@ -931,7 +955,7 @@ const GraficoEnergia = () => {
       },
       series: [
         {
-          name: 'Energy Status',
+          name: "Energy Status",
           type: "gauge",
           startAngle: 180,
           endAngle: 0,
@@ -955,28 +979,26 @@ const GraficoEnergia = () => {
           },
           detail: {
             show: true,
-            formatter: function(value) {
+            formatter: function (value) {
               return `${value.toFixed(2)}  kw\n{white|PV Generation}`;
             },
             rich: {
               white: {
-                color: '#fff',
+                color: "#fff",
                 fontSize: 14,
                 lineHeight: 20,
-                padding: [5, 0]  // Ajusta el espaciado si es necesario
-              }
+                padding: [5, 0], // Ajusta el espaciado si es necesario
+              },
             },
-            offsetCenter: [0, '60%'],
-            color: 'white',
+            offsetCenter: [0, "60%"],
+            color: "white",
             fontSize: 16,
           },
-          data: [{ value: gaugeValue}],
+          data: [{ value: gaugeValue }],
         },
       ],
     };
   };
-
-  
 
   // interfaz para los datos de las plantas
   interface PlantData {
@@ -1019,7 +1041,7 @@ const GraficoEnergia = () => {
       tooltip: {
         trigger: "axis",
         axisPointer: {
-          type: "line"
+          type: "line",
         },
         formatter: function (params) {
           const dataIndex = params[0].dataIndex;
@@ -1053,7 +1075,7 @@ const GraficoEnergia = () => {
             showSymbol: true,
           })),
           lineStyle: {
-            color: '#5470C6',
+            color: "#5470C6",
           },
           smooth: true,
         },
@@ -1061,34 +1083,34 @@ const GraficoEnergia = () => {
     };
   };
 
-    // ! Grafico para mostrar el device id conectado.
-    useEffect(() => {
-      const fetchData = async () => {
-        const deviceId = '65fce26c471437c1bf25533c'; // ID del dispositivo
-        const url = `${import.meta.env.VITE_APP_API_URL}/devices/${deviceId}`; // Actualiza la URL para incluir el ID del dispositivo
-  
-        try {
-          const response = await axios.get(url);
-  
-          // Asumiendo que deseas usar el objeto "device" de la respuesta
-          if (response.data && response.data.device) {
-            const deviceData = response.data.device;
-            // Transformar los datos para tu uso, por ejemplo:
-            const transformedData = [
-              [deviceData.deviceId, Math.random() * 100, deviceData.name],
-            ];
-            setDeviceData(transformedData); // Asumiendo que setDeviceData actualiza el estado con estos datos
-            console.log(transformedData);
-          } else {
-            console.error("La respuesta no tiene el formato esperado:", response);
-          }
-        } catch (error) {
-          console.error("Error al cargar los datos del dispositivo:", error);
+  // ! Grafico para mostrar el device id conectado.
+  useEffect(() => {
+    const fetchData = async () => {
+      const deviceId = "65fce26c471437c1bf25533c"; // ID del dispositivo
+      const url = `${import.meta.env.VITE_APP_API_URL}/devices/${deviceId}`; // Actualiza la URL para incluir el ID del dispositivo
+
+      try {
+        const response = await axios.get(url);
+
+        // Asumiendo que deseas usar el objeto "device" de la respuesta
+        if (response.data && response.data.device) {
+          const deviceData = response.data.device;
+          // Transformar los datos para tu uso, por ejemplo:
+          const transformedData = [
+            [deviceData.deviceId, Math.random() * 100, deviceData.name],
+          ];
+          setDeviceData(transformedData); // Asumiendo que setDeviceData actualiza el estado con estos datos
+          console.log(transformedData);
+        } else {
+          console.error("La respuesta no tiene el formato esperado:", response);
         }
-      };
-  
-      fetchData();
-    }, []);
+      } catch (error) {
+        console.error("Error al cargar los datos del dispositivo:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const getBarChartOption2 = (deviceData: any) => {
     // Generando colores aleatorios para cada barra
@@ -1158,7 +1180,7 @@ const GraficoEnergia = () => {
     };
     fetchDataUser();
   }, []);
-  
+
   return (
     <div className="mb-12">
       <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
@@ -1224,13 +1246,16 @@ const GraficoEnergia = () => {
           <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
             <h2 className="text-xl mb-2 text-white">Energy Intensity</h2>
             <div className="text-white mb-4">
-            {timeZoneData ? (
-  <>
-    <p>Time Zone device: {timeZoneData.timezone} ({timeZoneData.abbreviation})</p>
-    {/* <p>Current Time: {timeZoneData.datetime}</p> */}
-  </>
-) : null}
-      </div>
+              {timeZoneData ? (
+                <>
+                  <p>
+                    Time Zone device: {timeZoneData.timezone} (
+                    {timeZoneData.abbreviation})
+                  </p>
+                  {/* <p>Current Time: {timeZoneData.datetime}</p> */}
+                </>
+              ) : null}
+            </div>
             <ReactECharts
               option={gaugeOptions}
               style={{ height: "300px" }}
