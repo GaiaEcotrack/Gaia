@@ -4,7 +4,7 @@
   "description": "Gaia Server",
   "main": "application.py",
   "scripts": {
-    "start": "py application.py"
+    "start": "python3 application.py"
   },
   "dependencies": {
     "flask": "^2.2.2"
