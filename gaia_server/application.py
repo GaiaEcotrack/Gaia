@@ -99,9 +99,9 @@ collection = db['users']
 
 
 
-# @application.route('/', methods=['GET'])
-# def welcome():
-#     return jsonify({'message': 'Welcome to the Gaia Server!'})
+@application.route('/', methods=['GET'])
+def welcome():
+    return jsonify({'message': 'Welcome to the Gaia Server!'})
 
 # if __name__ == '__main__':
 #     try:
