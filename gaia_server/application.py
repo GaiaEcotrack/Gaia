@@ -22,6 +22,7 @@ from src.routes.payments_users import payments_users_route
 from src.routes.chatbox import chatbox_route
 from src.routes.wallet_gaia import wallet_route
 from src.routes.transaction import transaction_route
+from src.routes.tokenization_energy import energyGenerated_routes
 
 
 
@@ -59,6 +60,7 @@ application.register_blueprint(payments_users_route, url_prefix='/payments')
 application.register_blueprint(chatbox_route, url_prefix='/chatbox')
 application.register_blueprint(wallet_route, url_prefix='/wallet')
 application.register_blueprint(transaction_route, url_prefix='/transaction')
+application.register_blueprint(energyGenerated_routes, url_prefix='/energyGenerated')
 
 mongo_uri = os.getenv("MONGO_URI")
 client = MongoClient(mongo_uri, tlsAllowInvalidCertificates=True)
