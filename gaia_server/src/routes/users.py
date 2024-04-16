@@ -32,7 +32,7 @@ collection = db['users']
 
 # RUTEO
 @users_route.route('/', methods=['GET'])
-@require_firebase_auth
+# @require_firebase_auth
 def get_users():
     users = list(collection.find())
     for user in users:

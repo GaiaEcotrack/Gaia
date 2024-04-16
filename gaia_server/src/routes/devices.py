@@ -110,7 +110,7 @@ def get_device_data():
         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code
 
 @devices_routes.route('/plant-devices', methods=['GET', 'OPTIONS'])
-@require_firebase_auth
+# @require_firebase_auth
 def get_plant_devices():
     # Obtén el parámetro plantId de la solicitud
     plant_id = request.args.get('plantId')
@@ -152,7 +152,7 @@ def get_plant_devices():
 #battery
 #! ejemplo de query que me costo un huevo!: http://127.0.0.1:5000/devices/battery?deviceId=18&setType=EnergyAndPowerBattery&period=Week&Date=2022-08-08
 @devices_routes.route('/battery', methods=['GET'])
-@require_firebase_auth
+# @require_firebase_auth
 def get_device_measurements_battery():
     # Obtén los parámetros de la solicitud
     device_id = request.args.get('deviceId')
@@ -200,7 +200,7 @@ def get_device_measurements_battery():
 #ruta de meciiones de Pv
 #! ejemplo de query que me costo un huevo!: http://127.0.0.1:5000/devices/battery?deviceId=18&setType=EnergyAndPowerBattery&period=Week&Date=2022-08-08
 @devices_routes.route('/pv', methods=['GET'])
-@require_firebase_auth
+# @require_firebase_auth
 def get_device_measurements_pv():
     # Obtén los parámetros de la solicitud
     device_id = request.args.get('deviceId')
