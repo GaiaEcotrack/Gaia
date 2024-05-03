@@ -8,8 +8,9 @@ use gmeta::{In,Out,InOut,Metadata};
 #[derive(Encode, Decode, TypeInfo)]
 pub enum ActionGaiaEcotrack {
     NewGenerator(ActorId,Generator),
-    GenerateEnergy(u128),
-    GetRewards(u128),
+    Addliquidity(u128, String),
+    Removeliquidity(u128, String),
+    GetRewards(u128,String),
     Transferred(ActorId , ActorId , u128),
     Reward(ActorId , ActorId , u128,TransactionsInfo),
     NewDevice(String,DevicesInfo),
@@ -37,7 +38,9 @@ pub enum EventsGaiaEcotrack {
         kw:u128,
     },
     DeviceRegister(String),
-    TransactionsP2P(String)
+    TransactionsP2P(String),
+    Error(String),
+    Success(String)
     
     // Aqui pueden ir más eventos de respuesta para las acciones
     
@@ -96,6 +99,8 @@ pub struct InitFT {
 
     // Este será el program id del token fungible a controlar
     pub ft_program_id: ActorId,
+    pub admin_info : ActorId,
+    pub admin_password: String,
 }
 
 

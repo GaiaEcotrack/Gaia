@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import SellConfirmModal from "./sellConfirmModal";
+import SellConfirmModal from "./SellConfirmModal";
 import { auth } from "../../firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { isLoggedIn } from "@/utils";
