@@ -6,6 +6,9 @@ class EnergyTokenizationSchema(Schema):
     energy_in_kilowatts = fields.Float(required=True)
     energy_tokenized_in_gaia_tokens = fields.Float(required=True)
     is_tokenized = fields.Boolean(required=True)
+    total_generated = fields.Float(required=True)
+    total_consumed = fields.Float(required=True)
+    total_excedent = fields.Float(required=True)
     tokenization_date = fields.DateTime(default=datetime.utcnow)
 
     # Relación con el usuario (modelo user)

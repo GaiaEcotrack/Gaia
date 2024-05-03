@@ -178,6 +178,8 @@ const GraficoEnergia = () => {
       try {
         const auth = getAuth();
         const user = auth.currentUser;
+        console.log(auth);
+        
 
         if (!user) {
           throw new Error("User is not authenticated");
