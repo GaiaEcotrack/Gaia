@@ -21,7 +21,7 @@ def test_get_users(client):
 
 # test GET by Id
 def test_get_user_by_id(client):
-    valid_id = '65d9020319641afbb70eaf7b'
+    valid_id = '660b1cf3d9ec6a06f44d3edc'
     response = client.get(f'/users/{valid_id}')
     assert response.status_code == 200
     json_data = response.get_json()
