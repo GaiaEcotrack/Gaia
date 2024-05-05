@@ -26,7 +26,7 @@ const useVoucherUtils = () => {
             const voucherIssued =  await api.voucher.issue(
                 account?.decodedAddress ?? "0x00",
                 ONE_TVARA_VALUE * 11, // 11 TVaras
-                1_200, // An hour in blocks
+                864_000, // An hour in blocks
                 [program]
             );
 
@@ -143,7 +143,7 @@ const useVoucherUtils = () => {
             const renewVoucherAlertId = alert.loading("Renewing voucher");
 
             const newVoucherData: IUpdateVoucherParams = {
-                prolongDuration: 1_200 // one hour
+                prolongDuration: 864_000 // one hour
             }
 
             const voucherUpdate = api.voucher.update(

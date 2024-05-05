@@ -19,7 +19,7 @@ function VarasBalance() {
 
     // Add your programID
     const programIDFT =
-    "0xe5fd61567629a183c9caf022c3bed995a732814313785a1210c2ddbbf051a005";
+    "0x1d3728d0e29c71e0485af30cc5b9d39bef421ffeca140a56d0ed5489e59b6de7";
  
    // Add your metadata.txt
   const meta =
