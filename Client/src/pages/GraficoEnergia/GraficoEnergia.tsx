@@ -263,6 +263,78 @@ const GraficoEnergia = () => {
         console.log(error);
       }
     };
+    ///
+
+    // const fetchEnergyTwo = async () => {
+    //   try {
+    //     const auth = getAuth();
+    //     const user = auth.currentUser;
+    
+    //     if (!user) {
+    //       throw new Error("User is not authenticated");
+    //     }
+    
+    //     const idToken = await user.getIdToken();
+    //     const url = `${import.meta.env.VITE_APP_API_URL}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`;
+    
+    //     const response = await fetch(url, {
+    //       method: "GET",
+    //       headers: {
+    //         Authorization: `Bearer ${idToken}`,
+    //         "Content-Type": "application/json",
+    //       },
+    //     });
+    
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error! status: ${response.status}`);
+    //     }
+    
+    //     const jsonResponse = await response.json();
+    
+    //     if (jsonResponse && jsonResponse.set && jsonResponse.set.length > 0) {
+    //       const pvGeneration = jsonResponse.set[0].pvGeneration;
+    //       const totalConsumidoCalculado = pvGeneration * 0.5; 
+    //       const excedenteCapturadoCalculado = Math.max(0, pvGeneration - totalConsumidoCalculado);
+    
+    //       // Preparar los datos para enviar al servidor
+    //       const postData = {
+    //         total_generated: pvGeneration,
+    //         total_consumed: totalConsumidoCalculado,
+    //         total_excedente: excedenteCapturadoCalculado,
+    //         user_id: user.uid 
+    //       };
+    //       console.log("Energia guardad en db:", postData);
+          
+    
+    //       // URL de la API para enviar datos
+    //       const postUrl = `${import.meta.env.VITE_APP_API_URL}/energyGenerated/ejemplo`; // Cambia 'yourEndpoint' por el endpoint real
+    
+    //       // Enviar los datos al servidor
+    //       const postResponse = await fetch(postUrl, {
+    //         method: "POST",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //           Authorization: `Bearer ${idToken}`, // Si es necesario
+    //         },
+    //         body: JSON.stringify(postData)
+    //       });
+    
+    //       if (!postResponse.ok) {
+    //         throw new Error(`HTTP error! status: ${postResponse.status}`);
+    //       }
+    
+    //       // console.log("Data sent successfully", await postResponse.json());
+    //     } else {
+    //       // Manejar el caso en que data.set es undefined o vacío
+    //       console.error("PV generation data is missing or empty", jsonResponse);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching or posting energy data:", error);
+    //   }
+    // };
+    
+
+    ///
     fetchEnergyTwo();
     fetchEnergy();
 
@@ -282,24 +354,24 @@ const GraficoEnergia = () => {
     setPopupOpen(false);
   };
   //!  chequear los valores del local storage
-  useEffect(() => {
-    // Recuperar valores desde localStorage
-    const storedTotalGenerado = JSON.parse(
-      localStorage.getItem("totalGenerado") || "0"
-    );
-    const storedTotalConsumido = JSON.parse(
-      localStorage.getItem("totalConsumido") || "0"
-    );
-    const storedTotalExcedente = JSON.parse(
-      localStorage.getItem("totalExcedente") || "0"
-    );
+  // useEffect(() => {
+  //   // Recuperar valores desde localStorage
+  //   const storedTotalGenerado = JSON.parse(
+  //     localStorage.getItem("totalGenerado") || "0"
+  //   );
+  //   const storedTotalConsumido = JSON.parse(
+  //     localStorage.getItem("totalConsumido") || "0"
+  //   );
+  //   const storedTotalExcedente = JSON.parse(
+  //     localStorage.getItem("totalExcedente") || "0"
+  //   );
 
-    // Eestados con los valores recuperados
-    setTotalGenerado(storedTotalGenerado);
-    setTotalConsumido(storedTotalConsumido);
-    setTotalExcedente(storedTotalExcedente);
-    console.log("grafico energia", setTotalExcedente);
-  }, []);
+  //   // Eestados con los valores recuperados
+  //   setTotalGenerado(storedTotalGenerado);
+  //   setTotalConsumido(storedTotalConsumido);
+  //   setTotalExcedente(storedTotalExcedente);
+  //   console.log("grafico energia", setTotalExcedente);
+  // }, []);
   //!  ------------------
   useEffect(() => {
     const updateBarChart = () => {
