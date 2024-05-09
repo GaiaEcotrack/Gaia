@@ -64,38 +64,31 @@ def add_wallet_to_user():
 # }
 
 
-@wallet_route.route('/<user_id>', methods=['PUT'])
-def update_wallet(user_id):
-    try:
-        data = request.json
-        amount_kwh_to_sell = data.get('amount_kwh_to_sell')
-        if amount_kwh_to_sell is None:
-            return jsonify({'message': 'Se requiere el valor de "amount_kwh_to_sell" en el cuerpo de la solicitud'}), 400
-        
-        user_collection = collection  
-        user = user_collection.find_one({'_id': ObjectId(user_id)})
+# @wallet_route.route('/<user_id>', methods=['PUT'])
+# def update_wallet(user_id):
+#     try:
+#         data = request.json
+#         amount_kwh_to_sell = data.get('amount_kwh_to_sell', 0)  # Obtener el valor o default a 0 si no existe
+#         willing_to_sell_excess = data.get('willing_to_sell_excess', False)  # Obtener el valor o default a False si no existe
 
-        if user:
-            # Verificar si la propiedad wallet ya está presente en el usuario
-            if 'wallet' not in user:
-                user['wallet'] = {}  # Crear un objeto wallet vacío si no existe
+#         user_collection = collection
+#         # Especificar la ruta completa de cada campo dentro del objeto wallet que deseas actualizar
+#         update_result = user_collection.update_one(
+#             {'_id': ObjectId(user_id)},
+#             {'$set': {
+#                 'wallet.amount_kwh_to_sell': amount_kwh_to_sell,
+#                 'wallet.willing_to_sell_excess': willing_to_sell_excess
+#             }}
+#         )
 
-            # Actualizar las propiedades de la billetera
-            user['wallet']['willing_to_sell_excess'] = True
-            user['wallet']['amount_kwh_to_sell'] = amount_kwh_to_sell
+#         if update_result.modified_count > 0:
+#             return jsonify({'message': 'Billetera actualizada con éxito'}), 200
+#         else:
+#             return jsonify({'message': 'No se realizaron cambios en la billetera'}), 404
+#     except Exception as e:
+#         return jsonify({'error': str(e)}), 500
 
-            # Actualizar la propiedad wallet directamente en el usuario
-            user_collection.update_one(
-                {'_id': ObjectId(user_id)},
-                {'$set': {'wallet': user['wallet']}}
-            )
-            # Convertir el ObjectId del usuario a cadena antes de enviar la respuesta JSON
-            user['_id'] = str(user['_id'])
-            return jsonify({'message': 'Billetera actualizada con éxito', 'user_id': str(user_id)}), 200
-        else:
-            return jsonify({'message': 'Usuario no encontrado'}), 404
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+
     
 # ejemplo de Body para la peticion
     
