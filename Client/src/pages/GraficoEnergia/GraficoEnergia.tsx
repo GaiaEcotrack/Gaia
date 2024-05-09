@@ -354,24 +354,38 @@ const GraficoEnergia = () => {
     setPopupOpen(false);
   };
   //!  chequear los valores del local storage
-  // useEffect(() => {
-  //   // Recuperar valores desde localStorage
-  //   const storedTotalGenerado = JSON.parse(
-  //     localStorage.getItem("totalGenerado") || "0"
-  //   );
-  //   const storedTotalConsumido = JSON.parse(
-  //     localStorage.getItem("totalConsumido") || "0"
-  //   );
-  //   const storedTotalExcedente = JSON.parse(
-  //     localStorage.getItem("totalExcedente") || "0"
-  //   );
+  useEffect(() => {
+    localStorage.setItem("totalGenerado", totalGenerado.toString());
+  }, [totalGenerado]);
+  
+  useEffect(() => {
+    localStorage.setItem("totalConsumido", totalConsumido.toString());
+  }, [totalConsumido]);
+  
+  useEffect(() => {
+    const calculatedExcedente = totalGenerado - totalConsumido;
+    setTotalExcedente(calculatedExcedente);
+    localStorage.setItem("totalExcedente", calculatedExcedente.toString());
+  }, [totalGenerado, totalConsumido]);
 
-  //   // Eestados con los valores recuperados
-  //   setTotalGenerado(storedTotalGenerado);
-  //   setTotalConsumido(storedTotalConsumido);
-  //   setTotalExcedente(storedTotalExcedente);
-  //   console.log("grafico energia", setTotalExcedente);
-  // }, []);
+  
+
+  useEffect(() => {
+    const storedTotalGenerado = localStorage.getItem("totalGenerado");
+    const storedTotalConsumido = localStorage.getItem("totalConsumido");
+    const storedTotalExcedente = localStorage.getItem("totalExcedente");
+  
+    if (storedTotalGenerado !== null) {
+      setTotalGenerado(parseFloat(storedTotalGenerado));
+    }
+    if (storedTotalConsumido !== null) {
+      setTotalConsumido(parseFloat(storedTotalConsumido));
+    }
+    if (storedTotalExcedente !== null) {
+      setTotalExcedente(parseFloat(storedTotalExcedente));
+    }
+  }, []);
+  
   //!  ------------------
   useEffect(() => {
     const updateBarChart = () => {
@@ -392,9 +406,6 @@ const GraficoEnergia = () => {
         setBarData(newBarData);
       }
 
-      localStorage.setItem("totalGenerado", JSON.stringify(totalGenerado));
-      localStorage.setItem("totalConsumido", JSON.stringify(totalConsumido));
-      localStorage.setItem("totalExcedente", JSON.stringify(totalExcedente));
     };
 
     const intervalId = setInterval(updateBarChart, 1500);
@@ -408,23 +419,6 @@ const GraficoEnergia = () => {
 
   const showDate = format(currentDate, "dd/MM/yyyy HH:mm");
 
-  //! codigo viejo del contador sin pausa
-  // useEffect(() => {
-  //   const intervalId = setInterval(
-  //     () => setTotalGenerado((prevTotalGenerado) => prevTotalGenerado + 0.01),
-  //     1000
-  //   );
-
-  //   return () => clearInterval(intervalId);
-  // }, []);
-
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     setTotalConsumido((prevTotalConsumido) => prevTotalConsumido + 0.005);
-  //   }, 7000);
-
-  //   return () => clearInterval(intervalId);
-  // }, []);
   //! pausar el cotnador de energya cuando no se genera energia
   // Incrementa totalGenerado cada segundo, solo si generacionActiva es true
   useEffect(() => {
