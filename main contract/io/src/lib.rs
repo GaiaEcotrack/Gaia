@@ -8,11 +8,11 @@ use gmeta::{In,Out,InOut,Metadata};
 #[derive(Encode, Decode, TypeInfo)]
 pub enum ActionGaiaEcotrack {
     NewGenerator(ActorId,Generator),
-    Addliquidity(u128, String),
+    Addliquidity(u128,ActorId, String),
     Removeliquidity(u128, String),
-    GetRewards(u128,String),
-    Transferred(ActorId , ActorId , u128),
-    Reward(ActorId , ActorId , u128,TransactionsInfo),
+    GetRewards(Option<TxId>,u128,String),
+    Transferred(Option<TxId>,ActorId , ActorId , u128),
+    Reward(Option<TxId>,ActorId , ActorId , u128,TransactionsInfo),
     NewDevice(String,DevicesInfo),
     TransactionP_two_P(ActorId,TransactionsP2P)
     
@@ -48,45 +48,60 @@ pub enum EventsGaiaEcotrack {
 
 
 
-
+pub type TxId = u64;
+pub type ValidUntil = u64;
 // Al agregar un contrato secundario como un token fungible, hay que agregar las acciones y eventos del token fungible.
 // Este Enum define las acciones del token fungible a controlar
 #[derive(Debug, Decode, Encode, TypeInfo)]
 #[codec(crate = gstd::codec)]
 #[scale_info(crate = gstd::scale_info)]
 pub enum FTAction {
-    Mint(u128),
+    TransferToUsers {
+        amount: u128,
+        to_users: Vec<ActorId>,
+    },
+    Mint(u128,ActorId),
     Burn(u128),
     Transfer {
+        tx_id: Option<TxId>,
         from: ActorId,
         to: ActorId,
         amount: u128,
     },
     Approve {
+        tx_id: Option<TxId>,
         to: ActorId,
         amount: u128,
     },
-    TotalSupply,
     BalanceOf(ActorId),
 }
 
 // Este Enum define las eventos del token fungible a controlar
 #[derive(Encode, Decode, TypeInfo)]
 pub enum FTEvent {
-    Transfer {
+    Initialized,
+    TransferredToUsers {
+        from: ActorId,
+        to_users: Vec<ActorId>,
+        amount: u128,
+    },
+    Transferred {
         from: ActorId,
         to: ActorId,
         amount: u128,
     },
-    Approve {
+    Approved {
         from: ActorId,
         to: ActorId,
         amount: u128,
     },
-    Ok,
-    Err,
+    AdminAdded {
+        admin_id: ActorId,
+    },
+    AdminRemoved {
+        admin_id: ActorId,
+    },
     Balance(u128),
-    PermitId(u128),
 }
 
 
