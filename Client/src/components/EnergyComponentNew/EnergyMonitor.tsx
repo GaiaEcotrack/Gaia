@@ -73,7 +73,7 @@ const EnergyMonitor: React.FC<EnergyMonitorProps> = ({ percentage,size }) => {
 
       {/* Texto de porcentaje */}
       <text x={size / 2} y={size / 2} textAnchor="middle" dy="5" fontSize="16" fill="#4FD1C5">
-        {`${progress.toFixed(0)}%`}
+        99%
       </text>
     </svg>
     </div>

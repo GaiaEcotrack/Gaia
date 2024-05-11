@@ -224,7 +224,7 @@ const GraficoEnergia = () => {
         const idToken = await user.getIdToken();
         const url = import.meta.env.VITE_APP_API_URL;
         const response = await axios.get(
-          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`,
+          `${url}/devices/pv?deviceId=17&setType=EnergyAndPowerPv&period=Month?Date=2024-05`,
           //  (`${url}/devices/device-data?deviceId=16`),
           {
             method: "GET",

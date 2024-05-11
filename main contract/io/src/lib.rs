@@ -104,6 +104,52 @@ pub enum FTEvent {
     Balance(u128),
 }
 
+#[derive(Debug, Encode, Decode, TypeInfo)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
+pub enum FTReply {
+    Initialized,
+    TransferredToUsers {
+        from: ActorId,
+        to_users: Vec<ActorId>,
+        amount: u128,
+    },
+    Transferred {
+        from: ActorId,
+        to: ActorId,
+        amount: u128,
+    },
+    Approved {
+        from: ActorId,
+        to: ActorId,
+        amount: u128,
+    },
+    AdminAdded {
+        admin_id: ActorId,
+    },
+    AdminRemoved {
+        admin_id: ActorId,
+    },
+    Balance(u128),
+}
+
+#[derive(Debug, Encode, Decode, TypeInfo, MaxEncodedLen, Clone)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
+pub enum FTError {
+    DecimalsError,
+    DescriptionError,
+    MaxSupplyReached,
+    SupplyError,
+    NotAdmin,
+    NotEnoughBalance,
+    ZeroAddress,
+    NotAllowedToTransfer,
+    AdminAlreadyExists,
+    CantDeleteYourself,
+    TxAlreadyExists,
+}
+
 
 
 // Esta  estructura es para el inicio del programa: usualmente vincularemos el token fungible u otros contratos al arranque del programa.

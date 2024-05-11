@@ -24,10 +24,10 @@ const EnergyDeviceStatus = () => {
         const fetchEnergy = async () =>{
             if(selectedOption === 'recent'){
                 try {
-                     const response = await axios.get(`${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`)
+                     const response = await axios.get(`${url}/devices/pv?deviceId=17&setType=EnergyAndPowerPv&period=Month?Date=2024-05`)
                     const data = response.data.set
                     const pvGeneration = data[0].pvGeneration;
-                    setEnergy(pvGeneration) 
+                    setEnergy(pvGeneration.toFixed(1)) 
                 } catch (error) {
                     console.log(error);
                     

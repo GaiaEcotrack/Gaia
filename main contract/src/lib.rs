@@ -101,12 +101,7 @@ impl GaiaEcotrackMainState {
     }
     async fn transfer_tokens_between_actors(&mut self,tx_id: Option<TxId>, from: ActorId, to: ActorId, amount_tokens: u128) {
         let address_ft = addresft_state_mut();
-        let payload = FTAction::Transfer {
-            tx_id,
-            from,
-            to,
-            amount: amount_tokens,
-        };
+        let payload = FTAction::Transfer{tx_id,from, to ,amount: amount_tokens};
         let _ = msg::send(address_ft.ft_program_id, payload, 0);
         msg::reply(
             EventsGaiaEcotrack::TokensTransferred {
@@ -122,12 +117,7 @@ impl GaiaEcotrackMainState {
     async fn claimedTokens(&mut self,tx_id: Option<TxId>, from: ActorId, to: ActorId, amount_tokens: u128 ) {
         let address_ft = addresft_state_mut();
         let kw_generated_calculate = amount_tokens * 10;
-        let payload = FTAction::Transfer {
-            tx_id,
-            from,
-            to,
-            amount: amount_tokens,
-        };
+        let payload = FTAction::Transfer{tx_id,from, to ,amount: amount_tokens};
         let _ = msg::send(address_ft.ft_program_id, payload, 0);
         msg::reply(
             EventsGaiaEcotrack::Claimed {

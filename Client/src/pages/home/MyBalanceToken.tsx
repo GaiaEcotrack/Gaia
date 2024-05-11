@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ProgramMetadata, encodeAddress } from "@gear-js/api";
+import { ProgramMetadata, encodeAddress , GearKeyring } from "@gear-js/api";
 import { useApi, useAlert, useAccount } from "@gear-js/react-hooks";
 import { useDispatch} from 'react-redux';
 
@@ -30,7 +30,16 @@ function LocalBalanceToken() {
   const metadata = ProgramMetadata.from(meta);
   
 
-  console.log(account?.address);
+  const llavero = async ()=>{
+    const seed = account!.decodedAddress;
+   const keyring = await GearKeyring.fromSeed(seed, 'name');
+   return keyring
+  }
+  llavero().then(resultado => {
+    console.log(resultado.address);
+  }).catch(error => {
+    console.error('Error:', error);
+  });
   
   const getBalance = () => {
     if (api) {
@@ -38,7 +47,6 @@ function LocalBalanceToken() {
         .read({ programId: programIDFT, payload: "" }, metadata)
         .then((result: { toJSON: () => any; }) => {
           setFullState(result.toJSON());
-          console.log(result.toJSON());
           
         })
         .catch(({ message }: Error) => alert.error(message));
