@@ -178,6 +178,8 @@ const GraficoEnergia = () => {
       try {
         const auth = getAuth();
         const user = auth.currentUser;
+        console.log(auth);
+        
 
         if (!user) {
           throw new Error("User is not authenticated");
@@ -261,6 +263,78 @@ const GraficoEnergia = () => {
         console.log(error);
       }
     };
+    ///
+
+    // const fetchEnergyTwo = async () => {
+    //   try {
+    //     const auth = getAuth();
+    //     const user = auth.currentUser;
+    
+    //     if (!user) {
+    //       throw new Error("User is not authenticated");
+    //     }
+    
+    //     const idToken = await user.getIdToken();
+    //     const url = `${import.meta.env.VITE_APP_API_URL}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`;
+    
+    //     const response = await fetch(url, {
+    //       method: "GET",
+    //       headers: {
+    //         Authorization: `Bearer ${idToken}`,
+    //         "Content-Type": "application/json",
+    //       },
+    //     });
+    
+    //     if (!response.ok) {
+    //       throw new Error(`HTTP error! status: ${response.status}`);
+    //     }
+    
+    //     const jsonResponse = await response.json();
+    
+    //     if (jsonResponse && jsonResponse.set && jsonResponse.set.length > 0) {
+    //       const pvGeneration = jsonResponse.set[0].pvGeneration;
+    //       const totalConsumidoCalculado = pvGeneration * 0.5; 
+    //       const excedenteCapturadoCalculado = Math.max(0, pvGeneration - totalConsumidoCalculado);
+    
+    //       // Preparar los datos para enviar al servidor
+    //       const postData = {
+    //         total_generated: pvGeneration,
+    //         total_consumed: totalConsumidoCalculado,
+    //         total_excedente: excedenteCapturadoCalculado,
+    //         user_id: user.uid 
+    //       };
+    //       console.log("Energia guardad en db:", postData);
+          
+    
+    //       // URL de la API para enviar datos
+    //       const postUrl = `${import.meta.env.VITE_APP_API_URL}/energyGenerated/ejemplo`; // Cambia 'yourEndpoint' por el endpoint real
+    
+    //       // Enviar los datos al servidor
+    //       const postResponse = await fetch(postUrl, {
+    //         method: "POST",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //           Authorization: `Bearer ${idToken}`, // Si es necesario
+    //         },
+    //         body: JSON.stringify(postData)
+    //       });
+    
+    //       if (!postResponse.ok) {
+    //         throw new Error(`HTTP error! status: ${postResponse.status}`);
+    //       }
+    
+    //       // console.log("Data sent successfully", await postResponse.json());
+    //     } else {
+    //       // Manejar el caso en que data.set es undefined o vacío
+    //       console.error("PV generation data is missing or empty", jsonResponse);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching or posting energy data:", error);
+    //   }
+    // };
+    
+
+    ///
     fetchEnergyTwo();
     fetchEnergy();
 
@@ -281,23 +355,37 @@ const GraficoEnergia = () => {
   };
   //!  chequear los valores del local storage
   useEffect(() => {
-    // Recuperar valores desde localStorage
-    const storedTotalGenerado = JSON.parse(
-      localStorage.getItem("totalGenerado") || "0"
-    );
-    const storedTotalConsumido = JSON.parse(
-      localStorage.getItem("totalConsumido") || "0"
-    );
-    const storedTotalExcedente = JSON.parse(
-      localStorage.getItem("totalExcedente") || "0"
-    );
+    localStorage.setItem("totalGenerado", totalGenerado.toString());
+  }, [totalGenerado]);
+  
+  useEffect(() => {
+    localStorage.setItem("totalConsumido", totalConsumido.toString());
+  }, [totalConsumido]);
+  
+  useEffect(() => {
+    const calculatedExcedente = totalGenerado - totalConsumido;
+    setTotalExcedente(calculatedExcedente);
+    localStorage.setItem("totalExcedente", calculatedExcedente.toString());
+  }, [totalGenerado, totalConsumido]);
 
-    // Eestados con los valores recuperados
-    setTotalGenerado(storedTotalGenerado);
-    setTotalConsumido(storedTotalConsumido);
-    setTotalExcedente(storedTotalExcedente);
-    console.log("grafico energia", setTotalExcedente);
+  
+
+  useEffect(() => {
+    const storedTotalGenerado = localStorage.getItem("totalGenerado");
+    const storedTotalConsumido = localStorage.getItem("totalConsumido");
+    const storedTotalExcedente = localStorage.getItem("totalExcedente");
+  
+    if (storedTotalGenerado !== null) {
+      setTotalGenerado(parseFloat(storedTotalGenerado));
+    }
+    if (storedTotalConsumido !== null) {
+      setTotalConsumido(parseFloat(storedTotalConsumido));
+    }
+    if (storedTotalExcedente !== null) {
+      setTotalExcedente(parseFloat(storedTotalExcedente));
+    }
   }, []);
+  
   //!  ------------------
   useEffect(() => {
     const updateBarChart = () => {
@@ -318,9 +406,6 @@ const GraficoEnergia = () => {
         setBarData(newBarData);
       }
 
-      localStorage.setItem("totalGenerado", JSON.stringify(totalGenerado));
-      localStorage.setItem("totalConsumido", JSON.stringify(totalConsumido));
-      localStorage.setItem("totalExcedente", JSON.stringify(totalExcedente));
     };
 
     const intervalId = setInterval(updateBarChart, 1500);
@@ -334,23 +419,6 @@ const GraficoEnergia = () => {
 
   const showDate = format(currentDate, "dd/MM/yyyy HH:mm");
 
-  //! codigo viejo del contador sin pausa
-  // useEffect(() => {
-  //   const intervalId = setInterval(
-  //     () => setTotalGenerado((prevTotalGenerado) => prevTotalGenerado + 0.01),
-  //     1000
-  //   );
-
-  //   return () => clearInterval(intervalId);
-  // }, []);
-
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     setTotalConsumido((prevTotalConsumido) => prevTotalConsumido + 0.005);
-  //   }, 7000);
-
-  //   return () => clearInterval(intervalId);
-  // }, []);
   //! pausar el cotnador de energya cuando no se genera energia
   // Incrementa totalGenerado cada segundo, solo si generacionActiva es true
   useEffect(() => {
@@ -405,11 +473,11 @@ const GraficoEnergia = () => {
       } else {
         setTotalExcedente(0);
       }
-      const excedente = () => {
-        return (totalGenerado * 0.2).toFixed(1);
-      };
-
-      setExcedenteCapturado((totalGenerado * 0.2).toFixed(1));
+      const excedente = ()=>{
+        return (totalGenerado * 0.2).toFixed(1)
+      }
+      
+      setExcedenteCapturado((totalGenerado * 0.2).toFixed());
     };
 
     handleCaptureExcedente();
@@ -647,7 +715,8 @@ const GraficoEnergia = () => {
       signerVou();
     }
   };
-
+  
+  
   // Creacion de usuario en la DB
   const URL = import.meta.env.VITE_APP_API_URL;
   const [email, setEmail] = useState("");

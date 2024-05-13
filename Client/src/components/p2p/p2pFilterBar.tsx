@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import SellConfirmModal from "./sellConfirmModal";
+import SellConfirmModal from "./SellConfirmModal";
 import { auth } from "../../firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { isLoggedIn } from "@/utils";
 
 
 const P2PFilterBar: React.FC<{setMode: (mode: 'Buy' | 'Sell') => void}> = ({ setMode }) => {
@@ -18,7 +17,7 @@ const P2PFilterBar: React.FC<{setMode: (mode: 'Buy' | 'Sell') => void}> = ({ set
         const URL = import.meta.env.VITE_APP_API_URL;
         const { data } = await axios.get(`${URL}/coinbase`);
         const varaPrice = data.vara.price.data.amount;
-        console.log("vara price", varaPrice);
+        // console.log("vara price", varaPrice);
         setCryptoPrice(varaPrice);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -60,7 +59,7 @@ const P2PFilterBar: React.FC<{setMode: (mode: 'Buy' | 'Sell') => void}> = ({ set
         </button>
         <button
           className="px-6 py-2 text-white w-24 bg-red-700 rounded hover:bg-red-600 focus:outline-none"
-          onClick={handleSellClick} // Usa la función handleSellClick aquí
+          onClick={handleSellClick} 
         >
           Sell
         </button>
@@ -69,9 +68,8 @@ const P2PFilterBar: React.FC<{setMode: (mode: 'Buy' | 'Sell') => void}> = ({ set
         <span className="text-emerald-400">{cryptoPrice} USDT</span> <br/>
         <span className="text-gray-900">Hello</span>
         <span className="text-gray-900"> {loggedInUser?.email} </span>
-        <span className="text-gray-900"> Kw available for sell: {totalExcedente} </span>
+        <span className="text-gray-900"> Kw available (excedent): {totalExcedente} </span>
       </div>
-      {/* Otros elementos del componente */}
 
       {/* Aquí se incluye SellConfirmModal */}
       <SellConfirmModal
@@ -81,8 +79,8 @@ const P2PFilterBar: React.FC<{setMode: (mode: 'Buy' | 'Sell') => void}> = ({ set
           // Aquí manejas la confirmación de la venta
           alert("Welcome to Gaia community!");
           setIsSellConfirmModalOpen(false);
-          // Aquí podrías llamar a setMode('Sell') o manejar la venta de otra manera
         }}
+        maxAvailableKwh={totalExcedente}
       />
     </div>
   );

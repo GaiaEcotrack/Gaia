@@ -11,6 +11,7 @@ import { TwoFactorAuth } from "@/components/Login/TwoFactorAuth";
 import axios from "axios";
 import { ResetPassword } from "@/components/Login/ResetPassword";
 
+
 /* eslint-disable */
 export interface ILoginPageProps {}
   
@@ -31,6 +32,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const [foundUserId, setFoundUserId] = useState('');
   const [password, setPassword] = useState("")
   const [visible, setVisible] = useState(false)
+
 
   const eye = <BsEye className="text-xl text-gray-800"/>
   const eyeSlash = <BsEyeSlash className="text-xl text-gray-800"/>
@@ -68,7 +70,6 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
               email: emailRef.current?.value,
             },
           });
-    
           if (response.status === 200) {
             const verified2fa = response.data.verified_2fa;
             setFoundUserId(response.data._id); 

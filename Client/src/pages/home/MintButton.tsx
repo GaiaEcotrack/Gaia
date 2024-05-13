@@ -38,7 +38,7 @@ function Mint() {
 
 
   const programIDFT =
-    "0xc470a22d79d90991a3b45d381c7cd863bd4f883364bdff49819fe775eb518375";
+    "0xef93543e0c2b0779c51719ea7624af9b99fc411e825a715165977c489ac72432";
 
   // Add your metadata.txt
   const meta =
@@ -67,11 +67,7 @@ function Mint() {
   const message: any = {
     destination: programIDFT, // programId
     payload: {
-      newDevice: [
-        "5HjNGPcdpphBeLq6ffechssztTar6e2xXuavMAdeo3JHGcdR",
-        { id: 1, name: "sma-nico", typeEnergy: "solar", serial: "248-SMA" },
-        { id: 2, name: "sma-nico", typeEnergy: "solar", serial: "248-SMA" },
-      ],
+      generateenergy: 1000,
     },
     gasLimit: 9999819245,
     value: 0,
@@ -79,7 +75,7 @@ function Mint() {
 
   const messageTwo: any = {
     destination: programIDFT, // programId
-    payload: { generateEnergy: 1000000 },
+    payload: { generateenergy: 1000000 },
     gasLimit: 5246462557,
     value: 0,
   };
@@ -105,7 +101,7 @@ function Mint() {
 
     if (isVisibleAccount) {
       // Create a message extrinsic
-      const transferExtrinsic = await api!.message.send(messageThree, metadata);
+      const transferExtrinsic = await api!.message.send(message, metadata);
       const keyring = await GearKeyring.fromSuri("//Bob");
 
       await transferExtrinsic.signAndSend(keyring, (event: any) => {
