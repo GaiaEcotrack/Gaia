@@ -24,6 +24,7 @@ import PaymentModalMp from "./components/PaymentConfirmedModal/PaymentModalMp";
 import { AuthProvider } from '@/contexts/AuthContext';
 import P2PPage from "./pages/p2p/P2PPage";
 import ChatBot from "./pages/ChatBot/ChatBot";
+import FormGaia from "./pages/formGaia/FormGaia";
 
 
 initializeApp(config.firebaseConfig);
@@ -47,18 +48,20 @@ function Component() {
         location.pathname !== '/dataPrivacy' &&
         location.pathname !== '/payment' &&
         location.pathname !== '/dashAdmin' &&
+        location.pathname !== '/form' &&
         location.pathname !== '/' && <SideBar />}    
 
       <main>
         {location.pathname === '/assets/logo' && <Logo />}
         {location.pathname === '/serviceTerms' && <TermsAndPolicy />}
         {location.pathname === '/dataPrivacy' && <TermsAndPolicy />}
+        {location.pathname === '/form' && <FormGaia />}
 
         {isAppReady && 
-          !['/assets/logo', '/serviceTerms', '/dataPrivacy'].includes(location.pathname) && <Routing />}
+          !['/assets/logo', '/serviceTerms', '/dataPrivacy', '/form'].includes(location.pathname) && <Routing />}
 
         {!isAppReady && 
-          !['/assets/logo', '/serviceTerms', '/dataPrivacy'].includes(location.pathname) && <ApiLoader />}
+          !['/assets/logo', '/serviceTerms', '/dataPrivacy', '/form'].includes(location.pathname) && <ApiLoader />}
       </main>
     
         <Routes>
@@ -77,6 +80,7 @@ function Component() {
         location.pathname !== '/dataPrivacy' &&
         location.pathname !== '/payment' &&
         location.pathname !== '/dashAdmin' &&
+        location.pathname !== '/form' &&
         location.pathname !== '/' && <Footer />} 
 
       {shouldShowSidebar && 
@@ -85,6 +89,7 @@ function Component() {
         location.pathname !== '/dataPrivacy' &&
         location.pathname !== '/payment' &&
         location.pathname !== '/dashAdmin' &&
+        location.pathname !== '/form' &&
         location.pathname !== '/' && <ChatBot/>}    
 
     </div>
