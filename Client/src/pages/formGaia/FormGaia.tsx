@@ -48,9 +48,9 @@ function FormGaia() {
   }
 
   return (
-    <div className='ml-[20%] mr-[20%] pt-10 pb-32'>
+    <div className='ml-[15%] mr-[15%] pt-10 pb-16 px-10 bg-[#0d113b6d]'>
 
-      <button className="flex flex-row justify-center items-center w-full gap-2 mb-16">
+      <button className="flex flex-col justify-center items-center w-full gap-2 mb-16">
         <h1>
           <a 
           href="https://www.gaiaecotrack.com"
@@ -66,7 +66,7 @@ function FormGaia() {
 
         <h1 className='text-5xl mt-auto'>
           <a href="https://www.gaiaecotrack.com"
-          target="_blank" rel="noreferrer">GaiaEcotrack.com</a>
+          target="_blank" rel="noreferrer">GaiaEcotrack</a>
         </h1>
 
       </button>
