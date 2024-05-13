@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import emailjs from '@emailjs/browser';
+import Swal from "sweetalert2";
 
 function FormGaia() {
   const refForm = useRef<HTMLFormElement | null>(null);
@@ -7,6 +8,35 @@ function FormGaia() {
   const [typeCompany, setTypeCompany] = useState('');
   const [cost, setCost] = useState('');
   const [aspect, setAspect] = useState('');
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.onmouseenter = Swal.stopTimer;
+      toast.onmouseleave = Swal.resumeTimer;
+    }
+  }); 
+
+  const resetForm = () => {
+    setMembership('');
+    setTypeCompany('');
+    setCost('');
+    setAspect('');
+  
+    const inputFields = document.querySelectorAll<HTMLInputElement>('input[type="text"]');
+    inputFields.forEach((input) => {
+      input.value = '';
+    });
+  
+    const textareaFields = document.querySelectorAll<HTMLTextAreaElement>('textarea');
+    textareaFields.forEach((textarea) => {
+      textarea.value = '';
+    });
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -25,6 +55,11 @@ function FormGaia() {
       emailjs.sendForm(serviceId, templateId, refForm.current, apikey)
         .then((result) => {
           console.log(result.text);
+          Toast.fire({
+            icon: "success",
+            title: "Mensaje enviado correctamente"
+          });
+          resetForm();
         })
         .catch((error) => {
           console.log(error.text);
@@ -143,7 +178,7 @@ function FormGaia() {
         </fieldset>
 
         <fieldset className='flex flex-col'>
-          <label htmlFor="">Mensaje</label>
+          <label htmlFor="">Comentarios adicionales:</label>
           <textarea className='text-black border-2 rounded-lg p-2 flex border-gray-300 bg-[#ecf0f3]' name='message' placeholder='' maxLength={500} rows={5}  required />
         </fieldset>
 
