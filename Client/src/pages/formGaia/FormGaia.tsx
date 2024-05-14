@@ -120,12 +120,12 @@ function FormGaia() {
 
         <fieldset className='flex flex-col'>
           <label htmlFor="">Nombre de la empresa (si aplica) </label>
-          <input className="border-2 rounded-lg p-2 flex text-black border-gray-300 bg-[#ecf0f3] h-8" name='company' type="text" placeholder='' required />
+          <input className="border-2 rounded-lg p-2 flex text-black border-gray-300 bg-[#ecf0f3] h-8" name='company' type="text" placeholder='' />
         </fieldset>
 
         <fieldset className='flex flex-col'>
           <label htmlFor="">Cargo de la empresa (si aplica) </label>
-          <input className="border-2 rounded-lg p-2 flex text-black border-gray-300 bg-[#ecf0f3] h-8" name='position' type="text" placeholder='' required />
+          <input className="border-2 rounded-lg p-2 flex text-black border-gray-300 bg-[#ecf0f3] h-8" name='position' type="text" placeholder='' />
         </fieldset>
 
         <fieldset className='flex flex-col'>
