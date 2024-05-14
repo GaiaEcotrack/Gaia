@@ -40,18 +40,23 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
   };
   const [photoDB, setPhotoDB] = useState<string | null>(null);
   const [photoURL, setPhotoURL] = useState('');
+  const [photoFirebase, setPhotoFirebase] = useState<string | null>(null)
 
   useEffect(() => {
     const auth = getAuth();
-    const user = auth.currentUser;  
+    const user = auth.currentUser;
 
+    if (user && user.photoURL) {
+      setPhotoFirebase(user.photoURL);
+    }
+    
     const actualizarFotoDePerfil = async () => {
       try {
         const userId = localStorage.getItem('id');
-  
+        
         // Verificar si hay una imagen en user.photoURL, si no, usar la URL predeterminada
-        const photoURL = user?.photoURL || `https://api.multiavatar.com/c6c7f124c574a60dd2.png?apikey=CRrgM6wP8NoyEx`;
-  
+        const photoURL = photoFirebase || `https://api.multiavatar.com/c6c7f124c574a60dd2.png?apikey=CRrgM6wP8NoyEx`;
+        
         setPhotoURL(photoURL);
   
         const response = await axios.get(`${URL}/users/${userId}`);
@@ -73,7 +78,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
     // Esperar 2 segundos antes de llamar a actualizarFotoDePerfil
     const timeoutId = setTimeout(() => {
       actualizarFotoDePerfil();
-    }, 1000);  
+    }, 500);  
     // Limpiar el timeout si el componente se desmonta antes de que se cumplan los 2 segundos
     return () => clearTimeout(timeoutId);
   }, [photoURL]);
