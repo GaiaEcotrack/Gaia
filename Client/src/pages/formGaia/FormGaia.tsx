@@ -83,7 +83,7 @@ function FormGaia() {
   }
 
   return (
-    <div className='ml-[15%] mr-[15%] pt-10 pb-16 px-10 bg-[#0d113b6d]'>
+    <div className='md:ml-[15%] md:mr-[15%] pt-10 pb-16 px-10 bg-[#0d113b6d]'>
 
       <button className="flex flex-col justify-center items-center w-full gap-2 mb-16">
         <h1>
@@ -130,7 +130,7 @@ function FormGaia() {
 
         <fieldset className='flex flex-col'>
           <label htmlFor="">Seleccione la opción que más le representa:</label>
-          <select name="typeCompany" value={typeCompany} onChange={handleTypeCompany} className='border-2 rounded-lg flex text-black border-gray-300 bg-[#ecf0f3] h-8'>
+          <select name="typeCompany" value={typeCompany} onChange={handleTypeCompany} className='w-[100%] border-2 rounded-lg flex text-black border-gray-300 bg-[#ecf0f3] h-8'>
             <option value="">Selecciona una opción</option>
             <option value="Empresa instaladora de sistemas fotovoltaicos">Empresa instaladora de sistemas fotovoltaicos</option>
             <option value="Autoconsumidor con sistema fotovoltaico residencial">Autoconsumidor con sistema fotovoltaico residencial</option>
@@ -150,7 +150,7 @@ function FormGaia() {
 
         <fieldset className='flex flex-col'>
           <label htmlFor="">¿Si su respuesta fue Sí, ¿qué rango de precio anual consideraría razonable?</label>
-          <select name="cost" value={cost} onChange={handleCost} className='border-2 rounded-lg flex text-black border-gray-300 bg-[#ecf0f3] h-8'>
+          <select name="cost" value={cost} onChange={handleCost} className='w-[100%] border-2 rounded-lg flex text-black border-gray-300 bg-[#ecf0f3] h-8'>
             <option value="">Selecciona una opción</option>
             <option value="Hasta $60 (USD)">Hasta $60 (USD)</option>
             <option value="$100">$100</option>
@@ -162,7 +162,7 @@ function FormGaia() {
 
         <fieldset className='flex flex-col'>
           <label htmlFor="">¿Qué aspecto de Gaia EcoTrack le parece más atractivo?</label>
-          <select name="aspect" value={aspect} onChange={handleAspect} className='border-2 rounded-lg flex text-black border-gray-300 bg-[#ecf0f3] h-8'>
+          <select name="aspect" value={aspect} onChange={handleAspect} className='w-[100%] border-2 rounded-lg flex text-black border-gray-300 bg-[#ecf0f3] h-8'>
             <option value="">Selecciona una opción</option>
             <option value="Monetización de excedentes de energía renovable">Monetización de excedentes de energía renovable</option>
             <option value="Uso de tecnología blockchain">Uso de tecnología blockchain</option>
