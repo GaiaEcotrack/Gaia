@@ -7,14 +7,14 @@ use gmeta::{In,Out,InOut,Metadata};
 // 1. Acciones para el contrato principal de Gaia: Este enum puede tener todas las acciones de quienes participaran en el proceso.
 #[derive(Encode, Decode, TypeInfo)]
 pub enum ActionGaiaEcotrack {
-    NewGenerator(ActorId,Generator),
-    Addliquidity(u128,ActorId, String),
-    Removeliquidity(u128, String),
-    GetRewards(Option<TxId>,u128,String),
-    Transferred(Option<TxId>,ActorId , ActorId , u128),
-    Reward(Option<TxId>,ActorId , ActorId , u128,TransactionsInfo),
-    NewDevice(String,DevicesInfo),
-    TransactionP_two_P(ActorId,TransactionsP2P)
+    NewGenerator{id:ActorId,generator:Generator},
+    Addliquidity{supply:u128,password:String},
+    Removeliquidity{supply:u128,password:String},
+    GetRewards{tx_id:Option<TxId>,tokens:u128,password:String},
+    Transferred{tx_id:Option<TxId>,from:ActorId,to:ActorId,amount:u128 , password:String},
+    Reward{tx_id:Option<TxId>, to:ActorId ,amount: u128,transactions:TransactionsInfo},
+    NewDevice{id:String,device:DevicesInfo},
+    TransactionPTwoP{id:ActorId,transaction:TransactionsP2P}
     
     // Aqui se pueden implementar acciones adicionales en el contrato
 }
@@ -102,6 +102,52 @@ pub enum FTEvent {
         admin_id: ActorId,
     },
     Balance(u128),
+}
+
+#[derive(Debug, Encode, Decode, TypeInfo)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
+pub enum FTReply {
+    Initialized,
+    TransferredToUsers {
+        from: ActorId,
+        to_users: Vec<ActorId>,
+        amount: u128,
+    },
+    Transferred {
+        from: ActorId,
+        to: ActorId,
+        amount: u128,
+    },
+    Approved {
+        from: ActorId,
+        to: ActorId,
+        amount: u128,
+    },
+    AdminAdded {
+        admin_id: ActorId,
+    },
+    AdminRemoved {
+        admin_id: ActorId,
+    },
+    Balance(u128),
+}
+
+#[derive(Debug, Encode, Decode, TypeInfo, MaxEncodedLen, Clone)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
+pub enum FTError {
+    DecimalsError,
+    DescriptionError,
+    MaxSupplyReached,
+    SupplyError,
+    NotAdmin,
+    NotEnoughBalance,
+    ZeroAddress,
+    NotAllowedToTransfer,
+    AdminAlreadyExists,
+    CantDeleteYourself,
+    TxAlreadyExists,
 }
 
 

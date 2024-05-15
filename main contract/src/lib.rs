@@ -30,7 +30,7 @@ impl GaiaEcotrackMainState {
 
 
     // Esta función agregaria liquidez de tokens al contrato principal para posteriormente transferirla a los generadores
-    async fn add_liquidity( &mut self, amount: u128 , password:String , to:ActorId){
+    async fn add_liquidity( &mut self, amount: u128 , password:String){
         let caller = msg::source();
 
         // Check if caller is the admin before proceeding
@@ -46,11 +46,11 @@ impl GaiaEcotrackMainState {
         let address_ft = addresft_state_mut();
 
         // Esta payload será la acción que se mandará al token fungible.
-        let payload = FTAction::Mint(amount , to);
+        let payload = FTAction::Mint(amount ,exec::program_id());
 
         // Esta linea manda el mensaje para el cual se espera como respuesta el evento.
             
-        let result =  msg::send_for_reply_as::<_, FTEvent>(address_ft.ft_program_id,payload,0,0).expect("Error in sending a message").await;
+        let _result =  msg::send_for_reply_as::<_, FTEvent>(address_ft.ft_program_id,payload,0,0).expect("Error in sending a message").await;
 
         msg::reply(EventsGaiaEcotrack::Success("Aggregate liquidity".to_string()), 0)
             .expect("failed to encode or reply from `state()`");
@@ -73,7 +73,7 @@ impl GaiaEcotrackMainState {
         else{
             let address_ft = addresft_state_mut();           
             let payload = FTAction::Burn(amount_tokens);     
-            let result =  msg::send_for_reply_as::<_, FTEvent>(address_ft.ft_program_id,payload,0,0).expect("Error in sending a message").await;
+            let _result =  msg::send_for_reply_as::<_, FTEvent>(address_ft.ft_program_id,payload,0,0).expect("Error in sending a message").await;
            
         }
     }
@@ -99,35 +99,30 @@ impl GaiaEcotrackMainState {
         // Aquí se pueden generar eventos de confirmación al usuario.
 
     }
-    async fn transfer_tokens_between_actors(&mut self,tx_id: Option<TxId>, from: ActorId, to: ActorId, amount_tokens: u128) {
-        let address_ft = addresft_state_mut();
-        let payload = FTAction::Transfer {
-            tx_id,
-            from,
-            to,
-            amount: amount_tokens,
-        };
-        let _ = msg::send(address_ft.ft_program_id, payload, 0);
-        msg::reply(
-            EventsGaiaEcotrack::TokensTransferred {
-                from: from,
-                to: to,
-                amount : amount_tokens,
-            },
-            0,
-        )
-        .unwrap();
+    async fn transfer_tokens_between_actors(&mut self, tx_id: Option<TxId>,from:&ActorId,to:&ActorId, amount_tokens: u128 , password:String) {
+
+        if  password != addresft_state_mut().admin_password {
+            msg::reply(EventsGaiaEcotrack::Error("Unauthorized".to_string()), 0)
+            .expect("failed to encode or reply from `state()`");
+            return;
+        }
+        else {
+            
+            let address_ft = addresft_state_mut();
+            let payload = FTAction::Transfer{ tx_id, from: *from, to: *to,amount:amount_tokens };
+            let _ = msg::send(address_ft.ft_program_id, payload, 0);
+            msg::reply(
+                EventsGaiaEcotrack::TokensTransferred{from: *from, to: *to, amount:amount_tokens },
+                0,
+            ).expect("failed to encode or reply from `state()`");
+        return;
+        }
     }
 
-    async fn claimedTokens(&mut self,tx_id: Option<TxId>, from: ActorId, to: ActorId, amount_tokens: u128 ) {
+    async fn claimed_tokens(&mut self,tx_id: Option<TxId>, to: ActorId, amount_tokens: u128 ) {
         let address_ft = addresft_state_mut();
         let kw_generated_calculate = amount_tokens * 10;
-        let payload = FTAction::Transfer {
-            tx_id,
-            from,
-            to,
-            amount: amount_tokens,
-        };
+        let payload = FTAction::Transfer{tx_id,from : msg::source(), to ,amount: amount_tokens};
         let _ = msg::send(address_ft.ft_program_id, payload, 0);
         msg::reply(
             EventsGaiaEcotrack::Claimed {
@@ -220,7 +215,7 @@ async fn main(){
 
     // Aquí se evalua todas las acciones y se ejecuta lo correspondiente.
     match action {
-        ActionGaiaEcotrack::NewGenerator(actorid,generator) =>  {
+        ActionGaiaEcotrack::NewGenerator{id,generator} =>  {
 
             // Esta varible usa la  función de mutabilidad para poder cambiar el estado principal.
             let state = state_mut();
@@ -229,7 +224,7 @@ async fn main(){
             // TRANSICIÓN DE ESTADO PRINCIPAL
             // Ingresamos al campo generators del estado principal(struc GaiaEcotrackMainState )
             // entry busca el actorid y si no existe lo inserta como un generador nuevo
-            state.generators.entry(actorid).or_insert(Generator {
+            state.generators.entry(id).or_insert(Generator {
                 id: generator.id,
                 wallet:generator.wallet,
                 total_generated: 0,
@@ -243,7 +238,7 @@ async fn main(){
 
  
             },
-        ActionGaiaEcotrack::Addliquidity(amount,password,to) => {
+        ActionGaiaEcotrack::Addliquidity{supply,password} => {
 
 
             let state = state_mut();
@@ -253,15 +248,15 @@ async fn main(){
             state.generators
              .entry(msg::source())
              .and_modify(|generator| {
-                generator.rewards = generator.rewards.saturating_add(amount);
+                generator.rewards = generator.rewards.saturating_add(supply);
              });
 
              // Aquí llamamos a un método en la implementación
-             state.add_liquidity(amount, to, password).await;
+             state.add_liquidity(supply, password).await;
                      
             }
 
-        ActionGaiaEcotrack::GetRewards(tx_id,amount,password) => {
+        ActionGaiaEcotrack::GetRewards{tx_id,tokens,password} => {
 
 
             let state = state_mut();
@@ -271,31 +266,30 @@ async fn main(){
             state.generators
             .entry(msg::source())
             .and_modify(|generator| {
-               generator.rewards = generator.rewards.saturating_sub(amount);
+               generator.rewards = generator.rewards.saturating_sub(tokens);
             });
 
             // Aquí llamamos a un método para transferir tokens en la implementación
-            state.transfer_tokens_to_generators(tx_id, amount, password.to_string()).await;
+            state.transfer_tokens_to_generators(tx_id, tokens, password.to_string()).await;
                 
              
             }
-            ActionGaiaEcotrack::Removeliquidity(amount , password) => {
+            ActionGaiaEcotrack::Removeliquidity{supply , password} => {
                 let state = state_mut();         
                 // Llama al método remove_liquidity
-                state.remove_liquidity(amount,password.to_string()).await;
+                state.remove_liquidity(supply,password.to_string()).await;
             }
 
-            ActionGaiaEcotrack::Transferred(tx_id,from, to, amount) => {
+            ActionGaiaEcotrack::Transferred{tx_id,from, to, amount,password} => {
                 let state = state_mut();
-                state.transfer_tokens_between_actors(tx_id,from, to, amount).await;
+                state.transfer_tokens_between_actors(tx_id,&from, &to, amount,password).await;
             }
 
-            ActionGaiaEcotrack::Reward(tx_id,from, to, amount , transactions) => {
+            ActionGaiaEcotrack::Reward{tx_id, to, amount , transactions} => {
                 let state = state_mut();
-                let calculate = amount / 10 ;
-                state.claimedTokens(tx_id,from, to, amount).await;
+                state.claimed_tokens(tx_id, to, amount).await;
 
-                let transactions_state = state.transactions.entry(from.clone()).or_insert(vec![]);
+                let transactions_state = state.transactions.entry(msg::source().clone()).or_insert(vec![]);
                 transactions_state.push(TransactionsInfo {
                     to : transactions.to,
                     amount: transactions.amount,
@@ -303,12 +297,12 @@ async fn main(){
                 });
             }
 
-            ActionGaiaEcotrack::NewDevice(idUser,device) =>  {
+            ActionGaiaEcotrack::NewDevice{id,device} =>  {
                 let state = state_mut();
 
                 // TRANSICIÓN DE ESTADO PRINCIPAL
                 // Buscamos si ya existe un vector de devices para ese idUser
-                let user_devices = state.devices.entry(idUser.clone()).or_insert(vec![]);
+                let user_devices = state.devices.entry(id.clone()).or_insert(vec![]);
     
                 // Insertamos el nuevo dispositivo en el vector
                 user_devices.push(DevicesInfo {
@@ -324,20 +318,20 @@ async fn main(){
      
                 }
 
-            ActionGaiaEcotrack::TransactionP_two_P(actor,p2p) =>  {
+            ActionGaiaEcotrack::TransactionPTwoP{id,transaction} =>  {
                     let state = state_mut();
     
                     // TRANSICIÓN DE ESTADO PRINCIPAL
                     // Buscamos si ya existe un vector de devices para ese idUser
-                    let p2p_state = state.p2p_transactions.entry(actor.clone()).or_insert(vec![]);
+                    let p2p_state = state.p2p_transactions.entry(id.clone()).or_insert(vec![]);
         
                     // Insertamos el nuevo dispositivo en el vector
                     p2p_state.push(TransactionsP2P {
-                        from: p2p.from,
-                        to: p2p.to,
-                        kw: p2p.kw,
-                        date: p2p.date,
-                        value: p2p.value,
+                        from: transaction.from,
+                        to: transaction.to,
+                        kw: transaction.kw,
+                        date: transaction.date,
+                        value: transaction.value,
                     });
         
                     msg::reply(EventsGaiaEcotrack::TransactionsP2P("Transaction Completed".to_string()), 0)
