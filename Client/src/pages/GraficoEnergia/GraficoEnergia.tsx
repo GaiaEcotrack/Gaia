@@ -216,6 +216,9 @@ const GraficoEnergia = () => {
       try {
         const auth = getAuth();
         const user = auth.currentUser;
+        console.log(user);
+        
+
 
         if (!user) {
           throw new Error("User is not authenticated");
@@ -482,8 +485,75 @@ const GraficoEnergia = () => {
 
     handleCaptureExcedente();
 
-    // ... (your existing code)
   }, [totalGenerado, totalConsumido, excedenteCapturado]);
+  
+  // Funcion para almacenar y actualizar los datos de energia del usuario
+  const sendEnergyDataToBackend = async () => {
+    
+    const userId = localStorage.getItem("id");
+ 
+      if (!userId) {
+        throw new Error("User ID not found in localStorage");
+      }
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+  
+      if (!user) {
+        throw new Error("User is not authenticated");
+      }
+      // const idToken = await user.getIdToken();
+      const url = import.meta.env.VITE_APP_API_URL;
+  
+      const data = {
+        energy_in_kilowatts: 0.0333301,  // Cambia estos valores a los correctos
+        energy_tokenized_in_gaia_tokens: 0.03333005,  // Cambia estos valores a los correctos
+        is_tokenized: true,  
+        total_generated: parseFloat(localStorage.getItem("totalGenerado") || "0"),
+        total_consumed: parseFloat(localStorage.getItem("totalConsumido") || "0"),
+        total_excedent: parseFloat(localStorage.getItem("totalExcedente") || "0"),
+        tokenization_date: new Date().toISOString()
+      };
+  
+      const response = await axios.put(
+        `${url}/energyGenerated/${userId}/energy`,  // Asegúrate de que la URL sea correcta
+        data,
+        {
+          headers: {
+            // Authorization: `Bearer ${idToken}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+  
+      if (response.status === 201) {
+        console.log("Energy data stored successfully");
+      } else {
+        console.error("Failed to store energy data", response.status);
+      }
+    } catch (error) {
+      console.error("Error storing energy data", error);
+    }
+  };
+
+  // Actualizar los datos de energia cada 23 hs
+  const scheduleEnergyDataSend = () => {
+    const now = new Date();
+    const currentTime = now.getTime();
+
+    const nextTest = new Date(now.getTime() + 60 * 1000);  // 1 minuto en el futuro
+    const timeUntilNextTest = nextTest.getTime() - currentTime;
+
+    setTimeout(() => {
+      sendEnergyDataToBackend();
+      setInterval(sendEnergyDataToBackend, 60 * 60 * 1000); // Cada 1 hora
+    }, timeUntilNextTest);
+  };
+
+  useEffect(() => {
+    scheduleEnergyDataSend();
+  }, []);
+  
 
   //-------------------------------------------------------------------VARA INTEGRATION
 
