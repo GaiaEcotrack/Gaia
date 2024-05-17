@@ -124,7 +124,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
             <div className="p-4 m-2 border-2 w-[50%]">
               <label
                 htmlFor="amount"
-                className="block text-gray-900"
+                className="block text-gray-900 text-[17px] font-black"
               >
                 How many kW do you want to buy ?
               </label>
@@ -135,7 +135,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
                   id="amount"
                   value={inputValue}
                   onChange={handleInputChange}
-                  className="focus:ring-indigo-500 focus:border-indigo-500 block w-[70%] pl-3 pr-2 sm:text-sm text-gray-900 border-gray-300 rounded-md shadow-sm"
+                  className="focus:ring-indigo-500 focus:border-indigo-500 block w-[70%] h-8 pl-3 pr-2 sm:text-sm text-gray-900 border border-gray-600 rounded-md shadow-sm"
                   placeholder="0"
                 />
               </div>
