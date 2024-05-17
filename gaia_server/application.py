@@ -3,6 +3,7 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from flask_swagger_ui import get_swaggerui_blueprint
 import os
+import logging
 from dotenv import load_dotenv
 import secrets
 
@@ -28,6 +29,17 @@ from src.routes.tokenization_energy import energyGenerated_routes
 import logging.config
 from config import LOG_FORMAT, LOG_LOCATION, LOG_LEVEL
 logging.basicConfig(format=LOG_FORMAT, filename=LOG_LOCATION, level=LOG_LEVEL)
+
+LOG_DIRECTORY = 'C:\\Users\\Diego\\Documents\\projects\\VaraEnergy\\gaia_server\\logs'
+LOG_FILE = os.path.join(LOG_DIRECTORY, 'application.log')
+LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+LOG_LEVEL = logging.DEBUG
+
+# Crear el directorio de logs si no existe
+if not os.path.exists(LOG_DIRECTORY):
+    os.makedirs(LOG_DIRECTORY)
+
+logging.basicConfig(format=LOG_FORMAT, filename=LOG_FILE, level=LOG_LEVEL)
 
 ## prometheus 
 from prometheus_client import start_http_server, Counter,Histogram, Gauge
