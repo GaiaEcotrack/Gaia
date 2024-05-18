@@ -53,7 +53,7 @@ const P2PFilterBar: React.FC<{setMode: (mode: 'Buy' | 'Sell') => void}> = ({ set
     <div className="flex flex-wrap items-center justify-between p-4 bg-white shadow-md m-2">
       <div className="space-x-2">
         <button
-          className="px-6 py-2 text-white w-24 bg-emerald-500 rounded hover:bg-emerald-400 focus:outline-none"
+          className="px-6 py-2 text-white w-24 bg-green-500 rounded hover:bg-green-600 focus:outline-none"
           onClick={() => setMode('Buy')}
         >
           Buy

@@ -3,6 +3,7 @@ import TransactionModal from "./TransactionModal";
 import { auth } from "../../firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import axios from "axios";
+import { Currency } from "lucide-react";
 
 type PaymentMethod = "Polkadot wallet";
 
@@ -47,6 +48,7 @@ const P2PTable: React.FC<P2PTableProps> = ({ mode }) => {
 
   interface User {
     _id: string;
+    photo_profile: string;
     email: string;
     full_name: string | null;
     wallet: Wallet;
@@ -67,7 +69,7 @@ const P2PTable: React.FC<P2PTableProps> = ({ mode }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser:any) => {
       setLoggedInUser(currentUser);
     });
-
+    
     return () => unsubscribe();
   }, []);
 
@@ -100,22 +102,52 @@ const P2PTable: React.FC<P2PTableProps> = ({ mode }) => {
     fetchUsers();
   }, [loggedInUser]);
 
+
   return (
     <div className="flex flex-wrap m-2" style={{ backgroundImage: "url('ruta_de_la_imagen')" }}>
       {users.map((user: User, index) => (
-        <div key={user._id} className="w-full bg-gray-100 px-4 pt-4">
-          <div className="hidden md:block border-b-2 border-gray-300 p-4">
-            <h2 className="text-lg text-gray-900 font-medium title-font mb-0 hover:cursor-pointer">
-              User: {" "}
-              {user.full_name ? user.full_name : user.email.split("@")[0]}
-            </h2>
-            <p className="text-gray-700">
-              Email:{" "}
-              {user.email}
-            </p>
-            <p className="text-gray-700">
-            Kw to sell : {" "} {user.wallet && user.wallet.willing_to_sell_excess ? user.wallet.amount_kwh_to_sell : "N/A"} kw
-            </p>
+        <div key={user._id} className="w-full bg-gray-100">
+          <div className="hidden md:block border-b-2 border-gray-300 p-8">
+
+            <div className="flex flex-row">
+
+              <div className="flex justify-center items-start w-16 ">
+                <img 
+                  src={user.photo_profile ? user.photo_profile : "https://api.multiavatar.com/c6c7f124c574a60dd2.png?apikey=CRrgM6wP8NoyEx"} 
+                  alt="imagen" 
+                  className="h-8 w-8 rounded-full" 
+                />             
+              </div>
+
+              <div className="w-[73%] pt-1">
+                <h2 className="text-lg text-gray-900 font-medium title-font mb-0 hover:cursor-pointer">
+                  User: {" "}
+                  {user.full_name ? user.full_name : user.email.split("@")[0]}
+                </h2>
+                <p className="text-gray-700">
+                  Email:{" "}
+                  {user.email}
+                </p>
+                <p className="text-gray-700">
+                Kw to sell : {" "} {user.wallet && user.wallet.willing_to_sell_excess ? user.wallet.amount_kwh_to_sell : "N/A"} kw
+                </p>
+              </div>
+
+              <div className="flex justify-end items-center w-[20%]">
+                <button
+                  className={`text-white h-12 ${
+                    mode === "Buy"
+                      ? "bg-green-500 hover:bg-green-600"
+                      : "bg-red-600 hover:bg-red-500"
+                  } w-24 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5`}
+                  onClick={() => handleButtonModal(user)}
+                >
+                  {mode === "Buy" ? "Buy" : "Sell"}
+                </button>
+              </div>
+
+            </div>
+
             {/* <p className="text-gray-900">Gaia Token Balance: {user.wallet.gaia_token_balance}</p> */}
             {/* <div>
               <h3 className="text-gray-900">Transactions:</h3>
@@ -131,18 +163,6 @@ const P2PTable: React.FC<P2PTableProps> = ({ mode }) => {
                 ))}
             </div> */}
             {/* Botón para Buy/Sell según corresponda */}
-            <div className="text-right">
-              <button
-                className={`text-white ${
-                  mode === "Buy"
-                    ? "bg-emerald-500 hover:bg-emerald-400"
-                    : "bg-red-600 hover:bg-red-500"
-                } w-24 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5`}
-                onClick={() => handleButtonModal(user)}
-              >
-                {mode === "Buy" ? "Buy" : "Sell"}
-              </button>
-            </div>
           </div>
         </div>
       ))}
