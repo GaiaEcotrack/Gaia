@@ -665,32 +665,44 @@ const GraficoEnergia = () => {
     const isVisibleAccount = accounts.some(
       (visibleAccount) => visibleAccount.address === localaccount
     );
+    const key = import.meta.env.VITE_APP_ADMIN_KEY;
 
     if (isVisibleAccount) {
       const { signer } = await web3FromSource(account.meta.source);
       const gas = await api.program.calculateGas.handle(
         account?.decodedAddress ?? "0x00",
         programIDFT,
-        { Reward: null },
+        { GetRewards: {
+          "tx_id":null,
+          "tokens": excedenteCapturado,
+          "password": key,
+          "transactions": {
+              "to": account.decodedAddress,
+              "amount": excedenteCapturado,
+              "kw": totalGenerado.toFixed().toString().replace(".", ""),
+              "surplus": totalConsumido.toFixed().toString().replace(".", "")
+          }
+      } },
         0,
         true,
         metadata
       );
-      const MidWallet = import.meta.env.VITE_APP_MID_KEY;
+      console.log(gasToSpend(gas));
       const transferExtrinsic = api.message.send(
         {
           destination: programIDFT, // programId
           payload: {
-            Reward: [
-              decodeAddress(MidWallet),
-              account.decodedAddress,
-              excedenteCapturado,
-              {
-                to: account.decodedAddress,
-                amount: excedenteCapturado,
-                kw: totalGenerado.toFixed().toString().replace(".", ""),
-              },
-            ],
+            getrewards:{
+              "tx_id":null,
+              "tokens": excedenteCapturado,
+              "password": key,
+              "transactions": {
+                  "to": account.decodedAddress,
+                  "amount": excedenteCapturado,
+                  "kw": totalGenerado.toFixed().toString().replace(".", ""),
+                  "surplus": totalConsumido.toFixed().toString().replace(".", "")
+              }
+          },
           },
           gasLimit: gasToSpend(gas),
           value: 0,
