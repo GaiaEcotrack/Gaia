@@ -3,6 +3,7 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from flask_swagger_ui import get_swaggerui_blueprint
 import os
+import logging
 from dotenv import load_dotenv
 import secrets
 
@@ -24,6 +25,29 @@ from src.routes.wallet_gaia import wallet_route
 from src.routes.transaction import transaction_route
 from src.routes.tokenization_energy import energyGenerated_routes
 
+##logs de flask
+import logging.config
+from config import LOG_FORMAT, LOG_LOCATION, LOG_LEVEL
+logging.basicConfig(format=LOG_FORMAT, filename=LOG_LOCATION, level=LOG_LEVEL)
+
+LOG_DIRECTORY = '/Users/agustinnazer/desktop/VaraEnergy/gaia_server/logs'
+LOG_FILE = os.path.join(LOG_DIRECTORY, 'application.log')
+LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+LOG_LEVEL = logging.DEBUG
+
+# Crear el directorio de logs si no existe
+if not os.path.exists(LOG_DIRECTORY):
+    os.makedirs(LOG_DIRECTORY)
+
+logging.basicConfig(format=LOG_FORMAT, filename=LOG_FILE, level=LOG_LEVEL)
+
+## prometheus 
+from prometheus_client import start_http_server, Counter,Histogram, Gauge
+import time
+REQUESTS = Counter('requests_total', 'Total request count of the host')
+IN_PROGRESS = Gauge('in_progress_requests', 'Number of in progress requests')
+LATENCY = Histogram('request_latency_seconds', 'Request latency')
+
 load_dotenv()
 
 application = Flask(__name__)
@@ -31,6 +55,11 @@ CORS(application,supports_credentials=True, resources={r"/*": {"origins": "*"}},
 
 application.config['MERCADOPAGO_PUBLIC_KEY'] = os.getenv('MERCADOPAGO_PUBLIC_KEY')
 application.config['MERCADOPAGO_ACCESS_TOKEN'] = os.getenv('MERCADOPAGO_ACCESS_TOKEN')
+
+mongo_uri = os.getenv("MONGO_URI")
+client = MongoClient(mongo_uri, tlsAllowInvalidCertificates=True)
+db = client['gaia']
+collection = db['users']
 
 # Configuración de Swagger
 SWAGGER_URL = "/docs"
@@ -60,10 +89,7 @@ application.register_blueprint(wallet_route, url_prefix='/wallet')
 application.register_blueprint(transaction_route, url_prefix='/transaction')
 application.register_blueprint(energyGenerated_routes, url_prefix='/energyGenerated')
 
-mongo_uri = os.getenv("MONGO_URI")
-client = MongoClient(mongo_uri, tlsAllowInvalidCertificates=True)
-db = client['gaia']
-collection = db['users']
+
 
 
 @application.route('/', methods=['GET'])
@@ -71,7 +97,28 @@ def welcome():
     # application.logger.info('Se ha realizado una solicitud a la ruta principal.')
     return jsonify({'message': 'Welcome to the Gaia Server!'})
 
+# ## prometheus metrics
+# @application.before_request
+# def before_request():
+#     IN_PROGRESS.inc()
+#     request.start_time = time.time()
+
+# @application.after_request
+# def after_request(response):
+#     request_latency = time.time() - request.start_time
+#     LATENCY.observe(request_latency)
+#     REQUESTS.inc()
+#     IN_PROGRESS.dec()
+#     return response
+
+
+# if __name__ == '__main__':
+#     try:
+#         application.run(debug=False)
+#     finally:
+#         client.close()
         
 #durante desarrollo
 if __name__ == '__main__':
+    # start_http_server(8000)
     application.run(debug=True)
