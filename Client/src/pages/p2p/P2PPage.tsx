@@ -9,9 +9,7 @@ const P2PPage: React.FC = () => {
 
   return (
     <div className='p-24'>
-      <P2PFilterBar setMode={setMode} />
       <P2pFilterSection/>
-      <P2PTable mode={mode} />
     </div>
   );
 };
