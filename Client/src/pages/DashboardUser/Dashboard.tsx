@@ -28,6 +28,7 @@ import { ModalSendToken } from "../ModalTransaction/ModalSendToken";
 import { ModalConvertTokens } from "../ModalTransaction/ModalConvertTokens";
 import { ModalFunds } from "../ModalTransaction/ModalFunds";
 import {AlertModal} from "../../components/AlertModal/AlertModal";
+import { Loader } from '@/components';
 
 
 function Dashboard() {
@@ -41,8 +42,7 @@ function Dashboard() {
     gaia: number;
     vara: number;
   }
-  
-
+  const userRedux = useSelector((state: RootState) => state.app.loggedInUser);
   const gaia = useSelector((state: RootState)=> state.app.valueGaia)
   const vara = useSelector((state: RootState)=> state.app.valueVara)
 
@@ -132,84 +132,88 @@ function Dashboard() {
   }, [gaia, vara]);
 
   return (
-    <div className="flex bg-gray-100 h-screen overflow-hidden">
+    <div>
+      {userRedux?(
+            <div className="flex bg-gray-100 h-screen overflow-hidden">
 
-      {/* Sidebar */}
-
-
-      {/* Content area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-
-        {/*  Site header */}
-        {/* <Header  /> */}
-
-        <main>
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-11/12 max-w-9xl mx-auto">
-
-            {/* Welcome banner */}
-            <WelcomeBanner />
-
-            {/* Dashboard actions */}
-
-            {/* Cards */}
-            <div className="grid grid-cols-12 gap-6">
-
-              {/* Line chart (Acme Plus) */}
-              <DashboardCard01 onClick={openCard} />
-              {/* Line chart (Acme Advanced) */}
-              <DashboardCard02 image="/VaraCrypto.png" quantity={totalVara.toFixed(2)} metric={porcentajesCambio.vara.toFixed(2)} name="Vara" onClick={openCard} />
-              {/* Line chart (Acme Professional) */}
-              <DashboardCard03 total={totalTokens.toFixed(2)} />
-              {/* Bar chart (Direct vs Indirect) */}
-              <DashboardCard04 />
-              {/* Line chart (Real Time Value) */}
-              <DashboardCard05 />
-              {/* Doughnut chart (Top Countries) */}
-              <DashboardCard06 />
-              {/* Table (Top Channels) */}
-              <DashboardCard07 />
-              {/* Line chart (Sales Over Time) */}
-              <DashboardCard08 />
-              {/* Stacked bar chart (Sales VS Refunds) */}
-              {/* <DashboardCard09 /> */}
-              {/* Card (Customers) */}
-              <DashboardCard10 />
-             
-              {/* <DashboardCard11 />
-             
-              <DashboardCard12 />
-            
-              <DashboardCard13 /> */}
-              {sendTokenState && (
-        <div>
-          <ModalSendToken onClose={onClose} />
-        </div>
-      )}
-      {convertTokenState && (
-        <div>
-          <div>
-            <ModalConvertTokens onClose={onClose} />
-          </div>
-        </div>
-      )}
-      {fundsState && (
+            {/* Sidebar */}
+      
+      
+            {/* Content area */}
+            <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+      
+              {/*  Site header */}
+              {/* <Header  /> */}
+      
+              <main>
+                <div className="px-4 sm:px-6 lg:px-8 py-8 w-11/12 max-w-9xl mx-auto">
+      
+                  {/* Welcome banner */}
+                  <WelcomeBanner />
+      
+                  {/* Dashboard actions */}
+      
+                  {/* Cards */}
+                  <div className="grid grid-cols-12 gap-6">
+      
+                    {/* Line chart (Acme Plus) */}
+                    <DashboardCard01 onClick={openCard} />
+                    {/* Line chart (Acme Advanced) */}
+                    <DashboardCard02 image="/VaraCrypto.png" quantity={totalVara.toFixed(2)} metric={porcentajesCambio.vara.toFixed(2)} name="Vara" onClick={openCard} />
+                    {/* Line chart (Acme Professional) */}
+                    <DashboardCard03 total={totalTokens.toFixed(2)} />
+                    {/* Bar chart (Direct vs Indirect) */}
+                    <DashboardCard04 />
+                    {/* Line chart (Real Time Value) */}
+                    <DashboardCard05 />
+                    {/* Doughnut chart (Top Countries) */}
+                    <DashboardCard06 />
+                    {/* Table (Top Channels) */}
+                    <DashboardCard07 />
+                    {/* Line chart (Sales Over Time) */}
+                    <DashboardCard08 />
+                    {/* Stacked bar chart (Sales VS Refunds) */}
+                    {/* <DashboardCard09 /> */}
+                    {/* Card (Customers) */}
+                    <DashboardCard10 />
+                   
+                    {/* <DashboardCard11 />
+                   
+                    <DashboardCard12 />
+                  
+                    <DashboardCard13 /> */}
+                    {sendTokenState && (
               <div>
-              <ModalFunds onClose={onClose}/>
+                <ModalSendToken onClose={onClose} />
+              </div>
+            )}
+            {convertTokenState && (
+              <div>
+                <div>
+                  <ModalConvertTokens onClose={onClose} />
+                </div>
+              </div>
+            )}
+            {fundsState && (
+                    <div>
+                    <ModalFunds onClose={onClose}/>
+                  </div>
+            )}
+            {alert && (
+              <div>
+                <AlertModal onClose={onClose}/>
+              </div>
+            )}
+                    
+                  </div>
+      
+                </div>
+              </main>
+      
+      
             </div>
-      )}
-      {alert && (
-        <div>
-          <AlertModal onClose={onClose}/>
-        </div>
-      )}
-              
-            </div>
-
           </div>
-        </main>
-
-
-      </div>
+      ):<Loader/>}
     </div>
   );
 }

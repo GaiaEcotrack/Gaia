@@ -113,6 +113,7 @@ def add_user():
     verified_2fa = data.get('verified_2fa', False)
     status_documents = "pending"
     photo_profile = data.get('photo_profile')
+    location = data.get('location')
     wallet = data.get('wallet', {})
 
     # Insertar el nuevo usuario en la colección
@@ -136,6 +137,7 @@ def add_user():
         'verified_2fa': verified_2fa,
         'status_documents': status_documents,
         'photo_profile': photo_profile,
+        'location': location,
         'wallet': {
         'gaia_token_balance': 0,
         'transactions': [],

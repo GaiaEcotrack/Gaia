@@ -54,6 +54,7 @@ import CardGenerated from "@/components/CardsEnergy/CardGenerated";
 import useVoucherUtils from "../home/VouchersUtils";
 //api timezone
 import { fetchTimeZoneInfo, TimeZoneApiResponse } from "./FetchTimeZone";
+import { Loader } from "@/components";
 
 ChartJS.register(
   ArcElement,
@@ -132,6 +133,7 @@ const GraficoEnergia = () => {
 
   const [token, setToken] = useState("");
   const userRedux = useSelector((state: RootState) => state.app.loggedInUser);
+  
 
   // estas dos funciones la movi arriba para usarlas en el scop
   const { accounts, account } = useAccount();
@@ -665,32 +667,44 @@ const GraficoEnergia = () => {
     const isVisibleAccount = accounts.some(
       (visibleAccount) => visibleAccount.address === localaccount
     );
+    const key = import.meta.env.VITE_APP_ADMIN_KEY;
 
     if (isVisibleAccount) {
       const { signer } = await web3FromSource(account.meta.source);
       const gas = await api.program.calculateGas.handle(
         account?.decodedAddress ?? "0x00",
         programIDFT,
-        { Reward: null },
+        { GetRewards: {
+          "tx_id":null,
+          "tokens": excedenteCapturado,
+          "password": key,
+          "transactions": {
+              "to": account.decodedAddress,
+              "amount": excedenteCapturado,
+              "kw": totalGenerado.toFixed().toString().replace(".", ""),
+              "surplus": totalConsumido.toFixed().toString().replace(".", "")
+          }
+      } },
         0,
         true,
         metadata
       );
-      const MidWallet = import.meta.env.VITE_APP_MID_KEY;
+      console.log(gasToSpend(gas));
       const transferExtrinsic = api.message.send(
         {
           destination: programIDFT, // programId
           payload: {
-            Reward: [
-              decodeAddress(MidWallet),
-              account.decodedAddress,
-              excedenteCapturado,
-              {
-                to: account.decodedAddress,
-                amount: excedenteCapturado,
-                kw: totalGenerado.toFixed().toString().replace(".", ""),
-              },
-            ],
+            getrewards:{
+              "tx_id":null,
+              "tokens": excedenteCapturado,
+              "password": key,
+              "transactions": {
+                  "to": account.decodedAddress,
+                  "amount": excedenteCapturado,
+                  "kw": totalGenerado.toFixed().toString().replace(".", ""),
+                  "surplus": totalConsumido.toFixed().toString().replace(".", "")
+              }
+          },
           },
           gasLimit: gasToSpend(gas),
           value: 0,
@@ -1320,145 +1334,150 @@ const GraficoEnergia = () => {
   }, []);
 
   return (
-    <div className="mb-12">
-      <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
-        <div className="flex flex-col lg:flex-row gap-5  p-2 justify-center graficos items-center">
-          <CardGenerated supply={totalGenerado.toFixed(3)} />
-          <CardConsume supply={totalConsumido.toFixed(3)} />
-          <CardEnergy supply={excedenteCapturado} reward={claimReward} />
+    <div>
+      {userRedux?(
+        <div className="mb-12">
+        <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
+          <div className="flex flex-col lg:flex-row gap-5  p-2 justify-center graficos items-center">
+            <CardGenerated supply={totalGenerado.toFixed(3)} />
+            <CardConsume supply={totalConsumido.toFixed(3)} />
+            <CardEnergy supply={excedenteCapturado} reward={claimReward} />
+          </div>
+          <div className="flex justify-center text-center text-emerald-500  ">
+            {walletMessage && <p className="text-xl">{walletMessage}</p>}
+          </div>
+          <div className="flex flex-col p-2  md:ml-10 justify-center items-center md:items-start">
+            {popupOpen && <PopUpALert onClose={closePopup} />}
+          </div>
+          <div className="flex flex-col items-center sm:flex-row sm:justify-center">
+            <div className="relative inline-block"></div>
+          </div>
         </div>
-        <div className="flex justify-center text-center text-emerald-500  ">
-          {walletMessage && <p className="text-xl">{walletMessage}</p>}
-        </div>
-        <div className="flex flex-col p-2  md:ml-10 justify-center items-center md:items-start">
-          {popupOpen && <PopUpALert onClose={closePopup} />}
-        </div>
-        <div className="flex flex-col items-center sm:flex-row sm:justify-center">
-          <div className="relative inline-block"></div>
-        </div>
-      </div>
-      {/*  NUEVO DISENO DE LA PAGINA  */}
-
-      <div className="flex flex-col m-16">
-        {/* Header del Dashboard */}
-        <div className="flex justify-around bg-blue-950 bg-opacity-90 text-white p-4 rounded-full">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Generation panel
-          </button>
-          <NavLink to="/panelUsuarioFinal">
+        {/*  NUEVO DISENO DE LA PAGINA  */}
+  
+        <div className="flex flex-col m-16">
+          {/* Header del Dashboard */}
+          <div className="flex justify-around bg-blue-950 bg-opacity-90 text-white p-4 rounded-full">
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-              Device manage
+              Generation panel
             </button>
-          </NavLink>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={openPopup}
-          >
-            Alerts
-          </button>
-        </div>
-
-        {/* Main content del Dashboard */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8">
-          {/* Cost Predicted */}
-          <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl mb-2 text-white">Energy type</h2>
-            <ReactECharts
-              option={getOption()}
-              className="w-full"
-              style={{ height: "300px" }}
-            />
+            <NavLink to="/panelUsuarioFinal">
+              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Device manage
+              </button>
+            </NavLink>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={openPopup}
+            >
+              Alerts
+            </button>
           </div>
-
-          {/* Change in Cost */}
-          <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl mb-2 text-white">Consume per day</h2>
-            <ReactECharts
-              option={options}
-              className="w-full"
-              style={{ height: "300px" }}
-            />
-          </div>
-
-          {/* Usage Estimate */}
-          <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl mb-2 text-white">Energy Intensity</h2>
-            <div className="text-white mb-4">
-              {timeZoneData ? (
-                <>
-                  <p>
-                    Time Zone device: {timeZoneData.timezone} (
-                    {timeZoneData.abbreviation})
-                  </p>
-                  {/* <p>Current Time: {timeZoneData.datetime}</p> */}
-                </>
-              ) : null}
+  
+          {/* Main content del Dashboard */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-8">
+            {/* Cost Predicted */}
+            <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+              <h2 className="text-xl mb-2 text-white">Energy type</h2>
+              <ReactECharts
+                option={getOption()}
+                className="w-full"
+                style={{ height: "300px" }}
+              />
             </div>
-            <ReactECharts
-              option={gaugeOptions}
-              style={{ height: "300px" }}
-              className="w-full"
-            />
-          </div>
-
-          {/* Active Appliances */}
-          <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl mb-2 text-white">Active plants</h2>
-            <ReactECharts
-              option={getBarChartOption(plantData)}
-              className="w-full"
-              style={{ height: "300px" }}
-            />
-          </div>
-
-          {/* Energy Intensity */}
-          <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl mb-2 text-white">Device usage Estimate</h2>
-            <ReactECharts
-              option={getBarChartOption2(deviceData)}
-              className="w-full"
-              style={{ height: "300px" }}
-            />
-          </div>
-
-          {/* Carbon Footprint */}
-          <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
-            <h2 className="text-xl mb-2 text-white">Carbon Footprint</h2>
-            <ReactECharts
-              option={options}
-              className="w-full"
-              style={{ height: "300px" }}
-            />
+  
+            {/* Change in Cost */}
+            <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+              <h2 className="text-xl mb-2 text-white">Consume per day</h2>
+              <ReactECharts
+                option={options}
+                className="w-full"
+                style={{ height: "300px" }}
+              />
+            </div>
+  
+            {/* Usage Estimate */}
+            <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+              <h2 className="text-xl mb-2 text-white">Energy Intensity</h2>
+              <div className="text-white mb-4">
+                {timeZoneData ? (
+                  <>
+                    <p>
+                      Time Zone device: {timeZoneData.timezone} (
+                      {timeZoneData.abbreviation})
+                    </p>
+                    {/* <p>Current Time: {timeZoneData.datetime}</p> */}
+                  </>
+                ) : null}
+              </div>
+              <ReactECharts
+                option={gaugeOptions}
+                style={{ height: "300px" }}
+                className="w-full"
+              />
+            </div>
+  
+            {/* Active Appliances */}
+            <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+              <h2 className="text-xl mb-2 text-white">Active plants</h2>
+              <ReactECharts
+                option={getBarChartOption(plantData)}
+                className="w-full"
+                style={{ height: "300px" }}
+              />
+            </div>
+  
+            {/* Energy Intensity */}
+            <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+              <h2 className="text-xl mb-2 text-white">Device usage Estimate</h2>
+              <ReactECharts
+                option={getBarChartOption2(deviceData)}
+                className="w-full"
+                style={{ height: "300px" }}
+              />
+            </div>
+  
+            {/* Carbon Footprint */}
+            <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg">
+              <h2 className="text-xl mb-2 text-white">Carbon Footprint</h2>
+              <ReactECharts
+                option={options}
+                className="w-full"
+                style={{ height: "300px" }}
+              />
+            </div>
           </div>
         </div>
+  
+        {/*   FIN NUEVO GRAFICO */}
+        <div className="flex items-center flex-col gap-10 justify-center">
+          <h1 className="text-6xl font-bold text-white">
+            Status of your devices
+          </h1>
+          <div className="flex flex-col sm:flex-row items-center gap-10 justify-center">
+            <EnergyMonitor percentage={60} size={200} />
+            <EnergyDeviceStatus />
+            <EnergyDeviceList />
+          </div>
+        </div>
+  
+        <ModalMintGaia
+          modalMint={modalMint}
+          setModalMint={setModalMint}
+          excedenteCapturado={excedenteCapturado}
+          setTotalGenerado={setTotalGenerado}
+          setTotalConsumido={setTotalConsumido}
+        />
+  
+        {alertWallet && (
+          <div>
+            <AlertModal onClose={onClose} />
+          </div>
+        )}
       </div>
-
-      {/*   FIN NUEVO GRAFICO */}
-      <div className="flex items-center flex-col gap-10 justify-center">
-        <h1 className="text-6xl font-bold text-white">
-          Status of your devices
-        </h1>
-        <div className="flex flex-col sm:flex-row items-center gap-10 justify-center">
-          <EnergyMonitor percentage={60} size={200} />
-          <EnergyDeviceStatus />
-          <EnergyDeviceList />
-        </div>
-      </div>
-
-      <ModalMintGaia
-        modalMint={modalMint}
-        setModalMint={setModalMint}
-        excedenteCapturado={excedenteCapturado}
-        setTotalGenerado={setTotalGenerado}
-        setTotalConsumido={setTotalConsumido}
-      />
-
-      {alertWallet && (
-        <div>
-          <AlertModal onClose={onClose} />
-        </div>
-      )}
+      ): <Loader/>}
     </div>
+    
   );
 };
 

@@ -90,7 +90,15 @@ function DeviceRegister() {
       const gas = await api.program.calculateGas.handle(
         account?.decodedAddress ?? "0x00",
         programIDFT,
-        { newDevice: null },
+        { newDevice: {
+          "id": formData.user_id,
+          "device": {
+              "id": formData.device.deviceId,
+              "name": formData.device.deviceName,
+              "type_energy": formData.device.deviceName,
+              "serial": formData.device.serial
+          }
+      } },
         0,
         true,
         metadata
@@ -99,15 +107,15 @@ function DeviceRegister() {
         {
           destination: programIDFT, // programId
           payload: {
-            newDevice: [
-              formData.user_id,
-              {
-                id: formData.device.deviceId,
-                name: formData.device.deviceName,
-                typeEnergy: formData.device.deviceName,
-                serial: formData.device.serial,
-              },
-            ],
+            newDevice: {
+              "id": formData.user_id,
+              "device": {
+                  "id": formData.device.deviceId,
+                  "name": formData.device.deviceName,
+                  "type_energy": formData.device.deviceName,
+                  "serial": formData.device.serial
+              }
+          },
           },
           gasLimit: gasToSpend(gas),
           value: 0,
