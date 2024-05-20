@@ -24,18 +24,6 @@ from src.routes.wallet_gaia import wallet_route
 from src.routes.transaction import transaction_route
 from src.routes.tokenization_energy import energyGenerated_routes
 
-##logs de flask
-import logging.config
-from config import LOG_FORMAT, LOG_LOCATION, LOG_LEVEL
-logging.basicConfig(format=LOG_FORMAT, filename=LOG_LOCATION, level=LOG_LEVEL)
-
-## prometheus 
-from prometheus_client import start_http_server, Counter,Histogram, Gauge
-import time
-REQUESTS = Counter('requests_total', 'Total request count of the host')
-IN_PROGRESS = Gauge('in_progress_requests', 'Number of in progress requests')
-LATENCY = Histogram('request_latency_seconds', 'Request latency')
-
 load_dotenv()
 
 application = Flask(__name__)
@@ -77,68 +65,13 @@ client = MongoClient(mongo_uri, tlsAllowInvalidCertificates=True)
 db = client['gaia']
 collection = db['users']
 
-# api_keys_collection = db["api_keys"]
-
-# # Ruta para generar una nueva API key (solo accesible para administradores)
-# @application.route('/generate_api_key', methods=['POST'])
-# def generate_api_key():
-#     # Verificar si la solicitud proviene de un administrador (puedes implementar tu propia lógica de autenticación aquí)
-#     is_admin = request.headers.get('X-Admin-Auth')
-#     if not is_admin:
-#         abort(403, description='Access forbidden.')
-
-#     # Generar una nueva API key única
-#     new_api_key = secrets.token_urlsafe(16)
-
-#     # Almacenar la nueva API key en MongoDB
-#     api_keys_collection.insert_one({"api_key": new_api_key})
-
-#     # Devolver la nueva API key al administrador
-#     return jsonify({'api_key': new_api_key}), 201
-
-# @application.before_request
-# def validate_api_key():
-#     # Obtener la API key de la cabecera de la solicitud
-#     api_key = request.headers.get('X-API-KEY')
-    
-#     # Si no se proporciona la API key, devolver un error 401
-#     if not api_key:
-#         abort(401, description='API Key missing.')
-
-#     # Verificar si la API Key es válida consultando en la base de datos
-#     if not api_keys_collection.find_one({"api_key": api_key}):
-#         abort(401, description='Invalid API Key.')
-
-
-
 
 @application.route('/', methods=['GET'])
 def welcome():
-    application.logger.info('Se ha realizado una solicitud a la ruta principal.')
+    # application.logger.info('Se ha realizado una solicitud a la ruta principal.')
     return jsonify({'message': 'Welcome to the Gaia Server!'})
 
-## prometheus metrics
-@application.before_request
-def before_request():
-    IN_PROGRESS.inc()
-    request.start_time = time.time()
-
-@application.after_request
-def after_request(response):
-    request_latency = time.time() - request.start_time
-    LATENCY.observe(request_latency)
-    REQUESTS.inc()
-    IN_PROGRESS.dec()
-    return response
-
-
-# if __name__ == '__main__':
-#     try:
-#         application.run(debug=False)
-#     finally:
-#         client.close()
         
 #durante desarrollo
 if __name__ == '__main__':
-    # start_http_server(8000)
     application.run(debug=True)
