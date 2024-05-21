@@ -411,7 +411,7 @@ const GraficoEnergia = () => {
         return (totalGenerado * 0.2).toFixed(1)
       }
       
-      setExcedenteCapturado((totalGenerado * 0.2));
+      setExcedenteCapturado((totalGenerado * 0.2).toFixed());
     };
 
     handleCaptureExcedente();
@@ -1087,7 +1087,11 @@ const GraficoEnergia = () => {
     name: string;
   }
 
-//********** FUNCION  */
+
+
+
+//********** FUNCION PETICIONES ***********/
+
 
   const fetchAllData = async () => {
     const fetchEnergy = async () => {
@@ -1330,7 +1334,11 @@ const GraficoEnergia = () => {
     }, 3000);
   
     return () => clearInterval(interval);
-  }, []);
+  }, [email, handleSearch, searchCompleted]);
+
+
+
+  //**********  FIN FUNCION PETICIONES ***********/
 
 
 
