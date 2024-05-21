@@ -30,10 +30,12 @@ import logging.config
 from config import LOG_FORMAT, LOG_LOCATION, LOG_LEVEL
 logging.basicConfig(format=LOG_FORMAT, filename=LOG_LOCATION, level=LOG_LEVEL)
 
-LOG_DIRECTORY = 'C:\\Users\\usuario\\Desktop\\portfolio\\Gaia-Develop\\gaia_server\\logs'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_DIRECTORY = os.path.join(BASE_DIR, 'logs')
 LOG_FILE = os.path.join(LOG_DIRECTORY, 'application.log')
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 LOG_LEVEL = logging.DEBUG
+
 
 # Crear el directorio de logs si no existe
 if not os.path.exists(LOG_DIRECTORY):
