@@ -175,181 +175,110 @@ const GraficoEnergia = () => {
 
   const [energyData, setEnergyData] = useState(50);
   //!!!!!!!!!!!!!!!!
-  useEffect(() => {
-    const fetchEnergy = async () => {
-      try {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        console.log(auth);
+  // useEffect(() => {
+  //   const fetchEnergy = async () => {
+  //     try {
+  //       const auth = getAuth();
+  //       const user = auth.currentUser;
+  //       console.log(auth);
         
 
-        if (!user) {
-          throw new Error("User is not authenticated");
-        }
+  //       if (!user) {
+  //         throw new Error("User is not authenticated");
+  //       }
 
-        const idToken = await user.getIdToken();
+  //       const idToken = await user.getIdToken();
 
-        const url = import.meta.env.VITE_APP_API_URL;
-        const response = await fetch(
-          `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${idToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await response.json();
+  //       const url = import.meta.env.VITE_APP_API_URL;
+  //       const response = await fetch(
+  //         `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
+  //         {
+  //           method: "GET",
+  //           headers: {
+  //             Authorization: `Bearer ${idToken}`,
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       const data = await response.json();
 
-        if (data.set) {
-          const energy = data.set.map((energ: any) => energ.pvGeneration);
-          setEnergyBatery(energy);
-        } else {
-          // Manejar el caso en que data.set es undefined
-          console.error("data.set is undefined", data);
-        }
-      } catch (error) {
-        console.error("Error fetching energy data:", error);
-      }
-    };
+  //       if (data.set) {
+  //         const energy = data.set.map((energ: any) => energ.pvGeneration);
+  //         setEnergyBatery(energy);
+  //       } else {
+  //         // Manejar el caso en que data.set es undefined
+  //         console.error("data.set is undefined", data);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching energy data:", error);
+  //     }
+  //   };
 
-    const fetchEnergyTwo = async () => {
-      try {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        console.log(user);
+  //   const fetchEnergyTwo = async () => {
+  //     try {
+  //       const auth = getAuth();
+  //       const user = auth.currentUser;
+  //       console.log(user);
         
 
 
-        if (!user) {
-          throw new Error("User is not authenticated");
-        }
+  //       if (!user) {
+  //         throw new Error("User is not authenticated");
+  //       }
 
-        const idToken = await user.getIdToken();
-        const url = import.meta.env.VITE_APP_API_URL;
-        const response = await axios.get(
-          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2024-05`,
-          //  (`${url}/devices/device-data?deviceId=16`),
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${idToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = response.data.set;
-        const pvGeneration = data[0].pvGeneration;
-        setTotalGenerado(pvGeneration);
-        // Determina si la generación está activa basada en el umbral de 0.2
-        setGeneracionActiva(pvGeneration > 0.2);
+  //       const idToken = await user.getIdToken();
+  //       const url = import.meta.env.VITE_APP_API_URL;
+  //       const response = await axios.get(
+  //         `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2024-05`,
+  //         //  (`${url}/devices/device-data?deviceId=16`),
+  //         {
+  //           method: "GET",
+  //           headers: {
+  //             Authorization: `Bearer ${idToken}`,
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       const data = response.data.set;
+  //       const pvGeneration = data[0].pvGeneration;
+  //       setTotalGenerado(pvGeneration);
+  //       // Determina si la generación está activa basada en el umbral de 0.2
+  //       setGeneracionActiva(pvGeneration > 0.2);
 
-        // Actualiza totalConsumido y excedenteCapturado aquí 
-        const totalConsumidoCalculado = pvGeneration * 0.5; 
-        const excedenteCapturadoCalculado = Math.max(
-          pvGeneration - totalConsumidoCalculado
-        ); 
+  //       // Actualiza totalConsumido y excedenteCapturado aquí 
+  //       const totalConsumidoCalculado = pvGeneration * 0.5; 
+  //       const excedenteCapturadoCalculado = Math.max(
+  //         pvGeneration - totalConsumidoCalculado
+  //       ); 
 
-        setTotalConsumido(totalConsumidoCalculado);
-        setExcedenteCapturado(excedenteCapturadoCalculado);
+  //       setTotalConsumido(totalConsumidoCalculado);
+  //       setExcedenteCapturado(excedenteCapturadoCalculado);
 
-        // Actualizar localStorage con los nuevos valores
-        localStorage.setItem("totalGenerado", JSON.stringify(pvGeneration));
-        localStorage.setItem(
-          "totalConsumido",
-          JSON.stringify(totalConsumidoCalculado)
-        );
-        localStorage.setItem(
-          "totalExcedente",
-          JSON.stringify(excedenteCapturadoCalculado)
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    ///
+  //       // Actualizar localStorage con los nuevos valores
+  //       localStorage.setItem("totalGenerado", JSON.stringify(pvGeneration));
+  //       localStorage.setItem(
+  //         "totalConsumido",
+  //         JSON.stringify(totalConsumidoCalculado)
+  //       );
+  //       localStorage.setItem(
+  //         "totalExcedente",
+  //         JSON.stringify(excedenteCapturadoCalculado)
+  //       );
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+   
+  //   fetchEnergyTwo();
+  //   fetchEnergy();
 
-    // const fetchEnergyTwo = async () => {
-    //   try {
-    //     const auth = getAuth();
-    //     const user = auth.currentUser;
-    
-    //     if (!user) {
-    //       throw new Error("User is not authenticated");
-    //     }
-    
-    //     const idToken = await user.getIdToken();
-    //     const url = `${import.meta.env.VITE_APP_API_URL}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Recent`;
-    
-    //     const response = await fetch(url, {
-    //       method: "GET",
-    //       headers: {
-    //         Authorization: `Bearer ${idToken}`,
-    //         "Content-Type": "application/json",
-    //       },
-    //     });
-    
-    //     if (!response.ok) {
-    //       throw new Error(`HTTP error! status: ${response.status}`);
-    //     }
-    
-    //     const jsonResponse = await response.json();
-    
-    //     if (jsonResponse && jsonResponse.set && jsonResponse.set.length > 0) {
-    //       const pvGeneration = jsonResponse.set[0].pvGeneration;
-    //       const totalConsumidoCalculado = pvGeneration * 0.5; 
-    //       const excedenteCapturadoCalculado = Math.max(0, pvGeneration - totalConsumidoCalculado);
-    
-    //       // Preparar los datos para enviar al servidor
-    //       const postData = {
-    //         total_generated: pvGeneration,
-    //         total_consumed: totalConsumidoCalculado,
-    //         total_excedente: excedenteCapturadoCalculado,
-    //         user_id: user.uid 
-    //       };
-    //       console.log("Energia guardad en db:", postData);
-          
-    
-    //       // URL de la API para enviar datos
-    //       const postUrl = `${import.meta.env.VITE_APP_API_URL}/energyGenerated/ejemplo`; // Cambia 'yourEndpoint' por el endpoint real
-    
-    //       // Enviar los datos al servidor
-    //       const postResponse = await fetch(postUrl, {
-    //         method: "POST",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //           Authorization: `Bearer ${idToken}`, // Si es necesario
-    //         },
-    //         body: JSON.stringify(postData)
-    //       });
-    
-    //       if (!postResponse.ok) {
-    //         throw new Error(`HTTP error! status: ${postResponse.status}`);
-    //       }
-    
-    //       // console.log("Data sent successfully", await postResponse.json());
-    //     } else {
-    //       // Manejar el caso en que data.set es undefined o vacío
-    //       console.error("PV generation data is missing or empty", jsonResponse);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error fetching or posting energy data:", error);
-    //   }
-    // };
-    
+  //   // Simula la actualización en tiempo real de los datos de energía
+  //   const interval = setInterval(() => {
+  //     setEnergyData(Math.random());
+  //   }, 3000);
 
-    ///
-    fetchEnergyTwo();
-    fetchEnergy();
-
-    // Simula la actualización en tiempo real de los datos de energía
-    const interval = setInterval(() => {
-      setEnergyData(Math.random());
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const openPopup = () => {
     setPopupOpen(true);
@@ -482,7 +411,7 @@ const GraficoEnergia = () => {
         return (totalGenerado * 0.2).toFixed(1)
       }
       
-      setExcedenteCapturado((totalGenerado * 0.2).toFixed());
+      setExcedenteCapturado((totalGenerado * 0.2));
     };
 
     handleCaptureExcedente();
@@ -872,30 +801,30 @@ const GraficoEnergia = () => {
   };
   const [searchCompleted, setSearchCompleted] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      const storedEmail = localStorage.getItem("email") ?? "";
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const auth = getAuth();
+  //     const user = auth.currentUser;
+  //     const storedEmail = localStorage.getItem("email") ?? "";
 
-      if (!storedEmail && user?.email) {
-        localStorage.setItem("email", user.email);
-      }
-      setEmail(storedEmail || "");
+  //     if (!storedEmail && user?.email) {
+  //       localStorage.setItem("email", user.email);
+  //     }
+  //     setEmail(storedEmail || "");
 
-      try {
-        await handleSearch();
-        setSearchCompleted(true);
+  //     try {
+  //       await handleSearch();
+  //       setSearchCompleted(true);
 
-        if (searchCompleted) {
-          addNewUser();
-        }
-      } catch (error) {
-        console.error("Error during handleSearch:", error);
-      }
-    };
-    fetchData();
-  }, [email, handleSearch]);
+  //       if (searchCompleted) {
+  //         addNewUser();
+  //       }
+  //     } catch (error) {
+  //       console.error("Error during handleSearch:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [email, handleSearch]);
 
   // PopUp completar registro
   useEffect(() => {
@@ -975,81 +904,81 @@ const GraficoEnergia = () => {
   const [options, setOptions] = useState({});
 
   // Obtener datos de la API y actualizar barData
-  useEffect(() => {
-    const fetchChartData = async () => {
-      const url = `${
-        import.meta.env.VITE_APP_API_URL
-      }/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-03`;
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
+  // useEffect(() => {
+  //   const fetchChartData = async () => {
+  //     const url = `${
+  //       import.meta.env.VITE_APP_API_URL
+  //     }/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-03`;
+  //     try {
+  //       const response = await fetch(url);
+  //       if (!response.ok) throw new Error("Network response was not ok");
+  //       const data = await response.json();
 
-        const colors = ["#e74c3c", "#3498db", "#2ecc71"];
-        // Procesa y actualiza las opciones de ECharts
-        setOptions({
-          color: ["#74b9ff"],
-          title: {
-            textStyle: {
-              color: "#FFFFFF",
-            },
-          },
-          tooltip: {
-            trigger: "axis",
-            axisPointer: {
-              type: "shadow",
-            },
-          },
-          xAxis: {
-            type: "category",
-            data: data.set.map((item) => moment(item.time).format("MMM D")),
-            axisLine: {
-              lineStyle: {
-                color: "#FFFFFF", // Cambia el color de la línea del eje X a blanco
-              },
-            },
-            axisLabel: {
-              color: "#FFFFFF", // Etiquetas del eje X en blanco
-            },
-            splitLine: {
-              show: false, // Opcional: esconde las líneas de división para un diseño más limpio
-            },
-          },
-          yAxis: {
-            type: "value",
-            axisLine: {
-              lineStyle: {
-                color: "#FFFFFF", // Cambia el color de la línea del eje Y a blanco
-              },
-            },
-            axisLabel: {
-              color: "#FFFFFF", // Etiquetas del eje Y en blanco
-            },
-            splitLine: {
-              lineStyle: {
-                color: "#FFFFFF", // Cambia el color de las líneas de división del eje Y si deseas mantenerlas
-                opacity: 0.1, // Reduce la opacidad para hacerlas menos prominentes
-              },
-            },
-          },
-          series: [
-            {
-              data: data.set.map((item) => item.pvGeneration),
-              type: "bar",
-              barWidth: "60%",
-              itemStyle: {
-                color: "#74b9ff", // O define el color específico de la serie aquí
-              },
-            },
-          ],
-        });
-      } catch (error) {
-        console.error("Error fetching chart data:", error);
-      }
-    };
+  //       const colors = ["#e74c3c", "#3498db", "#2ecc71"];
+  //       // Procesa y actualiza las opciones de ECharts
+  //       setOptions({
+  //         color: ["#74b9ff"],
+  //         title: {
+  //           textStyle: {
+  //             color: "#FFFFFF",
+  //           },
+  //         },
+  //         tooltip: {
+  //           trigger: "axis",
+  //           axisPointer: {
+  //             type: "shadow",
+  //           },
+  //         },
+  //         xAxis: {
+  //           type: "category",
+  //           data: data.set.map((item: any) => moment(item.time).format("MMM D")),
+  //           axisLine: {
+  //             lineStyle: {
+  //               color: "#FFFFFF", // Cambia el color de la línea del eje X a blanco
+  //             },
+  //           },
+  //           axisLabel: {
+  //             color: "#FFFFFF", // Etiquetas del eje X en blanco
+  //           },
+  //           splitLine: {
+  //             show: false, // Opcional: esconde las líneas de división para un diseño más limpio
+  //           },
+  //         },
+  //         yAxis: {
+  //           type: "value",
+  //           axisLine: {
+  //             lineStyle: {
+  //               color: "#FFFFFF", // Cambia el color de la línea del eje Y a blanco
+  //             },
+  //           },
+  //           axisLabel: {
+  //             color: "#FFFFFF", // Etiquetas del eje Y en blanco
+  //           },
+  //           splitLine: {
+  //             lineStyle: {
+  //               color: "#FFFFFF", // Cambia el color de las líneas de división del eje Y si deseas mantenerlas
+  //               opacity: 0.1, // Reduce la opacidad para hacerlas menos prominentes
+  //             },
+  //           },
+  //         },
+  //         series: [
+  //           {
+  //             data: data.set.map((item: any) => item.pvGeneration),
+  //             type: "bar",
+  //             barWidth: "60%",
+  //             itemStyle: {
+  //               color: "#74b9ff", // O define el color específico de la serie aquí
+  //             },
+  //           },
+  //         ],
+  //       });
+  //     } catch (error) {
+  //       console.error("Error fetching chart data:", error);
+  //     }
+  //   };
 
-    fetchChartData();
-  }, []);
+  //   fetchChartData();
+  // }, []);
 
   //! Medidor de intensidad de enrgia: esta tomando la data de la engeriga generada
   const [timeZoneData, setTimeZoneData] = useState<TimeZoneApiResponse | null>(
@@ -1065,7 +994,7 @@ const GraficoEnergia = () => {
     });
   }, []);
 
-  const getCurrentHour = (datetime) => {
+  const getCurrentHour = (datetime: any) => {
     // console.log(datetime);
 
     if (!datetime) return 0;
@@ -1076,31 +1005,31 @@ const GraficoEnergia = () => {
   };
 
   const [gaugeOptions, setGaugeOptions] = useState({});
-  useEffect(() => {
-    const fetchEnergyData = async () => {
-      const url = `${
-        import.meta.env.VITE_APP_API_URL
-      }/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2024-05`;
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
-        console.log(data);
+  // useEffect(() => {
+  //   const fetchEnergyData = async () => {
+  //     const url = `${
+  //       import.meta.env.VITE_APP_API_URL
+  //     }/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2024-05`;
+  //     try {
+  //       const response = await fetch(url);
+  //       if (!response.ok) throw new Error("Network response was not ok");
+  //       const data = await response.json();
+  //       console.log(data);
 
-        // Accede a pvGeneration desde la respuesta de la API
-        const gaugeValue = data.set[0].pvGeneration; // Asume que siempre hay al menos un elemento en 'set'
+  //       // Accede a pvGeneration desde la respuesta de la API
+  //       const gaugeValue = data.set[0].pvGeneration; // Asume que siempre hay al menos un elemento en 'set'
 
-        // Configura las opciones del gráfico con el valor obtenido
-        setGaugeOptions(getGaugeOption(gaugeValue));
-      } catch (error) {
-        console.error("Error fetching energy data:", error);
-      }
-    };
+  //       // Configura las opciones del gráfico con el valor obtenido
+  //       setGaugeOptions(getGaugeOption(gaugeValue));
+  //     } catch (error) {
+  //       console.error("Error fetching energy data:", error);
+  //     }
+  //   };
 
-    fetchEnergyData();
-  }, []);
+  //   fetchEnergyData();
+  // }, []);
 
-  const getGaugeOption = (gaugeValue) => {
+  const getGaugeOption = (gaugeValue: any) => {
     return {
       tooltip: {
         // formatter: "{a} <br/>{b}: {c}%",
@@ -1131,7 +1060,7 @@ const GraficoEnergia = () => {
           },
           detail: {
             show: true,
-            formatter: function (value) {
+            formatter: function (value: any) {
               return `${value.toFixed(2)}  kw\n{white|PV Generation}`;
             },
             rich: {
@@ -1158,20 +1087,199 @@ const GraficoEnergia = () => {
     name: string;
   }
 
-  // ! Grafico para mostrar las plantas.
-  useEffect(() => {
-    const fetchData = async () => {
-      const url = import.meta.env.VITE_APP_API_URL; // Reemplaza con la URL correcta.
+//********** FUNCION  */
+
+  const fetchAllData = async () => {
+    const fetchEnergy = async () => {
+      try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        console.log(auth);
+  
+        if (!user) {
+          throw new Error("User is not authenticated");
+        }
+  
+        const idToken = await user.getIdToken();
+        const url = import.meta.env.VITE_APP_API_URL;
+        const response = await fetch(
+          `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+  
+        if (data.set) {
+          const energy = data.set.map((energ: any) => energ.pvGeneration);
+          setEnergyBatery(energy);
+        } else {
+          console.error("data.set is undefined", data);
+        }
+      } catch (error) {
+        console.error("Error fetching energy data:", error);
+      }
+    };
+  
+    const fetchEnergyTwo = async () => {
+      try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        console.log(user);
+  
+        if (!user) {
+          throw new Error("User is not authenticated");
+        }
+  
+        const idToken = await user.getIdToken();
+        const url = import.meta.env.VITE_APP_API_URL;
+        const response = await axios.get(
+          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2024-05`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${idToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = response.data.set;
+        const pvGeneration = data[0].pvGeneration;
+        setTotalGenerado(pvGeneration);
+        setGeneracionActiva(pvGeneration > 0.2);
+  
+        const totalConsumidoCalculado = pvGeneration * 0.5;
+        const excedenteCapturadoCalculado = Math.max(pvGeneration - totalConsumidoCalculado);
+  
+        setTotalConsumido(totalConsumidoCalculado);
+        setExcedenteCapturado(excedenteCapturadoCalculado);
+  
+        localStorage.setItem("totalGenerado", JSON.stringify(pvGeneration));
+        localStorage.setItem("totalConsumido", JSON.stringify(totalConsumidoCalculado));
+        localStorage.setItem("totalExcedente", JSON.stringify(excedenteCapturadoCalculado));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    const fetchChartData = async () => {
+      const url = `${import.meta.env.VITE_APP_API_URL}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-03`;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+  
+        setOptions({
+          color: ["#74b9ff"],
+          title: {
+            textStyle: {
+              color: "#FFFFFF",
+            },
+          },
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "shadow",
+            },
+          },
+          xAxis: {
+            type: "category",
+            data: data.set.map((item: any) => moment(item.time).format("MMM D")),
+            axisLine: {
+              lineStyle: {
+                color: "#FFFFFF",
+              },
+            },
+            axisLabel: {
+              color: "#FFFFFF",
+            },
+            splitLine: {
+              show: false,
+            },
+          },
+          yAxis: {
+            type: "value",
+            axisLine: {
+              lineStyle: {
+                color: "#FFFFFF",
+              },
+            },
+            axisLabel: {
+              color: "#FFFFFF",
+            },
+            splitLine: {
+              lineStyle: {
+                color: "#FFFFFF",
+                opacity: 0.1,
+              },
+            },
+          },
+          series: [
+            {
+              data: data.set.map((item: any) => item.pvGeneration),
+              type: "bar",
+              barWidth: "60%",
+              itemStyle: {
+                color: "#74b9ff",
+              },
+            },
+          ],
+        });
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+      }
+    };
+  
+    const fetchEnergyData = async () => {
+      const url = `${import.meta.env.VITE_APP_API_URL}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2024-05`;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+        console.log(data);
+  
+        const gaugeValue = data.set[0].pvGeneration;
+        setGaugeOptions(getGaugeOption(gaugeValue));
+      } catch (error) {
+        console.error("Error fetching energy data:", error);
+      }
+    };
+  
+    const fetchUserData = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const storedEmail = localStorage.getItem("email") ?? "";
+  
+      if (!storedEmail && user?.email) {
+        localStorage.setItem("email", user.email);
+      }
+      setEmail(storedEmail || "");
+  
+      try {
+        await handleSearch();
+        setSearchCompleted(true);
+  
+        if (searchCompleted) {
+          addNewUser();
+        }
+      } catch (error) {
+        console.error("Error during handleSearch:", error);
+      }
+    };
+  
+    const fetchPlantData = async () => {
+      const url = import.meta.env.VITE_APP_API_URL;
       try {
         const response = await axios.get(`${url}/plants/`);
-
+  
         if (response.data && response.data.plants) {
-          const transformedData = response.data.plants.map(
-            (plant: any, index: any) => {
-              // Asume que quieres usar el plantId como el eje X y un valor aleatorio para el eje Y
-              return [plant.plantId, Math.random() * 100, plant.name]; // Incluye el nombre de la planta para mostrarlo en el tooltip
-            }
-          );
+          const transformedData = response.data.plants.map((plant: any , index: any) => {
+            return [plant.plantId, Math.random() * 100, plant.name];
+          });
           setPlantData(transformedData);
         } else {
           console.error("La respuesta no tiene el formato esperado:", response);
@@ -1180,8 +1288,77 @@ const GraficoEnergia = () => {
         console.error("Error al cargar los datos de las plantas:", error);
       }
     };
-    fetchData();
+  
+    const fetchDeviceData = async () => {
+      const deviceId = "65fce26c471437c1bf25533c";
+      const url = `${import.meta.env.VITE_APP_API_URL}/devices/${deviceId}`;
+  
+      try {
+        const response = await axios.get(url);
+  
+        if (response.data && response.data.device) {
+          const deviceData = response.data.device;
+          const transformedData: any = [
+            [deviceData.deviceId, Math.random() * 100, deviceData.name],
+          ];
+          setDeviceData(transformedData);
+          console.log(transformedData);
+        } else {
+          console.error("La respuesta no tiene el formato esperado:", response);
+        }
+      } catch (error) {
+        console.error("Error al cargar los datos del dispositivo:", error);
+      }
+    };
+  
+    // Call all fetch functions
+    await fetchEnergy();
+    await fetchEnergyTwo();
+    await fetchChartData();
+    await fetchEnergyData();
+    await fetchUserData();
+    await fetchPlantData();
+    await fetchDeviceData();
+  };
+  
+  useEffect(() => {
+    fetchAllData();
+  
+    // Simulate real-time data updates
+    const interval = setInterval(() => {
+      setEnergyData(Math.random());
+    }, 3000);
+  
+    return () => clearInterval(interval);
   }, []);
+
+
+
+
+  // ! Grafico para mostrar las plantas.
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const url = import.meta.env.VITE_APP_API_URL; // Reemplaza con la URL correcta.
+  //     try {
+  //       const response = await axios.get(`${url}/plants/`);
+
+  //       if (response.data && response.data.plants) {
+  //         const transformedData = response.data.plants.map(
+  //           (plant: any, index: any) => {
+  //             // Asume que quieres usar el plantId como el eje X y un valor aleatorio para el eje Y
+  //             return [plant.plantId, Math.random() * 100, plant.name]; // Incluye el nombre de la planta para mostrarlo en el tooltip
+  //           }
+  //         );
+  //         setPlantData(transformedData);
+  //       } else {
+  //         console.error("La respuesta no tiene el formato esperado:", response);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error al cargar los datos de las plantas:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
   const getBarChartOption = (plantData: number[][]): any => {
     // Generando colores aleatorios para cada barra
@@ -1195,7 +1372,7 @@ const GraficoEnergia = () => {
         axisPointer: {
           type: "line",
         },
-        formatter: function (params) {
+        formatter: function (params: any) {
           const dataIndex = params[0].dataIndex;
           const plantNumber = plantData[dataIndex][0];
           const metric = params[0].value.toFixed(2);
@@ -1236,33 +1413,33 @@ const GraficoEnergia = () => {
   };
 
   // ! Grafico para mostrar el device id conectado.
-  useEffect(() => {
-    const fetchData = async () => {
-      const deviceId = "65fce26c471437c1bf25533c"; // ID del dispositivo
-      const url = `${import.meta.env.VITE_APP_API_URL}/devices/${deviceId}`; // Actualiza la URL para incluir el ID del dispositivo
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const deviceId = "65fce26c471437c1bf25533c"; // ID del dispositivo
+  //     const url = `${import.meta.env.VITE_APP_API_URL}/devices/${deviceId}`; // Actualiza la URL para incluir el ID del dispositivo
 
-      try {
-        const response = await axios.get(url);
+  //     try {
+  //       const response = await axios.get(url);
 
-        // Asumiendo que deseas usar el objeto "device" de la respuesta
-        if (response.data && response.data.device) {
-          const deviceData = response.data.device;
-          // Transformar los datos para tu uso, por ejemplo:
-          const transformedData = [
-            [deviceData.deviceId, Math.random() * 100, deviceData.name],
-          ];
-          setDeviceData(transformedData); // Asumiendo que setDeviceData actualiza el estado con estos datos
-          console.log(transformedData);
-        } else {
-          console.error("La respuesta no tiene el formato esperado:", response);
-        }
-      } catch (error) {
-        console.error("Error al cargar los datos del dispositivo:", error);
-      }
-    };
+  //       // Asumiendo que deseas usar el objeto "device" de la respuesta
+  //       if (response.data && response.data.device) {
+  //         const deviceData = response.data.device;
+  //         // Transformar los datos para tu uso, por ejemplo:
+  //         const transformedData = [
+  //           [deviceData.deviceId, Math.random() * 100, deviceData.name],
+  //         ];
+  //         setDeviceData(transformedData); // Asumiendo que setDeviceData actualiza el estado con estos datos
+  //         console.log(transformedData);
+  //       } else {
+  //         console.error("La respuesta no tiene el formato esperado:", response);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error al cargar los datos del dispositivo:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   const getBarChartOption2 = (deviceData: any) => {
     // Generando colores aleatorios para cada barra
