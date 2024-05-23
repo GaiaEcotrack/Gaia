@@ -19,11 +19,11 @@ interface User {
 }
 
 interface Energy {
-  pvGenerationPower: any | null;
-  pvBattery: number | null;
+  pvGenerationPower: any | 0;
+  pvBattery: number | 0;
   devicesList: any | null;
   plantsList : any | null ;
-  pvGenerationPerMonth: any | null
+  pvGenerationPerMonth: any | 0
 }
 
 // Define tu estado inicial y los reducers

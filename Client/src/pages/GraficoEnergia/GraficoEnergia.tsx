@@ -158,7 +158,7 @@ const GraficoEnergia = () => {
   );
   const [alertWallet, setAlertWallet] = useState(false);
   const [modalMint, setModalMint] = useState<boolean>(false);
-  const [totalGenerado, setTotalGenerado] = useState<number>(0);
+  const [totalGenerado, setTotalGenerado] = useState<number>(energyRedux?.pvGenerationPower);
   const [totalConsumido, setTotalConsumido] = useState<number>(0);
   const [totalExcedente, setTotalExcedente] = useState<number>(0);
   const [generacionActiva, setGeneracionActiva] = useState<boolean>(false);
@@ -295,39 +295,9 @@ const GraficoEnergia = () => {
     setPopupOpen(false);
   };
   //!  chequear los valores del local storage
-  useEffect(() => {
-    localStorage.setItem("totalGenerado", totalGenerado.toString());
-  }, [totalGenerado]);
-  
-  useEffect(() => {
-    localStorage.setItem("totalConsumido", totalConsumido.toString());
-  }, [totalConsumido]);
-  
-  useEffect(() => {
-    const calculatedExcedente = totalGenerado - totalConsumido;
-    setTotalExcedente(calculatedExcedente);
-    localStorage.setItem("totalExcedente", calculatedExcedente.toString());
-  }, [totalGenerado, totalConsumido]);
 
-  
-
-  useEffect(() => {
-    const storedTotalGenerado = localStorage.getItem("totalGenerado");
-    const storedTotalConsumido = localStorage.getItem("totalConsumido");
-    const storedTotalExcedente = localStorage.getItem("totalExcedente");
-  
-    if (storedTotalGenerado !== null) {
-      setTotalGenerado(parseFloat(storedTotalGenerado));
-    }
-    if (storedTotalConsumido !== null) {
-      setTotalConsumido(parseFloat(storedTotalConsumido));
-    }
-    if (storedTotalExcedente !== null) {
-      setTotalExcedente(parseFloat(storedTotalExcedente));
-    }
-  }, []);
-  
   //!  ------------------
+  
   useEffect(() => {
     const updateBarChart = () => {
       const newData = Array.from({ length: 12 }, () =>
@@ -1200,14 +1170,11 @@ const fetchAll = async () => {
 
   const fetchAllData = async () => {
     const energy = energyRedux?.pvGenerationPower
-    const energyBattery = energyRedux?.pvBattery
-    const deviceList = energyRedux?.devicesList
     const plantList = energyRedux?.plantsList
     const energyPerMonth = energyRedux?.pvGenerationPerMonth
     const fetchEnergy = () => {
       setEnergyBatery(energy)
     };
-    fetchAll()
   
     const fetchEnergyTwo =  () => {
 
@@ -1339,13 +1306,50 @@ const fetchAll = async () => {
   };
 
   useEffect(() => {
-
-
-      fetchAll()
-      fetchAllData();
-
+    const energy = energyRedux?.pvGenerationPower
+    const plantList = energyRedux?.plantsList
+    const energyPerMonth = energyRedux?.pvGenerationPerMonth
+    fetchAll()
+    console.log(energyRedux);
+    
   }, []);
 
+  useEffect(() => {
+
+    if (totalGenerado !== undefined) {
+      localStorage.setItem("totalGenerado", totalGenerado.toString());
+    }
+
+  }, [totalGenerado]);
+  
+  useEffect(() => {
+    localStorage.setItem("totalConsumido", totalConsumido.toString());
+  }, [totalConsumido]);
+  
+  useEffect(() => {
+    const calculatedExcedente = totalGenerado - totalConsumido;
+    setTotalExcedente(calculatedExcedente);
+    localStorage.setItem("totalExcedente", calculatedExcedente.toString());
+  }, [totalGenerado, totalConsumido]);
+
+  
+
+  useEffect(() => {
+    const storedTotalGenerado = localStorage.getItem("totalGenerado");
+    const storedTotalConsumido = localStorage.getItem("totalConsumido");
+    const storedTotalExcedente = localStorage.getItem("totalExcedente");
+  
+    if (storedTotalGenerado !== null) {
+      setTotalGenerado(parseFloat(storedTotalGenerado));
+    }
+    if (storedTotalConsumido !== null) {
+      setTotalConsumido(parseFloat(storedTotalConsumido));
+    }
+    if (storedTotalExcedente !== null) {
+      setTotalExcedente(parseFloat(storedTotalExcedente));
+    }
+  }, []);
+  
 
 
 
@@ -1528,18 +1532,19 @@ const fetchAll = async () => {
       }
     };
     fetchDataUser();
-  }, []);
+    fetchAllData()
+  }, [energyRedux]);
 
 
 
 
   return (
     <div>
-      {userRedux && energyRedux?(
+      {userRedux  && energyRedux?(
         <div className="mb-12">
         <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
           <div className="flex flex-col lg:flex-row gap-5  p-2 justify-center graficos items-center">
-            <CardGenerated supply={totalGenerado.toFixed(3)} />
+          <CardGenerated supply={totalGenerado !== undefined ? totalGenerado.toFixed(3) : 0} />
             <CardConsume supply={totalConsumido.toFixed(3)} />
             <CardEnergy supply={excedenteCapturado} reward={claimReward} />
           </div>
