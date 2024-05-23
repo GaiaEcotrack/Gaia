@@ -1,9 +1,13 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
+import { RootState } from '@/store';
+import { useSelector } from 'react-redux';
 
 const EnergyDeviceStatus = () => {
+
     const [selectedOption, setSelectedOption] = useState('recent');
     const [energy, setEnergy] = useState<any>("")
+    const energyRedux = useSelector((state: RootState) => state.app.pvGeneration);
 
     const url = import.meta.env.VITE_APP_API_URL;
 
@@ -23,31 +27,19 @@ const EnergyDeviceStatus = () => {
     useEffect(() => {
         const fetchEnergy = async () =>{
             if(selectedOption === 'recent'){
-                try {
-                     const response = await axios.get(`${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2024-05`)
-                    const data = response.data.set
-                    const pvGeneration = data[0].pvGeneration;
-                    setEnergy(pvGeneration.toFixed(1)) 
-                } catch (error) {
-                    console.log(error);
-                    
-                }
+            setEnergy(energyRedux?.pvGenerationPower.toFixed(1)) 
+
                 
             }
             if(selectedOption === 'month'){
-                try {
-                    const response = await axios.get(`${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2023-12`)
-                    const data = response.data.set
+        
+                    const data = energyRedux?.pvGenerationPerMonth.set
                     let pvGeneration = 0
                     for (let i = 0; i < data.length; i++) {
                         pvGeneration += data[i].pvGeneration;
                       }
                     setEnergy(Math.round(pvGeneration))
-                } catch (error) {
-                    console.log(error);
-                    
-                }
-                
+
             }
             if(selectedOption === 'year'){
                 try {

@@ -8,7 +8,7 @@ const P2PPage: React.FC = () => {
   const [mode, setMode] = useState<'Buy' | 'Sell'>('Buy');
 
   return (
-    <div className='p-24'>
+    <div className='h-full'>
       <P2pFilterSection/>
     </div>
   );

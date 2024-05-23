@@ -54,7 +54,7 @@ import CardGenerated from "@/components/CardsEnergy/CardGenerated";
 import useVoucherUtils from "../home/VouchersUtils";
 //api timezone
 import { fetchTimeZoneInfo, TimeZoneApiResponse } from "./FetchTimeZone";
-import { Loader } from "@/components";
+import { ApiLoader, Loader } from "@/components";
 
 ChartJS.register(
   ArcElement,
@@ -133,7 +133,14 @@ const GraficoEnergia = () => {
 
   const [token, setToken] = useState("");
   const userRedux = useSelector((state: RootState) => state.app.loggedInUser);
-  
+  const energyRedux = useSelector((state: RootState) => state.app.pvGeneration);
+  const {
+    pvGenerationPower,
+    pvBattery,
+    devicesList,
+    plantsList,
+    pvGenerationPerMonth
+  } = energyRedux || {};
 
   // estas dos funciones la movi arriba para usarlas en el scop
   const { accounts, account } = useAccount();
@@ -151,7 +158,7 @@ const GraficoEnergia = () => {
   );
   const [alertWallet, setAlertWallet] = useState(false);
   const [modalMint, setModalMint] = useState<boolean>(false);
-  const [totalGenerado, setTotalGenerado] = useState<number>(0);
+  const [totalGenerado, setTotalGenerado] = useState<number>(energyRedux?.pvGenerationPower);
   const [totalConsumido, setTotalConsumido] = useState<number>(0);
   const [totalExcedente, setTotalExcedente] = useState<number>(0);
   const [generacionActiva, setGeneracionActiva] = useState<boolean>(false);
@@ -288,39 +295,9 @@ const GraficoEnergia = () => {
     setPopupOpen(false);
   };
   //!  chequear los valores del local storage
-  useEffect(() => {
-    localStorage.setItem("totalGenerado", totalGenerado.toString());
-  }, [totalGenerado]);
-  
-  useEffect(() => {
-    localStorage.setItem("totalConsumido", totalConsumido.toString());
-  }, [totalConsumido]);
-  
-  useEffect(() => {
-    const calculatedExcedente = totalGenerado - totalConsumido;
-    setTotalExcedente(calculatedExcedente);
-    localStorage.setItem("totalExcedente", calculatedExcedente.toString());
-  }, [totalGenerado, totalConsumido]);
 
-  
-
-  useEffect(() => {
-    const storedTotalGenerado = localStorage.getItem("totalGenerado");
-    const storedTotalConsumido = localStorage.getItem("totalConsumido");
-    const storedTotalExcedente = localStorage.getItem("totalExcedente");
-  
-    if (storedTotalGenerado !== null) {
-      setTotalGenerado(parseFloat(storedTotalGenerado));
-    }
-    if (storedTotalConsumido !== null) {
-      setTotalConsumido(parseFloat(storedTotalConsumido));
-    }
-    if (storedTotalExcedente !== null) {
-      setTotalExcedente(parseFloat(storedTotalExcedente));
-    }
-  }, []);
-  
   //!  ------------------
+  
   useEffect(() => {
     const updateBarChart = () => {
       const newData = Array.from({ length: 12 }, () =>
@@ -800,6 +777,37 @@ const GraficoEnergia = () => {
     }
   };
   const [searchCompleted, setSearchCompleted] = useState(false);
+  useEffect(() => {
+    const fetchUserData =  () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const storedEmail = localStorage.getItem("email") ?? "";
+  
+      if (!storedEmail && user?.email) {
+        localStorage.setItem("email", user.email);
+      }
+      setEmail(storedEmail || "");
+  
+      try {
+         handleSearch();
+        setSearchCompleted(true);
+  
+        if (searchCompleted) {
+          addNewUser();
+        }
+      } catch (error) {
+        console.error("Error during handleSearch:", error);
+      }
+    };
+    fetchUserData()
+  
+    // Simulate real-time data updates
+    const interval = setInterval(() => {
+      setEnergyData(Math.random());
+    }, 3000);
+  
+    return () => clearInterval(interval);
+  }, [email, handleSearch, searchCompleted]);
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -1091,91 +1099,103 @@ const GraficoEnergia = () => {
 
 
 //********** FUNCION PETICIONES ***********/
+const fetchEnergy = async ()=>{
+const url = import.meta.env.VITE_APP_API_URL;
+try {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (!user) {
+    throw new Error("User is not authenticated");
+  }
+  const idToken = await user.getIdToken();
+  const response = await axios.get(
+    `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2024-05`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const data = response.data.set;
+  const pvGeneration = data[0].pvGeneration
+  dispatch({ type: "SET_PV_GENERATION_POWER", payload: pvGeneration });
+} catch (error) {
+  console.log(error);  
+};
+
+
+}
+const fetchDataChart = async ()=>{
+  const url = `${import.meta.env.VITE_APP_API_URL}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-03`
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Network response was not ok");
+    const data = await response.json();
+
+    dispatch({ type: "SET_PV_PER_MONTH", payload: data });
+
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+};
+
+const fetchPlantData = async () => {
+  try {
+    const url = import.meta.env.VITE_APP_API_URL;
+    const request = await axios.get(`${url}/plants/`);
+    const response = request.data
+    dispatch({ type: "SET_PLANT_LIST", payload: response });
+
+  } catch (error) {
+    
+  }
+}
+
+const fetchAll = async () => {
+  try {
+    await fetchEnergy()
+    await fetchDataChart()
+    await fetchPlantData()
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
 
 
   const fetchAllData = async () => {
-    const fetchEnergy = async () => {
-      try {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        console.log(auth);
-  
-        if (!user) {
-          throw new Error("User is not authenticated");
-        }
-  
-        const idToken = await user.getIdToken();
-        const url = import.meta.env.VITE_APP_API_URL;
-        const response = await fetch(
-          `${url}/devices/battery?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-02`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${idToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await response.json();
-  
-        if (data.set) {
-          const energy = data.set.map((energ: any) => energ.pvGeneration);
-          setEnergyBatery(energy);
-        } else {
-          console.error("data.set is undefined", data);
-        }
-      } catch (error) {
-        console.error("Error fetching energy data:", error);
-      }
+    const energy = energyRedux?.pvGenerationPower
+    const plantList = energyRedux?.plantsList
+    const energyPerMonth = energyRedux?.pvGenerationPerMonth
+    const fetchEnergy = () => {
+      setEnergyBatery(energy)
     };
   
-    const fetchEnergyTwo = async () => {
-      try {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        console.log(user);
+    const fetchEnergyTwo =  () => {
+
+
+        setTotalGenerado(energy);
+        setGeneracionActiva(energy > 0.2);
   
-        if (!user) {
-          throw new Error("User is not authenticated");
-        }
-  
-        const idToken = await user.getIdToken();
-        const url = import.meta.env.VITE_APP_API_URL;
-        const response = await axios.get(
-          `${url}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2024-05`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${idToken}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = response.data.set;
-        const pvGeneration = data[0].pvGeneration;
-        setTotalGenerado(pvGeneration);
-        setGeneracionActiva(pvGeneration > 0.2);
-  
-        const totalConsumidoCalculado = pvGeneration * 0.5;
-        const excedenteCapturadoCalculado = Math.max(pvGeneration - totalConsumidoCalculado);
+        const totalConsumidoCalculado = energy * 0.5;
+        const excedenteCapturadoCalculado = Math.max(energy - totalConsumidoCalculado);
   
         setTotalConsumido(totalConsumidoCalculado);
         setExcedenteCapturado(excedenteCapturadoCalculado);
   
-        localStorage.setItem("totalGenerado", JSON.stringify(pvGeneration));
+        localStorage.setItem("totalGenerado", JSON.stringify(energy));
         localStorage.setItem("totalConsumido", JSON.stringify(totalConsumidoCalculado));
         localStorage.setItem("totalExcedente", JSON.stringify(excedenteCapturadoCalculado));
-      } catch (error) {
-        console.log(error);
-      }
+
     };
   
-    const fetchChartData = async () => {
-      const url = `${import.meta.env.VITE_APP_API_URL}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-03`;
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
+    const fetchChartData = () => {
+
   
         setOptions({
           color: ["#74b9ff"],
@@ -1192,7 +1212,7 @@ const GraficoEnergia = () => {
           },
           xAxis: {
             type: "category",
-            data: data.set.map((item: any) => moment(item.time).format("MMM D")),
+            data: energyPerMonth.set.map((item: any) => moment(item.time).format("MMM D")),
             axisLine: {
               lineStyle: {
                 color: "#FFFFFF",
@@ -1224,7 +1244,7 @@ const GraficoEnergia = () => {
           },
           series: [
             {
-              data: data.set.map((item: any) => item.pvGeneration),
+              data: energyPerMonth.set.map((item: any) => item.pvGeneration),
               type: "bar",
               barWidth: "60%",
               itemStyle: {
@@ -1233,64 +1253,23 @@ const GraficoEnergia = () => {
             },
           ],
         });
-      } catch (error) {
-        console.error("Error fetching chart data:", error);
-      }
     };
   
-    const fetchEnergyData = async () => {
-      const url = `${import.meta.env.VITE_APP_API_URL}/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month?Date=2024-05`;
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
-        console.log(data);
-  
-        const gaugeValue = data.set[0].pvGeneration;
-        setGaugeOptions(getGaugeOption(gaugeValue));
-      } catch (error) {
-        console.error("Error fetching energy data:", error);
-      }
+    const fetchEnergyData = () => {
+        setGaugeOptions(getGaugeOption(energy));
     };
   
-    const fetchUserData = async () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      const storedEmail = localStorage.getItem("email") ?? "";
   
-      if (!storedEmail && user?.email) {
-        localStorage.setItem("email", user.email);
-      }
-      setEmail(storedEmail || "");
-  
-      try {
-        await handleSearch();
-        setSearchCompleted(true);
-  
-        if (searchCompleted) {
-          addNewUser();
-        }
-      } catch (error) {
-        console.error("Error during handleSearch:", error);
-      }
-    };
-  
-    const fetchPlantData = async () => {
-      const url = import.meta.env.VITE_APP_API_URL;
-      try {
-        const response = await axios.get(`${url}/plants/`);
-  
-        if (response.data && response.data.plants) {
-          const transformedData = response.data.plants.map((plant: any , index: any) => {
+    const fetchPlantData =  () => {
+        if (plantList&& plantList.plants) {
+          const transformedData = plantList.plants.map((plant: any , index: any) => {
             return [plant.plantId, Math.random() * 100, plant.name];
           });
           setPlantData(transformedData);
         } else {
-          console.error("La respuesta no tiene el formato esperado:", response);
+          console.error("La respuesta no tiene el formato esperado:");
         }
-      } catch (error) {
-        console.error("Error al cargar los datos de las plantas:", error);
-      }
+
     };
   
     const fetchDeviceData = async () => {
@@ -1316,25 +1295,62 @@ const GraficoEnergia = () => {
     };
   
     // Call all fetch functions
-    await fetchEnergy();
-    await fetchEnergyTwo();
-    await fetchChartData();
-    await fetchEnergyData();
-    await fetchUserData();
-    await fetchPlantData();
-    await fetchDeviceData();
+
+      fetchEnergy();
+      fetchEnergyTwo();
+      fetchChartData();
+      fetchEnergyData();
+      fetchPlantData();
+     await fetchDeviceData();
+
   };
+
+  useEffect(() => {
+    const energy = energyRedux?.pvGenerationPower
+    const plantList = energyRedux?.plantsList
+    const energyPerMonth = energyRedux?.pvGenerationPerMonth
+    fetchAll()
+    console.log(energyRedux);
+    
+  }, []);
+
+  useEffect(() => {
+
+    if (totalGenerado !== undefined) {
+      localStorage.setItem("totalGenerado", totalGenerado.toString());
+    }
+
+  }, [totalGenerado]);
   
   useEffect(() => {
-    fetchAllData();
+    localStorage.setItem("totalConsumido", totalConsumido.toString());
+  }, [totalConsumido]);
   
-    // Simulate real-time data updates
-    const interval = setInterval(() => {
-      setEnergyData(Math.random());
-    }, 3000);
+  useEffect(() => {
+    const calculatedExcedente = totalGenerado - totalConsumido;
+    setTotalExcedente(calculatedExcedente);
+    localStorage.setItem("totalExcedente", calculatedExcedente.toString());
+  }, [totalGenerado, totalConsumido]);
+
   
-    return () => clearInterval(interval);
-  }, [email, handleSearch, searchCompleted]);
+
+  useEffect(() => {
+    const storedTotalGenerado = localStorage.getItem("totalGenerado");
+    const storedTotalConsumido = localStorage.getItem("totalConsumido");
+    const storedTotalExcedente = localStorage.getItem("totalExcedente");
+  
+    if (storedTotalGenerado !== null) {
+      setTotalGenerado(parseFloat(storedTotalGenerado));
+    }
+    if (storedTotalConsumido !== null) {
+      setTotalConsumido(parseFloat(storedTotalConsumido));
+    }
+    if (storedTotalExcedente !== null) {
+      setTotalExcedente(parseFloat(storedTotalExcedente));
+    }
+  }, []);
+  
+
 
 
 
@@ -1516,15 +1532,19 @@ const GraficoEnergia = () => {
       }
     };
     fetchDataUser();
-  }, []);
+    fetchAllData()
+  }, [energyRedux]);
+
+
+
 
   return (
     <div>
-      {userRedux?(
+      {userRedux  && energyRedux?(
         <div className="mb-12">
         <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
           <div className="flex flex-col lg:flex-row gap-5  p-2 justify-center graficos items-center">
-            <CardGenerated supply={totalGenerado.toFixed(3)} />
+          <CardGenerated supply={totalGenerado !== undefined ? totalGenerado.toFixed(3) : 0} />
             <CardConsume supply={totalConsumido.toFixed(3)} />
             <CardEnergy supply={excedenteCapturado} reward={claimReward} />
           </div>
@@ -1660,7 +1680,7 @@ const GraficoEnergia = () => {
           </div>
         )}
       </div>
-      ): <Loader/>}
+      ): <ApiLoader/>}
     </div>
     
   );
