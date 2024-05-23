@@ -19,9 +19,11 @@ interface User {
 }
 
 interface Energy {
-  pvGenerationPower: any[] | null;
+  pvGenerationPower: any | null;
   pvBattery: number | null;
-  devicesList: any[] | null;
+  devicesList: any | null;
+  plantsList : any | null ;
+  pvGenerationPerMonth: any | null
 }
 
 // Define tu estado inicial y los reducers
@@ -45,9 +47,10 @@ const initialState: AppState = {
 const SET_VALUE_GAIA = 'SET_VALUE_GAIA';
 const SET_VALUE_VARA = 'SET_VALUE_VARA';
 const SET_LOGGED_IN_USER = 'SET_LOGGED_IN_USER';
-const SET_DATA_ENERGY = 'SET_DATA_ENERGY';
 const SET_PV_GENERATION_POWER = 'SET_PV_GENERATION_POWER';
 const SET_PV_BATTERY = 'SET_PV_BATTERY';
+const SET_PV_PER_MONTH = 'SET_PV_PER_MONTH';
+const SET_PLANT_LIST = 'SET_PLANT_LIST';
 
 interface SetValueGaiaAction extends Action<typeof SET_VALUE_GAIA> {
   payload: number;
@@ -62,12 +65,20 @@ interface SetLoggedInUserAction extends Action<typeof SET_LOGGED_IN_USER> {
 }
 
 interface SetPvGenerationPowerAction extends Action<typeof SET_PV_GENERATION_POWER> {
-  payload: any[] | null; // Corregido el tipo
+  payload: any | null; // Corregido el tipo
 }
 
 interface SetPvBatteryAction extends Action<typeof SET_PV_BATTERY> {
-  payload: number | null; // Corregido el tipo
+  payload: any | null; // Corregido el tipo
 }
+interface SetPvGenerationPowerMonthAction extends Action<typeof SET_PV_PER_MONTH> {
+  payload: any | null; // Corregido el tipo
+}
+
+interface SetPlantListAction extends Action<typeof SET_PLANT_LIST> {
+  payload: any | null; // Corregido el tipo
+}
+
 
 // Crea las acciones para actualizar cada campo
 export const setPvGenerationPower = (pvGenerationPower: any[] | null): SetPvGenerationPowerAction => ({
@@ -75,9 +86,19 @@ export const setPvGenerationPower = (pvGenerationPower: any[] | null): SetPvGene
   payload: pvGenerationPower,
 });
 
+export const setPvGenerationPowerPerMonth = (pvGenerationPerMonth: any | null): SetPvGenerationPowerMonthAction => ({
+  type: SET_PV_PER_MONTH,
+  payload: pvGenerationPerMonth,
+});
+
 export const setPvBattery = (pvBattery: number | null): SetPvBatteryAction => ({
   type: SET_PV_BATTERY,
   payload: pvBattery,
+});
+
+export const setPlantList = (plantsList: any | null): SetPlantListAction => ({
+  type: SET_PLANT_LIST,
+  payload: plantsList,
 });
 
 // Define la acción creadora
@@ -87,7 +108,7 @@ export const setLoggedInUser = (user: User | null): SetLoggedInUserAction => ({
 });
 
 // Definir tipos de acciones
-type AppActionTypes = SetValueGaiaAction | SetValueVaraAction | SetLoggedInUserAction | SetPvGenerationPowerAction | SetPvBatteryAction;
+type AppActionTypes = SetValueGaiaAction | SetValueVaraAction | SetLoggedInUserAction | SetPvGenerationPowerAction | SetPvBatteryAction | SetPvGenerationPowerMonthAction | SetPlantListAction;
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 const rootReducer = (state: AppState = initialState, action: AppActionTypes): AppState => {
@@ -117,6 +138,22 @@ const rootReducer = (state: AppState = initialState, action: AppActionTypes): Ap
           pvBattery: action.payload,
         },
       };
+      case SET_PV_PER_MONTH:
+        return {
+          ...state,
+          pvGeneration: {
+            ...state.pvGeneration,
+            pvGenerationPerMonth: action.payload,
+          },
+        };
+        case SET_PLANT_LIST:
+          return {
+            ...state,
+            pvGeneration: {
+              ...state.pvGeneration,
+              plantsList: action.payload,
+            },
+          };
     // ... otros casos y lógicas de reducer
     default:
       return state;
