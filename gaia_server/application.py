@@ -3,7 +3,7 @@ from flask_cors import CORS
 from pymongo import MongoClient
 from flask_swagger_ui import get_swaggerui_blueprint
 import os
-import logging
+# import logging
 from dotenv import load_dotenv
 import secrets
 
@@ -26,29 +26,29 @@ from src.routes.transaction import transaction_route
 from src.routes.tokenization_energy import energyGenerated_routes
 
 ##logs de flask
-import logging.config
-from config import LOG_FORMAT, LOG_LOCATION, LOG_LEVEL
-logging.basicConfig(format=LOG_FORMAT, filename=LOG_LOCATION, level=LOG_LEVEL)
+# import logging.config
+# from config import LOG_FORMAT, LOG_LOCATION, LOG_LEVEL
+# logging.basicConfig(format=LOG_FORMAT, filename=LOG_LOCATION, level=LOG_LEVEL)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-LOG_DIRECTORY = os.path.join(BASE_DIR, 'logs')
-LOG_FILE = os.path.join(LOG_DIRECTORY, 'application.log')
-LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-LOG_LEVEL = logging.DEBUG
+# BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# LOG_DIRECTORY = os.path.join(BASE_DIR, 'logs')
+# LOG_FILE = os.path.join(LOG_DIRECTORY, 'application.log')
+# LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+# LOG_LEVEL = logging.DEBUG
 
 
-# Crear el directorio de logs si no existe
-if not os.path.exists(LOG_DIRECTORY):
-    os.makedirs(LOG_DIRECTORY)
+# # Crear el directorio de logs si no existe
+# if not os.path.exists(LOG_DIRECTORY):
+#     os.makedirs(LOG_DIRECTORY)
 
-logging.basicConfig(format=LOG_FORMAT, filename=LOG_FILE, level=LOG_LEVEL)
+# logging.basicConfig(format=LOG_FORMAT, filename=LOG_FILE, level=LOG_LEVEL)
 
 ## prometheus 
-from prometheus_client import start_http_server, Counter,Histogram, Gauge
-import time
-REQUESTS = Counter('requests_total', 'Total request count of the host')
-IN_PROGRESS = Gauge('in_progress_requests', 'Number of in progress requests')
-LATENCY = Histogram('request_latency_seconds', 'Request latency')
+# from prometheus_client import start_http_server, Counter,Histogram, Gauge
+# import time
+# REQUESTS = Counter('requests_total', 'Total request count of the host')
+# IN_PROGRESS = Gauge('in_progress_requests', 'Number of in progress requests')
+# LATENCY = Histogram('request_latency_seconds', 'Request latency')
 
 load_dotenv()
 
@@ -128,22 +128,22 @@ collection = db['users']
 
 @application.route('/', methods=['GET'])
 def welcome():
-    application.logger.info('Se ha realizado una solicitud a la ruta principal.')
+    # application.logger.info('Se ha realizado una solicitud a la ruta principal.')
     return jsonify({'message': 'Welcome to the Gaia Server!'})
 
 ## prometheus metrics
-@application.before_request
-def before_request():
-    IN_PROGRESS.inc()
-    request.start_time = time.time()
+# @application.before_request
+# def before_request():
+#     IN_PROGRESS.inc()
+#     request.start_time = time.time()
 
-@application.after_request
-def after_request(response):
-    request_latency = time.time() - request.start_time
-    LATENCY.observe(request_latency)
-    REQUESTS.inc()
-    IN_PROGRESS.dec()
-    return response
+# @application.after_request
+# def after_request(response):
+#     request_latency = time.time() - request.start_time
+#     LATENCY.observe(request_latency)
+#     REQUESTS.inc()
+#     IN_PROGRESS.dec()
+#     return response
 
 
 # if __name__ == '__main__':
