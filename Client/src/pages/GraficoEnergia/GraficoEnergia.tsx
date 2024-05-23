@@ -538,17 +538,17 @@ const GraficoEnergia = () => {
     }
   };
 
-  // Actualizar los datos de energia cada 23 hs
+  // Actualizar los datos de energia cada 23 hs OJO con la cantidad de peticiones que se hacen.
   const scheduleEnergyDataSend = () => {
     const now = new Date();
     const currentTime = now.getTime();
 
-    const nextTest = new Date(now.getTime() + 60 * 1000);  // 1 minuto en el futuro
+    const nextTest = new Date(now.getTime()  + 23 * 60 * 60 * 1000);  // 23 horas en el futuro
     const timeUntilNextTest = nextTest.getTime() - currentTime;
 
     setTimeout(() => {
       sendEnergyDataToBackend();
-      setInterval(sendEnergyDataToBackend, 60 * 60 * 1000); // Cada 1 hora
+      setInterval(sendEnergyDataToBackend, 23 * 60 * 60 * 1000); // Cada 23 horas
     }, timeUntilNextTest);
   };
 
