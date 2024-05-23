@@ -400,6 +400,9 @@ const [formData, setFormData] = useState({
       if (pendingDocuments.includes("photo_profile")) {
         setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "photo_profile"));
       }
+      if (pendingDocuments.includes("location")) {
+        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "location"));
+      }
       
       if (pendingDocuments.length > 0) {
         setCompleted(false);

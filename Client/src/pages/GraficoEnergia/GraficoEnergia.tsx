@@ -777,53 +777,22 @@ const GraficoEnergia = () => {
     }
   };
   const [searchCompleted, setSearchCompleted] = useState(false);
-  useEffect(() => {
-    const fetchUserData =  () => {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      const storedEmail = localStorage.getItem("email") ?? "";
   
-      if (!storedEmail && user?.email) {
-        localStorage.setItem("email", user.email);
-      }
-      setEmail(storedEmail || "");
-  
-      try {
-         handleSearch();
-        setSearchCompleted(true);
-  
-        if (searchCompleted) {
-          addNewUser();
-        }
-      } catch (error) {
-        console.error("Error during handleSearch:", error);
-      }
-    };
-    fetchUserData()
-  
-    // Simulate real-time data updates
-    const interval = setInterval(() => {
-      setEnergyData(Math.random());
-    }, 3000);
-  
-    return () => clearInterval(interval);
-  }, [email, handleSearch, searchCompleted]);
-
   // useEffect(() => {
-  //   const fetchData = async () => {
+  //   const fetchUserData =  () => {
   //     const auth = getAuth();
   //     const user = auth.currentUser;
   //     const storedEmail = localStorage.getItem("email") ?? "";
-
+  
   //     if (!storedEmail && user?.email) {
   //       localStorage.setItem("email", user.email);
   //     }
   //     setEmail(storedEmail || "");
-
+  
   //     try {
-  //       await handleSearch();
+  //        handleSearch();
   //       setSearchCompleted(true);
-
+  
   //       if (searchCompleted) {
   //         addNewUser();
   //       }
@@ -831,8 +800,41 @@ const GraficoEnergia = () => {
   //       console.error("Error during handleSearch:", error);
   //     }
   //   };
-  //   fetchData();
-  // }, [email, handleSearch]);
+  //   fetchUserData()
+  
+  //   // Simulate real-time data updates
+  //   const interval = setInterval(() => {
+  //     setEnergyData(Math.random());
+  //   }, 3000);
+  
+  //   return () => clearInterval(interval);
+  // }, [email, handleSearch, searchCompleted]);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const storedEmail = localStorage.getItem("email") ?? "";
+
+      if (!storedEmail && user?.email) {
+        localStorage.setItem("email", user.email);
+      }
+      setEmail(storedEmail || "");
+
+      try {
+        await handleSearch();
+        setSearchCompleted(true);
+
+        if (searchCompleted) {
+          addNewUser();
+        }
+      } catch (error) {
+        console.error("Error during handleSearch:", error);
+      }
+    };
+    fetchData();
+  }, [email, handleSearch]);
 
   // PopUp completar registro
   useEffect(() => {
