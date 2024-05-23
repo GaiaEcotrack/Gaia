@@ -474,23 +474,24 @@ const GraficoEnergia = () => {
     }
   };
 
-  // Actualizar los datos de energia cada 23 hs OJO con la cantidad de peticiones que se hacen.
+  // Actualizar los datos de energia cada 23 hs
   const scheduleEnergyDataSend = () => {
     const now = new Date();
     const currentTime = now.getTime();
 
-    const nextTest = new Date(now.getTime()  + 23 * 60 * 60 * 1000);  // 23 horas en el futuro
+    const nextTest = new Date(now.getTime() + 60 * 1000);  // 1 minuto en el futuro
     const timeUntilNextTest = nextTest.getTime() - currentTime;
 
     setTimeout(() => {
       sendEnergyDataToBackend();
-      setInterval(sendEnergyDataToBackend, 23 * 60 * 60 * 1000); // Cada 23 horas
+      setInterval(sendEnergyDataToBackend, 60 * 60 * 1000); // Cada 1 hora
     }, timeUntilNextTest);
   };
 
   useEffect(() => {
     scheduleEnergyDataSend();
   }, []);
+  
 
   //-------------------------------------------------------------------VARA INTEGRATION
 
@@ -806,7 +807,6 @@ const GraficoEnergia = () => {
     }
   };
   const [searchCompleted, setSearchCompleted] = useState(false);
-
   useEffect(() => {
     const fetchUserData =  () => {
       const auth = getAuth();
@@ -1339,21 +1339,11 @@ const fetchAll = async () => {
   };
 
   useEffect(() => {
-    let isMounted = true;
-    const energy = energyRedux?.pvGenerationPower;
-    const plantList = energyRedux?.plantsList;
-    const energyPerMonth = energyRedux?.pvGenerationPerMonth;
 
-    if (!energy && !energyPerMonth && !plantList) {
+
       fetchAll()
       fetchAllData();
-    } else {
-      fetchAllData();
-    }
 
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
 
