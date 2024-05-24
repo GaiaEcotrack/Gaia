@@ -146,13 +146,17 @@ def welcome():
 #     return response
 
 
-# if __name__ == '__main__':
-#     try:
-#         application.run(debug=False)
-#     finally:
-#         client.close()
-        
-#durante desarrollo
+# Cierra la conexión al finalizar
+@application.teardown_appcontext
+def close_connection(exception=None):
+    pass  # No hagas nada en esta función, evita cerrar la conexión aquí
+
 if __name__ == '__main__':
-    # start_http_server(8000)
-    application.run(debug=True)
+    try:
+        application.run(debug=False)
+    finally:
+        client.close()
+# #durante desarrollo
+# if __name__ == '__main__':
+#     # start_http_server(8000)
+#     application.run(debug=True)
