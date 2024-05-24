@@ -14,7 +14,6 @@ from src.routes.plants import plants_routes
 from src.services.s3_bucket import bucket_route
 from src.routes.api_growth import api_growatt_bp
 from src.routes.mercadopago import mercadopago_route
-from src.routes.face import face_route
 from src.routes.coinbase import coinbase_route
 from src.routes.sms import sms_route
 from src.routes.paypal import paypal_route
@@ -75,7 +74,6 @@ application.register_blueprint(plants_routes, url_prefix='/plants')
 application.register_blueprint(bucket_route, url_prefix='/upload_image')
 application.register_blueprint(api_growatt_bp, url_prefix='/api_growatt')
 application.register_blueprint(mercadopago_route, url_prefix='/mercadopago')
-application.register_blueprint(face_route, url_prefix='/face')
 application.register_blueprint(coinbase_route, url_prefix='/coinbase')
 application.register_blueprint(sms_route, url_prefix='/sms')
 application.register_blueprint(paypal_route, url_prefix='/paypal')
@@ -146,16 +144,12 @@ def welcome():
 #     return response
 
 
-# Cierra la conexión al finalizar
-@application.teardown_appcontext
-def close_connection(exception=None):
-    pass  # No hagas nada en esta función, evita cerrar la conexión aquí
-
 if __name__ == '__main__':
     try:
         application.run(debug=False)
     finally:
         client.close()
+        
 # #durante desarrollo
 # if __name__ == '__main__':
 #     # start_http_server(8000)
