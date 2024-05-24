@@ -109,8 +109,9 @@ def get_device_data():
     else:
         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code
 
+##! esta ruta funciona com jwt tomarla de ejemplo
 @devices_routes.route('/plant-devices', methods=['GET', 'OPTIONS'])
-# @require_firebase_auth
+@require_firebase_auth
 def get_plant_devices():
     # Obtén el parámetro plantId de la solicitud
     plant_id = request.args.get('plantId')
