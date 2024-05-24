@@ -10,4 +10,5 @@ class WalletGaiaSchema(Schema):
     gaia_token_balance = fields.Float(required=True)
     willing_to_sell_excess = fields.Boolean(required=True) # vender excedente
     transactions = fields.List(fields.Nested(TransactionSchema), allow_none=True)# Referencia a las transacciones asociadas a esta wallet
-    amount_kwh_to_sell = fields.Float(required=False)
+
+

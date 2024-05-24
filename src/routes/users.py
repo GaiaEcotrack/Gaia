@@ -2,7 +2,6 @@ from flask import Flask, Blueprint, jsonify, request
 import requests
 from pymongo import MongoClient
 from src.models.user import UserSchema
-from src.models.wallet_gaia import WalletGaiaSchema
 import os
 from dotenv import load_dotenv
 from bson import ObjectId
@@ -64,16 +63,6 @@ def get_user_by_id(user_id):
         return jsonify({'message': 'User found', 'user': user})
     else:
         return jsonify({'message': 'User not found'}), 404
-    
-    # ruta para obtener usuario de firebase y llamarlo desde p2p para almacenar el mongoid en sesionstorage
-# @users_route.route('/getByFirebaseUid/<firebase_uid>', methods=['GET'])
-# def get_user_by_firebase_uid(firebase_uid):
-#     user = collection.find_one({'firebaseUid': firebase_uid})
-#     if user:
-#         user['_id'] = str(user['_id'])
-#         return jsonify({'message': 'User found', 'user': user})
-#     else:
-#         return jsonify({'message': 'User not found'}), 404
 
 
 @users_route.route('/', methods=['POST'])
@@ -113,7 +102,6 @@ def add_user():
     verified_2fa = data.get('verified_2fa', False)
     status_documents = "pending"
     photo_profile = data.get('photo_profile')
-    location = data.get('location')
     wallet = data.get('wallet', {})
 
     # Insertar el nuevo usuario en la colección
@@ -137,13 +125,11 @@ def add_user():
         'verified_2fa': verified_2fa,
         'status_documents': status_documents,
         'photo_profile': photo_profile,
-        'location': location,
         'wallet': {
         'gaia_token_balance': 0,
         'transactions': [],
         'vara_balance': 0,
-        'willing_to_sell_excess': False,
-        'amount_kwh_to_sell': 0
+        'willing_to_sell_excess': False
         }
     }
 
@@ -170,46 +156,6 @@ def update_user(id):
         return jsonify({'message': 'Usuario no encontrado'}), 404
 
     return jsonify({'message': 'Usuario actualizado con éxito'})
-
-
-##! Ruta para modificar especificamente las propiedades de la wallet
-@users_route.route('/<user_id>/wallet', methods=['PUT'])
-def update_user_wallet(user_id):
-    try:
-        oid = ObjectId(user_id)
-    except errors.InvalidId:
-        return jsonify({'error': 'Formato de ID inválido'}), 400
-
-    data = request.json
-    wallet_schema = WalletGaiaSchema(partial=True)
-    errors = wallet_schema.validate(data)
-    if errors:
-        return jsonify({'message': 'Validation errors', 'errors': errors}), 400
-
-    user_collection = collection
-    user_doc = user_collection.find_one({'_id': oid})
-    if not user_doc:
-        return jsonify({'error': 'Usuario no encontrado'}), 404
-
-    updates = {f'wallet.{k}': v for k, v in data.items()}
-    update_result = user_collection.update_one({'_id': oid}, {'$set': updates})
-
-    if update_result.modified_count == 0:
-        return jsonify({'message': 'No se necesitaban actualizaciones o el usuario no tiene una wallet configurada'}), 200
-
-    return jsonify({'message': 'Wallet actualizada correctamente'}), 200
-
-
-
-##! get user sellers! para mostrar los users q quieren participar en el p2p
-@users_route.route('/selling', methods=['GET'])
-def get_sellers():
-    # Filtrar usuarios que están dispuestos a vender excedente
-    users = list(collection.find({"willing_to_sell_excess": True}))
-    for user in users:
-        user['_id'] = str(user['_id'])  # Convertir ObjectId a str para JSON serializable
-    return jsonify(users)
-
 
 # @users_route.route('/<id>', methods=['PUT'])
 # def update_user(id):
@@ -322,18 +268,6 @@ def guardar_url_device():
         return jsonify({'message': 'URL de la imagen guardada con éxito', 'url': imagen_url}), 200
     else:
         return jsonify({'message': 'Error al guardar la URL de la imagen o usuario no encontrado'}), 400  
-    
-    
-@users_route.route('/willing', methods=['GET'])
-def get_users_willing_to_sell_excess():
-    users = collection.find({'wallet.willing_to_sell_excess': True})
-    user_list = []
-    for user in users:
-        user['_id'] = str(user['_id'])
-        user_list.append(user)
-    return jsonify({'users': user_list})
-
-
 
 if __name__ == '__main__':
      application.run(debug=True)

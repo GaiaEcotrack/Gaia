@@ -36,29 +36,13 @@ def add_transaction():
         if sender_user and receiver_user and 'wallet' in sender_user and 'wallet' in receiver_user:
             inserted_transactions = transaction_collection.insert_many(transactions_objects)
             
-            transaction_type = transactions_data[0].get('transaction_type')            
-            sender_transactions_info = [
-                {'id': str(trans_id), **trans, 'transaction_type': 
-                    'Membership' if transaction_type == 'Membership' else 
-                    'Withdrawal' if transaction_type == 'Withdrawal' else 'Buy'
-                } 
-                for trans_id, trans in zip(inserted_transactions.inserted_ids, transactions_data)
-                if trans['sender_user_id'] == sender_user_id
-            ]
-            
-            receiver_transactions_info = [
-                {'id': str(trans_id), **trans, 'transaction_type': 
-                    'Membership' if transaction_type == 'Membership' else 
-                    'Withdrawal' if transaction_type == 'Withdrawal' else 'Sell'
-                } 
-                for trans_id, trans in zip(inserted_transactions.inserted_ids, transactions_data)
-                if trans['receiver_user_id'] == receiver_user_id
-            ]
+            transactions_info = [{'id': str(trans_id), **trans} for trans_id, trans in
+                                 zip(inserted_transactions.inserted_ids, transactions_data)]
             
             sender_wallet = sender_user['wallet']
             receiver_wallet = receiver_user['wallet']
             
-            # Validate vara_balance in sender's wallet
+             # Validate vara_balance in sender's wallet
             if 'vara_balance' not in sender_wallet or not isinstance(sender_wallet['vara_balance'], (int, float)):
                 raise ValidationError('Sender wallet vara_balance is not valid.')
 
@@ -68,23 +52,30 @@ def add_transaction():
             
             user_collection.update_one(
                 {'_id': ObjectId(sender_user_id)},
-                {'$inc': {'wallet.vara_balance': -transactions_data[0]['vara_amount']},
-                 '$push': {'wallet.transactions': {'$each': sender_transactions_info}}}
+                {'$inc': {'wallet.vara_balance': -transactions_data[0]['vara_amount']}}
             )
             
             user_collection.update_one(
                 {'_id': ObjectId(receiver_user_id)},
-                {'$inc': {'wallet.vara_balance': transactions_data[0]['vara_amount']},
-                 '$push': {'wallet.transactions': {'$each': receiver_transactions_info}}}
+                {'$inc': {'wallet.vara_balance': transactions_data[0]['vara_amount']}}
+            )
+
+            user_collection.update_one(
+                {'_id': ObjectId(sender_user_id)},
+                {'$push': {'wallet.transactions': {'$each': transactions_info}}}
+            )
+
+            user_collection.update_one(
+                {'_id': ObjectId(receiver_user_id)},
+                {'$push': {'wallet.transactions': {'$each': transactions_info}}}
             )
           
-            return jsonify({'message': 'Transactions added successfully',
-                            'sender_transactions': sender_transactions_info,
-                            'receiver_transactions': receiver_transactions_info})
+            return jsonify({'message': 'Transactions added successfully', 'transaction_ids': transactions_info})
         else:
             return jsonify({'message': 'User not found or wallet not initialized'}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 # Ejemplo de documento JSON para realizar la transaccion
 
@@ -94,9 +85,9 @@ def add_transaction():
 #       "sender_user_id": "<id usuario que compra>",
 #       "receiver_user_id": "<id usuario que vende>",
 #       "vara_amount": 200.0,
-#       "transaction_type": "",  // Valores permitidos: "Membership", "Withdrawal" "P2P" (cuando es P2P el codigo asigna valores 'Buy' o 'Sell'), 
-#       "status": "Completed",  // Vallores permitidos: "Pending", "Completed", "Cancelled"
-#       "date": "2024-03-21T10:57:39Z"  // validar el formato de fecha en react
+#       "transaction_type": "buy",
+#       "status": "completed",
+#       "date": "2024-03-21T10:57:39Z"  // validar el formato de la fecha
 #     }
 #   ]
 # }
@@ -106,12 +97,8 @@ def add_transaction():
 @transaction_route.route('/', methods=['GET'])
 def get_all_transactions():
     try:
-        transactions = list(transaction_collection.find())
-        formatted_transactions = []
-        for trans in transactions:
-            trans['_id'] = str(trans['_id'])  # Convertir ObjectId a str
-            formatted_transactions.append(trans)
-        return jsonify({'transactions': formatted_transactions})
+        transactions = list(transaction_collection.find({}, {'_id': 0}))
+        return jsonify({'transactions': transactions})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

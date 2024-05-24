@@ -91,11 +91,6 @@ def get_dot():
     data = fetch_data(url)
     return data
 
-def get_usdt():
-    url = 'https://api.coinbase.com/v2/prices/USDT-COP/sell'
-    data = fetch_data(url)
-    return data
-
 @coinbase_route.route('/vara')
 def vara_route():
     return jsonify(get_vara())
@@ -111,10 +106,6 @@ def eth_route():
 @coinbase_route.route('/dot')
 def dot_route():
     return jsonify(get_dot())
-
-@coinbase_route.route('/usdt')
-def usdt_route():
-    return jsonify(get_usdt())
 
 @coinbase_route.route('/user')
 def current_user():
@@ -302,23 +293,6 @@ def get_base_volume_dot():
         return base_volume
     else:
         return jsonify({"error": "No se encontraron datos para el par de monedas VARA_USDT"}), 404
-    
-@coinbase_route.route('/usdt_curries', methods=['GET'])
-def get_base_volume_usdt():
-    host = "https://api.gateio.ws"
-    prefix = "/api/v4"
-    headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
-    url = '/spot/tickers'
-    query_param = 'currency_pair=USDT_USD'
-
-    response = requests.get(host + prefix + url, headers=headers, params=query_param)
-    ticker_data = response.json()
-
-    if ticker_data:
-        base_volume = ticker_data[0].get('base_volume')
-        return base_volume
-    else:
-        return jsonify({"error": "No se encontraron datos para el par de monedas VARA_USDT"}), 404
 
 @coinbase_route.route('/')
 def get_all_info():
@@ -344,11 +318,6 @@ def get_all_info():
         dot_data = get_dot()
         dot_volume = get_base_volume_dot()
         all_data['dot'] = {'price': dot_data, 'vol': dot_volume}
-
-        # Obtener datos para USDT
-        usdt_data = get_usdt()
-        usdt_volume = get_base_volume_usdt()
-        all_data['usdt'] = {'price': usdt_data, 'vol': usdt_volume}
         
         # Si todos los datos se obtuvieron correctamente, devolver la respuesta JSON
         return jsonify(all_data)
