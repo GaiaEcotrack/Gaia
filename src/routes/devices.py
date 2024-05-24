@@ -29,6 +29,7 @@ collection = db['users']
 #ROUTES
 stored_token = None
 
+
 @devices_routes.route('/token', methods=['GET'])
 def autorizar():
     # Obtener los datos del formulario enviado por el cliente
@@ -37,7 +38,7 @@ def autorizar():
 
     # Parámetros para la solicitud de autorización
     payload = {
-        'grant_type': 'client_credentials',  # Tipo de concesión (puede variar según la API)
+        'grant_type': 'client_credentials',  
         'client_id': 'andromeda_api',
         'client_secret': '5It2L4REBvWO2Hn09BUHVISmoVGrqxKi'
     }
@@ -45,7 +46,7 @@ def autorizar():
     # Realizar la solicitud utilizando el método POST y configurando el encabezado
     response = requests.post(url, data=payload, headers={'Content-Type': 'application/x-www-form-urlencoded'})
 
-    # Verificar el estado de la respuesta
+   
     if response.status_code == 200:
         # La solicitud fue exitosa, puedes acceder al token de acceso
         access_token = response.json().get('access_token')
@@ -54,7 +55,7 @@ def autorizar():
         return jsonify({'token': access_token}), 200
         
     else:
-        # La solicitud falló, devolver el código de estado y el mensaje de error
+        
         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code
 
 
@@ -65,54 +66,18 @@ def autorizar():
 def autorizar_con_token():
     global stored_token
     if stored_token:
-        # Si ya hay un token almacenado, devolverlo
         return jsonify({'token': stored_token}), 200
     else:
-        # Si no hay token almacenado, intentar obtener uno nuevo
         return autorizar()
     
-# llevado a archivo plants.py
-# @devices_routes.route('/plants', methods=['GET'])
-# def get_plant_data():
-#     # URL de la API
-#     url = 'https://sandbox.smaapis.de/monitoring/v1/plants'
-
-    
-#     token_response = autorizar()
-    
-    
-#     response_flask, status_code = token_response
-    
-#     if status_code != 200:
-#         return jsonify({'error': 'No se pudo obtener el token de acceso'}), token_response[1]
-
-    
-#     access_token = response_flask.get_json()['token']
-    
-
-    
-#     headers = {'Authorization': f'Bearer {access_token}'}
-   
-
-    
-#     response = requests.get(url, headers=headers)
-
-#     if response.status_code == 200:
         
-#         data = response.json()
-#         return jsonify(data), 200
-#     else:
-#         # La solicitud falló, devolver el código de estado y el mensaje de error
-#         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code   
-        
-
 #! url ejemplo: http://127.0.0.1:5000/devices/device-data?deviceId=19
 @devices_routes.route('/device-data', methods=['GET'])
 def get_device_data():
     # Obtén el parámetro deviceId de la solicitud
     device_id = request.args.get('deviceId')
 
-    # Verifica que el parámetro deviceId esté presente
+   
     if not device_id:
         return jsonify({'error': 'Falta el parámetro necesario (deviceId)'}), 400
 
@@ -138,11 +103,10 @@ def get_device_data():
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
-        # La solicitud fue exitosa, devolver los datos obtenidos
+       
         data = response.json()
         return jsonify(data), 200
     else:
-        # La solicitud falló, devolver el código de estado y el mensaje de error
         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code
 
 @devices_routes.route('/plant-devices', methods=['GET', 'OPTIONS'])
@@ -151,7 +115,6 @@ def get_plant_devices():
     # Obtén el parámetro plantId de la solicitud
     plant_id = request.args.get('plantId')
 
-    # Verifica que el parámetro plantId esté presente
     if not plant_id:
         return jsonify({'error': 'Falta el parámetro necesario (plantId)'}), 400
 
@@ -232,9 +195,6 @@ def get_device_measurements_battery():
     else:
         # La solicitud falló, devolver el código de estado y el mensaje de error
         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code
-
-
-
 
 
 #ruta de meciiones de Pv
@@ -330,16 +290,6 @@ def get_device_measurements_pv():
 #         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code
 
 
-
-
-
-
-
-
-
-
-
-
 #################################################################################
 
 # obtener  devices solo de la db   
@@ -385,21 +335,13 @@ def get_device_by_id(device_id):
 def add_device_to_user():
     try:
         user_id = request.json['user_id']
-        device_data = request.json['device']
-        plant_data = request.json['plant']        
-        sets_data = request.json['sets']  
+        device_data = request.json['device'] 
         
         device_id = ObjectId()
         
         device_object = {
             '_id': device_id,
             'user_id': user_id,
-            'plant': {
-                'plantId': plant_data.get('plantId'),
-                'plantName': plant_data.get('plantName'),
-                'plantTimezone': plant_data.get('plantTimezone'),
-                'description': plant_data.get('description')
-            },
             'device': {
                 'deviceId': device_data.get('deviceId'),
                 'deviceName': device_data.get('deviceName'),
@@ -407,7 +349,6 @@ def add_device_to_user():
                 'serial': device_data.get('serial'),
                 'image': device_data.get('image')
             },
-            'sets': sets_data
         } 
         
         user_collection = collection
@@ -431,12 +372,6 @@ def add_device_to_user():
       
     # {
     #   "user_id": " ID DEL USUARIO ",
-    #   "plant": {
-    #     "plantId": "plantId_value",
-    #     "plantName": "plantName_value",
-    #     "description": "plantDescription_value",
-    #     "plantTimezone": "plantTimezone_value"
-    #   },
     #   "device": {
     #     "deviceId": "deviceId_value",
     #     "deviceName": "deviceName_value",
@@ -444,7 +379,6 @@ def add_device_to_user():
     #     "serial": "deviceSerial_value",
     #     "image": "deviceImage_value"
     #   },
-    #   "sets": ["set1_value", "set2_value"]
     # }
 #----------------------------------------------------
 

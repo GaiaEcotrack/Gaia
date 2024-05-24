@@ -77,3 +77,32 @@ def get_plant_data():
     else:
         # La solicitud falló, devolver el código de estado y el mensaje de error
         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code     
+ 
+ 
+## Ruta para mediciones de las plantas    
+# @plants_routes.route('/measurements/<plantId>/<setType>/<periodo>', methods=['GET'])
+# def get_plant_measurements(plantId, setType, periodo):
+#     # Primero, asegúrate de tener un token de acceso válido
+#     token_response = autorizar_con_token()
+    
+#     if token_response is None:
+#         return jsonify({'error': 'No se pudo obtener el token de acceso'}), 401
+
+#     access_token = token_response
+
+#     # Construye la URL específica para obtener los datos de mediciones
+#     url = f'https://sandbox.smaapis.de/monitoring/v2/plants/{plantId}/measurements/sets/{setType}/Month?Date={periodo}'
+
+
+#     # Configura los encabezados de la solicitud con el token de acceso
+#     headers = {'Authorization': f'Bearer {access_token}'}
+    
+#     # Realiza la solicitud GET a la API
+#     response = requests.get(url, headers=headers)
+
+#     # Verifica el estado de la respuesta y devuelve los datos o un mensaje de error
+#     if response.status_code == 200:
+#         data = response.json()
+#         return jsonify(data), 200
+#     else:
+#         return jsonify({'error': f'Error {response.status_code}: {response.text}'}), response.status_code

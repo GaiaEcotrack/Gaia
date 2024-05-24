@@ -1,5 +1,6 @@
 from marshmallow import Schema, fields, validates, ValidationError, EXCLUDE
 from src.models.devices import DeviceSchema
+from src.models.wallet_gaia import WalletGaiaSchema
 
 
 class UserSchema(Schema):
@@ -22,6 +23,11 @@ class UserSchema(Schema):
     
     membership = fields.Boolean(required=False)
     key_auth = fields.String(required=False)
+    verified_email = fields.Boolean(required=False)
+    verified_sms = fields.Boolean(required=False)
+    verified_2fa = fields.Boolean(required=False)
+    status_documents = fields.String(required=False)
+    photo_profile = fields.String(required=False)
     
     identity_document_url = fields.String(required=False)
     bank_account_status_url = fields.String(required=False)
@@ -29,6 +35,7 @@ class UserSchema(Schema):
     other_financial_documents_url = fields.String(required=False)
     
     devices = fields.List(fields.Nested(DeviceSchema), allow_none=False)
+    wallet = fields.Nested(WalletGaiaSchema, allow_none=False)
     
     api_key = fields.String(required=False)
     

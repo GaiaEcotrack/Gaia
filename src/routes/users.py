@@ -96,7 +96,13 @@ def add_user():
     secret_key = data.get('secret_key')
     devices = data.get('devices', [])
     membresia = data.get('membresia', False)
-    key_auth = data.get('key_Auth')
+    key_auth = ""
+    verified_email = data.get('verified_email', False)
+    verified_sms = data.get('verified_sms', False)
+    verified_2fa = data.get('verified_2fa', False)
+    status_documents = "pending"
+    photo_profile = data.get('photo_profile')
+    wallet = data.get('wallet', {})
 
     # Insertar el nuevo usuario en la colección
     new_user = {
@@ -113,7 +119,18 @@ def add_user():
         'secret_key': secret_key,
         'devices': devices,
         'membresia': membresia,
-        'key_auth': key_auth        
+        'key_auth': key_auth,
+        'verified_email': verified_email,
+        'verified_sms': verified_sms,
+        'verified_2fa': verified_2fa,
+        'status_documents': status_documents,
+        'photo_profile': photo_profile,
+        'wallet': {
+        'gaia_token_balance': 0,
+        'transactions': [],
+        'vara_balance': 0,
+        'willing_to_sell_excess': False
+        }
     }
 
     result = collection.insert_one(new_user)
@@ -234,5 +251,23 @@ def guardar_url():
     else:
         return jsonify({'message': 'Error al guardar la URL del archivo o usuario no encontrado'}), 400   
     
+    
+@users_route.route('/save_url_device', methods=['POST'])
+def guardar_url_device():
+    data = request.json
+    user_id = data.get('user_id')
+    imagen_url = data.get('url')  # Cambia 'url' por el nombre del campo que contiene la URL de la imagen
+    user_id_obj = ObjectId(user_id)
+    result = collection.update_one(
+        {'_id': user_id_obj},
+        {'$set': {'devices.$[element].device.image': imagen_url}},
+        array_filters=[{'element.user_id': user_id}]
+    )
+
+    if result.modified_count > 0:
+        return jsonify({'message': 'URL de la imagen guardada con éxito', 'url': imagen_url}), 200
+    else:
+        return jsonify({'message': 'Error al guardar la URL de la imagen o usuario no encontrado'}), 400  
+
 if __name__ == '__main__':
      application.run(debug=True)
