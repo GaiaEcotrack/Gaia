@@ -127,6 +127,7 @@ const [formData, setFormData] = useState({
   bank_account_status: null,
   tax_declarations: null,
   other_financial_documents: null,
+  installation_company: null
 });
 
   useEffect(() => {
@@ -144,6 +145,7 @@ const [formData, setFormData] = useState({
             bank_account_status: userData.bank_account_status || null,
             tax_declarations: userData.tax_declarations || null,
             other_financial_documents: userData.other_financial_documents || null,
+            installation_company: userData.installation_company || null,
           });
 
           const pendingDocs = Object.entries(userData)
@@ -399,6 +401,9 @@ const [formData, setFormData] = useState({
       }
       if (pendingDocuments.includes("photo_profile")) {
         setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "photo_profile"));
+      }
+      if (pendingDocuments.includes("location")) {
+        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "location"));
       }
       
       if (pendingDocuments.length > 0) {
@@ -667,6 +672,25 @@ const [formData, setFormData] = useState({
               </div>
 
               <div className="mb-2 sm:mb-6">
+                <label
+                  htmlFor="InstallCompany"
+                  className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
+                >
+                  Installation Company<span className="text-red-600">*</span>
+                </label>
+                <input
+                  onChange={handleInputChange}
+                  name="installation_company"
+                  type="text"
+                  id="InstallCompany"
+                  className="bg-indigo-50 border outline-none border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                  placeholder="Installation Company"
+                  value={formData.installation_company || ''}
+                  required
+                />
+              </div>
+
+              <div className="mb-2 sm:mb-6">
                 <div className="flex justify-between items-center">
                   <label
                     htmlFor="identity_document"
@@ -759,10 +783,6 @@ const [formData, setFormData] = useState({
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
-              </div>
-
-              <div className="">
-                  {/* div comodin */}
               </div>
 
               <div className="flex justify-start w-full">

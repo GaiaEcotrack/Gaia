@@ -10,7 +10,7 @@ def client():
 
 def test_generate_key_and_qr_route(client):
     # atento cuando borramos un user en la db, cambiar el test
-    user_id = '660b1cf3d9ec6a06f44d3edc'
+    user_id = '65d8f9d019641afbb70eaf7a'
     response = client.post('/auth/generate_key', json={'id': user_id})
 
     # Verifico que el código de estado de la respuesta sea 200
