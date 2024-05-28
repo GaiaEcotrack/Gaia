@@ -114,6 +114,7 @@ def add_user():
     status_documents = "pending"
     photo_profile = data.get('photo_profile')
     location = data.get('location')
+    installation_company = data.get('installation_company')
     wallet = data.get('wallet', {})
 
     # Insertar el nuevo usuario en la colección
@@ -138,6 +139,7 @@ def add_user():
         'status_documents': status_documents,
         'photo_profile': photo_profile,
         'location': location,
+        'installation_company' : installation_company,
         'wallet': {
         'gaia_token_balance': 0,
         'transactions': [],

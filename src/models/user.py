@@ -28,6 +28,7 @@ class UserSchema(Schema):
     verified_2fa = fields.Boolean(required=False)
     status_documents = fields.String(required=False)
     photo_profile = fields.String(required=False)
+    installation_company = fields.String(required=False)
     location = fields.String(required=False)
     
     identity_document_url = fields.String(required=False)
