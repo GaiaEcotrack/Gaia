@@ -146,13 +146,13 @@ def after_request(response):
     return response
 
 
-# if __name__ == '__main__':
-#     try:
-#         application.run(debug=False)
-#     finally:
-#         client.close()
-        
-#durante desarrollo
 if __name__ == '__main__':
-    # start_http_server(8000)
-    application.run(debug=True)
+    try:
+        application.run(debug=False)
+    finally:
+        client.close()
+        
+# #durante desarrollo
+# if __name__ == '__main__':
+#     # start_http_server(8000)
+#     application.run(debug=True)
