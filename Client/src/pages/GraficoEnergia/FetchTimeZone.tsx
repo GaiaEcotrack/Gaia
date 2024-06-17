@@ -1,5 +1,7 @@
+import { ReactNode } from "react";
 
 export interface TimeZoneApiResponse {
+    abbreviation: ReactNode;
     datetime: string;
     timezone: string;
     utc_offset: string
