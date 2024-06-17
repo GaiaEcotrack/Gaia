@@ -16,6 +16,7 @@ interface User {
   phone: any | null;
   secret_key: any | null;
   tax_declarations: any | null;
+  device_type:any | null
 }
 
 interface Energy {
@@ -51,6 +52,11 @@ const SET_PV_GENERATION_POWER = 'SET_PV_GENERATION_POWER';
 const SET_PV_BATTERY = 'SET_PV_BATTERY';
 const SET_PV_PER_MONTH = 'SET_PV_PER_MONTH';
 const SET_PLANT_LIST = 'SET_PLANT_LIST';
+const SET_DEVICE_TYPE = 'SET_DEVICE_TYPE';
+
+interface SetDeviceTypeAction extends Action<typeof SET_DEVICE_TYPE> {
+  payload: string | null;
+}
 
 interface SetValueGaiaAction extends Action<typeof SET_VALUE_GAIA> {
   payload: number;
@@ -107,8 +113,14 @@ export const setLoggedInUser = (user: User | null): SetLoggedInUserAction => ({
   payload: user,
 });
 
+// Crea la acción creadora
+export const setDeviceType = (deviceType: string | null): SetDeviceTypeAction => ({
+  type: SET_DEVICE_TYPE,
+  payload: deviceType,
+});
+
 // Definir tipos de acciones
-type AppActionTypes = SetValueGaiaAction | SetValueVaraAction | SetLoggedInUserAction | SetPvGenerationPowerAction | SetPvBatteryAction | SetPvGenerationPowerMonthAction | SetPlantListAction;
+type AppActionTypes = SetValueGaiaAction | SetValueVaraAction | SetLoggedInUserAction | SetPvGenerationPowerAction | SetPvBatteryAction | SetPvGenerationPowerMonthAction | SetPlantListAction | SetDeviceTypeAction;;
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 const rootReducer = (state: AppState = initialState, action: AppActionTypes): AppState => {
@@ -153,7 +165,16 @@ const rootReducer = (state: AppState = initialState, action: AppActionTypes): Ap
               ...state.pvGeneration,
               plantsList: action.payload,
             },
+        
           };
+        case SET_DEVICE_TYPE:
+            return {
+              ...state,
+              loggedInUser: {
+                ...state.loggedInUser,
+                device_type: action.payload,
+              },
+            }
     // ... otros casos y lógicas de reducer
     default:
       return state;

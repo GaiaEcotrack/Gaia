@@ -31,7 +31,6 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
     { id: 2, title: "Transactions", src: "Transactions", to: "/dashUser" },
     { id: 3, title: "Devices", src: "Devices", to: "/panelUsuarioFinal" },
     { id: 4, title: "Profile", src: "Profile", to: "/userReg" },
-    { id: 5, title: "Information", src: "Info", gap: true, to: "/superUser" },
     { id: 6, title: "P2P", src: "p2p", to: "/P2PPage" },
   ];
 

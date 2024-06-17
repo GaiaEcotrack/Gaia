@@ -82,7 +82,7 @@ const EnergyDeviceStatus = () => {
   return (
     <div className='w-96 h-72 gap-10 bg-black/20 rounded-lg flex flex-col items-center justify-center'>
         <h1 className='text-2xl font-bold text-white'>generated energy</h1>
-        <h1 className='text-6xl font-bold text-white'>{energy} k/w</h1>
+        <h1 className='text-6xl font-bold text-white'>{0} k/w</h1>
         <div className="flex items-center space-x-4">
       {options.map((option) => (
         <button

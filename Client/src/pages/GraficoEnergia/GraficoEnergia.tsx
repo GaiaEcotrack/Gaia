@@ -595,7 +595,7 @@ const GraficoEnergia = () => {
         true,
         metadata
       );
-      console.log(gasToSpend(gas));
+
       const transferExtrinsic = api.message.send(
         {
           destination: programIDFT, // programId
@@ -1546,9 +1546,9 @@ const fetchAll = async () => {
         <div className="mb-12">
         <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
           <div className="flex flex-col lg:flex-row gap-5  p-2 justify-center graficos items-center">
-          <CardGenerated supply={totalGenerado !== undefined ? totalGenerado.toFixed(3) : 0} />
-            <CardConsume supply={totalConsumido.toFixed(3)} />
-            <CardEnergy supply={excedenteCapturado} reward={claimReward} />
+          <CardGenerated supply={0} />
+            <CardConsume supply={0} />
+            <CardEnergy supply={0} />
           </div>
           <div className="flex justify-center text-center text-emerald-500  ">
             {walletMessage && <p className="text-xl">{walletMessage}</p>}
@@ -1617,11 +1617,11 @@ const fetchAll = async () => {
                   </>
                 ) : null}
               </div>
-              <ReactECharts
+              {/* <ReactECharts
                 option={gaugeOptions}
                 style={{ height: "300px" }}
                 className="w-full"
-              />
+              /> */}
             </div>
   
             {/* Active Appliances */}

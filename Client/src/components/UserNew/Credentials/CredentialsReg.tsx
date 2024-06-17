@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FcHighPriority, FcOk } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import SelectOptions from "./Input";
 
 function CredentialsReg () {
 
@@ -207,7 +208,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           </h2>         
 
           {/* Formulario de perfil público */}
-
+          <SelectOptions/>
           <div className="">
             <form className="grid sm:grid-cols-2 gap-x-14" action="" onSubmit={handleSubmit}>
               <div className="mb-2 sm:mb-6">
