@@ -55,6 +55,7 @@ import useVoucherUtils from "../home/VouchersUtils";
 //api timezone
 import { fetchTimeZoneInfo, TimeZoneApiResponse } from "./FetchTimeZone";
 import { ApiLoader, Loader } from "@/components";
+import Container from "@/components/CardsEnergy/Container";
 
 ChartJS.register(
   ArcElement,
@@ -1545,10 +1546,8 @@ const fetchAll = async () => {
       {userRedux  && energyRedux?(
         <div className="mb-12">
         <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
-          <div className="flex flex-col lg:flex-row gap-5  p-2 justify-center graficos items-center">
-          <CardGenerated supply={0} />
-            <CardConsume supply={0} />
-            <CardEnergy supply={0} />
+          <div>
+           <Container/>
           </div>
           <div className="flex justify-center text-center text-emerald-500  ">
             {walletMessage && <p className="text-xl">{walletMessage}</p>}
