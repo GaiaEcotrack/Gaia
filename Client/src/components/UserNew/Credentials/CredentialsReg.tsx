@@ -42,8 +42,9 @@ function CredentialsReg () {
   }, [completeCredent]);
 
   const [formData, setFormData] = useState({
-    credentials: null,
-    secret_key: null,
+    device_brand: null,
+    username: null,
+    installation_company: null,
   });
 
   useEffect(() => {
@@ -80,8 +81,9 @@ function CredentialsReg () {
         .then(response => {
           const userData = response.data.user;
           setFormData({
-            credentials: userData.credentials || null,
-            secret_key: userData.secret_key || null,
+            device_brand: userData.device_brand || null,
+            username: userData.username || null,
+            installation_company: userData.installation_company || null,
           });
           setLoading(false)  
         })
@@ -95,7 +97,7 @@ function CredentialsReg () {
 
 // **********************************************************
 
-const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
   setFormData({
     ...formData,
     [e.target.name]: e.target.value,
@@ -213,41 +215,70 @@ const handleSubmit = async (e: React.FormEvent) => {
             <form className="grid sm:grid-cols-2 gap-x-14" action="" onSubmit={handleSubmit}>
               <div className="mb-2 sm:mb-6">
                 <label
-                  htmlFor="usernameCre"
+                  htmlFor="device_brand"
                   className="block mb-2 text-sm font-bold dark:text-black"
                 >
-                  Credential-ID
+                  Device Brand
                 </label>
-                <input
+                <select
                   onChange={handleInputChange}
-                  name="credentials"
-                  type="text"
-                  id="usernameCre"
+                  name="device_brand"
+                  id="device_brand"
                   className="bg-indigo-50 border outline-none border-indigo-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
-                  placeholder="Username"
-                  value={formData.credentials || ''}                 
+                  value={formData.device_brand || ''}
                   required
-                />
+                >
+                  <option value="" disabled>Select Device Brand</option>
+                  <option value="Hoymiles">Hoymiles</option>
+                  <option value="Solis">Solis</option>
+                  <option value="option2">SMA</option>
+                </select>
               </div>
 
               <div className="mb-2 sm:mb-6">
                 <label
-                  htmlFor="passwordCre"
+                  htmlFor="username"
                   className="block mb-2 text-sm font-bold dark:text-black"
                 >
-                  Secret-key
+                  Username
                 </label>
                 <input
                   onChange={handleInputChange}
-                  name="secret_key"
-                  type="password"
-                  id="passwordCre"
+                  name="username"
+                  type="text"
+                  id="username"
                   className="bg-indigo-50 border outline-none border-indigo-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
-                  placeholder="Password"
-                  value={formData.secret_key || ''} 
+                  placeholder="Username"
+                  value={formData.username || ''} 
                   required
                 />
-              </div>              
+              </div>  
+
+              <div className="mb-2 sm:mb-6">
+                <label
+                  htmlFor="installation_company"
+                  className="block mb-2 text-sm font-bold dark:text-black"
+                >
+                  Installation Company
+                </label>
+                <select
+                  onChange={handleInputChange}
+                  name="installation_company"
+                  id="installation_company"
+                  className="bg-indigo-50 border outline-none border-indigo-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                  value={formData.installation_company || ''}
+                  required
+                >
+                  <option value="" disabled>Select Installation Company</option>
+                  <option value="Opcion1">Opcion1</option>
+                  <option value="Opcion2">Opcion2</option>
+                  <option value="Opcion3">Opcion3</option>
+                </select>
+              </div>
+
+              <div>
+                {/* Comodin */}
+              </div>           
 
               <div className="flex justify-start w-full">
                 <button

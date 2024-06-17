@@ -103,8 +103,9 @@ def add_user():
     other_financial_documents = data.get('other_financial_documents')
 
     # Campos adicionales
-    credentials = data.get('credentials')
-    secret_key = data.get('secret_key')
+    device_brand = data.get('device_brand')
+    username = data.get('username')
+    installation_company = data.get('installation_company')
     devices = data.get('devices', [])
     membresia = data.get('membresia', False)
     key_auth = ""
@@ -114,7 +115,6 @@ def add_user():
     status_documents = "pending"
     photo_profile = data.get('photo_profile')
     location = data.get('location')
-    installation_company = data.get('installation_company')
     wallet = data.get('wallet', {})
 
     # Insertar el nuevo usuario en la colección
@@ -128,8 +128,9 @@ def add_user():
         'bank_account_status': bank_account_status,
         'tax_declarations': tax_declarations,
         'other_financial_documents': other_financial_documents,
-        'credentials': credentials,
-        'secret_key': secret_key,
+        'device_brand': device_brand,
+        'username': username,
+        'installation_company': installation_company,
         'devices': devices,
         'membresia': membresia,
         'key_auth': key_auth,
@@ -139,7 +140,6 @@ def add_user():
         'status_documents': status_documents,
         'photo_profile': photo_profile,
         'location': location,
-        'installation_company' : installation_company,
         'wallet': {
         'gaia_token_balance': 0,
         'transactions': [],

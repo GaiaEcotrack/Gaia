@@ -16,10 +16,11 @@ class UserSchema(Schema):
     identity_document = fields.String(required=False)
     bank_account_status = fields.String(allow_none=False)  
     tax_declarations = fields.String(allow_none=False)
-    other_financial_documents = fields.String(allow_none=False)  
-    
-    credentials = fields.String(required=False)
-    secret_key = fields.String(required=False) 
+    other_financial_documents = fields.String(allow_none=False)
+
+    device_brand = fields.String(required=False)
+    username = fields.String(required=False)
+    installation_company = fields.String(required=False)
     
     membership = fields.Boolean(required=False)
     key_auth = fields.String(required=False)
@@ -28,7 +29,6 @@ class UserSchema(Schema):
     verified_2fa = fields.Boolean(required=False)
     status_documents = fields.String(required=False)
     photo_profile = fields.String(required=False)
-    installation_company = fields.String(required=False)
     location = fields.String(required=False)
     
     identity_document_url = fields.String(required=False)
