@@ -127,7 +127,7 @@ const [formData, setFormData] = useState({
   bank_account_status: null,
   tax_declarations: null,
   other_financial_documents: null,
-  installation_company: null
+  // installation_company: null
 });
 
   useEffect(() => {
@@ -145,7 +145,7 @@ const [formData, setFormData] = useState({
             bank_account_status: userData.bank_account_status || null,
             tax_declarations: userData.tax_declarations || null,
             other_financial_documents: userData.other_financial_documents || null,
-            installation_company: userData.installation_company || null,
+            // installation_company: userData.installation_company || null,
           });
 
           const pendingDocs = Object.entries(userData)
@@ -388,13 +388,17 @@ const [formData, setFormData] = useState({
 
   useEffect(() => {
     if (foundUserId) {
-      if (pendingDocuments.includes("credentials")) {
-        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "credentials"));
-        setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "credentials"]);
+      if (pendingDocuments.includes("device_brand")) {
+        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "device_brand"));
+        setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "device_brand"]);
       }
-      if (pendingDocuments.includes("secret_key")) {
-        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "secret_key"));
-        setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "secret_key"]);
+      if (pendingDocuments.includes("username")) {
+        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "username"));
+        setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "username"]);
+      }
+      if (pendingDocuments.includes("installation_company")) {
+        setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "installation_company"));
+        setPendingCredentials(prevPendingCreds => [...prevPendingCreds, "installation_company"]);
       }
       if (pendingDocuments.includes("devices")) {
         setPendingDocuments(prevPendingDocs => prevPendingDocs.filter(item => item !== "devices"));
@@ -412,7 +416,7 @@ const [formData, setFormData] = useState({
         setCompleted(true);
       }
 
-      if (pendingCredentials.includes("credentials") && pendingCredentials.includes("secret_key")) {
+      if (pendingCredentials.includes("username") && pendingCredentials.includes("device_brand") && pendingCredentials.includes("installation_company")) {
         setCompletedCredent(false);
       } else {
         setCompletedCredent(true);
@@ -671,7 +675,7 @@ const [formData, setFormData] = useState({
                 />
               </div>
 
-              <div className="mb-2 sm:mb-6">
+              {/* <div className="mb-2 sm:mb-6">
                 <label
                   htmlFor="InstallCompany"
                   className="block mb-2 text-sm font-bold text-black-50 dark:text-black"
@@ -688,7 +692,7 @@ const [formData, setFormData] = useState({
                   value={formData.installation_company || ''}
                   required
                 />
-              </div>
+              </div> */}
 
               <div className="mb-2 sm:mb-6">
                 <div className="flex justify-between items-center">
@@ -783,6 +787,10 @@ const [formData, setFormData] = useState({
                   className="bg-indigo-50 border border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"                  
                   // required
                 />
+              </div>
+
+              <div>
+                {/* comodin */}
               </div>
 
               <div className="flex justify-start w-full">
