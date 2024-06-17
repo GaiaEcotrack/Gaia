@@ -38,25 +38,19 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
     setOpen(false);
   };
   const [photoDB, setPhotoDB] = useState<string | null>(null);
-  const [photoURL, setPhotoURL] = useState('');
-  const [photoFirebase, setPhotoFirebase] = useState<string | null>(null)
+  const [photoURL, setPhotoURL] = useState<string | null>(null)
 
   useEffect(() => {
     const auth = getAuth();
     const user = auth.currentUser;
-
-    if (user && user.photoURL) {
-      setPhotoFirebase(user.photoURL);
-    }
     
     const actualizarFotoDePerfil = async () => {
       try {
         const userId = localStorage.getItem('id');
+        const defaultPhotoURL = `https://api.multiavatar.com/c6c7f124c574a60dd2.png?apikey=CRrgM6wP8NoyEx`;
+        const photoURLToUse = user?.photoURL || defaultPhotoURL;
         
-        // Verificar si hay una imagen en user.photoURL, si no, usar la URL predeterminada
-        const photoURL = photoFirebase || `https://api.multiavatar.com/c6c7f124c574a60dd2.png?apikey=CRrgM6wP8NoyEx`;
-        
-        setPhotoURL(photoURL);
+        setPhotoURL(photoURLToUse);
   
         const response = await axios.get(`${URL}/users/${userId}`);
         const userPhoto = response.data.user.photo_profile;
@@ -64,7 +58,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
         if (!userPhoto || userPhoto !== user?.photoURL) {
           // Realizar el PUT solo si el valor de photo_profile es null
           await axios.put(`${URL}/users/${userId}`, {
-            photo_profile: photoURL,
+            photo_profile: photoURLToUse,
           });
         } else {
           // Almacenar el valor de photo_profile en setPhotoDB si no es null

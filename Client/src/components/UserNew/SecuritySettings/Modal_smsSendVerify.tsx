@@ -103,9 +103,9 @@ function SmsSendVerify(props:MoodalSms) {
   };
   
   return showSmsSendVerify ? (
-    <div className="bg-[#00000054] backdrop-blur-sm fixed top-0 left-0 h-full w-full flex justify-center items-center text-white">
+    <div className="bg-[#00000054] backdrop-blur-sm fixed top-0 left-0 h-full w-full flex justify-center items-center text-black">
         
-        <div className="flex flex-col justify-center items-center rounded-3xl bg-[#233e6f] h-[50%] xl:h-[32rem] w-full md:w-[50%] xl:w-[41rem] p-4 md:p-6 mt-40 md:mt-0">
+        <div className="flex flex-col justify-center items-center rounded-3xl bg-white h-[50%] xl:h-[32rem] w-full md:w-[50%] xl:w-[41rem] p-4 md:p-6 mt-40 md:mt-0">
           
         <div className="flex flex-row items-end" >
 
@@ -121,8 +121,8 @@ function SmsSendVerify(props:MoodalSms) {
               country={"co"}
               value={formData.phone}
               inputStyle={{
-                background: '#eef2ff',
-                border: '1px solid #a5b4fc',
+                background: '#ffffff',
+                border: '1px solid #d9d9d9',
                 color: '#000000',
                 fontSize: '0.875rem',
                 borderRadius: '8px',
@@ -165,6 +165,7 @@ function SmsSendVerify(props:MoodalSms) {
               height: '35px',
               fontSize: '16px',
               borderRadius: '5px',
+              border: '1px solid black',
             }}
           />
 
