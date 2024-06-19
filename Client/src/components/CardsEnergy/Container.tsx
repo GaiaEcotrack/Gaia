@@ -14,7 +14,8 @@ const Container = () => {
 
   const fetchData = async () => {
     try {
-      const request = await axios.post('http://localhost:5100/api/real-time-data', {
+      const apiUrl = import.meta.env.VITE_APP_API_EXPRESS
+      const request = await axios.post(`${apiUrl}/api/real-time-data`, {
         "user_name": userRedux[0].username
       });
       const response = request.data.data;
@@ -25,8 +26,10 @@ const Container = () => {
   };
 
   useEffect(() => {
-
+    if(userRedux !==null){
+      
       fetchData();
+    }
 
   }, []);
 

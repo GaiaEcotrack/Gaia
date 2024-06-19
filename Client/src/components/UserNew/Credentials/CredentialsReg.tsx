@@ -5,14 +5,36 @@ import { FcHighPriority, FcOk } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import SelectOptions from "./Input";
+import { getAuth } from "firebase/auth";
+import { useAccount } from "@gear-js/react-hooks";
 
 function CredentialsReg () {
+  const auth = getAuth()
+  const {account} = useAccount()
+
+  const userLogin =auth.currentUser?.displayName
 
   const [email, setEmail] = useState('');
   const [foundUserId, setFoundUserId] = useState('');
   const [completeCredent, setCompletedCredent] = useState(false);
   const [loading, setLoading] = useState(true);
   const URL = import.meta.env.VITE_APP_API_URL
+  const apiExpress = import.meta.env.VITE_APP_API_EXPRESS
+
+  const createGenerator = async (secret:any,company:any) => {
+    try {
+      await axios.post(`${apiExpress}/generator/users`,
+        { name:userLogin,
+          wallet:account?.address,
+          secret_name:secret,
+          installation_company:company }
+      )
+    } catch (error) {
+      console.log(error);
+      
+    }
+    
+  }
 
   const Toast = Swal.mixin({
     toast: true,
@@ -111,6 +133,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   try {
     const userId = localStorage.getItem('id');
+    createGenerator(formData.username,formData.installation_company)
 
     let apiUrl = `${URL}/users/${userId}`;
     let httpMethod = 'PUT';
@@ -210,7 +233,6 @@ const handleSubmit = async (e: React.FormEvent) => {
           </h2>         
 
           {/* Formulario de perfil público */}
-          <SelectOptions/>
           <div className="">
             <form className="grid sm:grid-cols-2 gap-x-14" action="" onSubmit={handleSubmit}>
               <div className="mb-2 sm:mb-6">
@@ -270,9 +292,10 @@ const handleSubmit = async (e: React.FormEvent) => {
                   required
                 >
                   <option value="" disabled>Select Installation Company</option>
-                  <option value="Vallesteros">Vallesteros</option>
-                  <option value="Opcion2">Opcion2</option>
-                  <option value="Opcion3">Opcion3</option>
+                  <option value="Fibra_Andina">Fibra Andina</option>
+                  <option value="Green_house">Green house</option>
+                  <option value="Proselec">Proselec</option>
+                  <option value="Fullenergysolar">Fullenergysolar</option>
                 </select>
               </div>
 

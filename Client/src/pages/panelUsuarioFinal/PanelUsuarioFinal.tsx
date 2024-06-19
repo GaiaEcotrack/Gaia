@@ -37,7 +37,7 @@ const PanelUsuarioFinal = () => {
   const [devices, setDevices] = useState<Dispositivo[]>([]);
   const [microInverst, setMicroInverst] = useState([])
   // const [scrollPosition, setScrollPosition] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState<Dispositivo | null>(
     null
@@ -67,6 +67,7 @@ const PanelUsuarioFinal = () => {
       const data = await fetchData(username)
       setDevices(data.data)
       setMicroInverst(data.data[0].children)
+      setIsLoading(false)
       
 
       return data
