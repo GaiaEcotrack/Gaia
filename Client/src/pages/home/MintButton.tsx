@@ -192,8 +192,7 @@ function Mint() {
       alert.error("Account not available to sign");
     }
   }
-  console.log(
-    decodeAddress("5G8mzxiCCW4VALGRGdaqGPfrMLp7CeaVfk5XwPhDDaDyGEgE")
+  console.log(account?.decodedAddress
   );
 
   // async function voucher() {

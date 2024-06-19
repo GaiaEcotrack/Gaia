@@ -9,6 +9,8 @@ import { RootState } from "../../store/index";
 const Container = () => {
   const [data, setData] = useState(null);
   const userRedux = useSelector((state: RootState) => state.app.loggedInUser);
+  console.log(userRedux);
+  
 
   const fetchData = async () => {
     try {

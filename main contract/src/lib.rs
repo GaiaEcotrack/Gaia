@@ -79,9 +79,10 @@ impl GaiaEcotrackMainState {
     }
  
     // Esta función transfiere tokens del contrato a los generadores de energia
-    async fn transfer_tokens_to_generators(&mut self, tx_id: Option<TxId>, amount_tokens: u128 , password: String) {
+    async fn transfer_tokens_to_generators(&mut self, tx_id: Option<TxId>,to:ActorId, amount_tokens: u128 , password: String) {
+        let caller = msg::source();
 
-        if  password != addresft_state_mut().admin_password {
+        if  password != addresft_state_mut().admin_password || caller != addresft_state_mut().admin_info  {
             msg::reply(EventsGaiaEcotrack::Error("Unauthorized".to_string()), 0)
             .expect("failed to encode or reply from `state()`");
             return;
@@ -89,7 +90,7 @@ impl GaiaEcotrackMainState {
         else {
             
         let address_ft = addresft_state_mut();           
-        let payload = FTAction::Transfer{tx_id,from: exec::program_id(), to: msg::source() ,amount: amount_tokens};
+        let payload = FTAction::Transfer{tx_id,from: exec::program_id(), to:to ,amount: amount_tokens};
         let _ = msg::send(address_ft.ft_program_id, payload, 0);
         msg::reply(EventsGaiaEcotrack::Success("Tokens Sent".to_string()), 0)
         .expect("failed to encode or reply from `state()`");
@@ -256,7 +257,7 @@ async fn main(){
                      
             }
 
-        ActionGaiaEcotrack::GetRewards{tx_id,tokens,password} => {
+        ActionGaiaEcotrack::GetRewards{tx_id,to,tokens,password} => {
 
 
             let state = state_mut();
@@ -270,7 +271,7 @@ async fn main(){
             });
 
             // Aquí llamamos a un método para transferir tokens en la implementación
-            state.transfer_tokens_to_generators(tx_id, tokens, password.to_string()).await;
+            state.transfer_tokens_to_generators(tx_id,to, tokens, password.to_string()).await;
                 
              
             }

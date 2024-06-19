@@ -10,7 +10,7 @@ pub enum ActionGaiaEcotrack {
     NewGenerator{id:ActorId,generator:Generator},
     Addliquidity{supply:u128,password:String},
     Removeliquidity{supply:u128,password:String},
-    GetRewards{tx_id:Option<TxId>,tokens:u128,password:String},
+    GetRewards{tx_id:Option<TxId>,to:ActorId,tokens:u128,password:String},
     Transferred{tx_id:Option<TxId>,from:ActorId,to:ActorId,amount:u128 , password:String},
     Reward{tx_id:Option<TxId>, to:ActorId ,amount: u128,transactions:TransactionsInfo},
     NewDevice{id:String,device:DevicesInfo},

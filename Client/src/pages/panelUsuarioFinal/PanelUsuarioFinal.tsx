@@ -8,25 +8,34 @@ import arrow from "../../assets/arrow.png";
 import { ApiLoader } from "../../components/loaders/api-loader/ApiLoader";
 import { IoIosAddCircle } from "react-icons/io";
 import { getAuth } from "firebase/auth";
+import { fetchData } from "./Hoymiles";
+import { RootState } from "@/store";
+import { useSelector } from "react-redux";
 // import authback from "@/apiauth/authback";
 
 // Definición de la interfaz Dispositivo
 interface Dispositivo {
-  deviceId: number;
-  name: string;
-  type: string;
-  vendor: string;
+  id: number;
+  model_no: string;
+  hard_ver: string;
   productId: number;
-  isActive: boolean;
-  product: string;
-  serial: string;
+  warn_data: object;
+  soft_ver: string;
+  dtu_sn: string;
   generatorPower: number;
   timezone: string;
 }
 
 const PanelUsuarioFinal = () => {
+  const userRedux = useSelector((state: RootState) => state.app.loggedInUser);
+  const username = userRedux[0].username
+
+  
+
+  
   // const [menuAbierto, setMenuAbierto] = useState<number | null>(null);
   const [devices, setDevices] = useState<Dispositivo[]>([]);
+  const [microInverst, setMicroInverst] = useState([])
   // const [scrollPosition, setScrollPosition] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,80 +60,24 @@ const PanelUsuarioFinal = () => {
     deleteSpeed: 40,
   });
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       const apiUrl = import.meta.env.VITE_APP_API_URL;
-  //       const url = `${apiUrl}/devices/plant-devices?plantId=13`;
-  //       const data = await authback(url);
-  //       if (data.devices) {
-  //         setDevices(data.devices);
-  //       } else {
-  //         throw new Error("No user");
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //       setUserError(true);
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-
-  // const handleUpdate = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const apiUrl = import.meta.env.VITE_APP_API_URL;
-  //     const data = await authback(`${apiUrl}/devices/plant-devices?plantId=35`);
-  //     setDevices(data.devices);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+ 
 
   useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        setIsLoading(true);
-        try {
-          const idToken = await user.getIdToken();
-          const apiUrl = import.meta.env.VITE_APP_API_URL;
-          const url = `${apiUrl}/devices/plant-devices?plantId=13`;
-  
-          const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-              "Authorization": `Bearer ${idToken}`,
-              "Content-Type": "application/json"
-            },
-          });
-  
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-  
-          const data = await response.json();
-          setDevices(data.devices);
-        } catch (error) {
-          console.error(error);
-          setUserError(true); 
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        // se podria establacer tambien el user error
-        setUserError(true);
-      }
-    });
-  
-    return () => unsubscribe();
+    const fethDevice = async ()=>{
+      const data = await fetchData(username)
+      setDevices(data.data)
+      setMicroInverst(data.data[0].children)
+      
+
+      return data
+    }
+    if(userRedux !== null){
+      fethDevice()
+    }
+    
   }, []);
+
+  
   
 const handleUpdate = async () => {
   setIsLoading(true);
@@ -134,24 +87,16 @@ const handleUpdate = async () => {
 
     // Check if user is logged in before proceeding
     if (user) {
-      const idToken = await user.getIdToken();
-      const apiUrl = import.meta.env.VITE_APP_API_URL;
-      const url = `${apiUrl}/devices/plant-devices?plantId=35`;
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          "Authorization": `Bearer ${idToken}`,
-          "Content-Type": "application/json"
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      const fethDevice = async ()=>{
+        const data = await fetchData(username)
+        setDevices(data.data)
+        setMicroInverst(data.data[0].children)
+        
+  
+        return data
       }
+      fethDevice()
 
-      const data = await response.json();
-      setDevices(data.devices);
     } else {
       console.error("User is not logged in");
       // se podria agregar un redirect
@@ -172,6 +117,9 @@ const handleUpdate = async () => {
     setIsModalOpen(false);
     setSelectedDevice(null);
   };
+
+  console.log(microInverst);
+  
 
   // Lista de imágenes de dispositivos (url)
   const deviceImages = [
@@ -262,44 +210,91 @@ const handleUpdate = async () => {
                   onClick={() => openModal(device)}
                 >
                   <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Logo_SMA.svg/600px-Logo_SMA.svg.png"
-                    alt="SMA Logo"
-                    className="absolute top-2 right-2 w-12 h-auto"
+                    src="https://www.hoymiles.com/wp-content/uploads/2022/05/Hoymiles-logo.png"
+                    alt="Hoymiles Logo"
+                    className="absolute top-2 right-2 w-48 h-48"
                   />
                   <div className="flex items-center space-x-4">
                     <img
                       src={deviceImages[index % deviceImages.length]}
-                      alt={`Imagen del dispositivo ${device.name}`}
+                      alt={`Imagen del dispositivo ${device.model_no}`}
                       className="w-16 h-16 object-cover rounded-full"
                     />
                     <div>
                       <h3 className="text-lg font-semibold text-gray-800">
-                        {device.name}
+                        {device.model_no}
                       </h3>
                       <p className="text-sm text-gray-600">
-                        Type: {device.type}
+                        Type: {device.model_no}
                       </p>
                       <p className="text-sm text-gray-600">
-                        Vendor: {device.vendor}
+                        Vendor: HoyMiles
                       </p>
                     </div>
                   </div>
 
                   <div className="mt-4 text-gray-600">
-                    <p>Model: {device.product}</p>
-                    <p>Serial: {device.serial || "None"}</p>
+                    <p>Model: {device.model_no}</p>
+                    <p>Serial: {device.sn || "None"}</p>
                     <p>Voltage: {device.generatorPower || "None"}</p>
                     <p>Timezone: {device.timezone}</p>
                     <p
                       className={`font-semibold ${
-                        device.isActive ? "text-blue-600" : "text-gray-400"
+                        device.warn_data.connect ? "text-blue-600" : "text-gray-400"
                       }`}
                     >
-                      {device.isActive ? "Connected" : "Disconnected"}
+                      {device.warn_data.connect ? "Connected" : "Disconnected"}
                     </p>
                   </div>
                 </div>
               ))}
+
+{microInverst.map((device, index) => (
+                <div
+                  key={index}
+                  className="border rounded-lg bg-white shadow-md p-4 cursor-pointer relative"
+                  onClick={() => openModal(device)}
+                >
+                  <img
+                    src="https://www.hoymiles.com/wp-content/uploads/2022/05/Hoymiles-logo.png"
+                    alt="Hoymiles Logo"
+                    className="absolute top-2 right-2 w-48 h-48"
+                  />
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={deviceImages[index % deviceImages.length]}
+                      alt={`Imagen del dispositivo ${device.model_no}`}
+                      className="w-16 h-16 object-cover rounded-full"
+                    />
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-800">
+                        {device.model_no}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Type: {device.model_no}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Vendor: HoyMiles
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 text-gray-600">
+                    <p>Model: {device.model_no}</p>
+                    <p>Serial: {device.sn || "None"}</p>
+                    <p>Voltage: {device.generatorPower || "None"}</p>
+                    <p>Timezone: {device.extend_data.grid_name}</p>
+                    <p
+                      className={`font-semibold ${
+                        device.warn_data.connect ? "text-blue-600" : "text-gray-400"
+                      }`}
+                    >
+                      {device.warn_data.connect ? "Connected" : "Disconnected"}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              
             </div>
           </>
         )}
@@ -324,28 +319,28 @@ const handleUpdate = async () => {
                 />
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800">
-                    {selectedDevice.name}
+                    {selectedDevice.model_no}
                   </h3>
                   <p className="text-sm text-gray-600">
-                    Type: {selectedDevice.type}
+                    Type: {selectedDevice.model_no}
                   </p>
                   <p className="text-sm text-gray-600">
-                    Vendor: {selectedDevice.vendor}
+                    Vendor: Hoymiles
                   </p>
                 </div>
               </div>
 
               <div className="mt-4 text-gray-600">
-                <p>Model: {selectedDevice.product}</p>
-                <p>Serial: {selectedDevice.serial || "None"}</p>
+                <p>Model: {selectedDevice.model_no}</p>
+                <p>Serial: {selectedDevice.sn || "None"}</p>
                 <p>Voltage: {selectedDevice.generatorPower || "None"}</p>
                 <p>Timezone: {selectedDevice.timezone}</p>
                 <p
                   className={`font-semibold ${
-                    selectedDevice.isActive ? "text-blue-600" : "text-gray-400"
+                    selectedDevice.warn_data.connect  ? "text-blue-600" : "text-gray-400"
                   }`}
                 >
-                  {selectedDevice.isActive ? "Connected" : "Disconnected"}
+                  {selectedDevice.warn_data.connect ? "Connected" : "Disconnected"}
                 </p>
               </div>
 
