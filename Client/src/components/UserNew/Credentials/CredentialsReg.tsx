@@ -253,7 +253,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <option value="" disabled>Select Device Brand</option>
                   <option value="Hoymiles">Hoymiles</option>
                   <option value="Solis">Solis</option>
-                  <option value="option2">SMA</option>
+                  <option value="SMA">SMA</option>
                 </select>
               </div>
 

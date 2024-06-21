@@ -71,13 +71,27 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
             },
           });
           if (response.status === 200) {
+            const user = response.data;
             const verified2fa = response.data.verified_2fa;
             setFoundUserId(response.data._id); 
-
+            const id = user._id
+            const company = user.installation_company
+            const profilePic = user.photo_profile
             if (verified2fa) {
               setShowTwoFA(true);
             } else {
-              navigate(redirectPath);
+              if (user.role === "Installer") {
+                localStorage.setItem("id", id);
+                localStorage.setItem("company", company);
+                localStorage.setItem("profilePic", profilePic);
+                navigate("/dashInstaller");
+              } else if (user.role === "Administrator") {
+                navigate("/dashAdmin");
+              } else if (user.role === "Generator") {
+                navigate(redirectPath);
+              } else {
+                navigate(redirectPath);
+              }
             }
           } else {
             console.error('Error al buscar usuario:', response.status);

@@ -8,7 +8,6 @@ import { useWalletSync } from "@/features/wallet/hooks";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Routing } from './pages/index';
 import { SideBar } from './pages/home/SideBar';
-import DashBoard from "./components/DashBoard/DashBoard";
 /* eslint-disable */
 import { SuperUser } from './pages/superUser/SuperUser';
 import { Labs } from './pages/Labs/Labs';
@@ -48,6 +47,7 @@ function Component() {
         location.pathname !== '/dataPrivacy' &&
         location.pathname !== '/payment' &&
         location.pathname !== '/dashAdmin' &&
+        location.pathname !== '/dashInstaller' &&
         location.pathname !== '/form' &&
         location.pathname !== '/' && <SideBar />}    
 
@@ -70,7 +70,6 @@ function Component() {
           <Route path='/lab' element={<Labs />} />
           <Route path='/userReg' element={<AuthProvider><UserRegister/></AuthProvider>} />
           <Route path='/face' element={<Face/>}/>
-          <Route path="/dashboard" element={<DashBoard />} />
           <Route path="/P2PPage" element={<P2PPage />} />
         </Routes>
 
@@ -80,6 +79,7 @@ function Component() {
         location.pathname !== '/dataPrivacy' &&
         location.pathname !== '/payment' &&
         location.pathname !== '/dashAdmin' &&
+        location.pathname !== '/dashInstaller' &&
         location.pathname !== '/form' &&
         location.pathname !== '/' && <Footer />} 
 
@@ -89,6 +89,7 @@ function Component() {
         location.pathname !== '/dataPrivacy' &&
         location.pathname !== '/payment' &&
         location.pathname !== '/dashAdmin' &&
+        location.pathname !== '/dashInstaller' &&
         location.pathname !== '/form' &&
         location.pathname !== '/' && <ChatBot/>}    
 

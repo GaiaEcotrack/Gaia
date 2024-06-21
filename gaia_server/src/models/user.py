@@ -12,6 +12,7 @@ class UserSchema(Schema):
     address = fields.String(required=False) 
     phone = fields.String(required=False)  
     email = fields.Email(required=False)
+    role = fields.String(required=False, validate=lambda x: x in ['Administrator', 'Installer', 'Generator'])
     
     identity_document = fields.String(required=False)
     bank_account_status = fields.String(allow_none=False)  
