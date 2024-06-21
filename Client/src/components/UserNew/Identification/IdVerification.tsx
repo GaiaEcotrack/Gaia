@@ -46,7 +46,7 @@ function IdVerification() {
             </h1>
           </Link>
 
-          <Link to="/IamInstaller">
+          {/* <Link to="/IamInstaller">
             <h1 className="flex items-cente px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               I am Installer
             </h1>
@@ -56,7 +56,7 @@ function IdVerification() {
             <h1 className="flex items-center px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
               Notifications
             </h1>
-          </Link>
+          </Link> */}
 
         </div>
       </aside>

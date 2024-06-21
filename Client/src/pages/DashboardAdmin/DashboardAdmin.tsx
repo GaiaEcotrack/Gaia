@@ -2,8 +2,13 @@ import { useState } from "react";
 import Users from "./componets/Users";
 import UsersList from "./componets/UsersList";
 import UsersPayments from "./componets/UsersPayments";
+import { getAuth, signOut } from "firebase/auth";
+import { HiOutlineLogout } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 const DashboardAdmin = () => {
+
+  const auth = getAuth();
   //STATES CARDS
 
   const [cardUser, setcardUser] = useState(true)
@@ -18,14 +23,19 @@ const DashboardAdmin = () => {
     setCardUserPayment(true)
     setcardUser(false)
   }
+
+  const signOutWithoutAuth = async () => {
+    await signOut(auth);
+    localStorage.clear()
+  };
   
 
 
 
   return (
     <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-white dark:bg-gray-700 text-black">
-      <div className="fixed w-full flex items-center justify-between h-14 bg-blue-800 text-white z-50">
-        <div className="flex items-center justify-start md:justify-center pl-3 w-14 md:w-64 h-14 bg-blue-800 dark:bg-gray-800 border-none">
+      <div className="fixed w-full flex items-center justify-between h-14 bg-gray-800 text-white z-50">
+        <div className="flex items-center justify-start md:justify-center pl-3 w-14 md:w-64 h-14 bg-gray-800 dark:bg-gray-800 border-none">
           <img
             className="w-7 h-7 md:w-10 md:h-10 mr-2 rounded-md overflow-hidden"
             alt="ima"
@@ -33,34 +43,20 @@ const DashboardAdmin = () => {
           />
           <span className="hidden md:block">ADMIN</span>
         </div>
+
         <div className="flex justify-between items-center h-14 bg-blue-800 dark:bg-gray-800 header-right">
-          <ul className="flex items-center">
-            <li>
-              <a
-                href="/"
-                className="flex items-center mr-4 hover:text-blue-100"
-              >
-                <span className="inline-flex mr-1">
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                    ></path>
-                  </svg>
-                </span>
-                Logout
-              </a>
-            </li>
-          </ul>
+          <div className="flex items-center justify-center mr-4 hover:text-blue-100">
+            <Link to="/">                  
+              <button className="inline-flex mr-1 justify-center items-center text-lg"
+                type="button"
+                onClick={signOutWithoutAuth}>
+                <HiOutlineLogout className="text-2xl flex justify-center mr-1"/>
+                Logout              
+              </button>
+            </Link>
+          </div>
         </div>
+        
       </div>
       {/* SIDEBAR */}
       <div className="fixed flex flex-col top-14 left-0 w-14 hover:w-64 md:w-64 bg-blue-900 dark:bg-gray-900 h-full text-white transition-all duration-300 border-none z-10 sidebar">
