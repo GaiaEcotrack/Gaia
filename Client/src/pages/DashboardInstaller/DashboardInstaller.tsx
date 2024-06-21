@@ -20,14 +20,14 @@ const DashboardInstaller = () => {
   const formatted_company = installation_company?.replace(/_/g, ' ');
   const [users, setUsers] = useState<User[]>([]);
   const [photoProfile, setPhotoProfile] = useState<string | null>(null);
-  const url = "http://localhost:4000/generator";
+  const apiExpress = import.meta.env.VITE_APP_API_EXPRESS
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const installationCompany = localStorage.getItem('company');
-        const response = await axios.get(`${url}/byinstaller/${installationCompany}`);
-        // const response = await axios.get(`${url}/users`);
+        const response = await axios.get(`${apiExpress}/generator/byinstaller/${installationCompany}`);
+        // const response = await axios.get(`${apiExpress}/generator/users`);
         const data = response.data;
         setUsers(data)
                 
@@ -39,7 +39,7 @@ const DashboardInstaller = () => {
 
     const photo_profile = localStorage.getItem('profilePic');
     setPhotoProfile(photo_profile);
-  }, [url]);
+  }, [apiExpress]);
 
   const openCardUser = ()=>{
     setCardUserPayment(false)
@@ -98,7 +98,7 @@ const DashboardInstaller = () => {
             <li>
               <button
               onClick={()=>openCardUser()}
-                className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
+                className="relative flex flex-row items-center h-11 w-full focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
               >
                 <span className="inline-flex justify-center items-center ml-4">
                   <svg
@@ -149,7 +149,7 @@ const DashboardInstaller = () => {
             </li>
             <li>
               <a
-                href="/"
+                // href="/"
                 className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
               >
                 <span className="inline-flex justify-center items-center ml-4">
@@ -175,7 +175,7 @@ const DashboardInstaller = () => {
             </li>
             <li>
               <a
-                href="/"
+                // href="/"
                 className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
               >
                 <span className="inline-flex justify-center items-center ml-4">
@@ -211,7 +211,7 @@ const DashboardInstaller = () => {
             </li>
             <li>
               <a
-                href="/"
+                // href="/"
                 className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
               >
                 <span className="inline-flex justify-center items-center ml-4">
@@ -237,7 +237,7 @@ const DashboardInstaller = () => {
             </li>
             <li>
               <a
-                href="/"
+                // href="/"
                 className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
               >
                 <span className="inline-flex justify-center items-center ml-4">

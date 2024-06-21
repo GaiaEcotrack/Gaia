@@ -92,6 +92,11 @@ function SecurityVerify() {
             </h1>
           </Link>
 
+          <Link to="/IamInstaller">
+            <h1 className="flex items-cente px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+              I am Installer
+            </h1>
+          </Link>
 
           <Link to="/notifications">
             <h1 className="flex items-cente px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
@@ -99,11 +104,6 @@ function SecurityVerify() {
             </h1>
           </Link>
 
-          {/* <Link to="/account"> */}
-            <h1 className="flex items-cente px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
-              PRO Account
-            </h1>
-          {/* </Link> */}
         </div>
       </aside>
 

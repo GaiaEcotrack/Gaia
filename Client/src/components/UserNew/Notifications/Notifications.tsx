@@ -40,17 +40,18 @@ function Notifications() {
             </h1>
           </Link>
 
+          <Link to="/IamInstaller">
+            <h1 className="flex items-cente px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
+              I am Installer
+            </h1>
+          </Link>
+          
           <Link to="/notifications">
             <h1 className="flex text-white items-center justify-between px-3 py-2.5 font-bold bg-[#212056] border rounded-full">
               Notifications
             </h1>
           </Link>
 
-          {/* <Link to="/account"> */}
-            <h1 className="flex items-center text-black px-3 py-2.5 font-semibold hover:text-black hover:border hover:rounded-full">
-              PRO Account
-            </h1>
-          {/* </Link> */}
         </div>
       </aside>
 

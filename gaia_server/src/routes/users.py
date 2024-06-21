@@ -339,28 +339,5 @@ def get_users_willing_to_sell_excess():
     return jsonify({'users': user_list})
 
 
-# ruta para cambiar propidad role
-@users_route.route('/<user_id>/role', methods=['POST'])
-def update_user_role(user_id):
-    try:
-        object_id = ObjectId(user_id)
-    except errors.InvalidId:
-        return jsonify({'error': 'Formato de ID inválido'}), 400
-
-    data = request.json
-    new_role = data.get('role')
-
-    if not new_role:
-        return jsonify({'message': 'El campo "role" es requerido'}), 400
-
-    result = collection.update_one({'_id': object_id}, {'$set': {'role': new_role}})
-
-    if result.matched_count == 0:
-        return jsonify({'message': 'Usuario no encontrado'}), 404
-
-    return jsonify({'message': 'Rol actualizado con éxito'})
-
-
-
 if __name__ == '__main__':
      application.run(debug=True)

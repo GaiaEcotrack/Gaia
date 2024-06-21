@@ -47,8 +47,9 @@ export default function Profile() {
       setPhoto(null)  
       Toast.fire({
         icon: "info",
-        title: "Updated image\nReload"
+        title: "Updated image\nThe page will reload"
       });
+      window.location.reload();
     }
   }
 
