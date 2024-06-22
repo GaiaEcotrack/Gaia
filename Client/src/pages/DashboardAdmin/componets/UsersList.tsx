@@ -1,5 +1,4 @@
 import { IoIosSave } from "react-icons/io";
-import axios from "axios";
 import { SetStateAction, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
@@ -126,25 +125,6 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
       });
     }
   };
-
-  // const handleSaveRole = async (_id: string) => {
-  //   const role = selectedRoles[_id];
-  //   if (!role) return;
-
-  //   try {
-  //     await axios.put(`${url}/users/${_id}`, { role });
-  //     Toast.fire({
-  //       icon: "success",
-  //       title: "User updated successfully"
-  //     });
-  //   } catch (error) {
-  //     console.error("Error updating role:", error);
-  //     Toast.fire({
-  //       icon: "error",
-  //       title: "Something went wrong"
-  //     });
-  //   }
-  // };
 
   return (
     <div>
