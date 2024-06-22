@@ -28,7 +28,7 @@ class UserSchema(Schema):
     verified_email = fields.Boolean(required=False)
     verified_sms = fields.Boolean(required=False)
     verified_2fa = fields.Boolean(required=False)
-    status_documents = fields.String(required=False)
+    status_documents = fields.String(required=False, validate=lambda x: x in ['pending', 'completed', 'verified'])
     photo_profile = fields.String(required=False)
     location = fields.String(required=False)
     

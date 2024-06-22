@@ -80,6 +80,9 @@ function UserRegister() {
         setFoundUserId(response.data._id);        
         setFoundUserPhoto(response.data.photo_profile)
         setFoundStatus(response.data.status_documents)
+        if(response.data.status_documents === "verified"){
+          setVerifiedDoc(true)
+        }
       } else if (response.status === 404) {
         setFoundUserId('');
         console.log('Usuario no encontrado');

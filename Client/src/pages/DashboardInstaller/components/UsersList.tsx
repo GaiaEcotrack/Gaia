@@ -63,7 +63,7 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
     <div className="flex items-center justify-between gap-8 mb-8">
       <div>
         <h5
-          className="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-gray-800">
+          className="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-gray-700">
           User List
         </h5>
         <p className="block mt-1 font-sans text-base antialiased font-normal leading-relaxed text-gray-700">
@@ -139,32 +139,32 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
       </div>
     </div>
   </div>
-  <div className="p-6 px-0 overflow-scroll">
+  <div className="pt-6 px-0">
     <table className="w-full mt-4 text-center table-auto min-w-max">
       <thead>
         <tr>
           <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50/50">
-            <p className="block font-sans text-base font-bold leading-none text-gray-800">
+            <p className="block font-sans text-base font-bold leading-none text-gray-700">
               User Generator
             </p>
           </th>
           <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50/50">
-            <p className="block font-sans text-base font-bold leading-none text-gray-800">
+            <p className="block font-sans text-base font-bold leading-none text-gray-700">
               kW Generated
             </p>
           </th>
           <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50/50">
-            <p className="block font-sans text-base font-bold leading-none text-gray-800">
+            <p className="block font-sans text-base font-bold leading-none text-gray-700">
               Status
             </p>
           </th>
           <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50/50">
-            <p className="block font-sans text-base font-bold leading-none text-gray-800">
+            <p className="block font-sans text-base font-bold leading-none text-gray-700">
               Last Update
             </p>
           </th>
           <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50/50">
-            <p className="block font-sans text-base font-bold leading-none text-gray-800">
+            <p className="block font-sans text-base font-bold leading-none text-gray-700">
             </p>
           </th>
         </tr>

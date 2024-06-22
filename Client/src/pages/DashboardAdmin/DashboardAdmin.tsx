@@ -1,18 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Users from "./componets/Users";
 import UsersList from "./componets/UsersList";
 import UsersPayments from "./componets/UsersPayments";
 import { getAuth, signOut } from "firebase/auth";
 import { HiOutlineLogout } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import axios from "axios";
+
+interface User {
+  full_name: string;
+  _id: string;
+  photo_profile: string;
+  email: string;
+  membresia: boolean;
+  status_documents: string;
+  role: string;
+}
 
 const DashboardAdmin = () => {
 
   const auth = getAuth();
-  //STATES CARDS
-
   const [cardUser, setcardUser] = useState(true)
   const [cardUserPayment, setCardUserPayment] = useState(false)
+  const [users, setUsers] = useState<User[]>([]);
+  const url = import.meta.env.VITE_APP_API_URL
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(`${url}/users/`);
+        const data = response.data.users;
+        setUsers(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUsers();
+  }, [url]);
 
   const openCardUser = ()=>{
     setCardUserPayment(false)
@@ -30,10 +54,8 @@ const DashboardAdmin = () => {
   };
   
 
-
-
   return (
-    <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-white dark:bg-gray-700 text-black">
+    <div className="h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-white dark:bg-gray-700 text-black">
       <div className="fixed w-full flex items-center justify-between h-14 bg-gray-800 text-white z-50">
         <div className="flex items-center justify-start md:justify-center pl-3 w-14 md:w-64 h-14 bg-gray-800 dark:bg-gray-800 border-none">
           <img
@@ -41,7 +63,7 @@ const DashboardAdmin = () => {
             alt="ima"
             src="https://therminic2018.eu/wp-content/uploads/2018/07/dummy-avatar.jpg"
           />
-          <span className="hidden md:block">ADMIN</span>
+          <span className="hidden md:block">ADMINISTRATOR</span>
         </div>
 
         <div className="flex justify-between items-center h-14 bg-blue-800 dark:bg-gray-800 header-right">
@@ -56,7 +78,7 @@ const DashboardAdmin = () => {
             </Link>
           </div>
         </div>
-        
+
       </div>
       {/* SIDEBAR */}
       <div className="fixed flex flex-col top-14 left-0 w-14 hover:w-64 md:w-64 bg-blue-900 dark:bg-gray-900 h-full text-white transition-all duration-300 border-none z-10 sidebar">
@@ -72,7 +94,7 @@ const DashboardAdmin = () => {
             <li>
               <button
               onClick={()=>openCardUser()}
-                className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
+                className="relative flex flex-row items-center h-11 w-full focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
               >
                 <span className="inline-flex justify-center items-center ml-4">
                   <svg
@@ -96,7 +118,7 @@ const DashboardAdmin = () => {
               </button>
             </li>
             <li>
-              <button onClick={()=>{openCardPayment()}} className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6">
+              <button onClick={()=>{openCardPayment()}} className="relative flex flex-row items-center h-11 w-full focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6">
                 <span className="inline-flex justify-center items-center ml-4">
                   <svg
                     className="w-5 h-5"
@@ -121,9 +143,9 @@ const DashboardAdmin = () => {
                 </span>
               </button>
             </li>
-            <li>
+            {/* <li>
               <a
-                href="/"
+                // href="/"
                 className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
               >
                 <span className="inline-flex justify-center items-center ml-4">
@@ -146,10 +168,10 @@ const DashboardAdmin = () => {
                   Messages
                 </span>
               </a>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <a
-                href="/"
+                // href="/"
                 className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
               >
                 <span className="inline-flex justify-center items-center ml-4">
@@ -175,7 +197,7 @@ const DashboardAdmin = () => {
                   1.2k
                 </span>
               </a>
-            </li>
+            </li> */}
             <li className="px-5 hidden md:block">
               <div className="flex flex-row items-center mt-5 h-8">
                 <div className="text-sm font-light tracking-wide text-gray-400 uppercase">
@@ -185,7 +207,7 @@ const DashboardAdmin = () => {
             </li>
             <li>
               <a
-                href="/"
+                // href="/"
                 className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
               >
                 <span className="inline-flex justify-center items-center ml-4">
@@ -211,7 +233,7 @@ const DashboardAdmin = () => {
             </li>
             <li>
               <a
-                href="/"
+                // href="/"
                 className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
               >
                 <span className="inline-flex justify-center items-center ml-4">
@@ -253,8 +275,8 @@ const DashboardAdmin = () => {
       <div className="h-full ml-14 mt-14 mb-10 md:ml-64 bg-white">
         {cardUser && (
           <div>
-            <Users />
-            <UsersList />
+            <Users users={users}/>
+            <UsersList users={users}/>
           </div>
         )}
 

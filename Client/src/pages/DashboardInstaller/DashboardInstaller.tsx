@@ -58,7 +58,7 @@ const DashboardInstaller = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-white dark:bg-gray-700 text-black">
+    <div className="h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-white dark:bg-gray-700 text-black">
       <div className="fixed w-full flex items-center justify-between h-14 bg-gray-800 text-white z-50">
         <div className="flex items-center justify-start md:justify-center pl-3 w-14 md:w-64 h-14 bg-gray-800 dark:bg-gray-800 border-none">
           {photoProfile && (
@@ -121,7 +121,7 @@ const DashboardInstaller = () => {
                 </span>
               </button>
             </li>
-            <li>
+            {/* <li>
               <button onClick={()=>{openCardPayment()}} className="relative flex flex-row items-center h-11 w-full focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6">
                 <span className="inline-flex justify-center items-center ml-4">
                   <svg
@@ -146,8 +146,9 @@ const DashboardInstaller = () => {
                   New
                 </span>
               </button>
-            </li>
-            <li>
+            </li> */}
+
+            {/* <li>
               <a
                 // href="/"
                 className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
@@ -172,8 +173,9 @@ const DashboardInstaller = () => {
                   Messages
                 </span>
               </a>
-            </li>
-            <li>
+            </li> */}
+
+            {/* <li>
               <a
                 // href="/"
                 className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
@@ -201,7 +203,8 @@ const DashboardInstaller = () => {
                   1.2k
                 </span>
               </a>
-            </li>
+            </li> */}
+
             <li className="px-5 hidden md:block">
               <div className="flex flex-row items-center mt-5 h-8">
                 <div className="text-sm font-light tracking-wide text-gray-400 uppercase">
