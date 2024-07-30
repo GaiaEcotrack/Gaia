@@ -709,7 +709,7 @@ const GraficoEnergia = () => {
   
   
   // Creacion de usuario en la DB
-  const URL = import.meta.env.VITE_APP_API_URL;
+  const URL = import.meta.env.VITE_APP_API_EXPRESS;
   const [email, setEmail] = useState("");
   const [foundUserId, setFoundUserId] = useState("");
   const [foundUserName, setFoundUserName] = useState("");
@@ -1546,7 +1546,7 @@ const fetchAll = async () => {
 
   return (
     <div>
-      {userRedux  && energyRedux?(
+      
         <div className="mb-12">
         <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
           <div>
@@ -1684,7 +1684,7 @@ const fetchAll = async () => {
           </div>
         )}
       </div>
-      ): <ApiLoader/>}
+
     </div>
     
   );
