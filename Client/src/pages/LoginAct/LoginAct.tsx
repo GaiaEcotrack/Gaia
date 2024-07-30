@@ -17,7 +17,7 @@ export interface ILoginPageProps {}
   
 function AuthForm (props: ILoginPageProps): JSX.Element {
 
-  const URL = import.meta.env.VITE_APP_API_URL
+  const URL = import.meta.env.VITE_APP_API_EXPRESS
   const auth = getAuth();
   const navigate = useNavigate();
   const [authing, setAuthing] = useState(false);

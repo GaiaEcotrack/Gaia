@@ -284,7 +284,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   htmlFor="username"
                   className="block mb-2 text-sm font-bold dark:text-black"
                 >
-                  Username
+                  Secret-key
                 </label>
                 <input
                   onChange={handleInputChange}

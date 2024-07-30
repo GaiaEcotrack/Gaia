@@ -917,82 +917,7 @@ const GraficoEnergia = () => {
   // para el segundo grafico (barras)
   const [options, setOptions] = useState({});
 
-  // Obtener datos de la API y actualizar barData
-  // useEffect(() => {
-  //   const fetchChartData = async () => {
-  //     const url = `${
-  //       import.meta.env.VITE_APP_API_URL
-  //     }/devices/pv?deviceId=18&setType=EnergyAndPowerPv&period=Month&Date=2024-03`;
-  //     try {
-  //       const response = await fetch(url);
-  //       if (!response.ok) throw new Error("Network response was not ok");
-  //       const data = await response.json();
 
-  //       const colors = ["#e74c3c", "#3498db", "#2ecc71"];
-  //       // Procesa y actualiza las opciones de ECharts
-  //       setOptions({
-  //         color: ["#74b9ff"],
-  //         title: {
-  //           textStyle: {
-  //             color: "#FFFFFF",
-  //           },
-  //         },
-  //         tooltip: {
-  //           trigger: "axis",
-  //           axisPointer: {
-  //             type: "shadow",
-  //           },
-  //         },
-  //         xAxis: {
-  //           type: "category",
-  //           data: data.set.map((item: any) => moment(item.time).format("MMM D")),
-  //           axisLine: {
-  //             lineStyle: {
-  //               color: "#FFFFFF", // Cambia el color de la línea del eje X a blanco
-  //             },
-  //           },
-  //           axisLabel: {
-  //             color: "#FFFFFF", // Etiquetas del eje X en blanco
-  //           },
-  //           splitLine: {
-  //             show: false, // Opcional: esconde las líneas de división para un diseño más limpio
-  //           },
-  //         },
-  //         yAxis: {
-  //           type: "value",
-  //           axisLine: {
-  //             lineStyle: {
-  //               color: "#FFFFFF", // Cambia el color de la línea del eje Y a blanco
-  //             },
-  //           },
-  //           axisLabel: {
-  //             color: "#FFFFFF", // Etiquetas del eje Y en blanco
-  //           },
-  //           splitLine: {
-  //             lineStyle: {
-  //               color: "#FFFFFF", // Cambia el color de las líneas de división del eje Y si deseas mantenerlas
-  //               opacity: 0.1, // Reduce la opacidad para hacerlas menos prominentes
-  //             },
-  //           },
-  //         },
-  //         series: [
-  //           {
-  //             data: data.set.map((item: any) => item.pvGeneration),
-  //             type: "bar",
-  //             barWidth: "60%",
-  //             itemStyle: {
-  //               color: "#74b9ff", // O define el color específico de la serie aquí
-  //             },
-  //           },
-  //         ],
-  //       });
-  //     } catch (error) {
-  //       console.error("Error fetching chart data:", error);
-  //     }
-  //   };
-
-  //   fetchChartData();
-  // }, []);
 
   //! Medidor de intensidad de enrgia: esta tomando la data de la engeriga generada
   const [timeZoneData, setTimeZoneData] = useState<TimeZoneApiResponse | null>(
@@ -1521,7 +1446,7 @@ const fetchAll = async () => {
 
   //REDUX
   useEffect(() => {
-    const url = import.meta.env.VITE_APP_API_URL;
+    const url = import.meta.env.VITE_APP_API_EXPRESS;
     const auth = getAuth();
     const user = auth.currentUser?.email;
     const fetchDataUser = async () => {
@@ -1550,7 +1475,7 @@ const fetchAll = async () => {
         <div className="mb-12">
         <div className=" text-white md:pl-24 md:pr-10 md:pb-0">
           <div>
-           <Container/>
+           <Container token={claimReward}/>
           </div>
           <div className="flex justify-center text-center text-emerald-500  ">
             {walletMessage && <p className="text-xl">{walletMessage}</p>}
