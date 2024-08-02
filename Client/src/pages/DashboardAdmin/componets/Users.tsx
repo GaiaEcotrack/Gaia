@@ -20,7 +20,7 @@ const Users: React.FC<UsersListProps> = ({ users }) => {
   // const totaltokens = users.reduce((sum, user) => sum + roundToThousands(user.generatedKW) / 1000, 0);
   const totaltokens = users.reduce((sum) => sum + roundToThousands(7283) / 1000, 0);
 
-  const totalEarnings = ((totaltokens * 0.645) * 0.15).toFixed(2);
+  const totalEarnings = ((totaltokens * 0.645)).toFixed(2);
   
   return (
     <div>
