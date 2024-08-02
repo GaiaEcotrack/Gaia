@@ -115,6 +115,7 @@ const sendMessageContract = async () => {
         if (status.isInBlock) {
           console.log("Transaction in the block");
         } else if (status.isFinalized) {
+          alert("tokens enviados")
           console.log("Transaction completed");
           resolve(true);
         }
