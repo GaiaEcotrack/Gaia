@@ -21,16 +21,34 @@ const DashboardInstaller = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [photoProfile, setPhotoProfile] = useState<string | null>(null);
   const apiExpress = import.meta.env.VITE_APP_API_EXPRESS
+  const username=import.meta.env.VITE_APP_ADMIN_USER
+  const password=import.meta.env.VITE_APP_ADMIN_PASSWORD
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        // Paso 1: Obtener el token desde la ruta de autenticación
+        const loginResponse = await axios.post(`${apiExpress}/auth/login`, {
+          username: username, 
+          password: password  
+        });
+    
+        const token = loginResponse.data.token;
+    
+        // Paso 2: Almacenar el token en el localStorage
+        localStorage.setItem('token', token);
+    
+        // Paso 3: Usar el token para realizar la petición a la otra ruta
         const installationCompany = localStorage.getItem('company');
-        const response = await axios.get(`${apiExpress}/generator/byinstaller/${installationCompany}`);
-        // const response = await axios.get(`${apiExpress}/generator/users`);
+        const response = await axios.get(`${apiExpress}/generator/byinstaller/${installationCompany}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+    
         const data = response.data;
-        setUsers(data)
-                
+        setUsers(data);
+    
       } catch (error) {
         console.log(error);
       }

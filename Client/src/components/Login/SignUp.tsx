@@ -5,6 +5,7 @@ import { useAuth } from "../../contexts/AuthContext"
 import { useNavigate } from "react-router-dom";
 import { sendEmailVerification } from "firebase/auth";
 import Swal from 'sweetalert2'
+import axios from "axios";
 
 interface SignUp {
   showSignUp: boolean;
@@ -13,7 +14,7 @@ interface SignUp {
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 function SignUp(props:SignUp) {
-  
+  const URL = import.meta.env.VITE_APP_API_EXPRESS
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordConfirmRef = useRef<HTMLInputElement>(null);
@@ -63,6 +64,10 @@ function SignUp(props:SignUp) {
           await sendEmailVerification(user)
         }
         );
+        await axios.post(`${URL}/users`, {
+          email: emailRef.current.value,
+          full_name:"User"
+        });
       navigate("/");
       setShowSignUp(false)
       Swal.fire({
