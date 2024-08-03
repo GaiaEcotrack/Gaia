@@ -1,5 +1,5 @@
 import { FcSelfie } from "react-icons/fc"; 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import Swal from "sweetalert2";
 import { ModalIdVerify } from "./Modal_idVerify";
@@ -7,6 +7,10 @@ import { ModalIdVerify } from "./Modal_idVerify";
 function IdVerification() {
 
   const [showIdVerify, setShowIdVerify] = useState(false)
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
 
   return (

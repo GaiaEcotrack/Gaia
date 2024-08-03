@@ -23,6 +23,10 @@ function CredentialsReg () {
   const password=import.meta.env.VITE_APP_ADMIN_PASSWORD
   const apiExpress = import.meta.env.VITE_APP_API_EXPRESS
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const createGenerator = async (secret, company) => {
     try {
       // Realiza el login y obtiene el token

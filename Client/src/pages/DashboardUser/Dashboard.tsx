@@ -33,6 +33,10 @@ import { Loader } from '@/components';
 
 function Dashboard() {
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   interface CryptoValues {
     gaia: any;
     vara: any;

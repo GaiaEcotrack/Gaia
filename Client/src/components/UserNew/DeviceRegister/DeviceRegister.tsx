@@ -65,8 +65,9 @@ function DeviceRegister() {
   const meta = import.meta.env.VITE_APP_MAIN_CONTRACT_METADATA;
   const metadata = ProgramMetadata.from(meta);
 
-
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const gasToSpend = (gasInfo: GasInfo): bigint => {
     const gasHuman = gasInfo.toHuman();

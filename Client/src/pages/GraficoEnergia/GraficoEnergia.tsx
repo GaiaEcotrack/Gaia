@@ -181,6 +181,10 @@ const GraficoEnergia = () => {
     ],
   });
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [energyData, setEnergyData] = useState(50);
   //!!!!!!!!!!!!!!!!
   // useEffect(() => {

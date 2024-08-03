@@ -43,6 +43,10 @@ const PanelUsuarioFinal = () => {
     }
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [typeEffect] = useTypewriter({
     words: [`Hello, ${name}!, Here you can check out your connections!⚙️`],
     loop: {},

@@ -429,6 +429,10 @@ const [formData, setFormData] = useState({
     }
   }, [foundUserId, pendingDocuments, pendingCredentials, completeCredent]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className=" w-full flex flex-col gap-5 px-3 md:px-16 lg:px-28 md:flex-row text-black bg-white">
       {/* Aside */}
@@ -626,7 +630,7 @@ const [formData, setFormData] = useState({
                 <input
                   onChange={handleInputChange}
                   name="identification_number"
-                  type="number"
+                  type="text"
                   id="Identification"
                   className="bg-indigo-50 border outline-none border-indigo-300 text-black text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
                   placeholder="Identification"
