@@ -24,6 +24,7 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import P2PPage from "./pages/p2p/P2PPage";
 import ChatBot from "./pages/ChatBot/ChatBot";
 import FormGaia from "./pages/formGaia/FormGaia";
+import AuthRoute from "./components/AuthRoute"
 
 
 initializeApp(config.firebaseConfig);
@@ -63,15 +64,17 @@ function Component() {
         {!isAppReady && 
           !['/assets/logo', '/serviceTerms', '/dataPrivacy', '/form'].includes(location.pathname) && <ApiLoader />}
       </main>
-    
+
+      <AuthRoute>
         <Routes>
           <Route path="/panelUsuarioFinal" element={<PanelUsuarioFinal />} />
           <Route path="/superUser" element={<SuperUser />} />
           <Route path='/lab' element={<Labs />} />
-          <Route path='/userReg' element={<AuthProvider><UserRegister/></AuthProvider>} />
+          <Route path='/userReg' element={<UserRegister/>} />
           <Route path='/face' element={<Face/>}/>
           <Route path="/P2PPage" element={<P2PPage />} />
         </Routes>
+      </AuthRoute>
 
       {shouldShowFooter && 
         location.pathname !== '/assets/logo' &&
