@@ -12,7 +12,7 @@ const P2PPage: React.FC = () => {
   }, []);
 
   return (
-    <div className='h-full'>
+    <div className='h-full ml-20'>
       <P2pFilterSection/>
     </div>
   );

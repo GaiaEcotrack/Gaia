@@ -160,9 +160,9 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
             </Link>
           ))}
         </ul>
-        <div className="mt-5">{open && <AccountInfo />}</div>
+        <div className="mt-5 ml-1.5">{open && <AccountInfo />}</div>
 
-        <div className={` ${open ? "sm:block" : "hidden sm:block"} mt-5`}>
+        <div className={` ${open ? "sm:block" : "hidden sm:block"} mt-5 ml-1.5`}>
           {!open && <AccountInfo />}
         </div>  
       </div>
