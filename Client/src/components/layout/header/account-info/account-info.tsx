@@ -27,11 +27,9 @@ export function AccountInfo() {
       {account ? (
         <Wallet balance={formattedBalance} address={account.address} name={account.meta.name} onClick={openModal} />
       ) : (
-        // <TbWalletOff  />
-        
-        <div className="flex flex-grow flex-no" onClick={openModal}>
+        // <TbWalletOff  />        
+        <div className="flex flex-grow flex-no cursor-pointer relative z-10" onClick={openModal}>
           <span><TbWallet size='37px' /></span>
-          <span className="cursor-pointer hover:bg-light-white text-slate-400 hover:text-white text-sm items-center ml-3 gap-x-4 mt-2 hidden sm:inline">Connect Wallet</span>
         </div>
       )}
       {isModalOpen && <AccountsModal accounts={accounts} close={closeModal} />}

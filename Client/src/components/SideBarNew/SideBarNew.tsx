@@ -160,7 +160,13 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
             </Link>
           ))}
         </ul>
-        <div className="mt-5 ml-1.5">{open && <AccountInfo />}</div>
+        <div className="mt-5 ml-1.5">{open && (
+            <div className="flex ">
+              <AccountInfo />
+              <h1 className="absolute text-slate-400 hover:text-white font-normal text-sm items-center ml-[50px] gap-x-4 mt-2" style={{ minWidth: '150px' }}>Wallet Connection</h1>
+            </div>
+          )}
+        </div>
 
         <div className={` ${open ? "sm:block" : "hidden sm:block"} mt-5 ml-1.5`}>
           {!open && <AccountInfo />}
