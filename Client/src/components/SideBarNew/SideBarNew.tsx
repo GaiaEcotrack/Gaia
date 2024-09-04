@@ -31,7 +31,7 @@ function SideBarNew(props: IHomePageProps): JSX.Element {
     { id: 2, title: "Transactions", src: "Transactions", to: "/dashUser" },
     { id: 3, title: "Devices", src: "Devices", to: "/panelUsuarioFinal" },
     { id: 4, title: "Profile", src: "Profile", to: "/userReg" },
-    { id: 6, title: "P2P", src: "p2p", to: "/P2PPage" },
+    // { id: 6, title: "P2P", src: "p2p", to: "/P2PPage" },
   ];
 
   const handleMenuClick = () => {

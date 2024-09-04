@@ -56,6 +56,7 @@ import useVoucherUtils from "../home/VouchersUtils";
 import { fetchTimeZoneInfo, TimeZoneApiResponse } from "./FetchTimeZone";
 import { ApiLoader, Loader } from "@/components";
 import Container from "@/components/CardsEnergy/Container";
+import AnimatedHouse from "@/components/HouseModel/House";
 
 ChartJS.register(
   ArcElement,

@@ -10,6 +10,7 @@ import { useAuth } from "../../contexts/AuthContext"
 import { TwoFactorAuth } from "@/components/Login/TwoFactorAuth";
 import axios from "axios";
 import { ResetPassword } from "@/components/Login/ResetPassword";
+import  SignUpInstaller  from "@/components/Login/SingUpInstallerOrCommercial";
 
 
 /* eslint-disable */
@@ -22,6 +23,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
   const navigate = useNavigate();
   const [authing, setAuthing] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false)
+  const [showSignUpInstaller, setShowSignUpInstaller] = useState(false)
   const [showResetPass, setShowResetPass] = useState(false)
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -229,6 +231,15 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
               </button>
             </div>
 
+            
+            <div className="flex flex-col items-center mt-4">
+              <button type="button"
+                className="text-blue-500 hover:text-blue-700 font-semibold" 
+                onClick={() => {setShowSignUpInstaller(true)}}
+                >Create an installer or commercial account
+              </button>
+            </div>
+
             <button
               // onClick={signInWithGoogle}
               onClick={() => signInWithGoogle()} disabled={authing}
@@ -292,6 +303,7 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
       </div>
       <AuthProvider>
         <SignUp showSignUp={showSignUp} setShowSignUp={setShowSignUp}/>
+        <SignUpInstaller showSignUp={showSignUpInstaller} setShowSignUp={setShowSignUpInstaller}/>
         <ResetPassword showResetPass={showResetPass} setShowResetPass={setShowResetPass}/>
       </AuthProvider>
       <TwoFactorAuth showTwoFA={showTwoFA} setShowTwoFA={setShowTwoFA} foundUserId={foundUserId}/>

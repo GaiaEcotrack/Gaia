@@ -38,7 +38,7 @@ const Users: React.FC<UsersListProps> = ({ users }) => {
             <AiOutlineThunderbolt className="text-3xl"color='black' />
             </div>
             <div className="text-right">
-              <p className="text-2xl">{totalGeneratedKW} kW</p>
+              <p className="text-2xl">{totalGeneratedKW} Watts</p>
               <p>Energy generated</p>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useVoucher, useBalanceFormat } from '@gear-js/react-hooks';
-import { ADDRESS } from '../consts';
+import { ADDRESS } from '../../../../../gaia-next/src/utils/consts';
 
 export function useFetchVouchr(account: string | undefined) {
   const { isVoucherExists, voucherBalance } = useVoucher(ADDRESS.GAME);
