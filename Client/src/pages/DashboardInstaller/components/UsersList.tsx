@@ -170,7 +170,7 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
                 </th>
                 <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50/50">
                   <p className="block font-sans text-base font-bold leading-none text-gray-700">
-                    kW Generated
+                    Watts Generated
                   </p>
                 </th>
                 <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50/50">
@@ -231,7 +231,7 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
                   </td>
                   <td className="p-4 border-b border-blue-gray-50">
                     <p className="block font-sans text-base antialiased font-normal leading-normal text-blue-gray-900">
-                      23/04/18
+                      12/08/24
                     </p>
                   </td>
                   <td className="p-4 border-b border-blue-gray-50">

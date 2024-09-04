@@ -1,6 +1,8 @@
 
 const CardEnergy = ({supply ,reward}:any) => {
 
+  
+
 
 
 

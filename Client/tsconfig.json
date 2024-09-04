@@ -23,7 +23,7 @@
     },
     "types": ["vite-plugin-svgr/client"]
   },
-  "include": ["src"],
+  "include": ["src", "../../gaia-next/src/utils/consts.ts", "../../gaia-next/src/utils/utils.ts"],
   "references": [
     {
       "path": "./tsconfig.node.json"

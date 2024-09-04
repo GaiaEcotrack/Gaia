@@ -113,7 +113,7 @@ function SignUp(props:SignUp) {
                 name="email"
                 placeholder="Enter Email Address"
                 className="w-full px-4 py-3 rounded-lg text-black bg-gray-100 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-                autoComplete="on"
+                autoComplete="off"  // Cambiar a "off"
                 required
               />
             </div>
@@ -132,6 +132,7 @@ function SignUp(props:SignUp) {
                   minLength={6}
                   className="w-full px-4 py-3 rounded-lg text-black bg-gray-100 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none pr-10"
                   onChange={(e) => setPassword(e.target.value)}
+                  autoComplete="new-password"  // Cambiar a "new-password"
                   required
                 />
                 <div className="absolute inset-y-4 right-0 p-2" onClick={() => setVisible(!visible)}>
@@ -154,6 +155,7 @@ function SignUp(props:SignUp) {
                   minLength={6}
                   className="w-full px-4 py-3 rounded-lg text-black bg-gray-100 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none pr-10"
                   onChange={(e) => setPasswordConf(e.target.value)}
+                  autoComplete="new-password"  // Cambiar a "new-password"
                   required
                 />
                 <div className="absolute inset-y-4 right-0 p-2" onClick={() => setVisibleConf(!visibleConf)}>
