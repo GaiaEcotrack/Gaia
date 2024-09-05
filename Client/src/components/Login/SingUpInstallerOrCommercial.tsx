@@ -65,7 +65,7 @@ function SignUpInstaller(props: SignUp) {
       setError("");
       setLoading(true);
       await signup(emailRef.current.value, passwordRef.current.value).then(
-        async (userCred) => {
+        async (userCred: { user: any; }) => {
           const user = userCred.user;
           await sendEmailVerification(user);
         }
@@ -96,6 +96,8 @@ function SignUpInstaller(props: SignUp) {
         confirmButtonColor: "#6366f1",
         confirmButtonText: "Ok !"
       });
+      setPassword("")
+      setPasswordConf("")
     } catch (error: any) {
       if (error.code === "auth/email-already-in-use") {
         setError("Email is already in use -- Sign in");
@@ -110,7 +112,7 @@ function SignUpInstaller(props: SignUp) {
   const { showSignUp, setShowSignUp } = props;
   return showSignUp ? (
 <div className="bg-[#00000084] backdrop-blur-sm fixed top-0 left-0 h-full w-full flex justify-center items-center">
-  <div className="flex flex-col justify-start items-center bg-white rounded-3xl 2xl:pt-10 sm:h-[67rem]  w-full lg:w-[45rem] 2xl:w-[60rem] md:py-6 md:mt-0 relative p-8">
+  <div className="flex flex-col justify-start items-center bg-white rounded-3xl 2xl:pt-10 w-full lg:w-[90rem] 2xl:w-[90rem]  md:py-6 md:mt-0 relative p-8 laptop">
     <div className="flex flex-col text-center items-center justify-center h-[20%] lg:h-[23%]">
       <img className="w-24 h-24 lg:w-32 lg:h-32 mx-auto" src="/LOGOGAIASOLO.png" alt="Gaia Ecotrack Logo" />
       <h1 className="text-gray-800 text-2xl lg:text-3xl">Gaia Ecotrack</h1>
@@ -118,7 +120,7 @@ function SignUpInstaller(props: SignUp) {
 
     <h1 className="text-gray-800 mt-4 text-xl lg:text-2xl font-bold lg:my-6">Sign Up</h1>
 
-    <form className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full" action="#" method="POST" onSubmit={handleSubmit}>
+    <form className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 w-full" action="#" method="POST" onSubmit={handleSubmit}>
       <div>
         <label htmlFor="company-name" className="block text-gray-800">Nombre de la Empresa</label>
         <input
