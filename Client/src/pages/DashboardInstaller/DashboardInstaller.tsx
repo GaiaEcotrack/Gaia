@@ -6,6 +6,7 @@ import UsersList from "./components/UsersList";
 import UsersPayments from "./components/UsersPayments";
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
+import UserForm from './components/ProfileInstaller';
 
 interface User {
   name: string;
@@ -14,15 +15,19 @@ interface User {
 
 const DashboardInstaller = () => {
   const auth = getAuth();
+  const savedCompanyName = localStorage.getItem('companyName');
   const [cardUser, setcardUser] = useState(true)
+  const [userOnline, setUserOnline] = useState([])
+  const [profileCard, setProfileCard] = useState(false)
   const [cardUserPayment, setCardUserPayment] = useState(false)
-  const installation_company = localStorage.getItem('company')
-  const formatted_company = installation_company?.replace(/_/g, ' ');
   const [users, setUsers] = useState<User[]>([]);
   const [photoProfile, setPhotoProfile] = useState<string | null>(null);
   const apiExpress = import.meta.env.VITE_APP_API_EXPRESS
   const username=import.meta.env.VITE_APP_ADMIN_USER
   const password=import.meta.env.VITE_APP_ADMIN_PASSWORD
+  const currentUser = auth.currentUser?.email
+  console.log(currentUser);
+  
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -39,8 +44,7 @@ const DashboardInstaller = () => {
         localStorage.setItem('token', token);
     
         // Paso 3: Usar el token para realizar la petición a la otra ruta
-        const installationCompany = localStorage.getItem('company');
-        const response = await axios.get(`${apiExpress}/generator/byinstaller/${installationCompany}`, {
+        const response = await axios.get(`${apiExpress}/generator/byinstaller/${userOnline.installer_company}`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -52,7 +56,39 @@ const DashboardInstaller = () => {
       } catch (error) {
         console.log(error);
       }
-    };  
+    };
+    const fetchType = async () => {
+      try {
+        // Paso 1: Obtener el token desde la ruta de autenticación
+        const loginResponse = await axios.post(`${apiExpress}/auth/login`, {
+          username: username, 
+          password: password  
+        });
+    
+        const token = loginResponse.data.token;
+    
+        // Paso 2: Almacenar el token en el localStorage
+        localStorage.setItem('token', token);
+    
+        // Paso 3: Usar el token para realizar la petición a la otra ruta
+        const response = await axios.get(`${apiExpress}/users/search`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+          params: {
+            email: currentUser // Aquí pasas el filtro por email
+          }
+        });
+    
+        const user = response.data; // Obtiene el usuario desde la respuesta
+        setUserOnline(user)
+        
+    
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchType()  
     fetchUsers();
 
     const photo_profile = localStorage.getItem('profilePic');
@@ -62,6 +98,7 @@ const DashboardInstaller = () => {
   const openCardUser = ()=>{
     setCardUserPayment(false)
     setcardUser(true)
+    setProfileCard(false)
   }
 
   const openCardPayment = ()=>{
@@ -69,11 +106,27 @@ const DashboardInstaller = () => {
     setcardUser(false)
   }
 
+  const openProfile = ()=>{
+    if(userOnline.role === "Installer"){
+      setCardUserPayment(false)
+      setcardUser(false)
+      setProfileCard(true)
+    }
+    else if(userOnline.role === "Comercial"){
+      setCardUserPayment(false)
+      setcardUser(false)
+      setProfileCard(false)
+    }
+  }
+
 
   const signOutWithoutAuth = async () => {
     await signOut(auth);
     localStorage.clear()
   };
+console.log(userOnline);
+
+  
 
   return (
     <div className="h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-white dark:bg-gray-700 text-black">
@@ -83,10 +136,10 @@ const DashboardInstaller = () => {
             <img
               className="w-7 h-7 md:w-10 md:h-10 mr-2 rounded-md overflow-hidden"
               alt="Profile"
-              src={photoProfile}
+              src="https://images.unsplash.com/photo-1546881963-ac8d67aee789?q=80&w=1358&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             />
           )}
-          <span className="hidden md:block text-xl ml-1">{formatted_company}</span>
+          <span className="hidden md:block text-white text-xl ml-1">Hola</span>
         </div>
 
         <div className="flex justify-between items-center h-14 bg-blue-800 dark:bg-gray-800 header-right">
@@ -251,9 +304,9 @@ const DashboardInstaller = () => {
                     ></path>
                   </svg>
                 </span>
-                <span className="ml-2 text-sm tracking-wide truncate">
+                <button onClick={openProfile} className="ml-2 text-sm tracking-wide truncate">
                   Profile
-                </span>
+                </button>
               </a>
             </li>
             <li>
@@ -304,7 +357,12 @@ const DashboardInstaller = () => {
             <UsersList users={users}/>
           </div>
         )}
-  
+        {profileCard && (
+          <div>
+            <UserForm/>
+          </div>
+        )}
+
         {cardUserPayment && (
           <div>
             <UsersPayments />

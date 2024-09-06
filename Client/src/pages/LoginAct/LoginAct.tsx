@@ -87,7 +87,14 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
                 localStorage.setItem("company", company);
                 localStorage.setItem("profilePic", profilePic);
                 navigate("/dashInstaller");
-              } else if (user.role === "Administrator") {
+                
+              } 
+              else if (user.role === "Comercial") {
+                localStorage.setItem("id", id);
+                localStorage.setItem("company", company);
+                localStorage.setItem("profilePic", profilePic);
+                navigate("/dashInstaller");}
+              else if (user.role === "Administrator") {
                 navigate("/dashAdmin");
               } else if (user.role === "Generator") {
                 navigate(redirectPath);
