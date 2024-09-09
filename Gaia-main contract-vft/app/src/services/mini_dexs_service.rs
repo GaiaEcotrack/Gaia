@@ -25,6 +25,7 @@ where VftClient: Vft
     pub fn seed(
         owner: ActorId,
         vft_contract_id: Option<ActorId>,
+        gaia_company_token: Option<ActorId>,
         min_tokens_to_add: u128,
         tokens_per_vara: u128
     ) {
@@ -33,6 +34,7 @@ where VftClient: Vft
                 MiniDexsState {
                     owner,
                     vft_contract_id,
+                    gaia_company_token,
                     min_tokens_to_add,
                     tokens_per_vara,
                     devices: Vec::new(),
@@ -106,7 +108,7 @@ where VftClient: Vft
 
         });
     
-        MiniDexsEvents::DevicesAdded
+        MiniDexsEvents::DevicesAdded("Device successfully added".to_string())
     }
     /// ## Consulta todos los dispositivos
     pub fn get_devices(&self) -> MiniDexsQueryEvents {
@@ -114,12 +116,11 @@ where VftClient: Vft
             MiniDexsQueryEvents::Devices(state.devices.clone())
     }
 
-     /// ## Obtiene el tiempo actual en segundos
-    /// Aquí debes usar el sistema de tiempo de tu blockchain o plataforma
-    fn get_current_time(&self) -> u64 {
-        // Ejemplo: esto depende de tu entorno, puedes usar un llamado a un oráculo
-        0 // Reemplaza con la obtención del timestamp real
-    }
+    pub fn get_mitings(&self) -> MiniDexsQueryEvents {
+        let state = self.state_ref();
+        MiniDexsQueryEvents::Mitings(state.minting_schedules.clone())
+}
+
 
 
         /// ## Programar un minting
@@ -140,14 +141,14 @@ where VftClient: Vft
             minting_time,
         });
 
-        MiniDexsEvents::MintingScheduled
+        MiniDexsEvents::MintingScheduled("Successfully programmed minting".to_string())
     }
 
     /// ## Ejecutar mintings programados
     /// Revisa la lista de mintings programados y ejecuta aquellos cuyo tiempo ha llegado
-    pub fn execute_mintings(&mut self) -> MiniDexsEvents {
+    pub async fn execute_mintings(&mut self, time:u64) -> MiniDexsEvents {
         let state = self.state_mut();
-        let current_time = self.get_current_time(); // Función que obtiene el tiempo actual
+        let current_time = time; // Función que obtiene el tiempo actual
 
         // Filtra los mintings que ya deberían ejecutarse
         let due_mintings: Vec<MintingSchedule> = state.minting_schedules
@@ -158,8 +159,12 @@ where VftClient: Vft
 
         for mint in due_mintings.iter() {
             // Ejecutar el minting llamando al contrato de VFT para mintear tokens
-            let result = self.mint_tokens_to_user(mint.wallet, mint.amount);
+            let result = self.mint_tokens_to_user(mint.wallet, mint.amount).await;
 
+                    // Manejar errores en el minting
+        if let MiniDexsEvents::Error(error) = result {
+            return MiniDexsEvents::Error(error);
+        }
 
             // Remover los mintings ejecutados de la lista
             state.minting_schedules.retain(|schedule| schedule.minting_time > current_time);
@@ -222,6 +227,84 @@ where VftClient: Vft
 
         MiniDexsEvents::TokensAdded
     }
+
+
+        /// ## add company token
+    /// Only the contract owner can perform this action
+    pub async fn add_company_token(&mut self, tokens_to_add: u128) ->  MiniDexsEvents {
+        let state = self.state_ref();
+        let caller = msg::source();
+
+        if caller != state.owner {
+            return MiniDexsEvents::Error(
+                MiniDexsErrors::OnlyOwnerCanDoThatAction
+            );
+        }
+
+        if state.gaia_company_token.is_none() {
+            return MiniDexsEvents::Error(
+                MiniDexsErrors::VftContractIdNotSet
+            );
+        }
+
+        if tokens_to_add < state.min_tokens_to_add {
+            return MiniDexsEvents::Error(
+                MiniDexsErrors::MinTokensToAdd(state.min_tokens_to_add)
+            );
+        }
+
+        let result = self
+            .add_num_of_tokens_to_contract(
+                tokens_to_add, 
+                state.gaia_company_token.unwrap()
+            )
+            .await;
+
+        if let Err(error_variant) = result {
+            return MiniDexsEvents::Error(error_variant);
+        }
+
+        MiniDexsEvents::TokensAdded
+    }
+
+
+/// ## Transferir tokens ade compañia
+/// Solo el propietario del contrato puede realizar esta acción
+pub async fn transfer_tokens_company(&mut self, recipient: ActorId, amount: u128) -> MiniDexsEvents {
+    let state = self.state_ref();
+
+    if msg::source() != state.owner {
+        return MiniDexsEvents::Error(
+            MiniDexsErrors::OnlyOwnerCanDoThatAction
+        );
+    }
+
+    if state.gaia_company_token.is_none() {
+        return MiniDexsEvents::Error(
+            MiniDexsErrors::VftContractIdNotSet
+        );
+    }
+
+    let response = self
+        .vft_client
+        .transfer(recipient, U256::from(amount))
+        .send_recv(state.gaia_company_token.unwrap())
+        .await;
+
+    let Ok(transfer_status) = response else {
+        return MiniDexsEvents::Error(
+            MiniDexsErrors::ErrorInVFTContract
+        );
+    };
+
+    if !transfer_status {
+        return MiniDexsEvents::Error(
+            MiniDexsErrors::OperationWasNotPerformed
+        );
+    }
+
+    MiniDexsEvents::TokensAdded
+}
 
     /// ## Swap Varas for tokens
     /// Receive a certain amount of varas and then make a swap for a certain number of tokens
@@ -559,6 +642,7 @@ pub async fn mint_tokens_to_user(&mut self, recipient: ActorId, amount: u128) ->
 #[scale_info(crate = sails_rs::scale_info)]
 pub enum MiniDexsQueryEvents {
     ContractBalanceInVaras(u128),
+    Mitings(Vec<MintingSchedule>),
     Devices(Vec<Devices>),
     UserTotalTokensAsU128(u128),
     UserTotalTokens(U256),
@@ -575,11 +659,11 @@ pub enum MiniDexsQueryEvents {
 pub enum MiniDexsEvents {
     RefundOfVaras(u128),
     VFTContractIdSet,
-    DevicesAdded,
+    DevicesAdded(String),
     MinTokensToAddSet,
     TokensAdded,
     SetTokensPerVaras,
-    MintingScheduled, 
+    MintingScheduled(String), 
     MintingExecuted,
     TotalSwapInVaras(u128),
     TokensSwapSuccessfully {

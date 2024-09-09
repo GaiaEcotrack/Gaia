@@ -25,6 +25,7 @@ pub struct MintingSchedule {
 pub struct MiniDexsState {
     pub owner: ActorId,
     pub vft_contract_id: Option<ActorId>,
+    pub gaia_company_token: Option<ActorId>,
     pub min_tokens_to_add: u128,
     pub tokens_per_vara: u128,
     pub devices: Vec<Devices>, // Lista de dispositivos

@@ -25,6 +25,7 @@ impl MiniDexsProgram {
     pub fn new() -> Self {
         MiniDexsService::<VftClient<GStdRemoting>>::seed(
             msg::source(), 
+            None,
             None, 
             0,
             0
@@ -35,12 +36,14 @@ impl MiniDexsProgram {
 
     pub fn new_with_data(
         vft_contract_id: Option<ActorId>,
+        gaia_company_token:Option<ActorId>,
         min_tokens_to_add: u128,
         tokens_per_vara: u128
     ) -> Self {
         MiniDexsService::<VftClient<GStdRemoting>>::seed(
             msg::source(), 
             vft_contract_id,
+            gaia_company_token,
             min_tokens_to_add,
             tokens_per_vara
         );
