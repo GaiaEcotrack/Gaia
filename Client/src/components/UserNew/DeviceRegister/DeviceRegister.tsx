@@ -5,6 +5,7 @@ import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
 import { web3FromSource } from "@polkadot/extension-dapp";
 import { GasInfo, ProgramMetadata } from "@gear-js/api";
 import useVoucherUtils from "@/pages/home/VouchersUtils";
+import axios from "axios";
 
 function DeviceRegister() {
   const {
@@ -17,6 +18,7 @@ function DeviceRegister() {
   } = useVoucherUtils();
 
   const URL = import.meta.env.VITE_APP_API_URL;
+  const api = import.meta.env.VITE_APP_API_EXPRESS;
   const [foundUserId, setFoundUserId] = useState("");
   const [isLoadingUser, setIsLoadingUser] = useState(true);
 
@@ -40,6 +42,7 @@ function DeviceRegister() {
       deviceTimezone: "",
       serial: "",
       image: "",
+      deviceBrand:""
     },
   });
 
@@ -57,141 +60,23 @@ function DeviceRegister() {
 
   //VARA////////
   const alert = useAlert();
-  const { accounts, account } = useAccount();
-  const { api } = useApi();
-  const programIDFT = import.meta.env.VITE_APP_MAIN_CONTRACT_ID;
+  const { account } = useAccount();
 
-  // Add your metadata.txt
-  const meta = import.meta.env.VITE_APP_MAIN_CONTRACT_METADATA;
-  const metadata = ProgramMetadata.from(meta);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  const gasToSpend = (gasInfo: GasInfo): bigint => {
-    const gasHuman = gasInfo.toHuman();
-    const minLimit = gasHuman.min_limit?.toString() ?? "0";
-    const parsedGas = Number(minLimit.replaceAll(",", ""));
-    const gasPlusTenPorcent = Math.round(parsedGas + parsedGas * 0.1);
-    const gasLimit: bigint = BigInt(gasPlusTenPorcent);
-    return gasLimit;
-  };
-
-  const claimVoucher = async (voucherId: string) => {
-    if (!account || !api || !accounts) return;
-
-    const localaccount = account?.address;
-    const isVisibleAccount = accounts.some(
-      (visibleAccount) => visibleAccount.address === localaccount
-    );
-
-    if (isVisibleAccount) {
-      const { signer } = await web3FromSource(account.meta.source);
-      const gas = await api.program.calculateGas.handle(
-        account?.decodedAddress ?? "0x00",
-        programIDFT,
-        { newDevice: {
-          "id": formData.user_id,
-          "device": {
-              "id": formData.device.deviceId,
-              "name": formData.device.deviceName,
-              "type_energy": formData.device.deviceName,
-              "serial": formData.device.serial
-          }
-      } },
-        0,
-        true,
-        metadata
-      );
-      const transferExtrinsic = api.message.send(
-        {
-          destination: programIDFT, // programId
-          payload: {
-            newDevice: {
-              "id": formData.user_id,
-              "device": {
-                  "id": formData.device.deviceId,
-                  "name": formData.device.deviceName,
-                  "type_energy": formData.device.deviceName,
-                  "serial": formData.device.serial
-              }
-          },
-          },
-          gasLimit: gasToSpend(gas),
-          value: 0,
-        },
-        metadata
-      );
-      const voucherTx = api.voucher.call(voucherId, {
-        SendMessage: transferExtrinsic,
-      });
-
-      try {
-        await voucherTx.signAndSend(
-          account?.decodedAddress,
-          { signer },
-          ({ status, events }) => {
-            if (status.isInBlock) {
-              alert.success(`Transaction completed`);
-            } else {
-              console.log(`status: ${status.type}`);
-              if (status.type === "Finalized") {
-                alert.success(status.type);
-              }
-            }
-          }
-        );
-      } catch (error: any) {
-        console.log(" transaction failed", error);
-        const errorString = await error.toString()
-        const feesError = await  errorString.includes("Inability to pay some fees , e.g. account balance too low")
-  
-        if(feesError === true){
-            await addTwoTokensToVoucher(voucherId)
-            console.log("actualizado");      
-        }
-        
-        alert.info("Retry your transaction")
-      }
-    } else {
-      alert.error("Account not available to sign");
-    }
-  };
-
-  const createVoucher = async () => {
-    if (!api || !account) return;
-
-    if (await voucherExists()) {
-      console.log("Voucher already exists");
-
-      const voucherId = await accountVoucherId();
-
-      if (await voucherExpired(voucherId)) {
-        console.log("Voucher expired");
-        await renewVoucherOneHour(voucherId);
-      }
-
-      await claimVoucher(voucherId);
-
-      return;
-    }
-
-    console.log("Voucher does not exists");
-
+  const postDataBlockChain = async ()=>{
     try {
-      const voucherId = await createNewVoucher();
-      await claimVoucher(voucherId);
+      const data = [
+        `${account?.decodedAddress}`,
+        formData.device.serial,
+        "Colombia",
+        formData.device.deviceName,
+        formData.device.deviceBrand
+      ]
+      await axios.post(`${api}/service/MiniDeXs/AddDevice`,data)
     } catch (error) {
-      console.log("Error creating voucher");
+      
     }
-  };
-
-  const signerVou = async () => {
-    console.log("signer");
-    if (!account || !accounts || !api) return;
-    await createVoucher();
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -200,6 +85,7 @@ function DeviceRegister() {
 
     try {
       const userId = localStorage.getItem("id");
+      postDataBlockChain();
 
       let apiUrl = `${URL}/devices/`;
       let httpMethod = "POST";
@@ -217,7 +103,6 @@ function DeviceRegister() {
           icon: "success",
           title: "Device added successfully",
         });
-        signerVou();
 
         if (!userId) {
           Toast.fire({
@@ -480,6 +365,33 @@ function DeviceRegister() {
                   required
                 />
               </div>
+
+
+
+              <div className="mb-2 sm:mb-6">
+                <label
+                  htmlFor="deviceBrand"
+                  className="block mb-2 text-sm font-bold dark:text-black"
+                >
+                  Device Brand
+                </label>
+                <input
+                  onChange={handleInputChange}
+                  name="deviceBrand"
+                  type="text"
+                  id="deviceBrand"
+                  className="bg-indigo-50 border outline-none border-indigo-300 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5"
+                  placeholder="Device Name"
+                  required
+                />
+              </div>
+
+
+
+
+
+
+
 
               <div className="mb-2 sm:mb-6">
                 <label

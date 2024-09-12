@@ -521,6 +521,57 @@ pub async fn transfer_tokens_company(&mut self, recipient: ActorId, amount: u128
         MiniDexsQueryEvents::TotalTokensToSwapAsU128(total_tokens_to_swap.as_u128())
     }
 
+
+    pub async fn total_tokens_energy(&self , wallet : ActorId) -> MiniDexsQueryEvents {
+        let state = self.state_mut();
+
+        if state.vft_contract_id.is_none() {
+            return MiniDexsQueryEvents::Error(
+                MiniDexsErrors::VftContractIdNotSet
+            );
+        }
+
+        let response = self
+            .vft_client
+            .balance_of(wallet)
+            .recv(state.vft_contract_id.unwrap())
+            .await;
+
+        let Ok(total_tokens_energy) = response else {
+            return MiniDexsQueryEvents::Error(
+                MiniDexsErrors::ErrorInVFTContract
+            );
+        };
+
+        MiniDexsQueryEvents::TotalTokensUserEnergy(total_tokens_energy.as_u128())
+    }
+
+
+    pub async fn total_tokens_company(&self , wallet : ActorId) -> MiniDexsQueryEvents {
+        let state = self.state_mut();
+
+        if state.vft_contract_id.is_none() {
+            return MiniDexsQueryEvents::Error(
+                MiniDexsErrors::VftContractIdNotSet
+            );
+        }
+
+        let response = self
+            .vft_client
+            .balance_of(wallet)
+            .recv(state.gaia_company_token.unwrap())
+            .await;
+
+        let Ok(total_tokens_comapany) = response else {
+            return MiniDexsQueryEvents::Error(
+                MiniDexsErrors::ErrorInVFTContract
+            );
+        };
+
+        MiniDexsQueryEvents::TotalTokensUserCompany(total_tokens_comapany.as_u128())
+    }
+
+
     pub fn tokens_to_swap_one_vara(&self) -> MiniDexsQueryEvents {
         MiniDexsQueryEvents::TokensToSwapOneVara(self.state_ref().tokens_per_vara)
     }
@@ -644,6 +695,8 @@ pub enum MiniDexsQueryEvents {
     ContractBalanceInVaras(u128),
     Mitings(Vec<MintingSchedule>),
     Devices(Vec<Devices>),
+    TotalTokensUserEnergy(u128),
+    TotalTokensUserCompany(u128),
     UserTotalTokensAsU128(u128),
     UserTotalTokens(U256),
     TotalTokensToSwap(U256),

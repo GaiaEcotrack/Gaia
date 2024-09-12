@@ -67,7 +67,7 @@ function SignUpInstaller(props: SignUp) {
       await signup(emailRef.current.value, passwordRef.current.value).then(
         async (userCred: { user: any; }) => {
           const user = userCred.user;
-          await sendEmailVerification(user);
+          await sendEmailVerification(user); 
         }
       );
 
