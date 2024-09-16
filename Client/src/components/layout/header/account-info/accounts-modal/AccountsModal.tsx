@@ -10,7 +10,7 @@ type Props = {
 
 function AccountsModal({ accounts, close }: Props) {
   return (
-    <Modal heading='Connect' close={close}>
+    <Modal  heading='Connect Account' close={close} >
       {accounts ? (
         <Accounts list={accounts} onChange={close} />
       ) : (

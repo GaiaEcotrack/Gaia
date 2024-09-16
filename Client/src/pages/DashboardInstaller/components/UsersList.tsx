@@ -17,6 +17,10 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
+  const today = new Date();
+  const date = today.toLocaleDateString(); // Formato según la configuración regional del navegador
+
+
   useEffect(() => {
     const filtered = users.filter((user: { name: string }) => {
       const name = user.name || "";
@@ -225,13 +229,13 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
                           users.status_documents
                         )}`}
                       >
-                        <span className="">{users.status_documents}</span>
+                        <span className="">{users.status_documents ? users.status_documents : 'online'}</span>
                       </div>
                     </div>
                   </td>
                   <td className="p-4 border-b border-blue-gray-50">
                     <p className="block font-sans text-base antialiased font-normal leading-normal text-blue-gray-900">
-                      12/08/24
+                      {date}
                     </p>
                   </td>
                   <td className="p-4 border-b border-blue-gray-50">

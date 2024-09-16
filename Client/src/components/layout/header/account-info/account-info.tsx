@@ -28,7 +28,7 @@ export function AccountInfo() {
         <Wallet balance={formattedBalance} address={account.address} name={account.meta.name} onClick={openModal} />
       ) : (
         // <TbWalletOff  />        
-        <div className="flex flex-grow flex-no cursor-pointer relative z-10" onClick={openModal}>
+        <div className="flex z-10 flex-grow flex-no cursor-pointer relative z-10" onClick={openModal}>
           <span><TbWallet size='37px' /></span>
         </div>
       )}

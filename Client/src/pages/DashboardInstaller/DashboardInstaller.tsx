@@ -7,6 +7,8 @@ import UsersPayments from "./components/UsersPayments";
 import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import UserForm from './components/ProfileInstaller';
+import { AccountInfo } from '@/components/layout/header/account-info/account-info';
+import CreateWallet from './components/CreateWallet';
 
 interface User {
   name: string;
@@ -44,7 +46,8 @@ const DashboardInstaller = () => {
         localStorage.setItem('token', token);
     
         // Paso 3: Usar el token para realizar la petición a la otra ruta
-        const response = await axios.get(`${apiExpress}/generator/byinstaller/${userOnline.installer_company}`, {
+        const response = await axios.get(`${apiExpress}/generator/byinstaller/${userOnline.installation_company
+        }`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -88,12 +91,15 @@ const DashboardInstaller = () => {
         console.log(error);
       }
     };
-    fetchType()  
-    fetchUsers();
+    fetchType()
+    if (userOnline.installation_company !== undefined) {
+      fetchUsers();
+    }
+     
 
     const photo_profile = localStorage.getItem('profilePic');
     setPhotoProfile(photo_profile);
-  }, [apiExpress]);
+  }, [ apiExpress,userOnline.installation_company]);
 
   const openCardUser = ()=>{
     setCardUserPayment(false)
@@ -139,7 +145,9 @@ console.log(userOnline);
               src="https://images.unsplash.com/photo-1546881963-ac8d67aee789?q=80&w=1358&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             />
           )}
-          <span className="hidden md:block text-white text-xl ml-1">Hola</span>
+<span className="hidden md:block text-white text-xl ml-1">
+  {userOnline.installation_company ? userOnline.installation_company : 'installer'}
+</span>
         </div>
 
         <div className="flex justify-between items-center h-14 bg-blue-800 dark:bg-gray-800 header-right">
@@ -339,7 +347,12 @@ console.log(userOnline);
                 <span className="ml-2 text-sm tracking-wide truncate">
                   Settings
                 </span>
+
               </a>
+              <div className="flex z-10 ">
+              <AccountInfo />
+              <h1 className="absolute text-slate-400 hover:text-white font-normal text-sm items-center ml-[50px] gap-x-4 mt-2" style={{ minWidth: '150px' }}>Wallet Connection</h1>
+            </div>
             </li>
           </ul>
           <p className="mb-14 px-5 py-3 hidden md:block text-center text-xs">
@@ -353,6 +366,7 @@ console.log(userOnline);
       <div className="h-full ml-14 mt-14 mb-10 md:ml-64 bg-white">
         {cardUser && (
           <div>
+            <CreateWallet/>
             <Users users={users}/>
             <UsersList users={users}/>
           </div>
