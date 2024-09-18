@@ -1,6 +1,74 @@
+import { useAccount } from "@gear-js/react-hooks";
+import axios from "axios";
 import React from "react";
 
 const CardGenerated = ({ total , moment }: any) => {
+
+  const {account} = useAccount()
+  const username=import.meta.env.VITE_APP_ADMIN_USER
+  const password=import.meta.env.VITE_APP_ADMIN_PASSWORD
+  const apiExpress = import.meta.env.VITE_APP_API_EXPRESS
+  const userId = localStorage.getItem('id');
+
+  const createGenerator = async () => {
+    try {
+      // Realiza el login y obtiene el token
+      const loginResponse = await axios.post(`${apiExpress}/auth/login`, {
+        username: username, 
+        password: password  
+      });
+      
+      const token = loginResponse.data.token;
+  
+      // Almacena el token en el localStorage
+      localStorage.setItem('token', token);
+  
+      // Realiza el post a /generator/users usando el token en los headers
+      await axios.post(
+        `${apiExpress}/generator/users`,
+        { 
+          name: "userTest",
+          wallet: account?.address,
+          secret_name: "Monitoreo_2",
+          installation_company:"Fibra_Andina" 
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const putUser= async ()=>{
+    try {
+      await axios.put(`${apiExpress}/users`,{
+        userId:userId,
+        property:"username",
+        value:"Monitoreo_2"
+      })
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+  const handleSubmit = async ()=>{
+    try {
+      await createGenerator()
+      await putUser()
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+
+  console.log(userId);
+  
   return (
     <div>
       <div className="relative grid h-[35rem] sm:h-[50rem] w-full max-w-[28rem] flex-col items-end justify-center overflow-hidden rounded-xl bg-white bg-clip-border text-center text-gray-700">
@@ -113,6 +181,9 @@ const CardGenerated = ({ total , moment }: any) => {
               {moment} W
             </h5>
           </div>
+          <button onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Connect to a test device
+              </button>
 
           <img
             alt="Logo"

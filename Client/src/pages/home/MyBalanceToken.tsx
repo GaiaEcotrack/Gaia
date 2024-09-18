@@ -23,7 +23,7 @@ function LocalBalanceToken() {
         const data =[`${account?.decodedAddress}`]
         console.log(data);
         
-        const request = await axios.post(`${api}/service/query/MiniDeXs/TotalTokensEnergy`,data)
+        const request = await axios.post(`${api}/service/query/GaiaService/TotalTokensEnergy`,data)
         const response = request.data
         setBalance(response)
 dispatch({ type: 'SET_VALUE_GAIA', payload: response.totalTokensUserEnergy});

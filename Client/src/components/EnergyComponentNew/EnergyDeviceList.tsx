@@ -2,32 +2,58 @@ import {useState,useEffect} from "react";
 import axios from 'axios'
 import { SlEnergy } from "react-icons/sl";
 import { Link } from "react-router-dom";
+import { fetchData } from "@/pages/panelUsuarioFinal/Hoymiles";
+import { RootState } from "@/store";
+import { useSelector } from "react-redux";
+
+
+interface Dispositivo {
+  id: number;
+  model_no: string;
+  hard_ver: string;
+  productId: number;
+  warn_data: object;
+  soft_ver: string;
+  dtu_sn: string;
+  generatorPower: number;
+  timezone: string;
+}
+
 
 const EnergyDeviceList = () => {
+  const userRedux = useSelector((state: RootState) => state.app.loggedInUser);
+  const username = Array.isArray(userRedux) && userRedux.length > 0
+  ? userRedux[0]?.username ?? ""
+  : "";
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Devices {
         name:string;
 
     }
-    const url =import.meta.env.VITE_APP_API_URL
-    const [devices, setDevices] = useState([])
+    const [devices, setDevices] = useState<Dispositivo[]>([]);
+    const [microInverst, setMicroInverst] = useState([]);
 
     useEffect(() => {
-        const fetchData = async ()=>{
-            const response = await axios.get(`${url}/devices/plant-devices?plantId=35`)
-            const data = response.data.devices
-            const divicesPosition = [2,3,4]
-            const divicesGenerators = divicesPosition.map(posicion => data[posicion])
-            setDevices(divicesGenerators)
+      const fetchDevices = async () => {
+        try {
+          if (username) {
+            const data = await fetchData(username);
+            setDevices(data.data);
+            setMicroInverst(data.data[0].children);
+          }
+        } catch (error) {
+          console.error("Error fetching devices:", error);
+        } finally {
         }
-        fetchData()
-    }, [url])
+      };
+  
+      fetchDevices();
+    }, [username]);
 
 
 
   return (
-    <div className="w-96 h-72 gap-10 bg-black/20 rounded-lg flex flex-col items-center justify-center">
-     <h1 className="text-2xl font-bold text-white">Generating Devices</h1>
+    <div className="">
      <div className="flex flex-col gap-5 items-center justify-center">
         {devices.map((devices)=>(
             <Link to="/panelUsuarioFinal">
@@ -39,7 +65,7 @@ const EnergyDeviceList = () => {
           <SlEnergy/>
         </span>
         <span className="font-semibold mr-2 text-left flex-auto">
-          {devices.name}
+          {devices.model_no}
         </span>
         <svg
           viewBox="0 0 20 20"

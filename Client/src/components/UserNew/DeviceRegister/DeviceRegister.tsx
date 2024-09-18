@@ -72,7 +72,7 @@ function DeviceRegister() {
         formData.device.deviceName,
         formData.device.deviceBrand
       ]
-      await axios.post(`${api}/service/MiniDeXs/AddDevice`,data)
+      await axios.post(`${api}/service/GaiaService/AddDevice`,data)
     } catch (error) {
       
     }

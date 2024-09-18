@@ -239,13 +239,13 @@ function AuthForm (props: ILoginPageProps): JSX.Element {
             </div>
 
             
-            <div className="flex flex-col items-center mt-4">
+            {/* <div className="flex flex-col items-center mt-4">
               <button type="button"
                 className="text-blue-500 hover:text-blue-700 font-semibold" 
                 onClick={() => {setShowSignUpInstaller(true)}}
                 >Create an installer or commercial account
               </button>
-            </div>
+            </div> */}
 
             <button
               // onClick={signInWithGoogle}
