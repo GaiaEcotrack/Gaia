@@ -17,7 +17,6 @@ interface User {
 
 const DashboardInstaller = () => {
   const auth = getAuth();
-  const savedCompanyName = localStorage.getItem('companyName');
   const [cardUser, setcardUser] = useState(true)
   const [userOnline, setUserOnline] = useState([])
   const [profileCard, setProfileCard] = useState(false)
@@ -99,6 +98,7 @@ const DashboardInstaller = () => {
 
     const photo_profile = localStorage.getItem('profilePic');
     setPhotoProfile(photo_profile);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ apiExpress,userOnline.installation_company]);
 
   const openCardUser = ()=>{
@@ -107,10 +107,10 @@ const DashboardInstaller = () => {
     setProfileCard(false)
   }
 
-  const openCardPayment = ()=>{
-    setCardUserPayment(true)
-    setcardUser(false)
-  }
+  // const openCardPayment = ()=>{
+  //   setCardUserPayment(true)
+  //   setcardUser(false)
+  // }
 
   const openProfile = ()=>{
     if(userOnline.role === "Installer"){
@@ -292,7 +292,7 @@ console.log(userOnline);
               </div>
             </li>
             <li>
-              <a
+              <button
                 // href="/"
                 className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
               >
@@ -315,10 +315,10 @@ console.log(userOnline);
                 <button onClick={openProfile} className="ml-2 text-sm tracking-wide truncate">
                   Profile
                 </button>
-              </a>
+              </button>
             </li>
             <li>
-              <a
+              <button
                 // href="/"
                 className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-blue-800 dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-blue-500 dark:hover:border-gray-800 pr-6"
               >
@@ -348,7 +348,7 @@ console.log(userOnline);
                   Settings
                 </span>
 
-              </a>
+              </button>
               <div className="flex z-10 ">
               <AccountInfo />
               <h1 className="absolute text-slate-400 hover:text-white font-normal text-sm items-center ml-[50px] gap-x-4 mt-2" style={{ minWidth: '150px' }}>Wallet Connection</h1>

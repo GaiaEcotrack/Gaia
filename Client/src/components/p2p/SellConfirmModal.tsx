@@ -140,9 +140,6 @@ const SellConfirmModal: React.FC<ConfirmSellModalProps> = ({
       });
   };
   // funcion para el boton cancel
-  const handleCancel = () => {
-    onClose();
-  };
 
   if (!isOpen) return null;
   return (

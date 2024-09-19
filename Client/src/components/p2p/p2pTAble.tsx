@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import TransactionModal from "./TransactionModal";
 import { auth } from "../../firebase";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
-import { Currency } from "lucide-react";
 
-type PaymentMethod = "Polkadot wallet";
+
+
 
 // interface RowData {
 //   id: string;

@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { useTypewriter } from "react-simple-typewriter";
 
 import arrow from "../../assets/arrow.png";
-
 import { ApiLoader } from "../../components/loaders/api-loader/ApiLoader";
 import { IoIosAddCircle } from "react-icons/io";
 import { getAuth } from "firebase/auth";

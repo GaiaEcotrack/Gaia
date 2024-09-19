@@ -1,9 +1,10 @@
-import { useAccount } from "@gear-js/react-hooks";
+import { useAccount, useAlert } from "@gear-js/react-hooks";
 import axios from "axios";
 import React from "react";
 
 const CardGenerated = ({ total , moment }: any) => {
 
+  const alert = useAlert()
   const {account} = useAccount()
   const username=import.meta.env.VITE_APP_ADMIN_USER
   const password=import.meta.env.VITE_APP_ADMIN_PASSWORD
@@ -60,6 +61,8 @@ const CardGenerated = ({ total , moment }: any) => {
     try {
       await createGenerator()
       await putUser()
+      alert.success('Devices added')
+
     } catch (error) {
       console.log(error);
       

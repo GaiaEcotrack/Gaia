@@ -1,11 +1,8 @@
-import P2PTable from '../../components/p2p/p2pTAble';
-import P2PFilterBar from '../../components/p2p/p2pFilterBar';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import P2pFilterSection from '@/components/p2p/P2pFilterSection';
 
 const P2PPage: React.FC = () => {
 
-  const [mode, setMode] = useState<'Buy' | 'Sell'>('Buy');
 
   useEffect(() => {
     window.scrollTo(0, 0);

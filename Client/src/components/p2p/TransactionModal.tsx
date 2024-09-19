@@ -35,7 +35,9 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState("0");
   const [USDAmount, setUSDAmount] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [showNewModal, setShowNewModal] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -97,6 +99,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({
   //*************** Mercado Pago
   const url = import.meta.env.VITE_APP_API_URL
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [prefrenceId, setPreferenceId] = useState('')
 
   const createPreference = async () => {

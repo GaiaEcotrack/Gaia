@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { ProgramMetadata, encodeAddress } from "@gear-js/api";
-import { useApi, useAlert, useAccount } from "@gear-js/react-hooks";
+import {useAccount } from "@gear-js/react-hooks";
 import { useDispatch} from 'react-redux';
 import axios from "axios";
 
@@ -33,6 +32,7 @@ dispatch({ type: 'SET_VALUE_GAIA', payload: response.totalTokensUserEnergy});
       }
     }
     fetchData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

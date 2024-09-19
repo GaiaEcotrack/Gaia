@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { FcHighPriority, FcOk } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import SelectOptions from "./Input";
 import { getAuth } from "firebase/auth";
 import { useAccount } from "@gear-js/react-hooks";
 

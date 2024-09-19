@@ -1,5 +1,4 @@
 import {useState,useEffect} from "react";
-import axios from 'axios'
 import { SlEnergy } from "react-icons/sl";
 import { Link } from "react-router-dom";
 import { fetchData } from "@/pages/panelUsuarioFinal/Hoymiles";
@@ -31,6 +30,7 @@ const EnergyDeviceList = () => {
 
     }
     const [devices, setDevices] = useState<Dispositivo[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [microInverst, setMicroInverst] = useState([]);
 
     useEffect(() => {

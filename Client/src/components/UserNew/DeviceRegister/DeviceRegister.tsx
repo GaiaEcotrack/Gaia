@@ -1,21 +1,11 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useAccount, useApi, useAlert } from "@gear-js/react-hooks";
-import { web3FromSource } from "@polkadot/extension-dapp";
-import { GasInfo, ProgramMetadata } from "@gear-js/api";
-import useVoucherUtils from "@/pages/home/VouchersUtils";
+import { useAccount } from "@gear-js/react-hooks";
+
 import axios from "axios";
 
 function DeviceRegister() {
-  const {
-    createNewVoucher,
-    voucherExpired,
-    renewVoucherOneHour,
-    voucherExists,
-    accountVoucherId,
-    addTwoTokensToVoucher
-  } = useVoucherUtils();
 
   const URL = import.meta.env.VITE_APP_API_URL;
   const api = import.meta.env.VITE_APP_API_EXPRESS;
@@ -59,7 +49,6 @@ function DeviceRegister() {
   };
 
   //VARA////////
-  const alert = useAlert();
   const { account } = useAccount();
 
 

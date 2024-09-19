@@ -1,4 +1,3 @@
-import axios from "axios";
 import { SetStateAction, useEffect, useState } from "react";
 import { CiCircleMore } from "react-icons/ci";
 

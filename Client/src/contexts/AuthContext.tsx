@@ -10,7 +10,7 @@ import {
 import { auth, storage }  from "../firebase";
 import 'firebase/auth';
 import 'firebase/storage';
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref } from "firebase/storage";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -55,7 +55,6 @@ export function useAuth() {
 
     setLoading(true);
 
-    const snapshot = await uploadBytes(fileRef, file);
     const photoURL = await getDownloadURL(fileRef);
 
     updateProfile(currentUser, {photoURL});

@@ -80,18 +80,7 @@ function Mint() {
     value: 0,
   };
 
-  const messageThree: any = {
-    destination: programIDFT, // programId
-    payload: {
-      transferred: [
-        decodeAddress("5HTJkawMqHSvVRi2XrE7vdTU4t5Vq1EDv2ZDeWSwNxmmQKEK"),
-        decodeAddress("5G8mzxiCCW4VALGRGdaqGPfrMLp7CeaVfk5XwPhDDaDyGEgE"),
-        10,
-      ],
-    },
-    gasLimit: 2206058208,
-    value: 0,
-  };
+
 
   async function signer() {
     const localaccount = account?.address;

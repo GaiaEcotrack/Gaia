@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { AiOutlineThunderbolt } from "react-icons/ai";
 import { MdOutlineToken } from "react-icons/md";
 

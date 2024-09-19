@@ -2,21 +2,20 @@
 import { ProgramMetadata } from "@gear-js/api";
 import { Button } from "@gear-js/ui";
 import { useState } from "react";
-import { useApi, useAlert } from "@gear-js/react-hooks";
+import { useAlert } from "@gear-js/react-hooks";
 import { AnyJson } from "@polkadot/types/types";
 import { GearApi } from '@gear-js/api';
-import { Result } from "@polkadot/types";
+
 
 function ReadState() {
-  const { api } = useApi();
+
 
   const alert = useAlert();
 
   const [fullState, setFullState] = useState<AnyJson>([]);
 
   // Add your programID
-  const programIDFT =
-    "0x633d0f014702f15973932d129e12f5c144124de630125239c764694a143c6a28";
+
 
    // Add your metadata.txt
   const meta =
@@ -42,7 +41,6 @@ function ReadState() {
     }
   
 
-    const transactionId = "0x6486cf58687624dea8be82895cb23190d60d3232805119718642eee3ae3fbc2d";
 
     
 
