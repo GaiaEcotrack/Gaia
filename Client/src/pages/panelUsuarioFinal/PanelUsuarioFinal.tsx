@@ -6,8 +6,7 @@ import arrow from "../../assets/arrow.png";
 import { ApiLoader } from "../../components/loaders/api-loader/ApiLoader";
 import { IoIosAddCircle } from "react-icons/io";
 import { getAuth } from "firebase/auth";
-import { fetchData } from "./Hoymiles";
-import { RootState } from "@/store";
+import { fetchDataGrowattDevice , fetchDataHoymilesDevices } from "./Hoymiles";
 import { useSelector } from "react-redux";
 
 interface Dispositivo {
@@ -22,9 +21,26 @@ interface Dispositivo {
   timezone: string;
 }
 
+interface User {
+  device_brand: any;
+  username: string;
+  // otras propiedades
+}
+
+interface RootState {
+  app: {
+    loggedInUser: User[];
+    
+    // otras propiedades del estado
+  };
+  // otras propiedades del estado
+}
+
+
 const PanelUsuarioFinal = () => {
   const userRedux = useSelector((state: RootState) => state.app.loggedInUser);
-  const username = userRedux[0]?.username ?? "";
+  const brand = userRedux[0].device_brand;
+
 
   const [devices, setDevices] = useState<Dispositivo[]>([]);
   const [microInverst, setMicroInverst] = useState([]);
@@ -53,22 +69,33 @@ const PanelUsuarioFinal = () => {
   });
 
   useEffect(() => {
-    const fetchDevices = async () => {
-      try {
-        if (username) {
-          const data = await fetchData(username);
-          setDevices(data.data);
-          setMicroInverst(data.data[0].children);
-        }
-      } catch (error) {
-        console.error("Error fetching devices:", error);
-      } finally {
-        setIsLoading(false);
+    if (userRedux && userRedux[0]?.device_brand) {
+      const brand = userRedux[0].device_brand;
+      const username = userRedux[0].username;
+      if (brand && username) {
+        const fetchData = async () => {
+          if (brand === "Hoymiles") {
+            const result = await fetchDataHoymilesDevices(username, setDevices, setIsLoading);
+            if (Array.isArray(result)) {
+              setDevices(result);
+            } else {
+              console.error("Expected an array but got:", result);
+              setDevices([]);
+            }
+          } else if (brand === "Growatt") {
+            const result = await fetchDataGrowattDevice(username, setDevices, setIsLoading);
+            if (Array.isArray(result)) {
+              setDevices(result);
+            } else {
+              console.error("Expected an array but got:", result);
+              setDevices([]);
+            }
+          }
+        };
+        fetchData();
       }
-    };
-
-    fetchDevices();
-  }, [username]);
+    }
+  }, [userRedux]);
 
   const handleUpdate = async () => {
     setIsLoading(true);
@@ -77,9 +104,9 @@ const PanelUsuarioFinal = () => {
       const user = await auth.currentUser;
 
       if (user) {
-        const data = await fetchData(username);
-        setDevices(data.data);
-        setMicroInverst(data.data[0].children);
+        const username = userRedux[0].username;
+         await fetchDataHoymilesDevices(username,setDevices,setIsLoading);
+
       } else {
         console.error("User is not logged in");
         setUserError(true);
@@ -106,6 +133,13 @@ const PanelUsuarioFinal = () => {
     "https://i.ebayimg.com/images/g/GH4AAOSwPJlkeiH5/s-l1600.webp",
   ];
 
+  const brandImages = {
+    Hoymiles: "https://www.hoymiles.com/wp-content/uploads/2022/05/Hoymiles-logo.png",
+    Growatt: "https://www.sustenmarket.com/wp-content/uploads/2020/01/Growatt-logo.png",
+    // Agrega más marcas según sea necesario
+  };
+
+  const imagenSrc = brandImages[brand]
   return (
     <section className="min-h-screen bg-gray-100 p-6">
       <div className="text-gray-700">
@@ -177,14 +211,14 @@ const PanelUsuarioFinal = () => {
               {devices.map((device, index) => (
                 <div
                   key={index}
-                  className="border rounded-lg bg-white shadow-md p-4 cursor-pointer relative"
+                  className="border rounded-lg bg-white w-full  shadow-md p-4 cursor-pointer relative"
                   onClick={() => openModal(device)}
                 >
-                  <img
-                    src="https://www.hoymiles.com/wp-content/uploads/2022/05/Hoymiles-logo.png"
-                    alt="Hoymiles Logo"
-                    className="absolute top-2 right-2 w-48 h-48"
-                  />
+  <img
+    src={imagenSrc}
+    alt={`${brand} Logo`}
+    className="absolute top-2 right-2 w-48 h-48"
+  />
                   <div className="flex items-center space-x-4">
                     <img
                       src={deviceImages[index % deviceImages.length]}
@@ -194,12 +228,12 @@ const PanelUsuarioFinal = () => {
                     <div>
                       <h3 className="text-lg font-semibold text-gray-800">{device.model_no}</h3>
                       <p className="text-sm text-gray-600">Type: {device.model_no}</p>
-                      <p className="text-sm text-gray-600">Vendor: HoyMiles</p>
+                      <p className="text-sm text-gray-600">Vendor: {brand}</p>
                     </div>
                   </div>
                   <div className="mt-4 text-gray-600">
                     <p>Model: {device.model_no}</p>
-                    <p>Serial: {device.sn || "None"}</p>
+                    <p>Serial: {device.dtu_sn|| "None"}</p>
                     <p>Voltage: {device.generatorPower || "None"}</p>
                     <p>Timezone: {device.timezone}</p>
                     <p className={`font-semibold ${device.warn_data.connect ? "text-blue-600" : "text-gray-400"}`}>
@@ -251,13 +285,13 @@ const PanelUsuarioFinal = () => {
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
             <div className="bg-blue-100 p-6 rounded-lg shadow-lg w-3/4 md:w-1/2 lg:w-1/3 relative">
               <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Logo_SMA.svg/600px-Logo_SMA.svg.png"
-                alt="SMA Logo"
+    src={imagenSrc}
+    alt={`${brand} Logo`}
                 className="absolute top-2 right-2 w-12 h-auto"
               />
               <div className="flex items-center space-x-4">
                 <img
-                  src={deviceImages[selectedDevice.deviceId % deviceImages.length]}
+                  src={deviceImages[selectedDevice.id % deviceImages.length]}
                   alt={`Imagen del dispositivo ${selectedDevice.name}`}
                   className="w-16 h-16 object-cover rounded-full"
                 />
@@ -269,7 +303,7 @@ const PanelUsuarioFinal = () => {
               </div>
               <div className="mt-4 text-gray-600">
                 <p>Model: {selectedDevice.model_no}</p>
-                <p>Serial: {selectedDevice.sn || "None"}</p>
+                <p>Serial: {selectedDevice.dtu_sn || "None"}</p>
                 <p>Voltage: {selectedDevice.generatorPower || "None"}</p>
                 <p>Timezone: {selectedDevice.timezone}</p>
                 <p className={`font-semibold ${selectedDevice.warn_data.connect ? "text-blue-600" : "text-gray-400"}`}>

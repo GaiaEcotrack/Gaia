@@ -1,61 +1,18 @@
-import {useState,useEffect} from "react";
 import { SlEnergy } from "react-icons/sl";
 import { Link } from "react-router-dom";
-import { fetchData } from "@/pages/panelUsuarioFinal/Hoymiles";
-import { RootState } from "@/store";
-import { useSelector } from "react-redux";
 
-
-interface Dispositivo {
-  id: number;
-  model_no: string;
-  hard_ver: string;
-  productId: number;
-  warn_data: object;
-  soft_ver: string;
-  dtu_sn: string;
-  generatorPower: number;
-  timezone: string;
+interface DeviceProps {
+  device: {
+    name: string; // Asegúrate de que esta propiedad exista en el objeto `device`
+    // Puedes agregar más propiedades según sea necesario
+  };
 }
 
-
-const EnergyDeviceList = () => {
-  const userRedux = useSelector((state: RootState) => state.app.loggedInUser);
-  const username = Array.isArray(userRedux) && userRedux.length > 0
-  ? userRedux[0]?.username ?? ""
-  : "";
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    interface Devices {
-        name:string;
-
-    }
-    const [devices, setDevices] = useState<Dispositivo[]>([]);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [microInverst, setMicroInverst] = useState([]);
-
-    useEffect(() => {
-      const fetchDevices = async () => {
-        try {
-          if (username) {
-            const data = await fetchData(username);
-            setDevices(data.data);
-            setMicroInverst(data.data[0].children);
-          }
-        } catch (error) {
-          console.error("Error fetching devices:", error);
-        } finally {
-        }
-      };
-  
-      fetchDevices();
-    }, [username]);
-
-
+const EnergyDeviceList = ({ device }: DeviceProps) => {
 
   return (
     <div className="">
      <div className="flex flex-col gap-5 items-center justify-center">
-        {devices.map((devices)=>(
             <Link to="/panelUsuarioFinal">
             <div
         role="alert"
@@ -65,7 +22,7 @@ const EnergyDeviceList = () => {
           <SlEnergy/>
         </span>
         <span className="font-semibold mr-2 text-left flex-auto">
-          {devices.model_no}
+          {device.name}
         </span>
         <svg
           viewBox="0 0 20 20"
@@ -76,7 +33,7 @@ const EnergyDeviceList = () => {
         </svg>
       </div>
       </Link>
-        ))}
+
      </div>
     </div>
   );

@@ -40,6 +40,7 @@ import ReactECharts from "echarts-for-react";
 
 import Container from "@/components/CardsEnergy/Container";
 import { useAccount, useAlert } from "@gear-js/react-hooks";
+import { calculateEnergyDataGrowatt, calculateEnergyDataHoymiles, fetchDataGrowatt, fetchDataHoymiles } from "./fetchDataDevice";
 
 
 
@@ -65,6 +66,7 @@ interface Data {
 }
 
 interface User {
+  device_brand: any;
   username: string;
   // otras propiedades
 }
@@ -96,6 +98,12 @@ const GraficoEnergia = () => {
   const [alertWallet, setAlertWallet] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [plantData, setPlantData] = useState<number[][]>([]);
+  const [energyGenerated, setEnergyGenerated] = useState("0");
+  const [energyGenerating, setEnergyGenerating] = useState("0");
+  const [consumedCalculate, setConsumedCalculate] = useState("0");
+  const [tokens, setTokens] = useState("0");
+  const [carbonfoot, setCarbonfoot] = useState("0");
+  const [deviceInfo, setdeviceInfo] = useState("No data")
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -273,36 +281,44 @@ const GraficoEnergia = () => {
   const [data, setData] = useState<Data | null>(null);
   const {account} = useAccount()
   useEffect(() => {
-    const fetchData = async () => {
-      if (userRedux !== null) {
-        try {
-          const apiUrl = import.meta.env.VITE_APP_API_EXPRESS;
-          const request = await axios.post(`${apiUrl}/api/real-time-data`, {
-            user_name: userRedux[0].username,
-          });
-          const response = request.data.data;
-          setData(response);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+    if (userRedux && userRedux[0]?.device_brand) {
+      const brand = userRedux[0].device_brand;
+      const username = userRedux[0].username;
+      if (brand && username) {
+        const fetchData = async () => {
+          if (brand === "Hoymiles") {
+            await fetchDataHoymiles(username, setData);
+          } else if (brand === "Growatt") {
+            await fetchDataGrowatt(username, setData);
+          }
+        };
+        fetchData();
       }
-    };
-
-    fetchData();
-  }, [userRedux]);
-
-  const calculateEnergyData = (data: Data | null) => {
-    if (data) {
-      const energyGenerated = (data.today_eq / 1000).toFixed(2);
-      const energyGenerating = data.reflux_station_data.pv_power;
-      const consumedCalculate = ((data.reflux_station_data.meter_b_in_eq / 1000) + (data.reflux_station_data.self_eq / 1000)).toFixed(2);
-      const tokens = Math.floor(data.today_eq / 1000).toString();
-      return { energyGenerated, energyGenerating, consumedCalculate, tokens };
     }
-    return { energyGenerated: "0.00", energyGenerating: "0", consumedCalculate: "0.00", tokens: "0" };
-  };
+  }, [userRedux]);
+  
+  useEffect(() => {
+    if (data) {
+      let energyData;
+      if (userRedux[0]?.device_brand === "Hoymiles") {
+        energyData = calculateEnergyDataHoymiles(data);
+      } else if (userRedux[0]?.device_brand === "Growatt") {
+        energyData = calculateEnergyDataGrowatt(data);
+      }
+  
+      if (energyData) {
+        setEnergyGenerated(energyData.energyGenerated);
+        setEnergyGenerating(energyData.energyGenerating);
+        setConsumedCalculate(energyData.consumedCalculate);
+        setTokens(energyData.tokens);
+        setCarbonfoot(energyData.carboon)
+        setdeviceInfo(energyData.deviceName)
+      }
+    }
+  }, [data]);
 
-  const { energyGenerated, energyGenerating, consumedCalculate, tokens } = calculateEnergyData(data);
+  
+  
 
 
   const claimReward = async ()=>{
@@ -404,13 +420,14 @@ const GraficoEnergia = () => {
             {/* Energy Intensity */}
             <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg flex flex-col items-start gap-10">
               <h2 className="text-xl mb-2 text-white">Device usage</h2>
-              <EnergyDeviceList />
+              <EnergyDeviceList device={{ name: deviceInfo }} />
             </div>
   
             {/* Carbon Footprint */}
-            <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg flex flex-col gap-10">
+            <div className="bg-blue-950 bg-opacity-90 p-4 rounded-lg shadow-lg flex flex-col items-center gap-10">
               <h2 className="text-xl mb-2 text-white">Carbon Footprint</h2>
-              <h2 className="text center text-3xl mb-2 text-white">932 TONS</h2>
+              <img src="/c02gaia.png" alt="" />
+              <h2 className="text center text-3xl mb-2 text-white">{carbonfoot}</h2>
             </div>
           </div>
         </div>

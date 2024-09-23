@@ -279,6 +279,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <option value="Hoymiles">Hoymiles</option>
                   <option value="Solis">Solis</option>
                   <option value="SMA">SMA</option>
+                  <option value="Growatt">Growatt</option>
                 </select>
               </div>
 
@@ -321,6 +322,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <option value="Green_house">Green house</option>
                   <option value="Proselec">Proselec</option>
                   <option value="Fullenergysolar">Fullenergysolar</option>
+                  <option value="Sachar">Sachar S.A.S</option>
                 </select>
               </div>
 
