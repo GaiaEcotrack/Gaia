@@ -26,7 +26,7 @@ function CredentialsReg () {
     window.scrollTo(0, 0);
   }, []);
 
-  const createGenerator = async (secret, company) => {
+  const createGenerator = async (secret:any, company:any,brand:any) => {
     try {
       // Realiza el login y obtiene el token
       const loginResponse = await axios.post(`${apiExpress}/auth/login`, {
@@ -46,7 +46,8 @@ function CredentialsReg () {
           name: userLogin,
           wallet: account?.address,
           secret_name: secret,
-          installation_company: company 
+          installation_company: company,
+          brand:brand 
         },
         {
           headers: {
@@ -157,7 +158,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   try {
     const userId = localStorage.getItem('id');
-    createGenerator(formData.username,formData.installation_company)
+    createGenerator(formData.username,formData.installation_company,formData.device_brand)
 
     let apiUrl = `${URL}/users/${userId}`;
     let httpMethod = 'PUT';
