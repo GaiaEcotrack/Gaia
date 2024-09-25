@@ -16,6 +16,7 @@ interface ModalDeviceProps {
 }
 
 const ModalDevice: React.FC<ModalDeviceProps> = ({ close, deviceData }) => {
+  
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
       <div className="flex flex-col bg-white shadow-sm border border-slate-200 rounded-lg w-96">

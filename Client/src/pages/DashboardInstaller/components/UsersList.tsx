@@ -129,7 +129,7 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
             <thead>
               <tr>
                 <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50">User Generator</th>
-                <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50">Watts Generated</th>
+                <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50">Kw Generated</th>
                 <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50">Status</th>
                 <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50">Last Update</th>
                 <th className="p-4 border-y border-blue-gray-100 bg-blue-gray-50"></th>

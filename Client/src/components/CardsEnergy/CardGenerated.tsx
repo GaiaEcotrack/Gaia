@@ -31,7 +31,8 @@ const CardGenerated = ({ total , moment }: any) => {
           name: "userTest",
           wallet: account?.address,
           secret_name: "Monitoreo_2",
-          installation_company:"Fibra_Andina" 
+          installation_company:"Fibra_Andina",
+          brand:"Hoymiles" 
         },
         {
           headers: {
@@ -57,10 +58,25 @@ const CardGenerated = ({ total , moment }: any) => {
     }
   }
 
+  const putUserBrand= async ()=>{
+    try {
+      await axios.put(`${apiExpress}/users`,{
+        userId:userId,
+        property:"device_brand",
+        value:"Hoymiles"
+      })
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+
   const handleSubmit = async ()=>{
     try {
       await createGenerator()
       await putUser()
+      await putUserBrand()
       alert.success('Devices added')
 
     } catch (error) {

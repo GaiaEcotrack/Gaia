@@ -154,7 +154,7 @@ function DashboardCard01({onClick}) {
           {/* Icon */}
           <img src="/LogoGaia.svg" width="32" height="32" alt="Icon 01" />
           {/* Menu button */}
-          <button type="button" onClick={onClick} className="hover:brightness-110 hover:animate-pulse font-bold py-3 px-6 rounded-full bg-gradient-to-r from-blue-500 to-pink-500 text-white">Send</button>
+          {/* <button type="button" onClick={onClick} className="hover:brightness-110 hover:animate-pulse font-bold py-3 px-6 rounded-full bg-gradient-to-r from-blue-500 to-pink-500 text-white">Send</button> */}
 
         </header>
         <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-100 mb-2">Gaia</h2>
