@@ -7,19 +7,19 @@ use sails_rs::{
 use gstd::exec;
 use crate::states::mini_dexs_state::MintingSchedule;
 use crate::states::mini_dexs_state::Devices;
-use crate::states::mini_dexs_state::MiniDexsState;
+use crate::states::mini_dexs_state::GaiaContractState;
 use crate::clients::extended_vft_client::traits::Vft;
 
-static mut MINI_DEX_STATE: Option<MiniDexsState> = None;
+static mut MINI_DEX_STATE: Option<GaiaContractState> = None;
 
 const ONE_TVARA: u128 = 1_000_000_000_000; // Value of one TVara and Vara
 
-pub struct MiniDexsService<VftClient> {
+pub struct GaiaService<VftClient> {
     pub vft_client: VftClient
 }
 
 #[service]
-impl<VftClient> MiniDexsService<VftClient> 
+impl<VftClient> GaiaService<VftClient> 
 where VftClient: Vft
 {
     pub fn seed(
@@ -31,8 +31,9 @@ where VftClient: Vft
     ) {
         unsafe {
             MINI_DEX_STATE = Some(
-                MiniDexsState {
+                GaiaContractState {
                     owner,
+                    admins:Vec::new(),
                     vft_contract_id,
                     gaia_company_token,
                     min_tokens_to_add,
@@ -84,6 +85,18 @@ where VftClient: Vft
         MiniDexsEvents::MinTokensToAddSet
     }
 
+    //Add Admin Function
+    pub fn add_admin(&mut self, new_admin: ActorId) -> MiniDexsEvents {
+        let state = self.state_mut();
+        if !state.admins.contains(&new_admin){
+            state.admins.push(new_admin);
+            MiniDexsEvents::AdminAdded(new_admin)
+        } else{
+            MiniDexsEvents::Error(MiniDexsErrors::AdminExist)
+        }
+    }
+
+
      /// ## Agrega un nuevo dispositivo
     /// Solo el propietario del contrato puede realizar esta acción
     pub fn add_device(&mut self, owner: ActorId, serial_number: String , location:String , type_device: String , device_brand:String) -> MiniDexsEvents {
@@ -93,10 +106,30 @@ where VftClient: Vft
             return MiniDexsEvents::Error(MiniDexsErrors::OnlyOwnerCanDoThatAction);
         }
     
-        // Verifica si el dispositivo ya existe
-        if state.devices.iter().any(|device| device.owner == owner) {
-            return MiniDexsEvents::Error(MiniDexsErrors::UserAlreadyExists);
-        }
+   // Verifica si el dispositivo ya existe basado en el owner y el número de serie
+    if state.devices.iter().any(|device| device.owner == owner && device.serial_number == serial_number) {
+        return MiniDexsEvents::Error(MiniDexsErrors::DeviceAlreadyExists);
+    }
+
+    // Validaciones para serial_number
+    if serial_number.trim().is_empty() || serial_number.len() > 50 {
+        return MiniDexsEvents::Error(MiniDexsErrors::InvalidSerialNumber);
+    }
+
+    // Validaciones para location
+    if location.trim().is_empty() || location.len() > 100 {
+        return MiniDexsEvents::Error(MiniDexsErrors::InvalidLocation);
+    }
+
+    // Validaciones para type_device
+    if type_device.trim().is_empty() || type_device.len() > 30 {
+        return MiniDexsEvents::Error(MiniDexsErrors::InvalidDeviceType);
+    }
+
+    // Validaciones para device_brand
+    if device_brand.trim().is_empty() || device_brand.len() > 30 {
+        return MiniDexsEvents::Error(MiniDexsErrors::InvalidDeviceBrand);
+    }
     
         // Agrega el nuevo dispositivo
         state.devices.push(Devices {
@@ -614,6 +647,11 @@ pub async fn transfer_tokens_to_user(&mut self, recipient: ActorId, amount: u128
     MiniDexsEvents::TokensAdded
 }
 
+//is admin function
+pub fn is_admin(&self,caller:ActorId)->bool{
+    self.state_ref().admins.contains(&caller)
+}
+
 /// ## Mintear tokens a un usuario
 /// Solo el propietario del contrato puede realizar esta acción
 pub async fn mint_tokens_to_user(&mut self, recipient: ActorId, amount: u128) -> MiniDexsEvents {
@@ -674,13 +712,13 @@ pub async fn mint_tokens_to_user(&mut self, recipient: ActorId, amount: u128) ->
         Ok(())
     }
 
-    fn state_mut(&self) -> &'static mut MiniDexsState {
+    fn state_mut(&self) -> &'static mut GaiaContractState {
         let state = unsafe { MINI_DEX_STATE.as_mut() };
         debug_assert!(state.is_none(), "state is not started!");
         unsafe { state.unwrap_unchecked() }
     }
 
-    fn state_ref(&self) -> &'static MiniDexsState {
+    fn state_ref(&self) -> &'static GaiaContractState {
         let state = unsafe { MINI_DEX_STATE.as_ref() };
         debug_assert!(state.is_none(), "state is not started!");
         unsafe { state.unwrap_unchecked() }
@@ -723,6 +761,7 @@ pub enum MiniDexsEvents {
         total_tokens: u128,
         total_varas: u128
     },
+    AdminAdded(ActorId),
     Error(MiniDexsErrors)
 }
 
@@ -731,23 +770,34 @@ pub enum MiniDexsEvents {
 #[scale_info(crate = sails_rs::scale_info)]
 pub enum MiniDexsErrors {
     MinTokensToAdd(u128),
+    AdminExist,
     UserAlreadyExists,
     CantSwapTokens {
-        tokens_in_vft_contract: U256
-    }, 
+        tokens_in_vft_contract: U256,
+    },
     CantSwapUserTokens {
         user_tokens: U256,
-        tokens_to_swap: U256
+        tokens_to_swap: U256,
     },
     ContractCantMint,
     CantSwapTokensWithAmount {
         min_amount: u128,
-        actual_amount: u128
+        actual_amount: u128,
     },
     OnlyOwnerCanDoThatAction,
     VftContractIdNotSet,
     ErrorInVFTContract,
     ErrorInGetNumOfVarasToSwap,
     OperationWasNotPerformed,
-    MintingFailed
+    MintingFailed,
+    InvalidAmount, // Nuevo error para validar cantidades inválidas
+    InvalidSerialNumber, // Error para validar el formato y longitud del serial_number
+    InvalidLocation, // Error para validar el formato y longitud de location
+    InvalidTypeDevice, // Error para validar el formato y longitud de type_device
+    InvalidDeviceBrand, // Error para validar el formato y longitud de device_brand
+    ExternalCallTimeout, // Error para manejar timeouts en llamadas externas
+    ArithmeticOverflow, // Error para manejar desbordamientos aritméticos en u128
+    InvalidDeviceType,
+    DeviceAlreadyExists
 }
+

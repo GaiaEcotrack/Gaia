@@ -110,9 +110,7 @@ function DashboardCard02({image,quantity,name,onClick,metric}) {
           <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mr-2">${quantity}</div>
           <div className="text-sm font-semibold text-white px-1.5 bg-amber-500 rounded-full">{metric}%</div>
         </div>
-        {card && (
-          <SendVaras close={close}/>
-        )}
+
       </div>
       {/* Chart built with Chart.js 3 */}
       <div className="grow max-sm:max-h-[128px] max-h-[128px]">

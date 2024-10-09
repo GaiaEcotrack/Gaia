@@ -11,8 +11,11 @@ edition = "2021"
 license = "GPL-3.0"
 
 [workspace.dependencies]
-gstd = "1.5.0"
-gear-wasm-builder = "1.5.0"
-sails-client-gen = "0.3.0"
-sails-idl-gen = "0.3.0"
-sails-rs = "0.3.0"
+gstd = "1.6.1"
+gear-wasm-builder = "1.6.1"
+gear-wasm-instrument = "=1.6.2"
+sails-client-gen = "0.6.0"
+sails-idl-gen = "0.6.0"
+sails-rs = "0.6.0"
+
+

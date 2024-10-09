@@ -22,8 +22,9 @@ pub struct MintingSchedule {
     pub minting_time: u64,    // Fecha y hora programada para el minting (timestamp en segundos)
 }
 
-pub struct MiniDexsState {
+pub struct GaiaContractState {
     pub owner: ActorId,
+    pub admins:Vec<ActorId>,
     pub vft_contract_id: Option<ActorId>,
     pub gaia_company_token: Option<ActorId>,
     pub min_tokens_to_add: u128,

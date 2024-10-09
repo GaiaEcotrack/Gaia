@@ -17,9 +17,11 @@ const Users: React.FC<UsersListProps> = ({ users }) => {
   const totalGeneratedKW = totalGenerated.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
   const roundToThousands = (num:number) => Math.floor(num / 1000) * 1000;
-  const totaltokens = users.reduce((sum, user) => sum + roundToThousands(user.generatedKW) / 1000, 0);
+  const totalTokens = users.reduce((acumulador, objeto) => {
+    return acumulador + objeto.generatedKW;
+  }, 0);
 
-  const totalEarnings = ((totaltokens * 0.645) * 0.15).toFixed(2);
+  const totalEarnings = ((totalTokens * 0.645) * 0.15).toFixed(2);
 
   return (
     <div>
@@ -38,7 +40,7 @@ const Users: React.FC<UsersListProps> = ({ users }) => {
             <AiOutlineThunderbolt className="text-3xl"color='black' />
             </div>
             <div className="text-right">
-              <p className="text-2xl">{totalGeneratedKW} Watts</p>
+              <p className="text-2xl">{totalGeneratedKW} Kw</p>
               <p>Energy generated</p>
             </div>
           </div>
@@ -56,7 +58,7 @@ const Users: React.FC<UsersListProps> = ({ users }) => {
             <MdOutlineToken className="text-3xl"color='black' />
             </div>
             <div className="text-right">
-              <p className="text-2xl">{totaltokens}</p>
+              <p className="text-2xl">{totalTokens}</p>
               <p>Total tokens distributed</p>
             </div>
           </div>

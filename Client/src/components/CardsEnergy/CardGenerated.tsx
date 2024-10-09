@@ -78,6 +78,7 @@ const CardGenerated = ({ total , moment }: any) => {
       await putUser()
       await putUserBrand()
       alert.success('Devices added')
+      window.location.reload();
 
     } catch (error) {
       console.log(error);
